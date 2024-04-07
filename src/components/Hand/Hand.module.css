@@ -1,0 +1,12 @@
+.Hand {
+    
+}
+
+.CardContainer {
+    display: flex;
+    padding: 10px;
+}
+
+.CardContainer > * {
+    margin: 5px;
+}

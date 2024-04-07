@@ -1,0 +1,11 @@
+span {
+    font-size: 13px;
+}
+
+img {
+    max-height: 100px;
+}
+
+.Selected {
+    background-color: lightgreen;
+}
