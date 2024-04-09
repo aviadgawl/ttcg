@@ -1,1 +1,13 @@
-.Card {}
+.Card{
+    background-color: black;
+    background-size: cover;
+    color: white;
+    width: 200px;
+    height: 280px;
+}
+
+.Button {
+    background-color: darkgoldenrod;
+    color: black;
+    font-weight: bolder;
+}

@@ -1,10 +1,12 @@
-import { Card, Gear, Champion, Class, calculateStats } from './card';
+import { GameCard, Gear, Class } from './card';
+import { Champion, calculateStats } from './champion';
+
 import { Game } from './game';
 
 export interface Player {
     name: string;
-    deck: Card[];
-    hand: Card[];
+    deck: GameCard[];
+    hand: GameCard[];
     didDraw: boolean;
     summonsLeft: number;
 }
@@ -23,7 +25,7 @@ export class GamePlayerActions {
             case playerActionsName.surrender:
                 return this.surrender(player, game);
             case playerActionsName.summon:
-                return this.summon(game, data.selectedCard as Card, data.extendedData as number[]);
+                return this.summon(game, data.selectedCard as GameCard, data.extendedData as number[]);
             case playerActionsName.endTurn:
                 return this.endTurn(game);
             case playerActionsName.equip:
@@ -64,7 +66,7 @@ export class GamePlayerActions {
         game.status = `Player ${player.name} has surrendered`;
     };
 
-    summon = (game: Game, selectedCard: Card, targetLocation: number[]): string => {
+    summon = (game: Game, selectedCard: GameCard, targetLocation: number[]): string => {
 
         const targetRow = targetLocation[0],
             targetColumn = targetLocation[1];
@@ -86,10 +88,10 @@ export class GamePlayerActions {
     }
 
     endTurn = (game: Game): string => {
-        if (game.playerIndex === 0)
-            game.playingPlayer = 1;
-        else if (game.playerIndex === 0)
-            game.playingPlayer = 0;
+        if (game.playingPlayerIndex === 0)
+            game.playingPlayerIndex = 1;
+        else if (game.playingPlayerIndex === 1)
+            game.playingPlayerIndex = 0;
 
         return 'success';
     }
@@ -139,7 +141,7 @@ export class GamePlayerActions {
     }
 }
 
-const removeCardFromHand = (game: Game, selectedCard: Card) => {
+const removeCardFromHand = (game: Game, selectedCard: GameCard) => {
     const player = game.players[game.playerIndex];
     const cardIndex = player.hand.findIndex((x) => x.guid === selectedCard.guid);
     player.hand.splice(cardIndex, 1);

@@ -2,10 +2,17 @@ span {
     font-size: 13px;
 }
 
-img {
-    max-height: 100px;
+.Selected {
+    border:solid gold 5px;
 }
 
-.Selected {
-    background-color: lightgreen;
+.NotSelected {
+    border:solid black 5px;
+}
+
+.Container {
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    color: white;
 }

@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { championActions, playerActions, setSelectedActionData, initialState } from '../../app/store';
 import { actionTypes } from '../../app/types';
-import { isChampion } from '../../logic/card';
+import { isChampion } from '../../logic/champion';
 import Button from '@mui/material/Button';
 import BoardChampion from '../BoardChampion/BoardChampion';
 import styles from './Board.module.css';

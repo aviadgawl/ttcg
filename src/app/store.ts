@@ -1,10 +1,11 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 import { createGame } from '../logic/game';
-import { GameChampionActions, Card } from '../logic/card';
+import { GameCard } from '../logic/card';
+import { GameChampionActions } from '../logic/champion';
 import { GamePlayerActions } from '../logic/player';
 import { playSoundByPlayerActionName, playSoundByCardActionName } from '../helpers/audio-helper';
 
-export const createSelectedData = (card: Card | null, actionName: string, actionType: string, location: number[] = [-1, -1]) => {
+export const createSelectedData = (card: GameCard | null, actionName: string, actionType: string, location: number[] = [-1, -1]) => {
     return { card: card, actionName: actionName, actionType: actionType, location }
 }
 
@@ -25,7 +26,7 @@ const gameSlice = createSlice({
             const { targetLocation } = action.payload;
             const { actionName, location } = state.selectedActionData;
 
-            const result = gameChampionActions.championAction(state.game.board,
+            const result = gameChampionActions.championAction(state.game,
                 actionName, location[0], location[1], targetLocation[0], targetLocation[1]);
 
             if (result !== 'success') alert(result);

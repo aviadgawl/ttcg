@@ -10,3 +10,8 @@
 .CardContainer > * {
     margin: 5px;
 }
+
+.ButtonsContainer {
+    display: flex;
+    flex-direction: column;
+}

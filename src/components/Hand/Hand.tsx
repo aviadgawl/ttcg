@@ -9,15 +9,16 @@ import Button from '@mui/material/Button';
 import HandCard from '../HandCard/HandCard';
 
 const Hand: FC = () => {
-  const playerHand = useAppSelector((state) => state.gameActions.game.players[0].hand);
-  const playerDeck = useAppSelector((state) => state.gameActions.game.players[0].deck);
+  const playingPlayerIndex = useAppSelector((state) => state.gameActions.game.playingPlayerIndex);
+  const playerHand = useAppSelector((state) => state.gameActions.game.players[playingPlayerIndex].hand);
+  const playerDeck = useAppSelector((state) => state.gameActions.game.players[playingPlayerIndex].deck);
   const showHand = useAppSelector((state) => state.gameActions.showHand);
 
   const dispatch = useAppDispatch();
 
-  const handleDraw = () => {
-    const selectedActionData = createSelectedData(null, playerActionsName.initialDraw, actionTypes.playerAction);
-    dispatch(playerActions({ selectedActionData: selectedActionData}));
+  const handleAction = (actionMame: string) => {
+    const selectedActionData = createSelectedData(null, actionMame, actionTypes.playerAction);
+    dispatch(playerActions({ selectedActionData: selectedActionData }));
   };
 
   return <div className={styles.Hand}>
@@ -28,9 +29,11 @@ const Hand: FC = () => {
       <Button onClick={() => dispatch(setShowHand(false))}>Close drawer</Button>
 
       <div className={styles.CardContainer}>
-        <Button onClick={handleDraw} variant="outlined">Deck: {playerDeck.length}</Button>
-        <Button onClick={handleDraw} variant="outlined">{playerActionsName.endTurn}</Button>
-        <Button onClick={handleDraw} variant="outlined">{playerActionsName.surrender}</Button>
+        <div className={styles.ButtonsContainer}>
+          <Button onClick={() => handleAction(playerActionsName.initialDraw)} variant="outlined">Deck: {playerDeck.length}</Button>
+          <Button onClick={() => handleAction(playerActionsName.endTurn)} variant="outlined">{playerActionsName.endTurn}</Button>
+          <Button onClick={() => handleAction(playerActionsName.surrender)} variant="outlined">{playerActionsName.surrender}</Button>
+        </div>
         {playerHand.map((card, index) => <HandCard key={index} card={card} />)}
       </div>
 

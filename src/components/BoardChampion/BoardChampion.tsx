@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Champion } from '../../logic/card';
+import { Champion } from '../../logic/champion';
 import { useAppDispatch } from '../../app/hooks';
 import { setSelectedActionData, createSelectedData } from '../../app/store';
 import { actionTypes } from '../../app/types';
@@ -16,11 +16,9 @@ interface BoardChampionProps {
 const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
   const dispatch = useAppDispatch();
 
-  return (<div className={props.isSelected ? styles.Selected : ""}>
+  return (<div style={{ backgroundImage: `url(${props.champion.upgrade !== null ? props.champion.upgrade.image : props.champion.image})` }}
+    className={`${styles.Container} ${props.isSelected ? styles.Selected : styles.NotSelected}`}>
     <div>{props.champion.name}</div>
-    <div>
-      <img src={props.champion.image} />
-    </div>
     <span> HP: {props.champion.currentHp}/{props.champion.hp} </span>
     <span> Armor: {props.champion.armor}/{props.champion.calStr}</span>
     <span> Mental: {props.champion.mental}/{props.champion.calInt}</span>

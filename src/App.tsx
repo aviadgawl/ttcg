@@ -1,13 +1,15 @@
 import './App.css';
 import Board from './components/Board/Board';
+import GameDetails from './components/GameDetails/GameDetails';
 import Hand from './components/Hand/Hand';
 function App() {
 
   return (
-    <div className="App">
+    <main className="App">
+      <GameDetails />
       <Board />
       <Hand />
-    </div>
+    </main>
   );
 }
 

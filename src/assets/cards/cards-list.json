@@ -1,0 +1,10 @@
+[{
+    "guid": "1", "name": "Aviad", "image": "https://cdn.openart.ai/published/FszSWSLSplED5gq2DIRv/bZ9vPFtW_B0RM_raw.jpg", "playerIndex": 0,
+    "hp": 2, "currentHp": 2,
+    "armor": 2, "str": 2, "calStr": 2,
+    "dex": 2, "calDex": 2,
+    "int": 2, "calInt": 2, "mental": 2,
+    "stm": 2, "actions": ["Step", "Basic Hit"], "calActions": [],
+    "body": null, "rightHand": null, "leftHand": null, 
+    "class": "Fighter", "calClass": "Fighter", "upgrade": null
+}]
