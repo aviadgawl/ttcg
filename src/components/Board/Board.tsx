@@ -5,6 +5,7 @@ import { actionTypes } from '../../app/types';
 import { isChampion } from '../../logic/champion';
 import Button from '@mui/material/Button';
 import BoardChampion from '../BoardChampion/BoardChampion';
+import { FaBullseye } from "react-icons/fa";
 import styles from './Board.module.css';
 
 const Board: FC = () => {
@@ -30,7 +31,7 @@ const Board: FC = () => {
     if (rowIndex >= 11) return styles.PlayerOneBase;
     if (rowIndex <= 1) return styles.PlayerTwoBase;
 
-    return styles.NoneBase;
+    return;
   };
 
   return (
@@ -40,7 +41,7 @@ const Board: FC = () => {
           return <tr key={`${rowIndex}`}>
             {row.map((card, columnIndex) => {
               return <td className={playerBaseClassName(rowIndex)} key={`${rowIndex}-${columnIndex}`}>
-                <Button variant="outlined" onClick={() => handleAction(rowIndex, columnIndex)}>{rowIndex}-{columnIndex}</Button>
+                <Button className={styles.TargetButton} size="small" variant="contained" onClick={() => handleAction(rowIndex, columnIndex)}><FaBullseye/></Button>
                 {isChampion(card) && <BoardChampion champion={card}
                   x={rowIndex}
                   y={columnIndex}

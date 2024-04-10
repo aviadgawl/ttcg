@@ -1,6 +1,6 @@
 import { Player } from './player';
 import { GameCard, Gear, Class } from './card';
-import { Champion, championActionsName } from './champion';
+import { Champion, ChampionActionsName } from './champion';
 
 export const createGame = (): Game => {
 
@@ -27,7 +27,7 @@ const mockChampion1: Champion = {
     armor: 2, str: 2, calStr: 2,
     dex: 2, calDex: 2,
     int: 2, calInt: 2, mental: 2,
-    stm: 2, actions: [championActionsName.step, championActionsName.daggerThrow], calActions: [],
+    stm: 2, actions: [ChampionActionsName.Step, ChampionActionsName.DaggerThrow], calActions: [],
     body: null, rightHand: null, leftHand: null, 
     class: 'Fighter', calClass: 'Fighter', upgrade: null
 };
@@ -37,7 +37,7 @@ const mockChampion2: Champion = {
     armor: 2, str: 4, calStr: 2,
     dex: 2, calDex: 2,
     int: 2, calInt: 2, mental: 2,
-    stm: 2, actions: [championActionsName.step, championActionsName.daggerThrow],  calActions: [],
+    stm: 2, actions: [ChampionActionsName.Step, ChampionActionsName.DaggerThrow],  calActions: [],
     body: null, rightHand: null, leftHand: null,
     class: 'Fighter', calClass: 'Fighter', upgrade: null
 };

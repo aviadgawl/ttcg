@@ -16,7 +16,7 @@ interface BoardChampionProps {
 const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
   const dispatch = useAppDispatch();
 
-  return (<div style={{ backgroundImage: `url(${props.champion.upgrade !== null ? props.champion.upgrade.image : props.champion.image})` }}
+  return (<div style={{ backgroundImage: `url(${props.champion.image})` }}
     className={`${styles.Container} ${props.isSelected ? styles.Selected : styles.NotSelected}`}>
     <div>{props.champion.name}</div>
     <span> HP: {props.champion.currentHp}/{props.champion.hp} </span>
@@ -29,7 +29,7 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
     <div> Class: {props.champion.calClass}</div>
     <div>
       {props.champion.actions.map((action, actionIndex) =>
-        <Button variant="outlined" key={actionIndex} onClick={() => dispatch(setSelectedActionData(createSelectedData(props.champion, action, actionTypes.championAction, [props.x, props.y])))}>{action}</Button>
+        <Button size="small" variant="contained" key={actionIndex} onClick={() => dispatch(setSelectedActionData(createSelectedData(props.champion, action, actionTypes.championAction, [props.x, props.y])))}>{action}</Button>
       )}
     </div>
   </div>);

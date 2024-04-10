@@ -1,6 +1,18 @@
 import { Gear, GameCard, Class } from './card';
 import { Game } from './game';
 
+export enum ChampionActionsName {
+    Step = 'Step',
+    BasicHit = 'Basic Hit',
+    DaggerThrow = 'Dagger Throw'
+}
+
+enum ChampionActionsDirections {
+    Straight = 'Straight'
+}
+
+export const isChampion = (value: any): value is Champion => !!value?.actions;
+
 export interface Champion extends GameCard {
 
     str: number;
@@ -27,8 +39,6 @@ export interface Champion extends GameCard {
     upgrade: Class | null;
 }
 
-export const isChampion = (value: any): value is Champion => !!value?.actions;
-
 export class GameChampionActions {
     championAction = (game: Game, action: string, sourceX: number, sourceY: number, targetX: number, targetY: number) => {
         const sourceChampion = game.board[sourceX][sourceY];
@@ -41,13 +51,13 @@ export class GameChampionActions {
         let result: string | null = null;
 
         switch (action) {
-            case championActionsName.step:
+            case ChampionActionsName.Step:
                 result = this.moveChampion(game.board, sourceChampion, sourceX, sourceY, targetX, targetY);
                 break;
-            case championActionsName.basicHit:
+            case ChampionActionsName.BasicHit:
                 result = this.basicHit(game.board, sourceChampion, sourceX, sourceY, targetX, targetY);
                 break;
-            case championActionsName.daggerThrow:
+            case ChampionActionsName.DaggerThrow:
                 result = this.daggerThrow(game.board, sourceChampion, sourceX, sourceY, targetX, targetY);
                 break;
             default:
@@ -75,14 +85,14 @@ export class GameChampionActions {
         return "success";
     }
 
-    basicHit = (board: (GameCard | null)[][], attackingChampion: Champion, rowIndex: number, columnIndex: number, targetRowIndex: number, targetColumnIndex: number) => {
+    basicHit = (board: (GameCard | null)[][], attackingChampion: Champion, sourceRowIndex: number, sourceColumnIndex: number, targetRowIndex: number, targetColumnIndex: number) => {
 
         const targetChampion = board[targetRowIndex][targetColumnIndex];
 
         if (!isChampion(targetChampion)) return "Target champion is not a champion";
 
-        const distance = this.distance(rowIndex, columnIndex, targetRowIndex, targetColumnIndex);
-        if (distance > 1) return "Location to far";
+        const validDistance = this.checkAllowedDistance(1, 1, sourceRowIndex, sourceColumnIndex, targetRowIndex, targetColumnIndex);
+        if (!validDistance) return "Location to far";
 
         const dmg = attackingChampion.calStr - targetChampion.armor;
 
@@ -101,13 +111,15 @@ export class GameChampionActions {
 
         const targetChampion = board[targetRowIndex][targetColumnIndex];
 
-        if (!isChampion(targetChampion)) return "Target champion is not a champion";
+        if (!isChampion(targetChampion)) return 'Target champion is not a champion';
 
-        const distance = this.distance(sourceRowIndex, sourceColumnIndex, targetRowIndex, targetColumnIndex);
-        if (distance > 3) return "Location to far";
+        const validDistance = this.checkAllowedDistance(3, 1, sourceRowIndex, sourceColumnIndex, targetRowIndex, targetColumnIndex);
+        if (!validDistance) return 'Location to far';
+
+        const validDirection = this.checkAllowedDirection(ChampionActionsDirections.Straight, sourceRowIndex, sourceColumnIndex, targetRowIndex, targetColumnIndex);
+        if(!validDirection) return `Not a valid direction for direction: ${ChampionActionsDirections.Straight}`;
 
         const isPathBlocked = this.checkBlockingObjects(board, sourceRowIndex, sourceColumnIndex, targetRowIndex, targetColumnIndex);
-
         if (isPathBlocked) return 'Hit path is blocked';
 
         const dmg = attackingChampion.calDex - targetChampion.armor;
@@ -121,6 +133,24 @@ export class GameChampionActions {
         }
 
         return "success";
+    }
+
+    checkAllowedDistance = (allowedMaxDistance: number,
+        allowedMinDistance: number, sourceRowIndex: number, sourceColumnIndex: number, targetRowIndex: number, targetColumnIndex: number) => {
+
+        const distance = this.distance(sourceRowIndex, sourceColumnIndex, targetRowIndex, targetColumnIndex);
+        return allowedMinDistance <= distance && distance <= allowedMaxDistance;
+    }
+
+    checkAllowedDirection = (allowedDirection: ChampionActionsDirections,
+        sourceRowIndex: number, sourceColumnIndex: number, targetRowIndex: number, targetColumnIndex: number) => {
+
+        switch (allowedDirection) {
+            case ChampionActionsDirections.Straight:
+                return sourceColumnIndex === targetColumnIndex || sourceRowIndex === targetRowIndex;
+            default:
+                break;
+        }
     }
 
     distance = (sourceX: number, sourceY: number, targetX: number, targetY: number): number => {
@@ -144,7 +174,7 @@ export class GameChampionActions {
             columnIndex += columnDirection === 'left' ? -1 : 1;
 
             const targetCell = board[rowIndex][columnIndex];
-            
+
             return targetCell !== undefined && targetCell !== null && targetCell.isBlocking;
         }
 
@@ -173,10 +203,4 @@ export const calculateStats = (champion: Champion) => {
     const calHp = (champion.body?.hp ?? 0) + (champion.rightHand?.hp ?? 0) + (champion.leftHand?.hp ?? 0) + (champion.upgrade?.hp ?? 0);
     champion.hp += calHp
     champion.currentHp += calHp;
-}
-
-export const championActionsName = {
-    step: 'Step',
-    basicHit: 'Basic Hit',
-    daggerThrow: 'Dagger Throw'
 }

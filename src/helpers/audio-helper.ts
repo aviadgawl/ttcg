@@ -1,5 +1,5 @@
 import { playerActionsName } from '../logic/player';
-import { championActionsName } from '../logic/champion';
+import { ChampionActionsName } from '../logic/champion';
 import equipSound from '../assets/audio/equip.mp3';
 import upgradeSound from '../assets/audio/upgrade.mp3';
 import summonSound from '../assets/audio/summon.mp3';
@@ -37,13 +37,13 @@ export const playSoundByPlayerActionName = (actionName: string) => {
 
 export const playSoundByCardActionName = (actionName: string) => {
     switch (actionName) {
-        case championActionsName.basicHit:
+        case ChampionActionsName.BasicHit:
             playSound(basicHitSound);
             break;
-        case championActionsName.step:
+        case ChampionActionsName.Step:
             playSound(stepSound);
             break;
-        case championActionsName.daggerThrow:
+        case ChampionActionsName.DaggerThrow:
             playSound(daggerThrowSound);
             break;
         default:
