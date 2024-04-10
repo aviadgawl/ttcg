@@ -2,6 +2,10 @@
     background-image: url("https://i.pinimg.com/originals/2b/59/73/2b5973de39eb2644364dc0cc317f7dd3.jpg");
 }
 
+.Rotate {
+    transform: rotate(180deg);
+}
+
 .Board td {
  
     width: 220px;

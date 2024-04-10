@@ -2,6 +2,10 @@ span {
     font-size: 13px;
 }
 
+.Rotate {
+    transform: rotate(180deg);
+}
+
 .Selected {
     border:solid gold 5px;
 }

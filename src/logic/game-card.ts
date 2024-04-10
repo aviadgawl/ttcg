@@ -16,15 +16,4 @@ export interface Gear extends GameCard {
     bodyPart: string;
 }
 
-export interface Class extends GameCard {
-    str: number;
-    dex: number;
-    int: number;
-    action: string;
-    requiredClass: string;
-    class: string;
-}
-
 export const isGear = (value: any): value is Gear => !!value?.bodyPart;
-
-export const isClass = (value: any): value is Class => !!value?.action;

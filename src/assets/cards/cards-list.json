@@ -1,10 +1,45 @@
-[{
-    "guid": "1", "name": "Aviad", "image": "https://cdn.openart.ai/published/FszSWSLSplED5gq2DIRv/bZ9vPFtW_B0RM_raw.jpg", "playerIndex": 0,
-    "hp": 2, "currentHp": 2,
-    "armor": 2, "str": 2, "calStr": 2,
-    "dex": 2, "calDex": 2,
-    "int": 2, "calInt": 2, "mental": 2,
-    "stm": 2, "actions": ["Step", "Basic Hit"], "calActions": [],
-    "body": null, "rightHand": null, "leftHand": null, 
-    "class": "Fighter", "calClass": "Fighter", "upgrade": null
-}]
+[
+    {
+        "guid": "1",
+        "type": "Champion",
+        "name": "Aviad",
+        "image": "https://ih1.redbubble.net/image.5268916617.1284/flat,750x,075,f-pad,750x1000,f8f8f8.jpg",
+        "hp": 2,
+        "str": 2,
+        "dex": 2,
+        "int": 2,
+        "stm": 2,
+        "actions": [
+            "Step",
+            "BasicHit"
+        ],
+        "class": "Fighter",
+        "isBlocking": false
+    },
+    {
+        "guid": "4",
+        "type": "Class",
+        "name": "High Knight",
+        "class": "Knight",
+        "str": 3,
+        "dex": 0,
+        "int": 0,
+        "hp": 4,
+        "action": "Block",
+        "requiredClass": "Fighter",
+        "image": "https://v.etsystatic.com/video/upload/q_auto/Untitled_design_18_hx9pqm.jpg",
+        "isBlocking": false
+    },
+    {
+        "guid": "3",
+        "type": "Gear",
+        "name": "Sword",
+        "str": 2,
+        "dex": 0,
+        "int": 0,
+        "hp": 0,
+        "bodyPart": "Hand",
+        "image": "https://pics.craiyon.com/2023-10-08/42b36e89ac864496855393cd033a545a.webp",
+        "isBlocking": false
+    }
+]

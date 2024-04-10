@@ -1,17 +1,25 @@
-import { Gear, GameCard, Class } from './card';
+import { Gear, GameCard } from './game-card';
 import { Game } from './game';
 
 export enum ChampionActionsName {
     Step = 'Step',
     BasicHit = 'Basic Hit',
-    DaggerThrow = 'Dagger Throw'
+    DaggerThrow = 'Dagger Throw',
+    Block = 'Block'
 }
 
 enum ChampionActionsDirections {
     Straight = 'Straight'
 }
 
-export const isChampion = (value: any): value is Champion => !!value?.actions;
+export interface Class extends GameCard {
+    str: number;
+    dex: number;
+    int: number;
+    action: ChampionActionsName;
+    requiredClass: string;
+    class: string;
+}
 
 export interface Champion extends GameCard {
 
@@ -27,7 +35,7 @@ export interface Champion extends GameCard {
 
     stm: number;
 
-    actions: string[];
+    actions: ChampionActionsName[];
     calActions: string[];
 
     body: Gear | null;
@@ -117,7 +125,7 @@ export class GameChampionActions {
         if (!validDistance) return 'Location to far';
 
         const validDirection = this.checkAllowedDirection(ChampionActionsDirections.Straight, sourceRowIndex, sourceColumnIndex, targetRowIndex, targetColumnIndex);
-        if(!validDirection) return `Not a valid direction for direction: ${ChampionActionsDirections.Straight}`;
+        if (!validDirection) return `Not a valid direction for direction: ${ChampionActionsDirections.Straight}`;
 
         const isPathBlocked = this.checkBlockingObjects(board, sourceRowIndex, sourceColumnIndex, targetRowIndex, targetColumnIndex);
         if (isPathBlocked) return 'Hit path is blocked';
@@ -204,3 +212,11 @@ export const calculateStats = (champion: Champion) => {
     champion.hp += calHp
     champion.currentHp += calHp;
 }
+
+export const stringToChampionActionName = (actionName: string|undefined): ChampionActionsName => {
+    return ChampionActionsName[actionName as keyof typeof ChampionActionsName];
+}
+
+export const isClass = (value: any): value is Class => !!value?.action;
+
+export const isChampion = (value: any): value is Champion => !!value?.actions;

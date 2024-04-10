@@ -3,7 +3,7 @@ import styles from './Hand.module.css';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { playerActions, setShowHand, createSelectedData } from '../../app/store';
 import { actionTypes } from '../../app/types';
-import { playerActionsName } from '../../logic/player';
+import { PlayerActionsName } from '../../logic/player';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
 import HandCard from '../HandCard/HandCard';
@@ -16,8 +16,8 @@ const Hand: FC = () => {
 
   const dispatch = useAppDispatch();
 
-  const handleAction = (actionMame: string) => {
-    const selectedActionData = createSelectedData(null, actionMame, actionTypes.playerAction);
+  const handleAction = (actionName: string) => {
+    const selectedActionData = createSelectedData(null, actionName, actionTypes.playerAction);
     dispatch(playerActions({ selectedActionData: selectedActionData }));
   };
 
@@ -30,9 +30,9 @@ const Hand: FC = () => {
 
       <div className={styles.CardContainer}>
         <div className={styles.ButtonsContainer}>
-          <Button onClick={() => handleAction(playerActionsName.initialDraw)} variant="outlined">Deck: {playerDeck.length}</Button>
-          <Button onClick={() => handleAction(playerActionsName.endTurn)} variant="outlined">{playerActionsName.endTurn}</Button>
-          <Button onClick={() => handleAction(playerActionsName.surrender)} variant="outlined">{playerActionsName.surrender}</Button>
+          <Button onClick={() => handleAction(PlayerActionsName.InitialDraw)} variant="outlined">Deck: {playerDeck.length}</Button>
+          <Button onClick={() => handleAction(PlayerActionsName.EndTurn)} variant="outlined">{PlayerActionsName.EndTurn}</Button>
+          <Button onClick={() => handleAction(PlayerActionsName.Surrender)} variant="outlined">{PlayerActionsName.Surrender}</Button>
         </div>
         {playerHand.map((card, index) => <HandCard key={index} card={card} />)}
       </div>

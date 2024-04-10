@@ -10,6 +10,7 @@ import styles from './Board.module.css';
 
 const Board: FC = () => {
   const boardState = useAppSelector((state) => state.gameActions.game.board);
+  const playingPlayerIndex = useAppSelector((state) => state.gameActions.game.playingPlayerIndex);
   const selectedActionData = useAppSelector((state) => state.gameActions.selectedActionData);
   const dispatch = useAppDispatch();
 
@@ -35,7 +36,7 @@ const Board: FC = () => {
   };
 
   return (
-    <table className={styles.Board}>
+    <table className={`${styles.Board} ${playingPlayerIndex === 1 ? styles.Rotate : ''}`} >
       <tbody>
         {boardState.map((row, rowIndex) => {
           return <tr key={`${rowIndex}`}>

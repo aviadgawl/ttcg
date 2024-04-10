@@ -1,7 +1,17 @@
-import { GameCard, Gear, Class } from './card';
-import { Champion, calculateStats } from './champion';
+import { GameCard, Gear } from './game-card';
+import { Champion, calculateStats, Class } from './champion';
 
 import { Game } from './game';
+
+export enum PlayerActionsName {
+    Draw = 'Draw',
+    Surrender = 'Surrender',
+    Summon = 'Summon',
+    EndTurn = 'End Turn',
+    InitialDraw = 'Initial Draw',
+    Equip = 'Equip',
+    Upgrade = 'Upgrade'
+}
 
 export interface Player {
     name: string;
@@ -18,19 +28,19 @@ export class GamePlayerActions {
         const player = game.players[game.playerIndex];
 
         switch (action) {
-            case playerActionsName.initialDraw:
+            case PlayerActionsName.InitialDraw:
                 return this.initialDraw(player);
-            case playerActionsName.draw:
+            case PlayerActionsName.Draw:
                 return this.draw(player, data.extendedData as number);
-            case playerActionsName.surrender:
+            case PlayerActionsName.Surrender:
                 return this.surrender(player, game);
-            case playerActionsName.summon:
+            case PlayerActionsName.Summon:
                 return this.summon(game, data.selectedCard as GameCard, data.extendedData as number[]);
-            case playerActionsName.endTurn:
+            case PlayerActionsName.EndTurn:
                 return this.endTurn(game);
-            case playerActionsName.equip:
+            case PlayerActionsName.Equip:
                 return this.equip(game, data.selectedCard as Gear, data.extendedData as number[]);
-            case playerActionsName.upgrade:
+            case PlayerActionsName.Upgrade:
                 return this.upgrade(game, data.selectedCard as Class, data.extendedData as number[]);
             default:
                 return `Player action ${action} is not implemented yet`;
@@ -120,6 +130,8 @@ export class GamePlayerActions {
     }
 
     upgrade = (game: Game, selectedCard: Class, targetLocation: number[]): string => {
+        if(selectedCard === null) return 'Upgrade card can not be null';
+        
         const targetRow = targetLocation[0],
             targetColumn = targetLocation[1];
 
@@ -145,14 +157,4 @@ const removeCardFromHand = (game: Game, selectedCard: GameCard) => {
     const player = game.players[game.playerIndex];
     const cardIndex = player.hand.findIndex((x) => x.guid === selectedCard.guid);
     player.hand.splice(cardIndex, 1);
-}
-
-export const playerActionsName = {
-    draw: 'Draw',
-    surrender: 'Surrender',
-    summon: 'Summon',
-    endTurn: 'End Turn',
-    initialDraw: 'Initial Draw',
-    equip: 'Equip',
-    upgrade: 'Upgrade'
 }

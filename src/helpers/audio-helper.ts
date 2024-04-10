@@ -1,4 +1,4 @@
-import { playerActionsName } from '../logic/player';
+import { PlayerActionsName } from '../logic/player';
 import { ChampionActionsName } from '../logic/champion';
 import equipSound from '../assets/audio/equip.mp3';
 import upgradeSound from '../assets/audio/upgrade.mp3';
@@ -15,19 +15,19 @@ const playSound = (soundFile: string) => {
 
 export const playSoundByPlayerActionName = (actionName: string) => {
     switch (actionName) {
-        case playerActionsName.equip:
+        case PlayerActionsName.Equip:
             playSound(equipSound);
             break;
-        case playerActionsName.upgrade:
+        case PlayerActionsName.Upgrade:
             playSound(upgradeSound);
             break;
-        case playerActionsName.summon:
+        case PlayerActionsName.Summon:
             playSound(summonSound);
             break;
-        case playerActionsName.draw:
+        case PlayerActionsName.Draw:
             playSound(drawSound);
             break;
-        case playerActionsName.initialDraw:
+        case PlayerActionsName.InitialDraw:
             playSound(drawSound);
             break;
         default:

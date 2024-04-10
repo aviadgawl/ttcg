@@ -1,6 +1,6 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 import { createGame } from '../logic/game';
-import { GameCard } from '../logic/card';
+import { GameCard } from '../logic/game-card';
 import { GameChampionActions } from '../logic/champion';
 import { GamePlayerActions } from '../logic/player';
 import { playSoundByPlayerActionName, playSoundByCardActionName } from '../helpers/audio-helper';

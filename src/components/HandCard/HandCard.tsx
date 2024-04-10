@@ -1,7 +1,7 @@
 import { FC } from 'react';
-import { GameCard, isGear, isClass } from '../../logic/card';
-import { isChampion } from '../../logic/champion';
-import { playerActionsName } from '../../logic/player';
+import { GameCard, isGear } from '../../logic/game-card';
+import { isChampion, isClass } from '../../logic/champion';
+import { PlayerActionsName } from '../../logic/player';
 import styles from './HandCard.module.css';
 import { useAppDispatch } from '../../app/hooks';
 import { setSelectedActionData, setShowHand, createSelectedData } from '../../app/store';
@@ -26,30 +26,33 @@ const HandCard: FC<CardProps> = (props) => {
   }
 
   return <Card className={styles.Card} style={{ backgroundImage: `url(${props.card.image})` }} sx={{ maxWidth: 345 }}>
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          {props.card.name}
-        </Typography>
+    <CardContent>
+      <Typography gutterBottom variant="h5" component="div">
+        {props.card.name}
+      </Typography>
 
-        {(isClass(props.card) || isGear(props.card) || isChampion(props.card)) && <>
-          <Typography> HP: {props.card.hp} </Typography>
-          <Typography> STR: {props.card.str} </Typography>
-          <Typography> DEX: {props.card.dex} </Typography>
-          <Typography> INT: {props.card.int} </Typography>
-        </>}
+      {(isClass(props.card) || isGear(props.card) || isChampion(props.card)) && <>
+        <Typography> HP: {props.card.hp} </Typography>
+        <Typography> STR: {props.card.str} </Typography>
+        <Typography> DEX: {props.card.dex} </Typography>
+        <Typography> INT: {props.card.int} </Typography>
+      </>}
 
-        {isChampion(props.card) && <>
-          {props.card.actions.map((action, actionIndex) =>
-            <Typography key={actionIndex}>{action}</Typography>
-          )}
-        </>}
-      </CardContent>
-      <CardActions>
-        {isClass(props.card) && <Button className={styles.Button} variant="contained" size="small" onClick={() => handleCardActionOnTarget(playerActionsName.upgrade)}> {playerActionsName.upgrade} </Button>}
-        {isGear(props.card) && <Button className={styles.Button} variant="contained" size="small" onClick={() => handleCardActionOnTarget(playerActionsName.equip)}> {playerActionsName.equip} </Button>}
-        {isChampion(props.card) && <Button className={styles.Button} variant="contained" size="small" onClick={() => handleCardActionOnTarget(playerActionsName.summon)}> {playerActionsName.summon} </Button>}
-      </CardActions>
-    </Card>
+      {isChampion(props.card) && <>
+        {props.card.actions.map((action, actionIndex) =>
+          <Typography key={actionIndex}>{action}</Typography>
+        )}
+      </>}
+    </CardContent>
+    <CardActions>
+      {isClass(props.card) && <Button className={styles.Button} variant="contained" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Upgrade)}>
+        {PlayerActionsName.Upgrade} </Button>}
+      {isGear(props.card) && <Button className={styles.Button} variant="contained" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Equip)}>
+        {PlayerActionsName.Equip} </Button>}
+      {isChampion(props.card) && <Button className={styles.Button} variant="contained" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Summon)}>
+        {PlayerActionsName.Summon} </Button>}
+    </CardActions>
+  </Card>
 };
 
 export default HandCard;
