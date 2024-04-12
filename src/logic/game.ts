@@ -1,5 +1,5 @@
 import { Player } from './player';
-import { GameCard, Gear } from './game-card';
+import { GameCard, Gear, Crystal } from './game-card';
 import { Champion, Class, stringToChampionActionName } from './champion';
 import cardsListJson from '../assets/cards/cards-list.json';
 
@@ -39,7 +39,8 @@ export const createGame = (): Game => {
     const board = new Array(new Array<GameCard | null>(7))
 
     for (let index = 0; index < 13; index++) {
-        board[index] = [null, null, null, null, mockChampion1, null, null, null];
+        if(index === 12) board[index] = [null, null, null, mockCrystal, null, null, null, null];
+        else board[index] = [null, null, null, null, null, null, null, null];
     }
 
     return { board: board, players: [mockPlayerOne, mockPlayerTwo], status: 'start', playerIndex: 0, playingPlayerIndex: 0 };
@@ -52,10 +53,11 @@ export interface Game {
     players: Player[];
     status: string;
 }
-debugger
+
 const mockChampion1: Champion = cardsList[0] as Champion;
 const mockChampion2: Champion = cardsList[0] as Champion;
 const mockClass: Class = cardsList[1] as Class;
 const mockGear: Gear = cardsList[2] as Gear;
 const mockPlayerOne: Player = { name: 'AviadP', hand: [mockClass, mockGear], deck: [mockChampion2], didDraw: false, summonsLeft: 1 };
 const mockPlayerTwo: Player = { name: 'MorP', hand: new Array<GameCard>(), deck: new Array<GameCard>(), didDraw: false, summonsLeft: 1 };
+const mockCrystal: Crystal = { image: 'https://img.freepik.com/premium-photo/magical-crystal-with-swirling-colors-digital-art-style-illustration_812426-6398.jpg', hp: 20, currentHp: 20, name: 'Warrior Spirit', guid: '5', effect: {area: 'Fighters', attribute: 'str', value: 1, duration: -1}, playerIndex:0, isBlocking: true}

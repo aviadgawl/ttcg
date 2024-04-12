@@ -7,9 +7,9 @@
 }
 
 .Board td {
- 
     width: 220px;
-    height: 90px;
+    height: 150px;
+    border: 1px solid black;
 }
 
 .PlayerTwoBase {
@@ -20,13 +20,9 @@
     background-color: rgb(133, 173, 133, 0.5);
 }
 
-td {
-    border: 1px solid black;
-}
-
 .TargetButton {
     background-color: black!important;
     position: absolute!important;
-    margin-left: -108px!important;
+    margin-left: -4.5%!important;
     margin-top: 0px!important;
 }

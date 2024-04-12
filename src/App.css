@@ -36,3 +36,12 @@
     transform: rotate(360deg);
   }
 }
+
+.App-button {
+    background-color: darkgoldenrod!important;
+    font-weight: bolder;
+}
+
+.App-text-color {
+  color: white!important;
+}

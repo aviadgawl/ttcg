@@ -1,4 +1,4 @@
-import { Gear, GameCard } from './game-card';
+import { Gear, GameCard, isCrystal } from './game-card';
 import { Game } from './game';
 
 export enum ChampionActionsName {
@@ -95,22 +95,18 @@ export class GameChampionActions {
 
     basicHit = (board: (GameCard | null)[][], attackingChampion: Champion, sourceRowIndex: number, sourceColumnIndex: number, targetRowIndex: number, targetColumnIndex: number) => {
 
-        const targetChampion = board[targetRowIndex][targetColumnIndex];
+        const target = board[targetRowIndex][targetColumnIndex];
 
-        if (!isChampion(targetChampion)) return "Target champion is not a champion";
+        if (target === null) return 'Target is not found';
+
+        const validTarget = this.checkValidTarget(target);
+        if (!validTarget) return 'Target is not a champion or crystal';
 
         const validDistance = this.checkAllowedDistance(1, 1, sourceRowIndex, sourceColumnIndex, targetRowIndex, targetColumnIndex);
         if (!validDistance) return "Location to far";
 
-        const dmg = attackingChampion.calStr - targetChampion.armor;
-
-        if (dmg <= 0) {
-            targetChampion.armor -= attackingChampion.calStr;
-        }
-        else {
-            targetChampion.currentHp -= dmg;
-            if (targetChampion.currentHp === 0) board[targetRowIndex][targetColumnIndex] = null;
-        }
+        this.applyPhysicalDamage(target, attackingChampion.calStr);
+        if (target.currentHp === 0) board[targetRowIndex][targetColumnIndex] = null;
 
         return "success";
     }
@@ -119,7 +115,10 @@ export class GameChampionActions {
 
         const targetChampion = board[targetRowIndex][targetColumnIndex];
 
-        if (!isChampion(targetChampion)) return 'Target champion is not a champion';
+        if (targetChampion === null) return 'Target is not found';
+
+        const validTarget = this.checkValidTarget(targetChampion);
+        if (!validTarget) return 'Target is not a champion or crystal';
 
         const validDistance = this.checkAllowedDistance(3, 1, sourceRowIndex, sourceColumnIndex, targetRowIndex, targetColumnIndex);
         if (!validDistance) return 'Location to far';
@@ -130,15 +129,8 @@ export class GameChampionActions {
         const isPathBlocked = this.checkBlockingObjects(board, sourceRowIndex, sourceColumnIndex, targetRowIndex, targetColumnIndex);
         if (isPathBlocked) return 'Hit path is blocked';
 
-        const dmg = attackingChampion.calDex - targetChampion.armor;
-
-        if (dmg <= 0) {
-            targetChampion.armor -= attackingChampion.calDex;
-        }
-        else {
-            targetChampion.currentHp -= dmg;
-            if (targetChampion.currentHp === 0) board[targetRowIndex][targetColumnIndex] = null;
-        }
+        this.applyPhysicalDamage(targetChampion, attackingChampion.calDex);
+        if (targetChampion.currentHp === 0) board[targetRowIndex][targetColumnIndex] = null;
 
         return "success";
     }
@@ -189,6 +181,10 @@ export class GameChampionActions {
         return false;
     }
 
+    checkValidTarget = (target: GameCard): boolean => {
+        return isChampion(target) || isCrystal(target);
+    }
+
     getColumnDirection = (sourceColumnIndex: number, targetColumnIndex: number): string => {
         if (sourceColumnIndex === targetColumnIndex) return 'none';
 
@@ -199,6 +195,23 @@ export class GameChampionActions {
         if (sourceRowIndex === targetRowIndex) return 'none';
 
         return (sourceRowIndex - targetRowIndex) > 0 ? 'up' : 'down';
+    }
+
+    applyPhysicalDamage = (target: GameCard, damage:number) => {
+        let pureDmg = damage;
+
+        if (isChampion(target)) {
+            const dmg = pureDmg - target.armor;
+
+            if (dmg > 0) {
+                target.armor = 0;
+                pureDmg -= dmg;
+            }
+            else if (dmg < 0) target.armor -= Math.abs(dmg);
+            else if (dmg === 0) return;
+        }
+
+        target.currentHp -= pureDmg;
     }
 }
 
@@ -213,7 +226,7 @@ export const calculateStats = (champion: Champion) => {
     champion.currentHp += calHp;
 }
 
-export const stringToChampionActionName = (actionName: string|undefined): ChampionActionsName => {
+export const stringToChampionActionName = (actionName: string | undefined): ChampionActionsName => {
     return ChampionActionsName[actionName as keyof typeof ChampionActionsName];
 }
 

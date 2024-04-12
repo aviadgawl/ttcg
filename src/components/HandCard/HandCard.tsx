@@ -25,7 +25,7 @@ const HandCard: FC<CardProps> = (props) => {
     dispatch(setShowHand(false));
   }
 
-  return <Card className={styles.Card} style={{ backgroundImage: `url(${props.card.image})` }} sx={{ maxWidth: 345 }}>
+  return <Card className={`${styles.Card} App-text-color`} style={{ backgroundImage: `url(${props.card.image})` }} sx={{ maxWidth: 345 }}>
     <CardContent>
       <Typography gutterBottom variant="h5" component="div">
         {props.card.name}
@@ -45,11 +45,11 @@ const HandCard: FC<CardProps> = (props) => {
       </>}
     </CardContent>
     <CardActions>
-      {isClass(props.card) && <Button className={styles.Button} variant="contained" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Upgrade)}>
+      {isClass(props.card) && <Button className="App-button" variant="contained" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Upgrade)}>
         {PlayerActionsName.Upgrade} </Button>}
-      {isGear(props.card) && <Button className={styles.Button} variant="contained" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Equip)}>
+      {isGear(props.card) && <Button className="App-button" variant="contained" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Equip)}>
         {PlayerActionsName.Equip} </Button>}
-      {isChampion(props.card) && <Button className={styles.Button} variant="contained" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Summon)}>
+      {isChampion(props.card) && <Button className="App-button" variant="contained" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Summon)}>
         {PlayerActionsName.Summon} </Button>}
     </CardActions>
   </Card>

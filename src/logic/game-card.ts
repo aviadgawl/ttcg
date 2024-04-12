@@ -1,3 +1,10 @@
+export interface GameEffect {
+    area: string,
+    attribute: string,
+    value: number,
+    duration: number
+}
+
 export interface GameCard {
     playerIndex: number;
     image: string;
@@ -5,7 +12,7 @@ export interface GameCard {
     hp: number;
     currentHp: number;
     guid: string;
-    isBlocking: false;
+    isBlocking: boolean;
 }
 
 export interface Gear extends GameCard {
@@ -15,5 +22,11 @@ export interface Gear extends GameCard {
     hp: number;
     bodyPart: string;
 }
+
+export interface Crystal extends GameCard {
+    effect: GameEffect
+}
+
+export const isCrystal = (value: any): value is Gear => !!value?.effect;
 
 export const isGear = (value: any): value is Gear => !!value?.bodyPart;
