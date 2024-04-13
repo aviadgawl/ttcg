@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Champion } from '../../logic/champion';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useAppDispatch } from '../../app/hooks';
 import { setSelectedActionData, createSelectedData } from '../../app/store';
 import { actionTypes } from '../../app/types';
 import Button from '@mui/material/Button';
@@ -11,14 +11,14 @@ interface BoardChampionProps {
   x: number;
   y: number;
   isSelected: boolean;
+  rotate: boolean;
 }
 
 const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
-  const playingPlayerIndex = useAppSelector((state) => state.gameActions.game.playingPlayerIndex);
   const dispatch = useAppDispatch();
 
   return (<div style={{ backgroundImage: `url(${props.champion.image})` }}
-    className={`App-text-color ${styles.Container} ${props.isSelected ? styles.Selected : styles.NotSelected} ${playingPlayerIndex === 1 ? styles.Rotate : ''}`}>
+    className={`App-text-color ${styles.Container} ${props.isSelected ? styles.Selected : styles.NotSelected} ${props.rotate ? 'App-rotate' : ''}`}>
     <div>{props.champion.name}</div>
     <span> HP: {props.champion.currentHp}/{props.champion.hp} </span>
     <span> Armor: {props.champion.armor}/{props.champion.calStr}</span>

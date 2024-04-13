@@ -5,6 +5,12 @@ import { GameChampionActions } from '../logic/champion';
 import { GamePlayerActions } from '../logic/player';
 import { playSoundByPlayerActionName, playSoundByCardActionName } from '../helpers/audio-helper';
 
+export interface GameDialog {
+    title: string;
+    content: string;
+    showButtons: boolean;
+}
+
 export const createSelectedData = (card: GameCard | null, actionName: string, actionType: string, location: number[] = [-1, -1]) => {
     return { card: card, actionName: actionName, actionType: actionType, location }
 }
@@ -12,7 +18,8 @@ export const createSelectedData = (card: GameCard | null, actionName: string, ac
 export const initialState = {
     game: createGame(),
     selectedActionData: { card: null, actionName: '', actionType: null, location: [-1, -1] },
-    showHand: false
+    showHand: false,
+    dialog: null as unknown as GameDialog
 }
 
 const gameChampionActions = new GameChampionActions();
@@ -45,6 +52,9 @@ const gameSlice = createSlice({
         },
         setSelectedActionData(state, action) {
             state.selectedActionData = action.payload;
+        },
+        setDialog(state, action) {
+            state.dialog = action.payload;
         }
     }
 });
@@ -59,7 +69,8 @@ export const {
     championActions,
     playerActions,
     setShowHand,
-    setSelectedActionData
+    setSelectedActionData,
+    setDialog
 } = gameSlice.actions;
 
 export type AppDispatch = typeof store.dispatch;

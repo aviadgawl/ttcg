@@ -45,3 +45,7 @@
 .App-text-color {
   color: white!important;
 }
+
+.App-rotate {
+  transform: rotate(180deg);
+}

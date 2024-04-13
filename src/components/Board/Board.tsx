@@ -37,19 +37,21 @@ const Board: FC = () => {
     return;
   };
 
+  const shouldRotate = playingPlayerIndex === 1;
+
   return (
-    <table className={`${styles.Board} ${playingPlayerIndex === 1 ? styles.Rotate : ''}`} >
+    <table className={`${styles.Board} ${shouldRotate ? 'App-rotate' : ''}`} >
       <tbody>
         {boardState.map((row, rowIndex) => {
           return <tr key={`${rowIndex}`}>
             {row.map((card, columnIndex) => {
               return <td className={playerBaseClassName(rowIndex)} key={`${rowIndex}-${columnIndex}`}>
                 <Button className={styles.TargetButton} size="small" variant="contained" onClick={() => handleAction(rowIndex, columnIndex)}><FaBullseye /></Button>
-                {isChampion(card) && <BoardChampion champion={card}
+                {isChampion(card) && <BoardChampion rotate={shouldRotate} champion={card}
                   x={rowIndex}
                   y={columnIndex}
                   isSelected={`${selectedActionData.location[0]}-${selectedActionData.location[1]}` === `${rowIndex}-${columnIndex}`} />}
-                {isCrystal(card) && <BoardCrystal crystal={card} />}
+                {isCrystal(card) && <BoardCrystal rotate={shouldRotate} crystal={card} />}
               </td>
             })}
           </tr>

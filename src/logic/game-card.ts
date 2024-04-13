@@ -24,9 +24,9 @@ export interface Gear extends GameCard {
 }
 
 export interface Crystal extends GameCard {
-    effect: GameEffect
+    effect: GameEffect|null
 }
 
-export const isCrystal = (value: any): value is Gear => !!value?.effect;
+export const isCrystal = (value: any): value is Gear => !!value?.effect || value?.effect === null;
 
 export const isGear = (value: any): value is Gear => !!value?.bodyPart;

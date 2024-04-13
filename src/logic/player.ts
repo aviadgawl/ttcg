@@ -1,7 +1,7 @@
 import { GameCard, Gear } from './game-card';
-import { Champion, calculateStats, Class } from './champion';
+import { Champion, calculateStats, Class, isChampion } from './champion';
 
-import { Game } from './game';
+import { Game, GameStatus } from './game';
 
 export enum PlayerActionsName {
     Draw = 'Draw',
@@ -73,7 +73,7 @@ export class GamePlayerActions {
     };
 
     surrender = (player: Player, game: Game) => {
-        game.status = `Player ${player.name} has surrendered`;
+        game.status = GameStatus.over;
     };
 
     summon = (game: Game, selectedCard: GameCard, targetLocation: number[]): string => {
@@ -83,7 +83,7 @@ export class GamePlayerActions {
 
         const player = game.players[game.playerIndex];
 
-        if(player.summonsLeft === 0) return 'Player used his all his summons';
+        if (player.summonsLeft === 0) return 'Player used his all his summons';
 
         if ((game.playerIndex === 0 && targetRow < 11) || (game.playerIndex === 1 && targetRow > 2))
             return `Player ${game.playerIndex + 1} can not summon here ${targetRow}-${targetColumn}`;
@@ -91,17 +91,23 @@ export class GamePlayerActions {
         game.board[targetRow][targetColumn] = selectedCard;
 
         removeCardFromHand(game, selectedCard);
-        
+
         player.summonsLeft--;
 
         return 'success';
     }
 
     endTurn = (game: Game): string => {
+        let nextPlayerIndex = 0;
+
         if (game.playingPlayerIndex === 0)
-            game.playingPlayerIndex = 1;
+            nextPlayerIndex = 1;
         else if (game.playingPlayerIndex === 1)
-            game.playingPlayerIndex = 0;
+            nextPlayerIndex = 0;
+
+        game.playingPlayerIndex = nextPlayerIndex;
+
+        this.refreshResources(game, nextPlayerIndex)
 
         return 'success';
     }
@@ -130,8 +136,8 @@ export class GamePlayerActions {
     }
 
     upgrade = (game: Game, selectedCard: Class, targetLocation: number[]): string => {
-        if(selectedCard === null) return 'Upgrade card can not be null';
-        
+        if (selectedCard === null) return 'Upgrade card can not be null';
+
         const targetRow = targetLocation[0],
             targetColumn = targetLocation[1];
 
@@ -150,6 +156,22 @@ export class GamePlayerActions {
         removeCardFromHand(game, selectedCard);
 
         return 'success';
+    }
+
+    refreshResources = (game: Game, playerIndex: number) => {
+        const player = game.players[playerIndex];
+        player.didDraw = false;
+        player.summonsLeft = 1;
+
+        const board = game.board;
+
+        for (let rowIndex = 0; rowIndex < board.length; rowIndex++) {
+            for (let columnIndex = 0; columnIndex < board[rowIndex].length; columnIndex++) {
+                const card = board[rowIndex][columnIndex];
+
+                if (isChampion(card) && card.playerIndex === playerIndex) card.stm = 2;
+            }
+        }
     }
 }
 

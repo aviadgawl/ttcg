@@ -1,5 +1,5 @@
 import { Gear, GameCard, isCrystal } from './game-card';
-import { Game } from './game';
+import { Game, GameStatus } from './game';
 
 export enum ChampionActionsName {
     Step = 'Step',
@@ -47,8 +47,13 @@ export interface Champion extends GameCard {
     upgrade: Class | null;
 }
 
+interface ChampionActionResult {
+    status: string,
+    targetedCard: GameCard | null
+}
+
 export class GameChampionActions {
-    championAction = (game: Game, action: string, sourceX: number, sourceY: number, targetX: number, targetY: number) => {
+    championAction = (game: Game, action: string, sourceX: number, sourceY: number, targetX: number, targetY: number): string => {
         const sourceChampion = game.board[sourceX][sourceY];
         if (sourceChampion === null) return 'Entity was not found';
         if (!isChampion(sourceChampion)) return 'Entity is not a champion';
@@ -56,7 +61,7 @@ export class GameChampionActions {
             return `Player number ${game.playingPlayerIndex + 1} can not use card of player number ${sourceChampion.playerIndex + 1}`;
         if (sourceChampion.stm <= 0) return 'Champion stamina is depleted';
 
-        let result: string | null = null;
+        let result: ChampionActionResult | null = null;
 
         switch (action) {
             case ChampionActionsName.Step:
@@ -69,70 +74,79 @@ export class GameChampionActions {
                 result = this.daggerThrow(game.board, sourceChampion, sourceX, sourceY, targetX, targetY);
                 break;
             default:
-                result = `Action ${action} is not implemented yet`;
+                result = {status: `Action ${action} is not implemented yet`, targetedCard: null};
                 break;
         }
 
-        if (result === 'success') sourceChampion.stm--;
+        if (result.status === 'success') {
+            sourceChampion.stm--;
 
-        return result;
+            if(result.targetedCard !== null && isCrystal(result.targetedCard) && result.targetedCard.currentHp < 0){
+                const loosingPlayer = game.players[result.targetedCard.playerIndex];
+                game.looser = loosingPlayer;
+                game.status = GameStatus.over;
+            }
+        }
+
+        return result.status;
     }
 
-    moveChampion = (board: (GameCard | null)[][], entityToMove: Champion, rowIndex: number, columnIndex: number, targetRowIndex: number, targetColumnIndex: number): string => {
+    moveChampion = (board: (GameCard | null)[][], entityToMove: Champion, rowIndex: number, columnIndex: number, targetRowIndex: number, targetColumnIndex: number): ChampionActionResult => {
         const targetCell = board[targetRowIndex][targetColumnIndex];
-        if (targetCell !== null) return 'Target location isn\'t empty';
+        if (targetCell !== null) return {status: 'Target location isn\'t empty', targetedCard: null };
 
-        if (entityToMove.calDex <= 0) return 'Dex must be higher than zero';
+        if (entityToMove.calDex <= 0) return {status: 'Dex must be higher than zero', targetedCard: null};
 
         const distance = this.distance(rowIndex, columnIndex, targetRowIndex, targetColumnIndex);
-        if (distance > entityToMove.calDex) return 'Location to far';
+        if (distance > entityToMove.calDex) return { status: 'Location to far', targetedCard: null };
 
         board[targetRowIndex][targetColumnIndex] = entityToMove;
         board[rowIndex][columnIndex] = null;
 
-        return "success";
+        return {status: 'success', targetedCard: null};
     }
 
-    basicHit = (board: (GameCard | null)[][], attackingChampion: Champion, sourceRowIndex: number, sourceColumnIndex: number, targetRowIndex: number, targetColumnIndex: number) => {
+    basicHit = (board: (GameCard | null)[][], attackingChampion: Champion,
+        sourceRowIndex: number, sourceColumnIndex: number, targetRowIndex: number, targetColumnIndex: number): ChampionActionResult => {
 
         const target = board[targetRowIndex][targetColumnIndex];
 
-        if (target === null) return 'Target is not found';
+        if (target === null) return { status: 'Target is not found', targetedCard: null };
 
         const validTarget = this.checkValidTarget(target);
-        if (!validTarget) return 'Target is not a champion or crystal';
+        if (!validTarget) return { status: 'Target is not a champion or crystal', targetedCard: target };
 
         const validDistance = this.checkAllowedDistance(1, 1, sourceRowIndex, sourceColumnIndex, targetRowIndex, targetColumnIndex);
-        if (!validDistance) return "Location to far";
+        if (!validDistance) return { status: 'Location to far', targetedCard: target };
 
         this.applyPhysicalDamage(target, attackingChampion.calStr);
         if (target.currentHp === 0) board[targetRowIndex][targetColumnIndex] = null;
 
-        return "success";
+        return { status: 'success', targetedCard: target };
     }
 
-    daggerThrow = (board: (GameCard | null)[][], attackingChampion: Champion, sourceRowIndex: number, sourceColumnIndex: number, targetRowIndex: number, targetColumnIndex: number) => {
+    daggerThrow = (board: (GameCard | null)[][], attackingChampion: Champion, sourceRowIndex: number, sourceColumnIndex: number, targetRowIndex: number, targetColumnIndex: number): ChampionActionResult => {
 
-        const targetChampion = board[targetRowIndex][targetColumnIndex];
+        const target = board[targetRowIndex][targetColumnIndex];
 
-        if (targetChampion === null) return 'Target is not found';
+        if (target === null) return { status: 'Target is not found', targetedCard: null };
 
-        const validTarget = this.checkValidTarget(targetChampion);
-        if (!validTarget) return 'Target is not a champion or crystal';
+        const validTarget = this.checkValidTarget(target);
+        if (!validTarget) return { status: 'Target is not a champion or crystal', targetedCard: target };
 
         const validDistance = this.checkAllowedDistance(3, 1, sourceRowIndex, sourceColumnIndex, targetRowIndex, targetColumnIndex);
-        if (!validDistance) return 'Location to far';
+        if (!validDistance) return { status: 'Location to far', targetedCard: target };
 
         const validDirection = this.checkAllowedDirection(ChampionActionsDirections.Straight, sourceRowIndex, sourceColumnIndex, targetRowIndex, targetColumnIndex);
-        if (!validDirection) return `Not a valid direction for direction: ${ChampionActionsDirections.Straight}`;
+        if (!validDirection) return { status: `Not a valid direction for direction: ${ChampionActionsDirections.Straight}`, targetedCard: null };
 
         const isPathBlocked = this.checkBlockingObjects(board, sourceRowIndex, sourceColumnIndex, targetRowIndex, targetColumnIndex);
-        if (isPathBlocked) return 'Hit path is blocked';
+        if (isPathBlocked) return { status: 'Hit path is blocked', targetedCard: null };
 
-        this.applyPhysicalDamage(targetChampion, attackingChampion.calDex);
-        if (targetChampion.currentHp === 0) board[targetRowIndex][targetColumnIndex] = null;
+        this.applyPhysicalDamage(target, attackingChampion.calDex);
+        if (target.currentHp <= 0) board[targetRowIndex][targetColumnIndex] = null;
 
-        return "success";
+        return { status: 'success', targetedCard: target };
     }
 
     checkAllowedDistance = (allowedMaxDistance: number,
@@ -197,7 +211,7 @@ export class GameChampionActions {
         return (sourceRowIndex - targetRowIndex) > 0 ? 'up' : 'down';
     }
 
-    applyPhysicalDamage = (target: GameCard, damage:number) => {
+    applyPhysicalDamage = (target: GameCard, damage: number) => {
         let pureDmg = damage;
 
         if (isChampion(target)) {
