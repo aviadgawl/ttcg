@@ -1,0 +1,17 @@
+.DeckBuilder {
+    display: flex;
+}
+
+.DeckBuilder > * {
+    flex: 10% 90%;
+}
+
+.CardsCollection {
+    display: flex;
+    justify-content: space-around;
+    flex: auto;
+}
+
+.CardsInHand {
+    
+}

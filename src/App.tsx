@@ -7,17 +7,19 @@ import { useAppDispatch, useAppSelector } from './app/hooks';
 import { setDialog } from './app/store';
 import { GameStatus } from './logic/game';
 import { getGames } from './firebase/firebase';
+import DeckBuilder from './components/DeckBuilder/DeckBuilder';
+
 import './App.css';
 
 function App() {
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await getGames();
-    }
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const data = await getGames();
+  //   }
   
-    fetchData().catch(console.error);
-  }, [])
+  //   fetchData().catch(console.error);
+  // }, [])
 
   const gameStatus = useAppSelector((state) => state.gameActions.game.status);
   const winner = useAppSelector((state) => state.gameActions.game.looser);
@@ -28,10 +30,11 @@ function App() {
 
   return (
     <main className="App">
-      <GameDialog />
+      <DeckBuilder></DeckBuilder>
+      {/* <GameDialog />
       <GameDetails />
       <Board />
-      <Hand />
+      <Hand /> */}
     </main>
   );
 }

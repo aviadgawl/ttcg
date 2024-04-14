@@ -6,7 +6,7 @@ import { actionTypes } from '../../app/types';
 import { PlayerActionsName } from '../../logic/player';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
-import HandCard from '../HandCard/HandCard';
+import HandCard, {HandCardMode} from '../HandCard/HandCard';
 
 const Hand: FC = () => {
   const playingPlayerIndex = useAppSelector((state) => state.gameActions.game.playingPlayerIndex);
@@ -34,7 +34,7 @@ const Hand: FC = () => {
           <Button onClick={() => handleAction(PlayerActionsName.EndTurn)} variant="outlined">{PlayerActionsName.EndTurn}</Button>
           <Button onClick={() => handleAction(PlayerActionsName.Surrender)} variant="outlined">{PlayerActionsName.Surrender}</Button>
         </div>
-        {playerHand.map((card, index) => <HandCard key={index} card={card} />)}
+        {playerHand.map((card, index) => <HandCard mode={HandCardMode.Hand} key={index} card={card} />)}
       </div>
 
     </Drawer>

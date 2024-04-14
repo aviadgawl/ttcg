@@ -10,7 +10,9 @@ export enum PlayerActionsName {
     EndTurn = 'End Turn',
     InitialDraw = 'Initial Draw',
     Equip = 'Equip',
-    Upgrade = 'Upgrade'
+    Upgrade = 'Upgrade',
+    AddCardToDeck = 'Add Card To Deck',
+    removeCardFromDeck = 'Remove Card From Deck'
 }
 
 export interface Player {
@@ -42,6 +44,8 @@ export class GamePlayerActions {
                 return this.equip(game, data.selectedCard as Gear, data.extendedData as number[]);
             case PlayerActionsName.Upgrade:
                 return this.upgrade(game, data.selectedCard as Class, data.extendedData as number[]);
+            case PlayerActionsName.AddCardToDeck:
+                return this.addCardToDeck(game, data.selectedCard as GameCard);
             default:
                 return `Player action ${action} is not implemented yet`;
         }
@@ -154,6 +158,16 @@ export class GamePlayerActions {
         calculateStats(targetChampion);
 
         removeCardFromHand(game, selectedCard);
+
+        return 'success';
+    }
+
+    addCardToDeck = (game: Game, selectedCard: GameCard) => {
+        if (selectedCard === null) return 'Card can not be null';
+
+        const player = game.players[game.playerIndex];
+
+        player.deck.push(selectedCard);
 
         return 'success';
     }

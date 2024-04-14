@@ -12,8 +12,14 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
+export enum HandCardMode {
+  DeckBuilding = 1,
+  Hand
+}
+
 interface CardProps {
-  card: GameCard
+  card: GameCard,
+  mode: HandCardMode,
 }
 
 const HandCard: FC<CardProps> = (props) => {
@@ -44,14 +50,14 @@ const HandCard: FC<CardProps> = (props) => {
         )}
       </>}
     </CardContent>
-    <CardActions>
-      {isClass(props.card) && <Button className="App-button" variant="contained" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Upgrade)}>
-        {PlayerActionsName.Upgrade} </Button>}
-      {isGear(props.card) && <Button className="App-button" variant="contained" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Equip)}>
-        {PlayerActionsName.Equip} </Button>}
-      {isChampion(props.card) && <Button className="App-button" variant="contained" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Summon)}>
-        {PlayerActionsName.Summon} </Button>}
-    </CardActions>
+    { props.mode === HandCardMode.Hand && <CardActions>
+        {isClass(props.card) && <Button className="App-button" variant="contained" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Upgrade)}>
+          {PlayerActionsName.Upgrade} </Button>}
+        {isGear(props.card) && <Button className="App-button" variant="contained" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Equip)}>
+          {PlayerActionsName.Equip} </Button>}
+        {isChampion(props.card) && <Button className="App-button" variant="contained" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Summon)}>
+          {PlayerActionsName.Summon} </Button>}
+      </CardActions>}
   </Card>
 };
 
