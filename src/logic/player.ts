@@ -46,6 +46,8 @@ export class GamePlayerActions {
                 return this.upgrade(game, data.selectedCard as Class, data.extendedData as number[]);
             case PlayerActionsName.AddCardToDeck:
                 return this.addCardToDeck(game, data.selectedCard as GameCard);
+            case PlayerActionsName.removeCardFromDeck:
+                return this.removeCardFromDeck(game, data.selectedCard as GameCard);
             default:
                 return `Player action ${action} is not implemented yet`;
         }
@@ -168,6 +170,17 @@ export class GamePlayerActions {
         const player = game.players[game.playerIndex];
 
         player.deck.push(selectedCard);
+
+        return 'success';
+    }
+
+    removeCardFromDeck = (game: Game, selectedCard: GameCard) => {
+        if (selectedCard === null) return 'Card can not be null';
+
+        const player = game.players[game.playerIndex];
+        const cardIndexToRemove = player.deck.findIndex(card => card.guid === selectedCard.guid);
+
+        player.deck.splice(cardIndexToRemove, 1);
 
         return 'success';
     }
