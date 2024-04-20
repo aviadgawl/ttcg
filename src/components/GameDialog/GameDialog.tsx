@@ -39,9 +39,7 @@ const GameDialog: FC<GameDialogProps> = () => {
     <DialogActions>
       {dialog.showButtons && <>
         <Button onClick={handleClose}>Disagree</Button>
-        <Button onClick={handleClose} autoFocus>
-          Agree
-        </Button>
+        <Button onClick={handleClose} autoFocus> Agree </Button>
       </>}
 
     </DialogActions>

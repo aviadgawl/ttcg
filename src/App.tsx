@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Board from './components/Board/Board';
 import GameDetails from './components/GameDetails/GameDetails';
 import GameDialog from './components/GameDialog/GameDialog';
@@ -8,16 +8,18 @@ import { setDialog } from './app/store';
 import { GameStatus } from './logic/game';
 import { getGames } from './firebase/firebase';
 import DeckBuilder from './components/DeckBuilder/DeckBuilder';
+import GameTabs from './components/GameMenu/GameTabs';
 
 import './App.css';
 
-function App() {
 
+function App() {
+  const [currentDisplay, setCurrentDisplay] = useState(0);
   // useEffect(() => {
   //   const fetchData = async () => {
   //     const data = await getGames();
   //   }
-  
+
   //   fetchData().catch(console.error);
   // }, [])
 
@@ -25,16 +27,22 @@ function App() {
   const winner = useAppSelector((state) => state.gameActions.game.looser);
   const dispatch = useAppDispatch();
 
-  if(gameStatus === GameStatus.over && winner !== null)
-    dispatch(setDialog({title: `Player ${winner.name} has lost!`, content: 'Close match, try another match', showButtons: false}));
+  const handleDisplaySelect = (event: React.SyntheticEvent, newValue: number) => {
+    setCurrentDisplay(newValue);
+  }
+
+  if (gameStatus === GameStatus.over && winner !== null)
+    dispatch(setDialog({ title: `Player ${winner.name} has lost!`, content: 'Close match, try another match', showButtons: false }));
 
   return (
     <main className="App">
-      <DeckBuilder></DeckBuilder>
-      {/* <GameDialog />
-      <GameDetails />
-      <Board />
-      <Hand /> */}
+      <GameTabs displayMode={currentDisplay} onModeClick={handleDisplaySelect} />
+      {currentDisplay === 0 && <DeckBuilder />}
+      {currentDisplay === 1 && <><GameDialog />
+        <GameDetails />
+        <Board />
+        <Hand />
+      </>}
     </main>
   );
 }

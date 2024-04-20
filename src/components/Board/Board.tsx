@@ -47,11 +47,11 @@ const Board: FC = () => {
             {row.map((card, columnIndex) => {
               return <td className={playerBaseClassName(rowIndex)} key={`${rowIndex}-${columnIndex}`}>
                 <Button className={styles.TargetButton} size="small" variant="contained" onClick={() => handleAction(rowIndex, columnIndex)}><FaBullseye /></Button>
-                {isChampion(card) && <BoardChampion rotate={shouldRotate} champion={card}
-                  x={rowIndex}
-                  y={columnIndex}
-                  isSelected={`${selectedActionData.location[0]}-${selectedActionData.location[1]}` === `${rowIndex}-${columnIndex}`} />}
-                {isCrystal(card) && <BoardCrystal rotate={shouldRotate} crystal={card} />}
+                  {isChampion(card) && <BoardChampion rotate={shouldRotate} champion={card}
+                    x={rowIndex}
+                    y={columnIndex}
+                    isSelected={`${selectedActionData.location[0]}-${selectedActionData.location[1]}` === `${rowIndex}-${columnIndex}`} />}
+                  {isCrystal(card) && <BoardCrystal rotate={shouldRotate} crystal={card} />}
               </td>
             })}
           </tr>
