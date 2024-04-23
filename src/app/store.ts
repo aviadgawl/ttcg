@@ -1,8 +1,8 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
-import { createGame } from '../logic/game';
+import { createGame, Game } from '../logic/game';
 import { GameCard } from '../logic/game-card';
-import { GameChampionActions } from '../logic/champion';
-import { GamePlayerActions } from '../logic/player';
+import { championAction } from '../logic/champion';
+import { playerAction } from '../logic/player';
 import { playSoundByPlayerActionName, playSoundByCardActionName } from '../helpers/audio-helper';
 
 export interface GameDialog {
@@ -16,14 +16,12 @@ export const createSelectedData = (card: GameCard | null, actionName: string, ac
 }
 
 export const initialState = {
-    game: createGame(),
+    game: createGame() as Game,
+    playerIndex: 0 as number,
     selectedActionData: { card: null, actionName: '', actionType: null, location: [-1, -1] },
-    showHand: false,
+    showHand: false as boolean,
     dialog: null as unknown as GameDialog
 }
-
-const gameChampionActions = new GameChampionActions();
-const gamePlayerActions = new GamePlayerActions();
 
 const gameSlice = createSlice({
     name: 'game',
@@ -33,7 +31,7 @@ const gameSlice = createSlice({
             const { targetLocation } = action.payload;
             const { actionName, location } = state.selectedActionData;
 
-            const result = gameChampionActions.championAction(state.game,
+            const result = championAction(state.game,
                 actionName, location[0], location[1], targetLocation[0], targetLocation[1]);
 
             if (result !== 'success') alert(result);
@@ -42,10 +40,13 @@ const gameSlice = createSlice({
         playerActions(state, action) {
             const { data } = action.payload;
             const { card, actionName } = action.payload.selectedActionData ?? state.selectedActionData;
-            const result = gamePlayerActions.playerAction(actionName, state.game, { selectedCard: card, extendedData: data });
+            const result = playerAction(actionName, state.game, { selectedCard: card, extendedData: data });
 
             if (result !== 'success') alert(result);
             else playSoundByPlayerActionName(actionName);
+        },
+        setPlayer(state, action){
+            state.playerIndex = action.payload;
         },
         setShowHand(state, action) {
             state.showHand = action.payload;
@@ -70,7 +71,8 @@ export const {
     playerActions,
     setShowHand,
     setSelectedActionData,
-    setDialog
+    setDialog,
+    setPlayer,
 } = gameSlice.actions;
 
 export type AppDispatch = typeof store.dispatch;

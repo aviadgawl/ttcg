@@ -30,7 +30,9 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
     <div> Class: {props.champion.calClass}</div>
     <div>
       {props.champion.actions.map((action, actionIndex) =>
-        <Button size="small" variant="contained" className="App-button" key={actionIndex} onClick={() => dispatch(setSelectedActionData(createSelectedData(props.champion, action, actionTypes.championAction, [props.x, props.y])))}>{action}</Button>
+        <Button disabled={props.champion.stm <= 0} size="small" variant="contained" className="App-button" key={actionIndex} 
+          onClick={() => dispatch(setSelectedActionData(createSelectedData(props.champion, action, actionTypes.championAction, [props.x, props.y])))}>{action}
+        </Button>
       )}
     </div>
   </div>);

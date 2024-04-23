@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { championActions, playerActions, setSelectedActionData, initialState } from '../../app/store';
 import { actionTypes } from '../../app/types';
@@ -15,6 +15,10 @@ const Board: FC = () => {
   const playingPlayerIndex = useAppSelector((state) => state.gameActions.game.playingPlayerIndex);
   const selectedActionData = useAppSelector((state) => state.gameActions.selectedActionData);
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    
+  },[selectedActionData]);
 
   const handleAction = (targetX: number, targetY: number) => {
 

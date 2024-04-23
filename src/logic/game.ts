@@ -50,14 +50,14 @@ export const createGame = (): Game => {
         else board[index] = [null, null, null, null, null, null, null, null];
     }
 
-    return { board: board, players: [mockPlayerOne, mockPlayerTwo], status: GameStatus.onGoing, playerIndex: 0, playingPlayerIndex: 0, looser: null };
+    return { board: board, players: [mockPlayerOne, mockPlayerTwo], status: GameStatus.onGoing, playerIndex: 0, playingPlayerIndex: 0, loser: null };
 }
 
 export interface Game {
     playingPlayerIndex: number;
     playerIndex: number;
     players: Player[];
-    looser: Player|null,
+    loser: Player|null,
     board: (GameCard | null)[][];
     status: GameStatus;
 }

@@ -24,7 +24,7 @@ function App() {
   // }, [])
 
   const gameStatus = useAppSelector((state) => state.gameActions.game.status);
-  const winner = useAppSelector((state) => state.gameActions.game.looser);
+  const winner = useAppSelector((state) => state.gameActions.game.loser);
   const dispatch = useAppDispatch();
 
   const handleDisplaySelect = (event: React.SyntheticEvent, newValue: number) => {
