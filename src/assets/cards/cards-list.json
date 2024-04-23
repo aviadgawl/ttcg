@@ -17,7 +17,7 @@
         "isBlocking": false
     },
     {
-        "guid": "4",
+        "guid": "2",
         "type": "Class",
         "name": "High Knight",
         "class": "Knight",
@@ -39,6 +39,13 @@
         "int": 0,
         "hp": 0,
         "bodyPart": "Hand",
+        "image": "https://pics.craiyon.com/2023-10-08/42b36e89ac864496855393cd033a545a.webp",
+        "isBlocking": false
+    },
+    {
+        "guid": "4",
+        "type": "Action",
+        "name": "Basic Hit",
         "image": "https://pics.craiyon.com/2023-10-08/42b36e89ac864496855393cd033a545a.webp",
         "isBlocking": false
     }

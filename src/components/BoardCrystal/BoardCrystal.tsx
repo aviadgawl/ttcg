@@ -1,9 +1,9 @@
-import React, { FC } from 'react';
-import { GameCard } from '../../logic/game-card';
+import { FC } from 'react';
+import { CrystalCard } from '../../logic/game-card';
 import styles from './BoardCrystal.module.css';
 
 interface BoardCrystalProps {
-    crystal: GameCard,
+    crystal: CrystalCard,
     rotate: boolean
 }
 

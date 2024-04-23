@@ -1,55 +1,10 @@
-import { Gear, GameCard, isCrystal } from './game-card';
+import { GearCard, GameCard, isCrystal, isSummoning, SummoningCard, ChampionCard, ClassCard } from './game-card';
+import { ChampionActionsName, ActionDirections} from './enums';
 import { Game, GameStatus } from './game';
-
-export enum ChampionActionsName {
-    Step = 'Step',
-    BasicHit = 'Basic Hit',
-    DaggerThrow = 'Dagger Throw',
-    Block = 'Block'
-}
-
-enum ChampionActionsDirections {
-    Straight = 'Straight'
-}
-
-export interface Class extends GameCard {
-    str: number;
-    dex: number;
-    int: number;
-    action: ChampionActionsName;
-    requiredClass: string;
-    class: string;
-}
-
-export interface Champion extends GameCard {
-
-    str: number;
-    calStr: number;
-    armor: number;
-    dex: number;
-    calDex: number;
-
-    int: number;
-    calInt: number;
-    mental: number;
-
-    stm: number;
-
-    actions: ChampionActionsName[];
-    calActions: string[];
-
-    body: Gear | null;
-    rightHand: Gear | null;
-    leftHand: Gear | null;
-
-    class: string;
-    calClass: string;
-    upgrade: Class | null;
-}
 
 interface ChampionActionResult {
     status: string,
-    targetedCard: GameCard | null
+    targetedCard: SummoningCard | null
 }
 
 export const checkValidTarget = (target: GameCard): boolean => {
@@ -68,7 +23,7 @@ export const getRowDirection = (sourceRowIndex: number, targetRowIndex: number):
     return (sourceRowIndex - targetRowIndex) > 0 ? 'up' : 'down';
 }
 
-export const applyPhysicalDamage = (target: GameCard, damage: number) => {
+export const applyPhysicalDamage = (target: SummoningCard, damage: number) => {
     let pureDmg = damage;
 
     if (isChampion(target)) {
@@ -85,7 +40,7 @@ export const applyPhysicalDamage = (target: GameCard, damage: number) => {
     target.currentHp -= pureDmg;
 }
 
-export const calculateStats = (champion: Champion) => {
+export const calculateStats = (champion: ChampionCard) => {
     champion.calStr = champion.str + (champion.body?.str ?? 0) + (champion.rightHand?.str ?? 0) + (champion.leftHand?.str ?? 0) + (champion.upgrade?.str ?? 0);
     champion.calDex = champion.dex + (champion.body?.dex ?? 0) + (champion.rightHand?.dex ?? 0) + (champion.leftHand?.dex ?? 0) + (champion.upgrade?.dex ?? 0);
     champion.calInt = champion.int + (champion.body?.int ?? 0) + (champion.rightHand?.int ?? 0) + (champion.leftHand?.int ?? 0) + (champion.upgrade?.int ?? 0);
@@ -100,12 +55,12 @@ export const stringToChampionActionName = (actionName: string | undefined): Cham
     return ChampionActionsName[actionName as keyof typeof ChampionActionsName];
 }
 
-export const isClass = (value: any): value is Class => !!value?.action;
+export const isClass = (value: any): value is ClassCard => !!value?.action;
 
-export const isChampion = (value: any): value is Champion => !!value?.actions;
+export const isChampion = (value: any): value is ChampionCard => !!value?.actions;
 
-export const moveChampion = (board: (GameCard | null)[][], entityToMove: Champion, rowIndex: number, columnIndex: number, targetRowIndex: number, targetColumnIndex: number): ChampionActionResult => {
-    const targetCell = board[targetRowIndex][targetColumnIndex];
+export const moveChampion = (board: (GameCard | null)[][], entityToMove: ChampionCard, rowIndex: number, columnIndex: number, targetRowIndex: number, targetColumnIndex: number): ChampionActionResult => {
+    const targetCell = board[targetRowIndex][targetColumnIndex] as unknown as SummoningCard;
     if (targetCell !== null) return { status: 'Target location isn\'t empty', targetedCard: null };
 
     if (entityToMove.calDex <= 0) return { status: 'Dex must be higher than zero', targetedCard: null };
@@ -119,12 +74,14 @@ export const moveChampion = (board: (GameCard | null)[][], entityToMove: Champio
     return { status: 'success', targetedCard: null };
 }
 
-export const basicHit = (board: (GameCard | null)[][], attackingChampion: Champion,
+export const basicHit = (board: (GameCard | null)[][], attackingChampion: ChampionCard,
     sourceRowIndex: number, sourceColumnIndex: number, targetRowIndex: number, targetColumnIndex: number): ChampionActionResult => {
 
-    const target = board[targetRowIndex][targetColumnIndex];
+    const target = board[targetRowIndex][targetColumnIndex] as unknown as SummoningCard;
 
     if (target === null) return { status: 'Target is not found', targetedCard: null };
+
+    if(!isSummoning(target)) return  { status: 'Target is not a summoning card', targetedCard: null};
 
     const validTarget = checkValidTarget(target);
     if (!validTarget) return { status: 'Target is not a champion or crystal', targetedCard: target };
@@ -138,9 +95,10 @@ export const basicHit = (board: (GameCard | null)[][], attackingChampion: Champi
     return { status: 'success', targetedCard: target };
 }
 
-export const daggerThrow = (board: (GameCard | null)[][], attackingChampion: Champion, sourceRowIndex: number, sourceColumnIndex: number, targetRowIndex: number, targetColumnIndex: number): ChampionActionResult => {
+export const daggerThrow = (board: (GameCard | null)[][], attackingChampion: ChampionCard,
+ sourceRowIndex: number, sourceColumnIndex: number, targetRowIndex: number, targetColumnIndex: number): ChampionActionResult => {
 
-    const target = board[targetRowIndex][targetColumnIndex];
+    const target = board[targetRowIndex][targetColumnIndex] as unknown as SummoningCard;;
 
     if (target === null) return { status: 'Target is not found', targetedCard: null };
 
@@ -150,8 +108,8 @@ export const daggerThrow = (board: (GameCard | null)[][], attackingChampion: Cha
     const validDistance = checkAllowedDistance(3, 1, sourceRowIndex, sourceColumnIndex, targetRowIndex, targetColumnIndex);
     if (!validDistance) return { status: 'Location to far', targetedCard: target };
 
-    const validDirection = checkAllowedDirection(ChampionActionsDirections.Straight, sourceRowIndex, sourceColumnIndex, targetRowIndex, targetColumnIndex);
-    if (!validDirection) return { status: `Not a valid direction for direction: ${ChampionActionsDirections.Straight}`, targetedCard: null };
+    const validDirection = checkAllowedDirection(ActionDirections.Straight, sourceRowIndex, sourceColumnIndex, targetRowIndex, targetColumnIndex);
+    if (!validDirection) return { status: `Not a valid direction for direction: ${ActionDirections.Straight}`, targetedCard: null };
 
     const isPathBlocked = checkBlockingObjects(board, sourceRowIndex, sourceColumnIndex, targetRowIndex, targetColumnIndex);
     if (isPathBlocked) return { status: 'Hit path is blocked', targetedCard: null };
@@ -169,11 +127,11 @@ export const checkAllowedDistance = (allowedMaxDistance: number,
     return allowedMinDistance <= distance && distance <= allowedMaxDistance;
 }
 
-export const checkAllowedDirection = (allowedDirection: ChampionActionsDirections,
+export const checkAllowedDirection = (allowedDirection: ActionDirections,
     sourceRowIndex: number, sourceColumnIndex: number, targetRowIndex: number, targetColumnIndex: number) => {
 
     switch (allowedDirection) {
-        case ChampionActionsDirections.Straight:
+        case ActionDirections.Straight:
             return sourceColumnIndex === targetColumnIndex || sourceRowIndex === targetRowIndex;
         default:
             break;
@@ -201,7 +159,7 @@ export const checkBlockingObjects = (board: (GameCard | null)[][], sourceRowInde
         rowIndex += rowDirection === 'up' ? -1 : 1;
         columnIndex += columnDirection === 'left' ? -1 : 1;
 
-        const targetCell = board[rowIndex][columnIndex];
+        const targetCell = board[rowIndex][columnIndex] as unknown as SummoningCard;;
 
         return targetCell !== undefined && targetCell !== null && targetCell.isBlocking;
     }

@@ -1,5 +1,5 @@
-import { GameCard, Gear } from './game-card';
-import { Champion, calculateStats, Class, isChampion } from './champion';
+import { GameCard, GearCard, ClassCard, ChampionCard } from './game-card';
+import { calculateStats, isChampion } from './champion';
 
 import { Game, GameStatus } from './game';
 
@@ -40,9 +40,9 @@ export const playerAction = (action: string | null, game: Game, data: any) => {
         case PlayerActionsName.EndTurn:
             return endTurn(game);
         case PlayerActionsName.Equip:
-            return equip(game, data.selectedCard as Gear, data.extendedData as number[]);
+            return equip(game, data.selectedCard as GearCard, data.extendedData as number[]);
         case PlayerActionsName.Upgrade:
-            return upgrade(game, data.selectedCard as Class, data.extendedData as number[]);
+            return upgrade(game, data.selectedCard as ClassCard, data.extendedData as number[]);
         case PlayerActionsName.AddCardToDeck:
             return addCardToDeck(game, data.selectedCard as GameCard);
         case PlayerActionsName.removeCardFromDeck:
@@ -117,11 +117,11 @@ export const endTurn = (game: Game): string => {
     return 'success';
 }
 
-export const equip = (game: Game, selectedCard: Gear, targetLocation: number[]): string => {
+export const equip = (game: Game, selectedCard: GearCard, targetLocation: number[]): string => {
     const targetRow = targetLocation[0],
         targetColumn = targetLocation[1];
 
-    var targetChampion = game.board[targetRow][targetColumn] as Champion;
+    var targetChampion = game.board[targetRow][targetColumn] as ChampionCard;
 
     if (targetChampion === null) return 'Champion was not found';
 
@@ -140,13 +140,13 @@ export const equip = (game: Game, selectedCard: Gear, targetLocation: number[]):
     return 'success';
 }
 
-export const upgrade = (game: Game, selectedCard: Class, targetLocation: number[]): string => {
+export const upgrade = (game: Game, selectedCard: ClassCard, targetLocation: number[]): string => {
     if (selectedCard === null) return 'Upgrade card can not be null';
 
     const targetRow = targetLocation[0],
         targetColumn = targetLocation[1];
 
-    var targetChampion = game.board[targetRow][targetColumn] as Champion;
+    var targetChampion = game.board[targetRow][targetColumn] as ChampionCard;
 
     if (targetChampion === null) return 'Champion was not found';
 

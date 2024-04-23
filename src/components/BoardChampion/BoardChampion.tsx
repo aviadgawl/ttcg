@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Champion } from '../../logic/champion';
+import { ChampionCard } from '../../logic/game-card';
 import { useAppDispatch } from '../../app/hooks';
 import { setSelectedActionData, createSelectedData } from '../../app/store';
 import { actionTypes } from '../../app/types';
@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import styles from './BoardChampion.module.css';
 
 interface BoardChampionProps {
-  champion: Champion;
+  champion: ChampionCard;
   x: number;
   y: number;
   isSelected: boolean;

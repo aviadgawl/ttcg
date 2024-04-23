@@ -1,5 +1,5 @@
 import { PlayerActionsName } from '../logic/player';
-import { ChampionActionsName } from '../logic/champion';
+import { ChampionActionsName } from '../logic/enums';
 import equipSound from '../assets/audio/equip.mp3';
 import upgradeSound from '../assets/audio/upgrade.mp3';
 import summonSound from '../assets/audio/summon.mp3';

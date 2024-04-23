@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { championActions, playerActions, setSelectedActionData, initialState } from '../../app/store';
 import { actionTypes } from '../../app/types';
 import { isChampion } from '../../logic/champion';
-import { isCrystal } from '../../logic/game-card';
+import { isCrystal, CrystalCard } from '../../logic/game-card';
 import Button from '@mui/material/Button';
 import BoardChampion from '../BoardChampion/BoardChampion';
 import BoardCrystal from '../BoardCrystal/BoardCrystal';
@@ -17,8 +17,8 @@ const Board: FC = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    
-  },[selectedActionData]);
+
+  }, [selectedActionData]);
 
   const handleAction = (targetX: number, targetY: number) => {
 
@@ -51,11 +51,11 @@ const Board: FC = () => {
             {row.map((card, columnIndex) => {
               return <td className={playerBaseClassName(rowIndex)} key={`${rowIndex}-${columnIndex}`}>
                 <Button className={styles.TargetButton} size="small" variant="contained" onClick={() => handleAction(rowIndex, columnIndex)}><FaBullseye /></Button>
-                  {isChampion(card) && <BoardChampion rotate={shouldRotate} champion={card}
-                    x={rowIndex}
-                    y={columnIndex}
-                    isSelected={`${selectedActionData.location[0]}-${selectedActionData.location[1]}` === `${rowIndex}-${columnIndex}`} />}
-                  {isCrystal(card) && <BoardCrystal rotate={shouldRotate} crystal={card} />}
+                {isChampion(card) && <BoardChampion rotate={shouldRotate} champion={card}
+                  x={rowIndex}
+                  y={columnIndex}
+                  isSelected={`${selectedActionData.location[0]}-${selectedActionData.location[1]}` === `${rowIndex}-${columnIndex}`} />}
+                {isCrystal(card) && <BoardCrystal rotate={shouldRotate} crystal={card as unknown as CrystalCard} />}
               </td>
             })}
           </tr>
