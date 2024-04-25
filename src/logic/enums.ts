@@ -14,3 +14,8 @@ export enum Stats {
     Dex = 'DEX',
     Int = 'INT'
 }
+
+export enum ActionType {
+    Movement = 0,
+    Attack = 1
+}

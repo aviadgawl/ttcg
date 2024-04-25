@@ -29,9 +29,14 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
     <span> STM: {props.champion.stm} </span>
     <div> Class: {props.champion.calClass}</div>
     <div>
-      {props.champion.actions.map((action, actionIndex) =>
+      {props.champion.learnedActionsCards.map((card, actionIndex) =>
         <Button disabled={props.champion.stm <= 0} size="small" variant="contained" className="App-button" key={actionIndex} 
-          onClick={() => dispatch(setSelectedActionData(createSelectedData(props.champion, action, actionTypes.championAction, [props.x, props.y])))}>{action}
+          onClick={() => dispatch(setSelectedActionData(createSelectedData(props.champion, card.name, actionTypes.championAction, [props.x, props.y])))}>{card.name}
+        </Button>
+      )}
+      {props.champion.attachedActionsCards.map((card, actionIndex) =>
+        <Button size="small" variant="contained" className="App-button" key={actionIndex} 
+          onClick={() => dispatch(setSelectedActionData(createSelectedData(props.champion, card.name, actionTypes.championAction, [props.x, props.y])))}>{card.name}
         </Button>
       )}
     </div>

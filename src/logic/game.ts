@@ -1,6 +1,6 @@
 import { Player } from './player';
-import { GameCard, GearCard, CrystalCard, ChampionCard, ClassCard, } from './game-card';
-import { stringToChampionActionName } from './champion';
+import { GameCard, GearCard, CrystalCard, ChampionCard, ClassCard, ActionCard } from './game-card';
+import { ActionType, Stats, ActionDirections } from './enums';
 import cardsListJson from '../assets/cards/cards-list.json';
 
 export const cardsList = cardsListJson.map(x => {
@@ -12,14 +12,14 @@ export const cardsList = cardsListJson.map(x => {
                 armor: x.str, str: x.str, calStr: x.str,
                 dex: x.dex, calDex: x.dex,
                 int: x.int, calInt: x.int, mental: x.int,
-                stm: 2, actions: x.actions?.map(y => stringToChampionActionName(y)), calActions: [],
+                stm: 2, learnedActions: x.actionsName, learnedActionsCards: [], attachedActionsCards: [],
                 body: null, rightHand: null, leftHand: null,
                 class: x.class, calClass: x.class, upgrade: null
             } as ChampionCard;
         case 'Class':
             return {
                 guid: x.guid, name: x.name, class: x.class,
-                str: x.str, dex: x.dex, int: x.int, hp: x.hp, action: stringToChampionActionName(x.action ?? ''),
+                str: x.str, dex: x.dex, int: x.int, hp: x.hp, learnedAction: x.action,
                 requiredClass: x.requiredClass, currentHp: 0,
                 image: x.image, playerIndex: 0, isBlocking: x.isBlocking
             } as ClassCard
@@ -29,6 +29,23 @@ export const cardsList = cardsListJson.map(x => {
                 dex: x.dex, int: x.int, hp: x.hp, currentHp: x.hp, bodyPart: x.bodyPart,
                 image: x.image, playerIndex: 0, isBlocking: x.isBlocking
             } as GearCard
+        case 'Action':
+            return {
+                playerIndex: 0,
+                guid: x.guid,
+                name: x.name,
+                image: x.image,
+                actionType: ActionType[x.actionType as keyof typeof ActionType],
+                distance: x.distance,
+                direction: ActionDirections[(x.direction ?? '') as keyof typeof ActionDirections],
+                dmgStat: Stats[(x.dmgStat ?? '') as keyof typeof Stats],
+                dmgModifier: x.dmgModifier,
+                dmgModifierValue: x.dmgModifierValue,
+                requiredClassName: x.requiredClassName,
+                requiredStat: Stats[(x.requiredStat ?? '')  as keyof typeof Stats],
+                requiredStatValue: x.requiredStatValue,
+                requiredGearName: x.requiredGearName
+            } as ActionCard
         default:
             return null;
     }

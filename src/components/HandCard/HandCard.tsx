@@ -1,6 +1,5 @@
 import { FC } from 'react';
-import { GameCard, isGear } from '../../logic/game-card';
-import { isChampion, isClass } from '../../logic/champion';
+import { GameCard, isGear, isChampion, isClass, isAction } from '../../logic/game-card';
 import { PlayerActionsName } from '../../logic/player';
 import styles from './HandCard.module.css';
 import { useAppDispatch } from '../../app/hooks';
@@ -46,7 +45,7 @@ const HandCard: FC<CardProps> = (props) => {
 
       <div className={styles.CardActions}>
         {isChampion(props.card) && <>
-          {props.card.actions.map((action, actionIndex) =>
+          {props.card.learnedActions.map((action, actionIndex) =>
             <Typography key={actionIndex}>{action}</Typography>
           )}
         </>}
@@ -58,6 +57,8 @@ const HandCard: FC<CardProps> = (props) => {
       {isGear(props.card) && <Button className="App-button" variant="contained" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Equip)}>
         {PlayerActionsName.Equip} </Button>}
       {isChampion(props.card) && <Button className="App-button" variant="contained" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Summon)}>
+        {PlayerActionsName.Summon} </Button>}
+      {isAction(props.card) && <Button className="App-button" variant="contained" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Attach)}>
         {PlayerActionsName.Summon} </Button>}
     </CardActions>}
   </Card>

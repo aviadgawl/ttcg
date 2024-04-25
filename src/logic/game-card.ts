@@ -1,4 +1,4 @@
-import { ActionDirections, Stats, ChampionActionsName } from './enums';
+import { ActionDirections, Stats, ActionType } from './enums';
 
 export interface GameEffect {
     area: string,
@@ -33,28 +33,29 @@ export interface GearCard extends GameCard {
 }
 
 export interface ActionCard extends GameCard {
+    actionType: ActionType;
     distance: number;
-    direction: ActionDirections;
+    direction: ActionDirections|null;
     dmgStat: Stats|null;
     dmgModifier: string|null;
-    dmgModifierValue: number;
-    requiredClass: string|null;
-    requiredStat: number|null;
+    dmgModifierValue: number|null;
+    requiredClassName: string|null;
+    requiredStat: Stats|null;
     requiredStatValue: number|null;
-    requiredGear: string|null;
+    requiredGearName: string|null;
 }
 
 export interface ClassCard extends SummoningCard {
     str: number;
     dex: number;
     int: number;
-    action: ChampionActionsName;
+    learnedAction: string;
+    action: ActionCard|null;
     requiredClass: string;
     class: string;
 }
 
 export interface ChampionCard extends SummoningCard {
-
     str: number;
     calStr: number;
     armor: number;
@@ -67,8 +68,9 @@ export interface ChampionCard extends SummoningCard {
 
     stm: number;
 
-    actions: ChampionActionsName[];
-    calActions: string[];
+    learnedActions: string[];
+    learnedActionsCards: ActionCard[];
+    attachedActionsCards: ActionCard[];
 
     body: GearCard | null;
     rightHand: GearCard | null;
@@ -84,3 +86,9 @@ export const isCrystal = (value: any): value is GearCard => !!value?.effect || v
 export const isGear = (value: any): value is GearCard => !!value?.bodyPart;
 
 export const isSummoning = (value: any): value is GearCard => !!value?.hp || value?.hp === null;
+
+export const isClass = (value: any): value is ClassCard => !!value?.learnedAction;
+
+export const isChampion = (value: any): value is ChampionCard => !!value?.learnedActions;
+
+export const isAction = (value: any): value is ActionCard => !!value?.actionType;

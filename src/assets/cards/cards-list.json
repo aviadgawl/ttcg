@@ -9,9 +9,9 @@
         "dex": 2,
         "int": 2,
         "stm": 2,
-        "actions": [
+        "actionsName": [
             "Step",
-            "BasicHit"
+            "Basic Hit"
         ],
         "class": "Fighter",
         "isBlocking": false
@@ -45,8 +45,33 @@
     {
         "guid": "4",
         "type": "Action",
+        "subType": "attack",
         "name": "Basic Hit",
         "image": "https://pics.craiyon.com/2023-10-08/42b36e89ac864496855393cd033a545a.webp",
-        "isBlocking": false
+        "distance": 1,
+        "direction": "Stright",
+        "dmgStat": "STR",
+        "dmgModifier": null,
+        "dmgModifierValue": null,
+        "requiredClass": null,
+        "requiredStat": null,
+        "requiredStatValue": null,
+        "requiredGear": null
+    },
+    {
+        "guid": "5",
+        "type": "Action",
+        "actionType": "Movement",
+        "name": "Step",
+        "image": "https://pics.craiyon.com/2023-10-08/42b36e89ac864496855393cd033a545a.webp",
+        "distance": 1,
+        "direction": "Stright",
+        "dmgStat": "STR",
+        "dmgModifier": null,
+        "dmgModifierValue": null,
+        "requiredClassName": null,
+        "requiredStat": null,
+        "requiredStatValue": null,
+        "requiredGearName": null
     }
 ]

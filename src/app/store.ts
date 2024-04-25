@@ -1,6 +1,6 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 import { createGame, Game } from '../logic/game';
-import { GameCard } from '../logic/game-card';
+import { ActionCard, GameCard } from '../logic/game-card';
 import { championAction } from '../logic/champion';
 import { playerAction } from '../logic/player';
 import { playSoundByPlayerActionName, playSoundByCardActionName } from '../helpers/audio-helper';
@@ -11,6 +11,13 @@ export interface GameDialog {
     showButtons: boolean;
 }
 
+export interface SelectedData {
+    card: GameCard|null,
+    actionName: string|null,
+    actionType: string|null,
+    location: number[]
+}
+
 export const createSelectedData = (card: GameCard | null, actionName: string, actionType: string, location: number[] = [-1, -1]) => {
     return { card: card, actionName: actionName, actionType: actionType, location }
 }
@@ -18,7 +25,7 @@ export const createSelectedData = (card: GameCard | null, actionName: string, ac
 export const initialState = {
     game: createGame() as Game,
     playerIndex: 0 as number,
-    selectedActionData: { card: null, actionName: '', actionType: null, location: [-1, -1] },
+    selectedActionData: { card: null, actionName: null, actionType: null, location: [-1, -1] } as SelectedData,
     showHand: false as boolean,
     dialog: null as unknown as GameDialog
 }
@@ -29,13 +36,18 @@ const gameSlice = createSlice({
     reducers: {
         championActions(state, action) {
             const { targetLocation } = action.payload;
-            const { actionName, location } = state.selectedActionData;
+            const { card, location } = state.selectedActionData;
+
+            if(card === null) {
+                alert('SelectedData card can not be null');
+                return;
+            }
 
             const result = championAction(state.game,
-                actionName, location[0], location[1], targetLocation[0], targetLocation[1]);
+                card.name, location[0], location[1], targetLocation[0], targetLocation[1]);
 
             if (result !== 'success') alert(result);
-            else playSoundByCardActionName(actionName);
+            else playSoundByCardActionName(card.name);
         },
         playerActions(state, action) {
             const { data } = action.payload;

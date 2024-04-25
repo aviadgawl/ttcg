@@ -1,5 +1,6 @@
-import { GameCard, GearCard, ClassCard, ChampionCard } from './game-card';
-import { calculateStats, isChampion } from './champion';
+import { GameCard, GearCard, ClassCard, ChampionCard, isChampion, ActionCard } from './game-card';
+import { calculateStats } from './champion';
+import { Stats } from './enums';
 
 import { Game, GameStatus } from './game';
 
@@ -12,7 +13,8 @@ export enum PlayerActionsName {
     Equip = 'Equip',
     Upgrade = 'Upgrade',
     AddCardToDeck = 'Add Card To Deck',
-    removeCardFromDeck = 'Remove Card From Deck'
+    removeCardFromDeck = 'Remove Card From Deck',
+    Attach = 'Attach'
 }
 
 export interface Player {
@@ -47,12 +49,14 @@ export const playerAction = (action: string | null, game: Game, data: any) => {
             return addCardToDeck(game, data.selectedCard as GameCard);
         case PlayerActionsName.removeCardFromDeck:
             return removeCardFromDeck(game, data.selectedCard as GameCard);
+        case PlayerActionsName.Attach:
+            return removeCardFromDeck(game, data.selectedCard as GameCard);
         default:
             return `Player action ${action} is not implemented yet`;
     }
 }
 
-export const initialDraw = (player: Player): string => {
+const initialDraw = (player: Player): string => {
     if (player.didDraw) return 'Player already draw this turn';
 
     const result = draw(player, 1);
@@ -62,7 +66,7 @@ export const initialDraw = (player: Player): string => {
     return result;
 }
 
-export const draw = (player: Player, amount: number): string => {
+const draw = (player: Player, amount: number): string => {
 
     if (player?.deck && player.deck.length < amount) return 'Not enough cards in deck';
 
@@ -77,11 +81,11 @@ export const draw = (player: Player, amount: number): string => {
     return 'success';
 };
 
-export const surrender = (player: Player, game: Game) => {
+const surrender = (player: Player, game: Game) => {
     game.status = GameStatus.over;
 };
 
-export const summon = (game: Game, selectedCard: GameCard, targetLocation: number[]): string => {
+const summon = (game: Game, selectedCard: GameCard, targetLocation: number[]): string => {
 
     const targetRow = targetLocation[0],
         targetColumn = targetLocation[1];
@@ -102,7 +106,7 @@ export const summon = (game: Game, selectedCard: GameCard, targetLocation: numbe
     return 'success';
 }
 
-export const endTurn = (game: Game): string => {
+const endTurn = (game: Game): string => {
     let nextPlayerIndex = 0;
 
     if (game.playingPlayerIndex === 0)
@@ -117,7 +121,7 @@ export const endTurn = (game: Game): string => {
     return 'success';
 }
 
-export const equip = (game: Game, selectedCard: GearCard, targetLocation: number[]): string => {
+const equip = (game: Game, selectedCard: GearCard, targetLocation: number[]): string => {
     const targetRow = targetLocation[0],
         targetColumn = targetLocation[1];
 
@@ -140,7 +144,7 @@ export const equip = (game: Game, selectedCard: GearCard, targetLocation: number
     return 'success';
 }
 
-export const upgrade = (game: Game, selectedCard: ClassCard, targetLocation: number[]): string => {
+const upgrade = (game: Game, selectedCard: ClassCard, targetLocation: number[]): string => {
     if (selectedCard === null) return 'Upgrade card can not be null';
 
     const targetRow = targetLocation[0],
@@ -152,8 +156,10 @@ export const upgrade = (game: Game, selectedCard: ClassCard, targetLocation: num
 
     if (selectedCard.requiredClass !== targetChampion.calClass) return `Champion das not have the required class of ${selectedCard.requiredClass}`;
 
+    if (selectedCard.action === null) return 'Class card action can not be null';
+
     targetChampion.upgrade = selectedCard;
-    targetChampion.actions = [...targetChampion.actions, targetChampion.upgrade.action];
+    targetChampion.learnedActionsCards = [...targetChampion.learnedActionsCards, selectedCard.action];
     targetChampion.calClass = targetChampion.upgrade.class;
 
     calculateStats(targetChampion);
@@ -163,7 +169,7 @@ export const upgrade = (game: Game, selectedCard: ClassCard, targetLocation: num
     return 'success';
 }
 
-export const addCardToDeck = (game: Game, selectedCard: GameCard) => {
+const addCardToDeck = (game: Game, selectedCard: GameCard) => {
     if (selectedCard === null) return 'Card can not be null';
 
     const player = game.players[game.playerIndex];
@@ -173,7 +179,46 @@ export const addCardToDeck = (game: Game, selectedCard: GameCard) => {
     return 'success';
 }
 
-export const removeCardFromDeck = (game: Game, selectedCard: GameCard) => {
+const attachAction = (game: Game, selectedCard: ActionCard, targetLocation: number[]) => {
+    if (selectedCard === null)
+        return 'Action card can not be null';
+
+    const targetRow = targetLocation[0],
+        targetColumn = targetLocation[1];
+
+    var targetChampion = game.board[targetRow][targetColumn] as ChampionCard;
+
+    if (targetChampion === null)
+        return 'Champion was not found';
+
+    if (selectedCard.requiredClassName !== targetChampion.calClass)
+        return `Champion das not have the required class of ${selectedCard.requiredClassName}`;
+
+    if (selectedCard.requiredGearName !== null) {
+        const isRequiredGearFound = targetChampion.body?.guid === selectedCard.requiredGearName
+            || targetChampion.rightHand?.guid === selectedCard.requiredGearName
+            || targetChampion.leftHand?.guid === selectedCard.requiredGearName
+        
+        if(!isRequiredGearFound) return `Champion das not meet the gear requirement of this action ${selectedCard.requiredGearName}`;
+    }
+
+    if (selectedCard.requiredStat !== null && selectedCard.requiredStatValue !== null) {
+        const championRequiredStatValue = getChampionStatValue(targetChampion, selectedCard.requiredStat);
+
+        if (championRequiredStatValue < selectedCard.requiredStatValue)
+            return `Champion stat ${selectedCard.requiredStat} ${championRequiredStatValue} das not meet the required value ${selectedCard.requiredStatValue}`;
+    }
+
+    targetChampion.attachedActionsCards.push(selectedCard);
+
+    calculateStats(targetChampion);
+
+    removeCardFromHand(game, selectedCard);
+
+    return 'success';
+}
+
+const removeCardFromDeck = (game: Game, selectedCard: GameCard) => {
     if (selectedCard === null) return 'Card can not be null';
 
     const player = game.players[game.playerIndex];
@@ -184,7 +229,7 @@ export const removeCardFromDeck = (game: Game, selectedCard: GameCard) => {
     return 'success';
 }
 
-export const refreshResources = (game: Game, playerIndex: number) => {
+const refreshResources = (game: Game, playerIndex: number) => {
     const player = game.players[playerIndex];
     player.didDraw = false;
     player.summonsLeft = 1;
@@ -204,4 +249,17 @@ const removeCardFromHand = (game: Game, selectedCard: GameCard) => {
     const player = game.players[game.playerIndex];
     const cardIndex = player.hand.findIndex((x) => x.guid === selectedCard.guid);
     player.hand.splice(cardIndex, 1);
+}
+
+const getChampionStatValue = (champion: ChampionCard, stat: Stats): number => {
+    switch (stat) {
+        case Stats.Str:
+            return champion.calStr;
+        case Stats.Dex:
+            return champion.calDex;
+        case Stats.Int:
+            return champion.calInt;
+        default:
+            return -1;
+    }
 }

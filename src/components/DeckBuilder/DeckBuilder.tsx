@@ -26,11 +26,11 @@ const DeckBuilder: FC<DeckBuilderProps> = () => {
       <hr />
       <div>
         {Object.keys(cardsInDeckGroupedByGuid).map(cardGroupKey =>
-          <>
+          <div key={cardGroupKey}>
             <span>{cardsInDeckGroupedByGuid[cardGroupKey].length}</span>
             <HandCard mode={HandCardMode.DeckBuilding} card={cardsInDeckGroupedByGuid[cardGroupKey][0]} />
             <Button onClick={() => dispatch(playerActions({ selectedActionData: { card: cardsInDeckGroupedByGuid[cardGroupKey][0], actionName: PlayerActionsName.removeCardFromDeck } }))}>Remove</Button>
-          </>
+          </div>
         )}
       </div>
 
@@ -39,7 +39,7 @@ const DeckBuilder: FC<DeckBuilderProps> = () => {
     <div className={styles.CardsCollection}>
       {cardsList.map(card => {
         if (card !== null)
-          return <div>
+          return <div key={card.guid}>
             <HandCard mode={HandCardMode.DeckBuilding} card={card} />
             <Button onClick={() => dispatch(playerActions({ selectedActionData: { card: card, actionName: PlayerActionsName.AddCardToDeck } }))}>Add to deck</Button>
           </div>

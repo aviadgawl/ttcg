@@ -1,5 +1,5 @@
-import { GearCard, GameCard, isCrystal, isSummoning, SummoningCard, ChampionCard, ClassCard } from './game-card';
-import { ChampionActionsName, ActionDirections} from './enums';
+import { GameCard, isCrystal, isSummoning, SummoningCard, ChampionCard, isChampion } from './game-card';
+import { ChampionActionsName, ActionDirections } from './enums';
 import { Game, GameStatus } from './game';
 
 interface ChampionActionResult {
@@ -51,14 +51,6 @@ export const calculateStats = (champion: ChampionCard) => {
     champion.currentHp += calHp;
 }
 
-export const stringToChampionActionName = (actionName: string | undefined): ChampionActionsName => {
-    return ChampionActionsName[actionName as keyof typeof ChampionActionsName];
-}
-
-export const isClass = (value: any): value is ClassCard => !!value?.action;
-
-export const isChampion = (value: any): value is ChampionCard => !!value?.actions;
-
 export const moveChampion = (board: (GameCard | null)[][], entityToMove: ChampionCard, rowIndex: number, columnIndex: number, targetRowIndex: number, targetColumnIndex: number): ChampionActionResult => {
     const targetCell = board[targetRowIndex][targetColumnIndex] as unknown as SummoningCard;
     if (targetCell !== null) return { status: 'Target location isn\'t empty', targetedCard: null };
@@ -81,7 +73,7 @@ export const basicHit = (board: (GameCard | null)[][], attackingChampion: Champi
 
     if (target === null) return { status: 'Target is not found', targetedCard: null };
 
-    if(!isSummoning(target)) return  { status: 'Target is not a summoning card', targetedCard: null};
+    if (!isSummoning(target)) return { status: 'Target is not a summoning card', targetedCard: null };
 
     const validTarget = checkValidTarget(target);
     if (!validTarget) return { status: 'Target is not a champion or crystal', targetedCard: target };
@@ -96,7 +88,7 @@ export const basicHit = (board: (GameCard | null)[][], attackingChampion: Champi
 }
 
 export const daggerThrow = (board: (GameCard | null)[][], attackingChampion: ChampionCard,
- sourceRowIndex: number, sourceColumnIndex: number, targetRowIndex: number, targetColumnIndex: number): ChampionActionResult => {
+    sourceRowIndex: number, sourceColumnIndex: number, targetRowIndex: number, targetColumnIndex: number): ChampionActionResult => {
 
     const target = board[targetRowIndex][targetColumnIndex] as unknown as SummoningCard;;
 
