@@ -31,7 +31,7 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
     <div>
       {props.champion.learnedActionsCards.map((card, actionIndex) =>
         <Button disabled={props.champion.stm <= 0} size="small" variant="contained" className="App-button" key={actionIndex} 
-          onClick={() => dispatch(setSelectedActionData(createSelectedData(props.champion, card.name, actionTypes.championAction, [props.x, props.y])))}>{card.name}
+          onClick={() => dispatch(setSelectedActionData(createSelectedData(card, card.name, actionTypes.championAction, [props.x, props.y])))}>{card.name}
         </Button>
       )}
       {props.champion.attachedActionsCards.map((card, actionIndex) =>

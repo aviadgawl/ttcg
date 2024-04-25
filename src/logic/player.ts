@@ -21,6 +21,7 @@ export interface Player {
     name: string;
     deck: GameCard[];
     hand: GameCard[];
+    usedCards: GameCard[];
     didDraw: boolean;
     summonsLeft: number;
 }
@@ -38,7 +39,7 @@ export const playerAction = (action: string | null, game: Game, data: any) => {
         case PlayerActionsName.Surrender:
             return surrender(player, game);
         case PlayerActionsName.Summon:
-            return summon(game, data.selectedCard as GameCard, data.extendedData as number[]);
+            return summon(game, data.selectedCard as ChampionCard, data.extendedData as number[]);
         case PlayerActionsName.EndTurn:
             return endTurn(game);
         case PlayerActionsName.Equip:
@@ -50,7 +51,7 @@ export const playerAction = (action: string | null, game: Game, data: any) => {
         case PlayerActionsName.removeCardFromDeck:
             return removeCardFromDeck(game, data.selectedCard as GameCard);
         case PlayerActionsName.Attach:
-            return removeCardFromDeck(game, data.selectedCard as GameCard);
+            return attachAction(game, data.selectedCard as ActionCard, data.extendedData as number[]);
         default:
             return `Player action ${action} is not implemented yet`;
     }
@@ -85,7 +86,7 @@ const surrender = (player: Player, game: Game) => {
     game.status = GameStatus.over;
 };
 
-const summon = (game: Game, selectedCard: GameCard, targetLocation: number[]): string => {
+const summon = (game: Game, selectedCard: ChampionCard, targetLocation: number[]): string => {
 
     const targetRow = targetLocation[0],
         targetColumn = targetLocation[1];
@@ -102,6 +103,16 @@ const summon = (game: Game, selectedCard: GameCard, targetLocation: number[]): s
     removeCardFromHand(game, selectedCard);
 
     player.summonsLeft--;
+
+    if(selectedCard.learnedActions.length !== 2) return 'Champion can no have less or more than two learned actions';
+
+    const firstActionCard = getAndRemoveActionCard(game, selectedCard.learnedActions[0]);
+
+    if(firstActionCard !== null) selectedCard.learnedActionsCards.push(firstActionCard);
+
+    const secondActionCard = getAndRemoveActionCard(game, selectedCard.learnedActions[1]);
+
+    if(secondActionCard !== null) selectedCard.learnedActionsCards.push(secondActionCard);
 
     return 'success';
 }
@@ -222,11 +233,16 @@ const removeCardFromDeck = (game: Game, selectedCard: GameCard) => {
     if (selectedCard === null) return 'Card can not be null';
 
     const player = game.players[game.playerIndex];
-    const cardIndexToRemove = player.deck.findIndex(card => card.guid === selectedCard.guid);
+    const deletedCards = removeCard(player.deck, selectedCard);
 
-    player.deck.splice(cardIndexToRemove, 1);
+    if(deletedCards.length !== 1) return 'Error removing card from deck';
 
     return 'success';
+}
+
+const removeCard = (cards: GameCard[], selectedCard: GameCard) : GameCard[] => {
+    const cardIndexToRemove = cards.findIndex(card => card.guid === selectedCard.guid);
+    return cards.splice(cardIndexToRemove, 1);
 }
 
 const refreshResources = (game: Game, playerIndex: number) => {
@@ -249,6 +265,38 @@ const removeCardFromHand = (game: Game, selectedCard: GameCard) => {
     const player = game.players[game.playerIndex];
     const cardIndex = player.hand.findIndex((x) => x.guid === selectedCard.guid);
     player.hand.splice(cardIndex, 1);
+}
+
+const getAndRemoveActionCard = (game: Game, actionCardName: string): ActionCard|null => {
+    const player = game.players[game.playerIndex];
+
+    let actionCard = findCard(player.usedCards, actionCardName);
+
+    if(actionCard !== undefined) {
+        removeCard(player.usedCards, actionCard as GameCard);
+        return actionCard as ActionCard;
+    }
+
+    actionCard = findCard(player.deck, actionCardName);
+
+    if(actionCard !== undefined) {
+        removeCard(player.deck, actionCard as GameCard);
+        return actionCard as ActionCard;
+    }
+
+    actionCard = findCard(player.hand, actionCardName);
+
+    if(actionCard !== undefined) {
+        removeCard(player.deck, actionCard as GameCard);
+        return actionCard as ActionCard;
+    }
+
+    return null;
+}
+
+const findCard = (cards: GameCard[], selectedCardName: string) => {
+    const card = cards.find((x) => x.name === selectedCardName);
+    return card;
 }
 
 const getChampionStatValue = (champion: ChampionCard, stat: Stats): number => {

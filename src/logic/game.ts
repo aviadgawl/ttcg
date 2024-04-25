@@ -42,7 +42,7 @@ export const cardsList = cardsListJson.map(x => {
                 dmgModifier: x.dmgModifier,
                 dmgModifierValue: x.dmgModifierValue,
                 requiredClassName: x.requiredClassName,
-                requiredStat: Stats[(x.requiredStat ?? '')  as keyof typeof Stats],
+                requiredStat: Stats[(x.requiredStat ?? '') as keyof typeof Stats],
                 requiredStatValue: x.requiredStatValue,
                 requiredGearName: x.requiredGearName
             } as ActionCard
@@ -83,7 +83,7 @@ const mockChampion1: ChampionCard = cardsList[0] as ChampionCard;
 const mockChampion2: ChampionCard = cardsList[0] as ChampionCard;
 const mockClass: ClassCard = cardsList[1] as ClassCard;
 const mockGear: GearCard = cardsList[2] as GearCard;
-const mockPlayerOne: Player = { name: 'AviadP', hand: [mockClass, mockGear], deck: [mockChampion2], didDraw: false, summonsLeft: 1 };
-const mockPlayerTwo: Player = { name: 'MorP', hand: new Array<GameCard>(), deck: new Array<GameCard>(), didDraw: false, summonsLeft: 1 };
+const mockPlayerOne: Player = { name: 'AviadP', hand: [mockClass, mockGear], deck: [mockChampion2], usedCards: [], didDraw: false, summonsLeft: 1 };
+const mockPlayerTwo: Player = { name: 'MorP', hand: [], deck: [], usedCards: [], didDraw: false, summonsLeft: 1 };
 const mockCrystalOne: CrystalCard = { image: 'https://img.freepik.com/premium-photo/magical-crystal-with-swirling-colors-digital-art-style-illustration_812426-6398.jpg', hp: 20, currentHp: 20, name: 'Warrior Spirit', guid: '5', effect: null, playerIndex: 0, isBlocking: true }
 const mockCrystalTwo: CrystalCard = { image: 'https://img.freepik.com/premium-photo/magical-crystal-with-swirling-colors-digital-art-style-illustration_812426-6466.jpg?w=740', hp: 20, currentHp: 20, name: 'Warrior Spirit', guid: '5', effect: null, playerIndex: 1, isBlocking: true }
