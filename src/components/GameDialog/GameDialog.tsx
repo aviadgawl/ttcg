@@ -5,8 +5,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { setDialog } from '../../app/store';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { setDialog } from '../../redux/store';
 import styles from './GameDialog.module.css';
 
 interface GameDialogProps { }

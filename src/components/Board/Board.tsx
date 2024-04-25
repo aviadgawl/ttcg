@@ -1,7 +1,7 @@
 import { FC, useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { championActions, playerActions, setSelectedActionData, initialState } from '../../app/store';
-import { actionTypes } from '../../app/types';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { championActions, playerActions, setSelectedActionData, initialState } from '../../redux/store';
+import { actionTypes } from '../../redux/types';
 import { isCrystal, CrystalCard, isChampion } from '../../logic/game-card';
 import Button from '@mui/material/Button';
 import BoardChampion from '../BoardChampion/BoardChampion';

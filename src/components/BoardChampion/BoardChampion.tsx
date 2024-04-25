@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import { ChampionCard } from '../../logic/game-card';
-import { useAppDispatch } from '../../app/hooks';
-import { setSelectedActionData, createSelectedData } from '../../app/store';
-import { actionTypes } from '../../app/types';
+import { useAppDispatch } from '../../redux/hooks';
+import { setSelectedActionData, createSelectedData } from '../../redux/store';
+import { actionTypes } from '../../redux/types';
 import Button from '@mui/material/Button';
 import styles from './BoardChampion.module.css';
 

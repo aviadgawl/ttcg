@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { useAppSelector } from '../../app/hooks';
+import { useAppSelector } from '../../redux/hooks';
 import styles from './GameDetails.module.css';
 
 interface GameDetailsProps {}

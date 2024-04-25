@@ -4,8 +4,8 @@ import { PlayerActionsName } from '../../logic/player';
 import HandCard, { HandCardMode } from '../HandCard/HandCard';
 import Button from '@mui/material/Button';
 import styles from './DeckBuilder.module.css';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { playerActions } from '../../app/store';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { playerActions } from '../../redux/store';
 
 interface DeckBuilderProps { }
 

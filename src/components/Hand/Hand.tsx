@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import styles from './Hand.module.css';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { playerActions, setShowHand, createSelectedData } from '../../app/store';
-import { actionTypes } from '../../app/types';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { playerActions, setShowHand, createSelectedData } from '../../redux/store';
+import { actionTypes } from '../../redux/types';
 import { PlayerActionsName } from '../../logic/player';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
