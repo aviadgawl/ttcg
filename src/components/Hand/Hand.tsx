@@ -2,7 +2,7 @@ import { FC } from 'react';
 import styles from './Hand.module.css';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { playerActions, setShowHand, createSelectedData } from '../../redux/store';
-import { actionTypes } from '../../redux/types';
+import { GameStoreActionTypes } from '../../redux/types';
 import { PlayerActionsName } from '../../logic/player';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
@@ -17,7 +17,7 @@ const Hand: FC = () => {
   const dispatch = useAppDispatch();
 
   const handleAction = (actionName: string) => {
-    const selectedActionData = createSelectedData(null, actionName, actionTypes.playerAction);
+    const selectedActionData = createSelectedData(null, actionName, GameStoreActionTypes.PlayerAction);
     dispatch(playerActions({ selectedActionData: selectedActionData }));
   };
 

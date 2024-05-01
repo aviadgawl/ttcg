@@ -50,7 +50,6 @@ export interface ClassCard extends SummoningCard {
     dex: number;
     int: number;
     learnedAction: string;
-    action: ActionCard|null;
     requiredClass: string;
     class: string;
 }

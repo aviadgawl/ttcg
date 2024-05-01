@@ -1,4 +1,4 @@
-export const actionTypes = {
-    championAction: 'championAction',
-    playerAction: 'playerAction'  
+export enum GameStoreActionTypes {
+    ChampionAction = 0,
+    PlayerAction = 1 
 }

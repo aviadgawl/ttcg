@@ -79,6 +79,16 @@ export interface Game {
     status: GameStatus;
 }
 
+export interface BoardLocation {
+    rowIndex: number;
+    columnIndex: number;
+}
+
+export interface AllowedBoardLocationResponse {
+    message: string;
+    locations: BoardLocation[];
+}
+
 const mockChampion1: ChampionCard = cardsList[0] as ChampionCard;
 const mockChampion2: ChampionCard = cardsList[0] as ChampionCard;
 const mockClass: ClassCard = cardsList[1] as ClassCard;

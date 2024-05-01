@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { ChampionCard } from '../../logic/game-card';
 import { useAppDispatch } from '../../redux/hooks';
 import { setSelectedActionData, createSelectedData } from '../../redux/store';
-import { actionTypes } from '../../redux/types';
+import { GameStoreActionTypes } from '../../redux/types';
 import Button from '@mui/material/Button';
 import styles from './BoardChampion.module.css';
 
@@ -31,12 +31,12 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
     <div>
       {props.champion.learnedActionsCards.map((card, actionIndex) =>
         <Button disabled={props.champion.stm <= 0} size="small" variant="contained" className="App-button" key={actionIndex} 
-          onClick={() => dispatch(setSelectedActionData(createSelectedData(card, card.name, actionTypes.championAction, [props.x, props.y])))}>{card.name}
+          onClick={() => dispatch(setSelectedActionData(createSelectedData(card, card.name, GameStoreActionTypes.ChampionAction, [props.x, props.y])))}>{card.name}
         </Button>
       )}
       {props.champion.attachedActionsCards.map((card, actionIndex) =>
         <Button size="small" variant="contained" className="App-button" key={actionIndex} 
-          onClick={() => dispatch(setSelectedActionData(createSelectedData(props.champion, card.name, actionTypes.championAction, [props.x, props.y])))}>{card.name}
+          onClick={() => dispatch(setSelectedActionData(createSelectedData(props.champion, card.name, GameStoreActionTypes.ChampionAction, [props.x, props.y])))}>{card.name}
         </Button>
       )}
     </div>

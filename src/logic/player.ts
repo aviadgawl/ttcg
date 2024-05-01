@@ -1,4 +1,5 @@
 import { GameCard, GearCard, ClassCard, ChampionCard, isChampion, ActionCard } from './game-card';
+import { BoardLocation, AllowedBoardLocationResponse } from './game';
 import { calculateStats } from './champion';
 import { Stats } from './enums';
 
@@ -26,6 +27,46 @@ export interface Player {
     summonsLeft: number;
 }
 
+export const getAllowedBoardLocations = (game: Game, actionName: string, selectedCard: GameCard|null): AllowedBoardLocationResponse => {
+    switch (actionName) {
+        case PlayerActionsName.Summon:
+            return getSummonBoardLocations(game);
+        case PlayerActionsName.Upgrade:
+            return getUpgradeBoardLocations(game, selectedCard as ClassCard);
+        default:
+            return { message: `Player allowed board locations ${actionName} is not implemented yet`, locations: [] };
+    }
+}
+
+const getSummonBoardLocations = (game: Game): AllowedBoardLocationResponse => {
+    let locations: BoardLocation[] = [];
+
+    if (game.playerIndex === 0) {
+        for (let rowIndex = game.board.length - 2; rowIndex < game.board.length; rowIndex++) {
+            for (let columnIndex = 0; columnIndex < game.board[rowIndex].length; columnIndex++) {
+                locations.push({ rowIndex: rowIndex, columnIndex: columnIndex });
+            }
+        }
+    }
+
+    return { message: 'success', locations: locations };
+}
+
+const getUpgradeBoardLocations = (game: Game, upgradeCard: ClassCard): AllowedBoardLocationResponse => {
+    let locations: BoardLocation[] = [];
+
+    for (let rowIndex = 0; rowIndex < game.board.length; rowIndex++) {
+        for (let columnIndex = 0; columnIndex < game.board[rowIndex].length; columnIndex++) {
+            const boardCell = game.board[rowIndex][columnIndex];
+
+            if (isChampion(boardCell) && boardCell.calClass === upgradeCard.requiredClass)
+                locations.push({ rowIndex: rowIndex, columnIndex: columnIndex });
+        }
+    }
+
+    return { message: 'success', locations: locations };
+}
+
 export const playerAction = (action: string | null, game: Game, data: any) => {
     if (action === null) return 'Action can not be null';
 
@@ -37,7 +78,7 @@ export const playerAction = (action: string | null, game: Game, data: any) => {
         case PlayerActionsName.Draw:
             return draw(player, data.extendedData as number);
         case PlayerActionsName.Surrender:
-            return surrender(player, game);
+            return surrender(game);
         case PlayerActionsName.Summon:
             return summon(game, data.selectedCard as ChampionCard, data.extendedData as number[]);
         case PlayerActionsName.EndTurn:
@@ -82,7 +123,7 @@ const draw = (player: Player, amount: number): string => {
     return 'success';
 };
 
-const surrender = (player: Player, game: Game) => {
+const surrender = (game: Game) => {
     game.status = GameStatus.over;
 };
 
@@ -104,15 +145,15 @@ const summon = (game: Game, selectedCard: ChampionCard, targetLocation: number[]
 
     player.summonsLeft--;
 
-    if(selectedCard.learnedActions.length !== 2) return 'Champion can no have less or more than two learned actions';
+    if (selectedCard.learnedActions.length !== 2) return 'Champion can no have less or more than two learned actions';
 
     const firstActionCard = getAndRemoveActionCard(game, selectedCard.learnedActions[0]);
 
-    if(firstActionCard !== null) selectedCard.learnedActionsCards.push(firstActionCard);
+    if (firstActionCard !== null) selectedCard.learnedActionsCards.push(firstActionCard);
 
     const secondActionCard = getAndRemoveActionCard(game, selectedCard.learnedActions[1]);
 
-    if(secondActionCard !== null) selectedCard.learnedActionsCards.push(secondActionCard);
+    if (secondActionCard !== null) selectedCard.learnedActionsCards.push(secondActionCard);
 
     return 'success';
 }
@@ -167,10 +208,14 @@ const upgrade = (game: Game, selectedCard: ClassCard, targetLocation: number[]):
 
     if (selectedCard.requiredClass !== targetChampion.calClass) return `Champion das not have the required class of ${selectedCard.requiredClass}`;
 
-    if (selectedCard.action === null) return 'Class card action can not be null';
+    if (selectedCard.learnedAction === null) return 'Class card learned Action can not be null';
+
+    const classActionCard = getAndRemoveActionCard(game, selectedCard.learnedAction);
+
+    if(classActionCard !== null)
+        targetChampion.learnedActionsCards = [...targetChampion.learnedActionsCards, classActionCard];
 
     targetChampion.upgrade = selectedCard;
-    targetChampion.learnedActionsCards = [...targetChampion.learnedActionsCards, selectedCard.action];
     targetChampion.calClass = targetChampion.upgrade.class;
 
     calculateStats(targetChampion);
@@ -209,8 +254,8 @@ const attachAction = (game: Game, selectedCard: ActionCard, targetLocation: numb
         const isRequiredGearFound = targetChampion.body?.guid === selectedCard.requiredGearName
             || targetChampion.rightHand?.guid === selectedCard.requiredGearName
             || targetChampion.leftHand?.guid === selectedCard.requiredGearName
-        
-        if(!isRequiredGearFound) return `Champion das not meet the gear requirement of this action ${selectedCard.requiredGearName}`;
+
+        if (!isRequiredGearFound) return `Champion das not meet the gear requirement of this action ${selectedCard.requiredGearName}`;
     }
 
     if (selectedCard.requiredStat !== null && selectedCard.requiredStatValue !== null) {
@@ -235,12 +280,12 @@ const removeCardFromDeck = (game: Game, selectedCard: GameCard) => {
     const player = game.players[game.playerIndex];
     const deletedCards = removeCard(player.deck, selectedCard);
 
-    if(deletedCards.length !== 1) return 'Error removing card from deck';
+    if (deletedCards.length !== 1) return 'Error removing card from deck';
 
     return 'success';
 }
 
-const removeCard = (cards: GameCard[], selectedCard: GameCard) : GameCard[] => {
+const removeCard = (cards: GameCard[], selectedCard: GameCard): GameCard[] => {
     const cardIndexToRemove = cards.findIndex(card => card.guid === selectedCard.guid);
     return cards.splice(cardIndexToRemove, 1);
 }
@@ -267,26 +312,26 @@ const removeCardFromHand = (game: Game, selectedCard: GameCard) => {
     player.hand.splice(cardIndex, 1);
 }
 
-const getAndRemoveActionCard = (game: Game, actionCardName: string): ActionCard|null => {
+const getAndRemoveActionCard = (game: Game, actionCardName: string): ActionCard | null => {
     const player = game.players[game.playerIndex];
 
     let actionCard = findCard(player.usedCards, actionCardName);
 
-    if(actionCard !== undefined) {
+    if (actionCard !== undefined) {
         removeCard(player.usedCards, actionCard as GameCard);
         return actionCard as ActionCard;
     }
 
     actionCard = findCard(player.deck, actionCardName);
 
-    if(actionCard !== undefined) {
+    if (actionCard !== undefined) {
         removeCard(player.deck, actionCard as GameCard);
         return actionCard as ActionCard;
     }
 
     actionCard = findCard(player.hand, actionCardName);
 
-    if(actionCard !== undefined) {
+    if (actionCard !== undefined) {
         removeCard(player.deck, actionCard as GameCard);
         return actionCard as ActionCard;
     }

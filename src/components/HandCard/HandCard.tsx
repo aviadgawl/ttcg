@@ -4,7 +4,7 @@ import { PlayerActionsName } from '../../logic/player';
 import styles from './HandCard.module.css';
 import { useAppDispatch } from '../../redux/hooks';
 import { setSelectedActionData, setShowHand, createSelectedData } from '../../redux/store';
-import { actionTypes } from '../../redux/types';
+import { GameStoreActionTypes } from '../../redux/types';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -25,7 +25,7 @@ const HandCard: FC<CardProps> = (props) => {
   const dispatch = useAppDispatch();
 
   const handleCardActionOnTarget = (cardAction: string) => {
-    const selectedData = createSelectedData(props.card, cardAction, actionTypes.playerAction);
+    const selectedData = createSelectedData(props.card, cardAction, GameStoreActionTypes.PlayerAction);
     dispatch(setSelectedActionData(selectedData));
     dispatch(setShowHand(false));
   }

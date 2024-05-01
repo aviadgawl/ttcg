@@ -1,7 +1,7 @@
 import { FC, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { championActions, playerActions, setSelectedActionData, initialState } from '../../redux/store';
-import { actionTypes } from '../../redux/types';
+import { GameStoreActionTypes } from '../../redux/types';
 import { isCrystal, CrystalCard, isChampion } from '../../logic/game-card';
 import Button from '@mui/material/Button';
 import BoardChampion from '../BoardChampion/BoardChampion';
@@ -21,10 +21,10 @@ const Board: FC = () => {
 
   const handleAction = (targetX: number, targetY: number) => {
 
-    if (selectedActionData.actionType === actionTypes.playerAction) {
+    if (selectedActionData.actionType === GameStoreActionTypes.PlayerAction) {
       dispatch(playerActions({ data: [targetX, targetY] }))
     }
-    else if (selectedActionData.actionType === actionTypes.championAction) {
+    else if (selectedActionData.actionType === GameStoreActionTypes.ChampionAction) {
       dispatch(championActions({
         targetLocation: [targetX, targetY]
       }));
@@ -40,6 +40,12 @@ const Board: FC = () => {
     return;
   };
 
+  const isAllowedLocation = (rowIndex: number, columnIndex: number): boolean => {
+    if (selectedActionData.allowedBoardLocations.length === 0) return true;
+
+    return selectedActionData.allowedBoardLocations.some(loc => loc.rowIndex === rowIndex && loc.columnIndex === columnIndex);
+  }
+
   const shouldRotate = playingPlayerIndex === 1;
 
   return (
@@ -49,7 +55,10 @@ const Board: FC = () => {
           return <tr key={`${rowIndex}`}>
             {row.map((card, columnIndex) => {
               return <td className={playerBaseClassName(rowIndex)} key={`${rowIndex}-${columnIndex}`}>
-                <Button className={styles.TargetButton} size="small" variant="contained" onClick={() => handleAction(rowIndex, columnIndex)}><FaBullseye /></Button>
+                {isAllowedLocation(rowIndex, columnIndex) &&
+                  <Button className={styles.TargetButton} size="small" variant="contained" onClick={() => handleAction(rowIndex, columnIndex)}>
+                    <FaBullseye />
+                  </Button>}
                 {isChampion(card) && <BoardChampion rotate={shouldRotate} champion={card}
                   x={rowIndex}
                   y={columnIndex}
