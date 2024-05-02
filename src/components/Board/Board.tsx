@@ -62,7 +62,7 @@ const Board: FC = () => {
                 {isChampion(card) && <BoardChampion rotate={shouldRotate} champion={card}
                   x={rowIndex}
                   y={columnIndex}
-                  isSelected={`${selectedActionData.location[0]}-${selectedActionData.location[1]}` === `${rowIndex}-${columnIndex}`} />}
+                  isSelected={selectedActionData.location?.rowIndex === rowIndex && selectedActionData.location?.columnIndex === columnIndex} />}
                 {isCrystal(card) && <BoardCrystal rotate={shouldRotate} crystal={card as unknown as CrystalCard} />}
               </td>
             })}

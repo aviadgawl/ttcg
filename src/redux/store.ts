@@ -16,7 +16,7 @@ export interface SelectedData {
     card: GameCard | null,
     actionName: string,
     actionType: GameStoreActionTypes | null,
-    location: number[],
+    location: BoardLocation | null,
     allowedBoardLocations: BoardLocation[]
 }
 
@@ -27,7 +27,7 @@ export const createSelectedData = (card: GameCard | null, actionName: string, ac
 export const initialState = {
     game: createGame() as Game,
     playerIndex: 0 as number,
-    selectedActionData: { card: null, actionName: '', actionType: null, location: [-1, -1], allowedBoardLocations: [] } as SelectedData,
+    selectedActionData: { card: null, actionName: '', actionType: null, location: null, allowedBoardLocations: [] } as SelectedData,
     showHand: false as boolean,
     dialog: null as unknown as GameDialog
 }
@@ -45,8 +45,12 @@ const gameSlice = createSlice({
                 return;
             }
 
-            const result = championAction(state.game,
-                card.name, location[0], location[1], targetLocation[0], targetLocation[1]);
+            if(location === null){
+                alert('No source location');
+                return;
+            };
+
+            const result = championAction(state.game, card.name, location, targetLocation);
 
             if (result !== 'success') alert(result);
             else playSoundByCardActionName(card.name);

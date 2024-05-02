@@ -1,6 +1,6 @@
 import { GameCard, isCrystal, isSummoning, SummoningCard, ChampionCard, isChampion } from './game-card';
 import { ChampionActionsName, ActionDirections } from './enums';
-import { Game, GameStatus } from './game';
+import { BoardLocation, Game, GameStatus } from './game';
 
 interface ChampionActionResult {
     status: string,
@@ -51,25 +51,25 @@ export const calculateStats = (champion: ChampionCard) => {
     champion.currentHp += calHp;
 }
 
-export const moveChampion = (board: (GameCard | null)[][], entityToMove: ChampionCard, rowIndex: number, columnIndex: number, targetRowIndex: number, targetColumnIndex: number): ChampionActionResult => {
-    const targetCell = board[targetRowIndex][targetColumnIndex] as unknown as SummoningCard;
+export const moveChampion = (board: (GameCard | null)[][], entityToMove: ChampionCard, sourceLocation: BoardLocation, targetLocation: BoardLocation): ChampionActionResult => {
+    const targetCell = board[targetLocation.rowIndex][targetLocation.columnIndex] as unknown as SummoningCard;
     if (targetCell !== null) return { status: 'Target location isn\'t empty', targetedCard: null };
 
     if (entityToMove.calDex <= 0) return { status: 'Dex must be higher than zero', targetedCard: null };
 
-    const distance = calculateDistance(rowIndex, columnIndex, targetRowIndex, targetColumnIndex);
+    const distance = calculateDistance(sourceLocation, targetLocation);
     if (distance > entityToMove.calDex) return { status: 'Location to far', targetedCard: null };
 
-    board[targetRowIndex][targetColumnIndex] = entityToMove;
-    board[rowIndex][columnIndex] = null;
+    board[targetLocation.rowIndex][targetLocation.columnIndex] = entityToMove;
+    board[sourceLocation.rowIndex][sourceLocation.columnIndex] = null;
 
     return { status: 'success', targetedCard: null };
 }
 
 export const basicHit = (board: (GameCard | null)[][], attackingChampion: ChampionCard,
-    sourceRowIndex: number, sourceColumnIndex: number, targetRowIndex: number, targetColumnIndex: number): ChampionActionResult => {
+    sourceLocation: BoardLocation, targetLocation: BoardLocation): ChampionActionResult => {
 
-    const target = board[targetRowIndex][targetColumnIndex] as unknown as SummoningCard;
+    const target = board[targetLocation.rowIndex][targetLocation.columnIndex] as unknown as SummoningCard;
 
     if (target === null) return { status: 'Target is not found', targetedCard: null };
 
@@ -78,75 +78,75 @@ export const basicHit = (board: (GameCard | null)[][], attackingChampion: Champi
     const validTarget = checkValidTarget(target);
     if (!validTarget) return { status: 'Target is not a champion or crystal', targetedCard: target };
 
-    const validDistance = checkAllowedDistance(1, 1, sourceRowIndex, sourceColumnIndex, targetRowIndex, targetColumnIndex);
+    const validDistance = checkAllowedDistance(1, 1, sourceLocation, targetLocation);
     if (!validDistance) return { status: 'Location to far', targetedCard: target };
 
     applyPhysicalDamage(target, attackingChampion.calStr);
-    if (target.currentHp === 0) board[targetRowIndex][targetColumnIndex] = null;
+    if (target.currentHp === 0) board[targetLocation.rowIndex][targetLocation.columnIndex] = null;
 
     return { status: 'success', targetedCard: target };
 }
 
 export const daggerThrow = (board: (GameCard | null)[][], attackingChampion: ChampionCard,
-    sourceRowIndex: number, sourceColumnIndex: number, targetRowIndex: number, targetColumnIndex: number): ChampionActionResult => {
+    sourceLocation: BoardLocation, targetLocation: BoardLocation): ChampionActionResult => {
 
-    const target = board[targetRowIndex][targetColumnIndex] as unknown as SummoningCard;;
+    const target = board[targetLocation.rowIndex][targetLocation.columnIndex] as unknown as SummoningCard;;
 
     if (target === null) return { status: 'Target is not found', targetedCard: null };
 
     const validTarget = checkValidTarget(target);
     if (!validTarget) return { status: 'Target is not a champion or crystal', targetedCard: target };
 
-    const validDistance = checkAllowedDistance(3, 1, sourceRowIndex, sourceColumnIndex, targetRowIndex, targetColumnIndex);
+    const validDistance = checkAllowedDistance(3, 1, sourceLocation, targetLocation);
     if (!validDistance) return { status: 'Location to far', targetedCard: target };
 
-    const validDirection = checkAllowedDirection(ActionDirections.Straight, sourceRowIndex, sourceColumnIndex, targetRowIndex, targetColumnIndex);
+    const validDirection = checkAllowedDirection(ActionDirections.Straight, sourceLocation, targetLocation);
     if (!validDirection) return { status: `Not a valid direction for direction: ${ActionDirections.Straight}`, targetedCard: null };
 
-    const isPathBlocked = checkBlockingObjects(board, sourceRowIndex, sourceColumnIndex, targetRowIndex, targetColumnIndex);
+    const isPathBlocked = checkBlockingObjects(board, sourceLocation, targetLocation);
     if (isPathBlocked) return { status: 'Hit path is blocked', targetedCard: null };
 
     applyPhysicalDamage(target, attackingChampion.calDex);
-    if (target.currentHp <= 0) board[targetRowIndex][targetColumnIndex] = null;
+    if (target.currentHp <= 0) board[targetLocation.rowIndex][targetLocation.columnIndex] = null;
 
     return { status: 'success', targetedCard: target };
 }
 
 export const checkAllowedDistance = (allowedMaxDistance: number,
-    allowedMinDistance: number, sourceRowIndex: number, sourceColumnIndex: number, targetRowIndex: number, targetColumnIndex: number) => {
+    allowedMinDistance: number, sourceLocation: BoardLocation, targetLocation: BoardLocation) => {
 
-    const distance = calculateDistance(sourceRowIndex, sourceColumnIndex, targetRowIndex, targetColumnIndex);
+    const distance = calculateDistance(sourceLocation, targetLocation);
     return allowedMinDistance <= distance && distance <= allowedMaxDistance;
 }
 
 export const checkAllowedDirection = (allowedDirection: ActionDirections,
-    sourceRowIndex: number, sourceColumnIndex: number, targetRowIndex: number, targetColumnIndex: number) => {
+    sourceLocation: BoardLocation, targetLocation: BoardLocation) => {
 
     switch (allowedDirection) {
         case ActionDirections.Straight:
-            return sourceColumnIndex === targetColumnIndex || sourceRowIndex === targetRowIndex;
+            return sourceLocation.columnIndex === targetLocation.columnIndex || sourceLocation.rowIndex === targetLocation.columnIndex;
         default:
             break;
     }
 }
 
-export const calculateDistance = (sourceX: number, sourceY: number, targetX: number, targetY: number): number => {
-    const distanceX = Math.abs(sourceX - targetX);
-    const distanceY = Math.abs(sourceY - targetY);
+export const calculateDistance = (sourceLocation: BoardLocation, targetLocation: BoardLocation): number => {
+    const distanceX = Math.abs(sourceLocation.rowIndex - targetLocation.rowIndex);
+    const distanceY = Math.abs(sourceLocation.columnIndex - targetLocation.columnIndex);
     const distance = distanceX + distanceY;
 
     return distance;
 }
 
-export const checkBlockingObjects = (board: (GameCard | null)[][], sourceRowIndex: number, sourceColumnIndex: number, targetRowIndex: number, targetColumnIndex: number): boolean => {
-    const distance = calculateDistance(sourceRowIndex, sourceColumnIndex, targetRowIndex, targetColumnIndex);
+export const checkBlockingObjects = (board: (GameCard | null)[][], sourceLocation: BoardLocation, targetLocation: BoardLocation): boolean => {
+    const distance = calculateDistance(sourceLocation, targetLocation);
 
     if (distance <= 1) return false;
 
-    const rowDirection = getRowDirection(sourceRowIndex, targetRowIndex);
-    const columnDirection = getColumnDirection(sourceColumnIndex, targetColumnIndex);
+    const rowDirection = getRowDirection(sourceLocation.rowIndex, targetLocation.rowIndex);
+    const columnDirection = getColumnDirection(sourceLocation.columnIndex, targetLocation.columnIndex);
 
-    for (let index = 0, rowIndex = sourceRowIndex, columnIndex = sourceRowIndex; index < distance; index++) {
+    for (let index = 0, rowIndex = sourceLocation.rowIndex, columnIndex = sourceLocation.columnIndex; index < distance; index++) {
 
         rowIndex += rowDirection === 'up' ? -1 : 1;
         columnIndex += columnDirection === 'left' ? -1 : 1;
@@ -159,8 +159,8 @@ export const checkBlockingObjects = (board: (GameCard | null)[][], sourceRowInde
     return false;
 }
 
-export const championAction = (game: Game, action: string, sourceX: number, sourceY: number, targetX: number, targetY: number): string => {
-    const sourceChampion = game.board[sourceX][sourceY];
+export const championAction = (game: Game, action: string, sourceLocation: BoardLocation, targetLocation: BoardLocation): string => {
+    const sourceChampion = game.board[sourceLocation.rowIndex][sourceLocation.columnIndex];
     if (sourceChampion === null) return 'Entity was not found';
     if (!isChampion(sourceChampion)) return 'Entity is not a champion';
     if (sourceChampion.playerIndex !== game.playingPlayerIndex)
@@ -171,13 +171,13 @@ export const championAction = (game: Game, action: string, sourceX: number, sour
 
     switch (action) {
         case ChampionActionsName.Step:
-            result = moveChampion(game.board, sourceChampion, sourceX, sourceY, targetX, targetY);
+            result = moveChampion(game.board, sourceChampion, sourceLocation, targetLocation);
             break;
         case ChampionActionsName.BasicHit:
-            result = basicHit(game.board, sourceChampion, sourceX, sourceY, targetX, targetY);
+            result = basicHit(game.board, sourceChampion, sourceLocation, targetLocation);
             break;
         case ChampionActionsName.DaggerThrow:
-            result = daggerThrow(game.board, sourceChampion, sourceX, sourceY, targetX, targetY);
+            result = daggerThrow(game.board, sourceChampion, sourceLocation, targetLocation);
             break;
         default:
             result = { status: `Action ${action} is not implemented yet`, targetedCard: null };
