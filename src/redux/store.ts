@@ -16,18 +16,18 @@ export interface SelectedData {
     card: GameCard | null,
     actionName: string,
     actionType: GameStoreActionTypes | null,
-    location: BoardLocation | null,
+    sourceLocation: BoardLocation | null,
     allowedBoardLocations: BoardLocation[]
 }
 
-export const createSelectedData = (card: GameCard | null, actionName: string, actionType: GameStoreActionTypes | null, location: number[] = [-1, -1]) => {
-    return { card: card, actionName: actionName, actionType: actionType, location }
+export const createSelectedData = (card: GameCard | null, actionName: string, actionType: GameStoreActionTypes | null, sourceLocation: BoardLocation|null = null): SelectedData => {
+    return { card: card, actionName: actionName, actionType: actionType, sourceLocation: sourceLocation, allowedBoardLocations: [] };
 }
 
 export const initialState = {
     game: createGame() as Game,
     playerIndex: 0 as number,
-    selectedActionData: { card: null, actionName: '', actionType: null, location: null, allowedBoardLocations: [] } as SelectedData,
+    selectedActionData: { card: null, actionName: '', actionType: null, sourceLocation: null, allowedBoardLocations: [] } as SelectedData,
     showHand: false as boolean,
     dialog: null as unknown as GameDialog
 }
@@ -38,19 +38,19 @@ const gameSlice = createSlice({
     reducers: {
         championActions(state, action) {
             const { targetLocation } = action.payload;
-            const { card, location } = state.selectedActionData;
+            const { card, sourceLocation } = state.selectedActionData;
 
             if (card === null) {
                 alert('SelectedData card can not be null');
                 return;
             }
 
-            if(location === null){
+            if (sourceLocation === null) {
                 alert('No source location');
                 return;
             };
 
-            const result = championAction(state.game, card.name, location, targetLocation);
+            const result = championAction(state.game, card.name, sourceLocation, targetLocation);
 
             if (result !== 'success') alert(result);
             else playSoundByCardActionName(card.name);
@@ -71,12 +71,12 @@ const gameSlice = createSlice({
         },
         setSelectedActionData(state, action) {
             let selectedData = action.payload as SelectedData;
-            let allowedLocationsResult: AllowedBoardLocationResponse | null = null;
+            let allowedLocationsResult: AllowedBoardLocationResponse | null = { message: 'success', locations: [] };
 
             if (selectedData.actionType === GameStoreActionTypes.PlayerAction)
                 allowedLocationsResult = getAllowedBoardLocations(state.game, selectedData.actionName, selectedData.card);
 
-            if (allowedLocationsResult !== null && allowedLocationsResult.message === 'success')
+            if (allowedLocationsResult.message === 'success')
                 selectedData = { ...selectedData, ...{ allowedBoardLocations: allowedLocationsResult.locations } }
 
             state.selectedActionData = selectedData;

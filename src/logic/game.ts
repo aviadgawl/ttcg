@@ -91,9 +91,11 @@ export interface AllowedBoardLocationResponse {
 
 const mockChampion1: ChampionCard = cardsList[0] as ChampionCard;
 const mockChampion2: ChampionCard = cardsList[0] as ChampionCard;
+const mockAction1: ActionCard = cardsList[3] as ActionCard;
+const mockAction2: ActionCard = cardsList[4] as ActionCard;
 const mockClass: ClassCard = cardsList[1] as ClassCard;
 const mockGear: GearCard = cardsList[2] as GearCard;
-const mockPlayerOne: Player = { name: 'AviadP', hand: [mockClass, mockGear], deck: [mockChampion2], usedCards: [], didDraw: false, summonsLeft: 1 };
+const mockPlayerOne: Player = { name: 'AviadP', hand: [mockClass, mockGear], deck: [mockAction1, mockAction2, mockChampion2], usedCards: [], didDraw: false, summonsLeft: 1 };
 const mockPlayerTwo: Player = { name: 'MorP', hand: [], deck: [], usedCards: [], didDraw: false, summonsLeft: 1 };
 const mockCrystalOne: CrystalCard = { image: 'https://img.freepik.com/premium-photo/magical-crystal-with-swirling-colors-digital-art-style-illustration_812426-6398.jpg', hp: 20, currentHp: 20, name: 'Warrior Spirit', guid: '5', effect: null, playerIndex: 0, isBlocking: true }
 const mockCrystalTwo: CrystalCard = { image: 'https://img.freepik.com/premium-photo/magical-crystal-with-swirling-colors-digital-art-style-illustration_812426-6466.jpg?w=740', hp: 20, currentHp: 20, name: 'Warrior Spirit', guid: '5', effect: null, playerIndex: 1, isBlocking: true }

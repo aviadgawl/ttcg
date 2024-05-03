@@ -80,19 +80,19 @@ export const playerAction = (action: string | null, game: Game, data: any) => {
         case PlayerActionsName.Surrender:
             return surrender(game);
         case PlayerActionsName.Summon:
-            return summon(game, data.selectedCard as ChampionCard, data.extendedData as number[]);
+            return summon(game, data.selectedCard as ChampionCard, data.extendedData as BoardLocation);
         case PlayerActionsName.EndTurn:
             return endTurn(game);
         case PlayerActionsName.Equip:
-            return equip(game, data.selectedCard as GearCard, data.extendedData as number[]);
+            return equip(game, data.selectedCard as GearCard, data.extendedData as BoardLocation);
         case PlayerActionsName.Upgrade:
-            return upgrade(game, data.selectedCard as ClassCard, data.extendedData as number[]);
+            return upgrade(game, data.selectedCard as ClassCard, data.extendedData as BoardLocation);
         case PlayerActionsName.AddCardToDeck:
             return addCardToDeck(game, data.selectedCard as GameCard);
         case PlayerActionsName.removeCardFromDeck:
             return removeCardFromDeck(game, data.selectedCard as GameCard);
         case PlayerActionsName.Attach:
-            return attachAction(game, data.selectedCard as ActionCard, data.extendedData as number[]);
+            return attachAction(game, data.selectedCard as ActionCard, data.extendedData as BoardLocation);
         default:
             return `Player action ${action} is not implemented yet`;
     }
@@ -127,19 +127,16 @@ const surrender = (game: Game) => {
     game.status = GameStatus.over;
 };
 
-const summon = (game: Game, selectedCard: ChampionCard, targetLocation: number[]): string => {
-
-    const targetRow = targetLocation[0],
-        targetColumn = targetLocation[1];
+const summon = (game: Game, selectedCard: ChampionCard, targetLocation: BoardLocation): string => {
 
     const player = game.players[game.playerIndex];
 
     if (player.summonsLeft === 0) return 'Player used his all his summons';
 
-    if ((game.playerIndex === 0 && targetRow < 11) || (game.playerIndex === 1 && targetRow > 2))
-        return `Player ${game.playerIndex + 1} can not summon here ${targetRow}-${targetColumn}`;
+    if ((game.playerIndex === 0 && targetLocation.rowIndex < 11) || (game.playerIndex === 1 && targetLocation.rowIndex > 2))
+        return `Player ${game.playerIndex + 1} can not summon here ${targetLocation.rowIndex}-${targetLocation.columnIndex}`;
 
-    game.board[targetRow][targetColumn] = selectedCard;
+    game.board[targetLocation.rowIndex][targetLocation.columnIndex] = selectedCard;
 
     removeCardFromHand(game, selectedCard);
 
@@ -173,11 +170,8 @@ const endTurn = (game: Game): string => {
     return 'success';
 }
 
-const equip = (game: Game, selectedCard: GearCard, targetLocation: number[]): string => {
-    const targetRow = targetLocation[0],
-        targetColumn = targetLocation[1];
-
-    var targetChampion = game.board[targetRow][targetColumn] as ChampionCard;
+const equip = (game: Game, selectedCard: GearCard, targetLocation: BoardLocation): string => {
+    var targetChampion = game.board[targetLocation.rowIndex][targetLocation.columnIndex] as ChampionCard;
 
     if (targetChampion === null) return 'Champion was not found';
 
@@ -196,13 +190,10 @@ const equip = (game: Game, selectedCard: GearCard, targetLocation: number[]): st
     return 'success';
 }
 
-const upgrade = (game: Game, selectedCard: ClassCard, targetLocation: number[]): string => {
+const upgrade = (game: Game, selectedCard: ClassCard, targetLocation: BoardLocation): string => {
     if (selectedCard === null) return 'Upgrade card can not be null';
 
-    const targetRow = targetLocation[0],
-        targetColumn = targetLocation[1];
-
-    var targetChampion = game.board[targetRow][targetColumn] as ChampionCard;
+    var targetChampion = game.board[targetLocation.rowIndex][targetLocation.columnIndex] as ChampionCard;
 
     if (targetChampion === null) return 'Champion was not found';
 
@@ -235,14 +226,11 @@ const addCardToDeck = (game: Game, selectedCard: GameCard) => {
     return 'success';
 }
 
-const attachAction = (game: Game, selectedCard: ActionCard, targetLocation: number[]) => {
+const attachAction = (game: Game, selectedCard: ActionCard, targetLocation: BoardLocation) => {
     if (selectedCard === null)
         return 'Action card can not be null';
 
-    const targetRow = targetLocation[0],
-        targetColumn = targetLocation[1];
-
-    var targetChampion = game.board[targetRow][targetColumn] as ChampionCard;
+    var targetChampion = game.board[targetLocation.rowIndex][targetLocation.columnIndex] as ChampionCard;
 
     if (targetChampion === null)
         return 'Champion was not found';

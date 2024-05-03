@@ -160,6 +160,7 @@ export const checkBlockingObjects = (board: (GameCard | null)[][], sourceLocatio
 }
 
 export const championAction = (game: Game, action: string, sourceLocation: BoardLocation, targetLocation: BoardLocation): string => {
+    debugger
     const sourceChampion = game.board[sourceLocation.rowIndex][sourceLocation.columnIndex];
     if (sourceChampion === null) return 'Entity was not found';
     if (!isChampion(sourceChampion)) return 'Entity is not a champion';

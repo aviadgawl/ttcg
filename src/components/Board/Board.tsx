@@ -8,6 +8,7 @@ import BoardChampion from '../BoardChampion/BoardChampion';
 import BoardCrystal from '../BoardCrystal/BoardCrystal';
 import { FaBullseye } from "react-icons/fa";
 import styles from './Board.module.css';
+import { BoardLocation } from '../../logic/game';
 
 const Board: FC = () => {
   const boardState = useAppSelector((state) => state.gameActions.game.board);
@@ -22,11 +23,11 @@ const Board: FC = () => {
   const handleAction = (targetX: number, targetY: number) => {
 
     if (selectedActionData.actionType === GameStoreActionTypes.PlayerAction) {
-      dispatch(playerActions({ data: [targetX, targetY] }))
+      dispatch(playerActions({ data: { rowIndex: targetX, columnIndex: targetY } as BoardLocation }))
     }
     else if (selectedActionData.actionType === GameStoreActionTypes.ChampionAction) {
       dispatch(championActions({
-        targetLocation: [targetX, targetY]
+        targetLocation: { rowIndex: targetX, columnIndex: targetY } as BoardLocation
       }));
     }
 
@@ -62,7 +63,7 @@ const Board: FC = () => {
                 {isChampion(card) && <BoardChampion rotate={shouldRotate} champion={card}
                   x={rowIndex}
                   y={columnIndex}
-                  isSelected={selectedActionData.location?.rowIndex === rowIndex && selectedActionData.location?.columnIndex === columnIndex} />}
+                  isSelected={selectedActionData.sourceLocation?.rowIndex === rowIndex && selectedActionData.sourceLocation?.columnIndex === columnIndex} />}
                 {isCrystal(card) && <BoardCrystal rotate={shouldRotate} crystal={card as unknown as CrystalCard} />}
               </td>
             })}
