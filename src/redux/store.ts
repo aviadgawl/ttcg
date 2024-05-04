@@ -1,10 +1,11 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
-import { AllowedBoardLocationResponse, BoardLocation, createGame, Game } from '../logic/game';
-import { GameCard } from '../logic/game-card';
-import { championAction } from '../logic/champion';
-import { playerAction, getAllowedBoardLocations } from '../logic/player';
+import { createGame, Game } from '../logic/game';
+import { GameCard, isAction } from '../logic/game-card';
+import { championAction, getChampionsActionsAllowedBoardLocations } from '../logic/champion';
+import { playerAction, getPlayerActionsAllowedBoardLocations } from '../logic/player';
 import { playSoundByPlayerActionName, playSoundByCardActionName } from '../helpers/audio-helper';
 import { GameStoreActionTypes } from './types';
+import { AllowedBoardLocationResponse, BoardLocation } from '../logic/common';
 
 export interface GameDialog {
     title: string;
@@ -72,12 +73,15 @@ const gameSlice = createSlice({
         setSelectedActionData(state, action) {
             let selectedData = action.payload as SelectedData;
             let allowedLocationsResult: AllowedBoardLocationResponse | null = { message: 'success', locations: [] };
-
+            
             if (selectedData.actionType === GameStoreActionTypes.PlayerAction)
-                allowedLocationsResult = getAllowedBoardLocations(state.game, selectedData.actionName, selectedData.card);
-
+                allowedLocationsResult = getPlayerActionsAllowedBoardLocations(state.game, selectedData.actionName, selectedData.card);
+            else if(selectedData.actionType === GameStoreActionTypes.ChampionAction && selectedData.card !== null && isAction(selectedData.card))
+                allowedLocationsResult = getChampionsActionsAllowedBoardLocations(state.game, selectedData.card, selectedData.sourceLocation); 
+               
             if (allowedLocationsResult.message === 'success')
                 selectedData = { ...selectedData, ...{ allowedBoardLocations: allowedLocationsResult.locations } }
+            else alert(allowedLocationsResult.message);
 
             state.selectedActionData = selectedData;
         },

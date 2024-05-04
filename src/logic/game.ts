@@ -1,6 +1,6 @@
 import { Player } from './player';
 import { GameCard, GearCard, CrystalCard, ChampionCard, ClassCard, ActionCard } from './game-card';
-import { ActionType, Stats, ActionDirections } from './enums';
+import { ActionType, Stats, ActionDirections, GameStatus } from './enums';
 import cardsListJson from '../assets/cards/cards-list.json';
 
 export const cardsList = cardsListJson.map(x => {
@@ -20,7 +20,7 @@ export const cardsList = cardsListJson.map(x => {
             return {
                 guid: x.guid, name: x.name, class: x.class,
                 str: x.str, dex: x.dex, int: x.int, hp: x.hp, learnedAction: x.action,
-                requiredClass: x.requiredClass, currentHp: 0,
+                requiredClassName: x.requiredClass, currentHp: 0,
                 image: x.image, playerIndex: 0, isBlocking: x.isBlocking
             } as ClassCard
         case 'Gear':
@@ -51,10 +51,13 @@ export const cardsList = cardsListJson.map(x => {
     }
 });
 
-export enum GameStatus {
-    starting = 1,
-    onGoing,
-    over
+export interface Game {
+    playingPlayerIndex: number;
+    playerIndex: number;
+    players: Player[];
+    loser: Player | null,
+    board: (GameCard | null)[][];
+    status: GameStatus;
 }
 
 export const createGame = (): Game => {
@@ -68,25 +71,6 @@ export const createGame = (): Game => {
     }
 
     return { board: board, players: [mockPlayerOne, mockPlayerTwo], status: GameStatus.onGoing, playerIndex: 0, playingPlayerIndex: 0, loser: null };
-}
-
-export interface Game {
-    playingPlayerIndex: number;
-    playerIndex: number;
-    players: Player[];
-    loser: Player | null,
-    board: (GameCard | null)[][];
-    status: GameStatus;
-}
-
-export interface BoardLocation {
-    rowIndex: number;
-    columnIndex: number;
-}
-
-export interface AllowedBoardLocationResponse {
-    message: string;
-    locations: BoardLocation[];
 }
 
 const mockChampion1: ChampionCard = cardsList[0] as ChampionCard;

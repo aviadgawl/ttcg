@@ -8,7 +8,7 @@ import BoardChampion from '../BoardChampion/BoardChampion';
 import BoardCrystal from '../BoardCrystal/BoardCrystal';
 import { FaBullseye } from "react-icons/fa";
 import styles from './Board.module.css';
-import { BoardLocation } from '../../logic/game';
+import { BoardLocation } from '../../logic/common';
 
 const Board: FC = () => {
   const boardState = useAppSelector((state) => state.gameActions.game.board);

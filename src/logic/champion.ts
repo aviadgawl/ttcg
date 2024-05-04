@@ -1,6 +1,7 @@
-import { GameCard, isCrystal, isSummoning, SummoningCard, ChampionCard, isChampion } from './game-card';
-import { ChampionActionsName, ActionDirections } from './enums';
-import { BoardLocation, Game, GameStatus } from './game';
+import { GameCard, isCrystal, isSummoning, SummoningCard, ChampionCard, isChampion, ActionCard } from './game-card';
+import { ChampionActionsName, ActionDirections, GameStatus } from './enums';
+import { Game } from './game';
+import { AllowedBoardLocationResponse, BoardLocation, } from './common';
 
 interface ChampionActionResult {
     status: string,
@@ -160,8 +161,8 @@ export const checkBlockingObjects = (board: (GameCard | null)[][], sourceLocatio
 }
 
 export const championAction = (game: Game, action: string, sourceLocation: BoardLocation, targetLocation: BoardLocation): string => {
-    debugger
     const sourceChampion = game.board[sourceLocation.rowIndex][sourceLocation.columnIndex];
+
     if (sourceChampion === null) return 'Entity was not found';
     if (!isChampion(sourceChampion)) return 'Entity is not a champion';
     if (sourceChampion.playerIndex !== game.playingPlayerIndex)
@@ -196,4 +197,78 @@ export const championAction = (game: Game, action: string, sourceLocation: Board
     }
 
     return result.status;
+}
+
+
+const getStepBoardLocations = (board: (GameCard | null)[][], sourceBoardLocation: BoardLocation, sourceChampion: ChampionCard): AllowedBoardLocationResponse => {
+
+    let allowedLocations: BoardLocation[] = [];
+
+    const rowIndex = sourceBoardLocation.rowIndex;
+    const columnIndex = sourceBoardLocation.columnIndex;
+    const distance = sourceChampion.calDex;
+
+    const maxRowIndex: number = rowIndex + distance;
+
+    for (let i = rowIndex + 1; i < board.length && i <= maxRowIndex; i++) {
+
+        const currentLocation = board[i][columnIndex];
+
+        if(currentLocation !== null) break;
+
+        allowedLocations.push({rowIndex: i, columnIndex: columnIndex})
+    }
+
+    const minRowIndex: number = rowIndex - distance;
+
+    for (let i = rowIndex - 1; i > 0 && i >= minRowIndex; i--) {
+
+        const currentLocation = board[i][columnIndex];
+
+        if(currentLocation !== null) break;
+
+        allowedLocations.push({rowIndex: i, columnIndex: columnIndex})
+    }
+
+    const maxColumnIndex: number = columnIndex + distance;
+
+    for (let i = columnIndex + 1; i < board[rowIndex].length && i <= maxColumnIndex; i++) {
+
+        const currentLocation = board[rowIndex][i];
+
+        if(currentLocation !== null) break;
+
+        allowedLocations.push({rowIndex: rowIndex, columnIndex: i})
+    }
+
+    const minColumnIndex: number = columnIndex - distance;
+
+    for (let i = columnIndex - 1; i > 0 && i >= minColumnIndex; i--) {
+
+        const currentLocation = board[rowIndex][i];
+
+        if(currentLocation !== null) break;
+
+        allowedLocations.push({rowIndex: rowIndex, columnIndex: i})
+    }
+    
+    return {message: 'success', locations: allowedLocations};
+}
+
+export const getChampionsActionsAllowedBoardLocations = (game: Game, actionCard: ActionCard, sourceBoardLocation: BoardLocation | null): AllowedBoardLocationResponse => {
+    let resultLocations: BoardLocation[] = [];
+
+    if (sourceBoardLocation === null) return { message: 'No source location', locations: resultLocations };
+
+    const sourceChampion = game.board[sourceBoardLocation.rowIndex][sourceBoardLocation.columnIndex];
+
+    if (sourceChampion === null || !isChampion(sourceChampion))
+        return { message: 'Champion was not found', locations: resultLocations };
+
+    switch (actionCard.name) {
+        case ChampionActionsName.Step:
+            return getStepBoardLocations(game.board, sourceBoardLocation, sourceChampion);
+        default:
+            return { message: `Champion allowed board locations ${actionCard.name} is not implemented yet`, locations: resultLocations };
+    }
 }

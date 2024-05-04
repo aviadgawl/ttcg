@@ -1,9 +1,9 @@
 import { GameCard, GearCard, ClassCard, ChampionCard, isChampion, ActionCard } from './game-card';
-import { BoardLocation, AllowedBoardLocationResponse } from './game';
 import { calculateStats } from './champion';
-import { Stats } from './enums';
+import { Stats, GameStatus } from './enums';
+import { ValidationResult, BoardLocation, AllowedBoardLocationResponse } from './common';
 
-import { Game, GameStatus } from './game';
+import { Game,  } from './game';
 
 export enum PlayerActionsName {
     Draw = 'Draw',
@@ -27,12 +27,16 @@ export interface Player {
     summonsLeft: number;
 }
 
-export const getAllowedBoardLocations = (game: Game, actionName: string, selectedCard: GameCard|null): AllowedBoardLocationResponse => {
+export const getPlayerActionsAllowedBoardLocations = (game: Game, actionName: string, selectedCard: GameCard | null): AllowedBoardLocationResponse => {
     switch (actionName) {
         case PlayerActionsName.Summon:
             return getSummonBoardLocations(game);
         case PlayerActionsName.Upgrade:
-            return getUpgradeBoardLocations(game, selectedCard as ClassCard);
+            return getValidChampionsBoardLocations(game, selectedCard, isValidForUpgrade);
+        case PlayerActionsName.Equip:
+            return getValidChampionsBoardLocations(game, selectedCard, isValidForEquip);
+        case PlayerActionsName.Attach:
+            return getValidChampionsBoardLocations(game, selectedCard, isValidForAttach);
         default:
             return { message: `Player allowed board locations ${actionName} is not implemented yet`, locations: [] };
     }
@@ -52,17 +56,18 @@ const getSummonBoardLocations = (game: Game): AllowedBoardLocationResponse => {
     return { message: 'success', locations: locations };
 }
 
-const getUpgradeBoardLocations = (game: Game, upgradeCard: ClassCard): AllowedBoardLocationResponse => {
+const getValidChampionsBoardLocations = (game: Game, selectedCard: GameCard | null, predicate: Function): AllowedBoardLocationResponse => {
     let locations: BoardLocation[] = [];
 
-    for (let rowIndex = 0; rowIndex < game.board.length; rowIndex++) {
-        for (let columnIndex = 0; columnIndex < game.board[rowIndex].length; columnIndex++) {
-            const boardCell = game.board[rowIndex][columnIndex];
+    if (selectedCard !== null)
+        for (let rowIndex = 0; rowIndex < game.board.length; rowIndex++) {
+            for (let columnIndex = 0; columnIndex < game.board[rowIndex].length; columnIndex++) {
+                const boardCell = game.board[rowIndex][columnIndex];
 
-            if (isChampion(boardCell) && boardCell.calClass === upgradeCard.requiredClass)
-                locations.push({ rowIndex: rowIndex, columnIndex: columnIndex });
+                if (isChampion(boardCell) && predicate(boardCell, selectedCard))
+                    locations.push({ rowIndex: rowIndex, columnIndex: columnIndex });
+            }
         }
-    }
 
     return { message: 'success', locations: locations };
 }
@@ -197,13 +202,13 @@ const upgrade = (game: Game, selectedCard: ClassCard, targetLocation: BoardLocat
 
     if (targetChampion === null) return 'Champion was not found';
 
-    if (selectedCard.requiredClass !== targetChampion.calClass) return `Champion das not have the required class of ${selectedCard.requiredClass}`;
-
     if (selectedCard.learnedAction === null) return 'Class card learned Action can not be null';
+
+    if (!isValidForUpgrade(targetChampion, selectedCard)) return `Champion das not have the required class of ${selectedCard.requiredClassName}`;
 
     const classActionCard = getAndRemoveActionCard(game, selectedCard.learnedAction);
 
-    if(classActionCard !== null)
+    if (classActionCard !== null)
         targetChampion.learnedActionsCards = [...targetChampion.learnedActionsCards, classActionCard];
 
     targetChampion.upgrade = selectedCard;
@@ -235,22 +240,10 @@ const attachAction = (game: Game, selectedCard: ActionCard, targetLocation: Boar
     if (targetChampion === null)
         return 'Champion was not found';
 
-    if (selectedCard.requiredClassName !== targetChampion.calClass)
-        return `Champion das not have the required class of ${selectedCard.requiredClassName}`;
+    const isChampionValidForAttachAction = isValidForAttach(targetChampion, selectedCard);
 
-    if (selectedCard.requiredGearName !== null) {
-        const isRequiredGearFound = targetChampion.body?.guid === selectedCard.requiredGearName
-            || targetChampion.rightHand?.guid === selectedCard.requiredGearName
-            || targetChampion.leftHand?.guid === selectedCard.requiredGearName
-
-        if (!isRequiredGearFound) return `Champion das not meet the gear requirement of this action ${selectedCard.requiredGearName}`;
-    }
-
-    if (selectedCard.requiredStat !== null && selectedCard.requiredStatValue !== null) {
-        const championRequiredStatValue = getChampionStatValue(targetChampion, selectedCard.requiredStat);
-
-        if (championRequiredStatValue < selectedCard.requiredStatValue)
-            return `Champion stat ${selectedCard.requiredStat} ${championRequiredStatValue} das not meet the required value ${selectedCard.requiredStatValue}`;
+    if(!isChampionValidForAttachAction.isValid) {
+        return isChampionValidForAttachAction.message;
     }
 
     targetChampion.attachedActionsCards.push(selectedCard);
@@ -343,4 +336,42 @@ const getChampionStatValue = (champion: ChampionCard, stat: Stats): number => {
         default:
             return -1;
     }
+}
+
+const isValidForUpgrade = (championCard: ChampionCard, classCard: ClassCard): ValidationResult => {
+    const isClassValid = championCard.calClass === classCard.requiredClassName;
+
+    if (!isClassValid)
+        return { message: `Champion das not have the required class of ${classCard.requiredClassName}`, isValid: false };
+
+    return { message: 'success', isValid: true };
+}
+
+const isValidForEquip = (championCard: ChampionCard, gearCard: GearCard): ValidationResult => {
+    return { message: 'success', isValid: true };
+}
+
+const isValidForAttach = (championCard: ChampionCard, actionCard: ActionCard): ValidationResult => {
+    if (championCard.calClass !== actionCard.requiredClassName)
+        return { message: `Champion das not have the required class of ${actionCard.requiredClassName}`, isValid: false };
+
+    if (actionCard.requiredGearName !== null) {
+        const isRequiredGearFound = championCard.body?.guid === actionCard.requiredGearName
+            || championCard.rightHand?.guid === actionCard.requiredGearName
+            || championCard.leftHand?.guid === actionCard.requiredGearName
+
+        if (!isRequiredGearFound) return { message: `Champion das not meet the gear requirement of this action ${actionCard.requiredGearName}`, isValid: false };
+    }
+
+    if (actionCard.requiredStat !== null && actionCard.requiredStatValue !== null) {
+        const championRequiredStatValue = getChampionStatValue(championCard, actionCard.requiredStat);
+
+        if (championRequiredStatValue < actionCard.requiredStatValue)
+            return {
+                message: `Champion stat ${actionCard.requiredStat} ${championRequiredStatValue} das not meet the required value ${actionCard.requiredStatValue}`,
+                isValid: false
+            };
+    }
+
+    return { message: 'success', isValid: true };
 }

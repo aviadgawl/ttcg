@@ -5,7 +5,7 @@ import GameDialog from './components/GameDialog/GameDialog';
 import Hand from './components/Hand/Hand';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { setDialog } from './redux/store';
-import { GameStatus } from './logic/game';
+import { GameStatus } from './logic/enums';
 import { getGames } from './firebase/firebase';
 import DeckBuilder from './components/DeckBuilder/DeckBuilder';
 import GameTabs from './components/GameMenu/GameTabs';

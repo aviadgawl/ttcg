@@ -50,7 +50,7 @@ export interface ClassCard extends SummoningCard {
     dex: number;
     int: number;
     learnedAction: string;
-    requiredClass: string;
+    requiredClassName: string;
     class: string;
 }
 
@@ -80,14 +80,14 @@ export interface ChampionCard extends SummoningCard {
     upgrade: ClassCard | null;
 }
 
-export const isCrystal = (value: any): value is GearCard => !!value?.effect || value?.effect === null;
+export const isCrystal = (value: any): value is CrystalCard => !!value?.effect || value?.effect === null;
 
 export const isGear = (value: any): value is GearCard => !!value?.bodyPart;
 
-export const isSummoning = (value: any): value is GearCard => !!value?.hp || value?.hp === null;
+export const isSummoning = (value: any): value is GameCard => !!value?.hp;
 
 export const isClass = (value: any): value is ClassCard => !!value?.learnedAction;
 
 export const isChampion = (value: any): value is ChampionCard => !!value?.learnedActions;
 
-export const isAction = (value: any): value is ActionCard => !!value?.actionType;
+export const isAction = (value: any): value is ActionCard => !!value?.distance;
