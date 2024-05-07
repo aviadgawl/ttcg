@@ -59,7 +59,7 @@ const HandCard: FC<CardProps> = (props) => {
       {isChampion(props.card) && <Button className="App-button" variant="contained" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Summon)}>
         {PlayerActionsName.Summon} </Button>}
       {isAction(props.card) && <Button className="App-button" variant="contained" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Attach)}>
-        {PlayerActionsName.Summon} </Button>}
+        {PlayerActionsName.Attach} </Button>}
     </CardActions>}
   </Card>
 };

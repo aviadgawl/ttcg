@@ -42,7 +42,7 @@ const Board: FC = () => {
   };
 
   const isAllowedLocation = (rowIndex: number, columnIndex: number): boolean => {
-    if (selectedActionData.allowedBoardLocations.length === 0) return true;
+    if (selectedActionData.allowedBoardLocations.length === 0) return false;
 
     return selectedActionData.allowedBoardLocations.some(loc => loc.rowIndex === rowIndex && loc.columnIndex === columnIndex);
   }

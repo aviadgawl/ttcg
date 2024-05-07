@@ -199,60 +199,74 @@ export const championAction = (game: Game, action: string, sourceLocation: Board
     return result.status;
 }
 
+const getBoardLocationInStraightPath = (board: (GameCard | null)[][],
+    initialLocation: BoardLocation, distance: number, stopOnBlockers: boolean): BoardLocation[] => {
+
+    const allowedLocations: BoardLocation[] = [];
+
+    const initialRowIndex = initialLocation.rowIndex;
+    const initialColumnIndex = initialLocation.columnIndex;
+
+    const maxRowIndex: number = initialRowIndex + distance;
+
+    for (let i = initialRowIndex + 1; i < board.length && i <= maxRowIndex; i++) {
+
+        const currentLocation = board[i][initialColumnIndex];
+
+        if (stopOnBlockers && currentLocation !== null) break;
+
+        allowedLocations.push({ rowIndex: i, columnIndex: initialColumnIndex })
+    }
+
+    const minRowIndex: number = initialRowIndex - distance;
+
+    for (let i = initialRowIndex - 1; i > 0 && i >= minRowIndex; i--) {
+
+        const currentLocation = board[i][initialColumnIndex];
+
+        if (stopOnBlockers && currentLocation !== null) break;
+
+        allowedLocations.push({ rowIndex: i, columnIndex: initialColumnIndex })
+    }
+
+    const maxColumnIndex: number = initialColumnIndex + distance;
+
+    for (let i = initialColumnIndex + 1; i < board[initialRowIndex].length && i <= maxColumnIndex; i++) {
+
+        const currentLocation = board[initialRowIndex][i];
+
+        if (stopOnBlockers && currentLocation !== null) break;
+
+        allowedLocations.push({ rowIndex: initialRowIndex, columnIndex: i })
+    }
+
+    const minColumnIndex: number = initialColumnIndex - distance;
+
+    for (let i = initialColumnIndex - 1; i > 0 && i >= minColumnIndex; i--) {
+
+        const currentLocation = board[initialRowIndex][i];
+
+        if (stopOnBlockers && currentLocation !== null) break;
+
+        allowedLocations.push({ rowIndex: initialRowIndex, columnIndex: i })
+    }
+
+    return allowedLocations;
+}
+
+const getDaggerThrowBoardLocations = (board: (GameCard | null)[][], sourceBoardLocation: BoardLocation, actionCard: ActionCard): AllowedBoardLocationResponse => {
+    const allowedLocations = getBoardLocationInStraightPath(board, sourceBoardLocation, actionCard.distance, false);
+    return { message: 'success', locations: allowedLocations };
+}
+
+const getBasicHitBoardLocations = (board: (GameCard | null)[][], sourceBoardLocation: BoardLocation, actionCard: ActionCard): AllowedBoardLocationResponse => {
+    const allowedLocations = getBoardLocationInStraightPath(board, sourceBoardLocation, actionCard.distance, false);
+    return { message: 'success', locations: allowedLocations };
+}
 
 const getStepBoardLocations = (board: (GameCard | null)[][], sourceBoardLocation: BoardLocation, sourceChampion: ChampionCard): AllowedBoardLocationResponse => {
-
-    let allowedLocations: BoardLocation[] = [];
-
-    const rowIndex = sourceBoardLocation.rowIndex;
-    const columnIndex = sourceBoardLocation.columnIndex;
-    const distance = sourceChampion.calDex;
-
-    const maxRowIndex: number = rowIndex + distance;
-
-    for (let i = rowIndex + 1; i < board.length && i <= maxRowIndex; i++) {
-
-        const currentLocation = board[i][columnIndex];
-
-        if(currentLocation !== null) break;
-
-        allowedLocations.push({rowIndex: i, columnIndex: columnIndex})
-    }
-
-    const minRowIndex: number = rowIndex - distance;
-
-    for (let i = rowIndex - 1; i > 0 && i >= minRowIndex; i--) {
-
-        const currentLocation = board[i][columnIndex];
-
-        if(currentLocation !== null) break;
-
-        allowedLocations.push({rowIndex: i, columnIndex: columnIndex})
-    }
-
-    const maxColumnIndex: number = columnIndex + distance;
-
-    for (let i = columnIndex + 1; i < board[rowIndex].length && i <= maxColumnIndex; i++) {
-
-        const currentLocation = board[rowIndex][i];
-
-        if(currentLocation !== null) break;
-
-        allowedLocations.push({rowIndex: rowIndex, columnIndex: i})
-    }
-
-    const minColumnIndex: number = columnIndex - distance;
-
-    for (let i = columnIndex - 1; i > 0 && i >= minColumnIndex; i--) {
-
-        const currentLocation = board[rowIndex][i];
-
-        if(currentLocation !== null) break;
-
-        allowedLocations.push({rowIndex: rowIndex, columnIndex: i})
-    }
-    
-    return {message: 'success', locations: allowedLocations};
+    const allowedLocations = getBoardLocationInStraightPath(board, sourceBoardLocation, sourceChampion.calDex, true);
+    return { message: 'success', locations: allowedLocations };
 }
 
 export const getChampionsActionsAllowedBoardLocations = (game: Game, actionCard: ActionCard, sourceBoardLocation: BoardLocation | null): AllowedBoardLocationResponse => {
@@ -268,6 +282,10 @@ export const getChampionsActionsAllowedBoardLocations = (game: Game, actionCard:
     switch (actionCard.name) {
         case ChampionActionsName.Step:
             return getStepBoardLocations(game.board, sourceBoardLocation, sourceChampion);
+        case ChampionActionsName.BasicHit:
+            return getBasicHitBoardLocations(game.board, sourceBoardLocation, actionCard);
+        case ChampionActionsName.DaggerThrow:
+            return getDaggerThrowBoardLocations(game.board, sourceBoardLocation, actionCard);
         default:
             return { message: `Champion allowed board locations ${actionCard.name} is not implemented yet`, locations: resultLocations };
     }

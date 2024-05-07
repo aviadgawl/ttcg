@@ -11,9 +11,9 @@
         "stm": 2,
         "actionsName": [
             "Step",
-            "Basic Hit"
+            "Dagger Throw"
         ],
-        "class": "Fighter",
+        "class": "Rouge",
         "isBlocking": false
     },
     {
@@ -49,7 +49,7 @@
         "name": "Basic Hit",
         "image": "https://pics.craiyon.com/2023-10-08/42b36e89ac864496855393cd033a545a.webp",
         "distance": 1,
-        "direction": "Stright",
+        "direction": "Straight",
         "dmgStat": "STR",
         "dmgModifier": null,
         "dmgModifierValue": null,
@@ -65,7 +65,7 @@
         "name": "Step",
         "image": "https://pics.craiyon.com/2023-10-08/42b36e89ac864496855393cd033a545a.webp",
         "distance": 1,
-        "direction": "Stright",
+        "direction": "Straight",
         "dmgStat": "STR",
         "dmgModifier": null,
         "dmgModifierValue": null,
@@ -73,5 +73,21 @@
         "requiredStat": null,
         "requiredStatValue": null,
         "requiredGearName": null
+    },
+    {
+        "guid": "6",
+        "type": "Action",
+        "subType": "attack",
+        "name": "Dagger Throw",
+        "image": "https://pics.craiyon.com/2023-10-08/42b36e89ac864496855393cd033a545a.webp",
+        "distance": 3,
+        "direction": "Straight",
+        "dmgStat": "STR",
+        "dmgModifier": null,
+        "dmgModifierValue": null,
+        "requiredClass": null,
+        "requiredStat": null,
+        "requiredStatValue": null,
+        "requiredGear": null
     }
 ]

@@ -268,6 +268,9 @@ const removeCardFromDeck = (game: Game, selectedCard: GameCard) => {
 
 const removeCard = (cards: GameCard[], selectedCard: GameCard): GameCard[] => {
     const cardIndexToRemove = cards.findIndex(card => card.guid === selectedCard.guid);
+
+    if(cardIndexToRemove === -1) return cards;
+    
     return cards.splice(cardIndexToRemove, 1);
 }
 
@@ -298,31 +301,31 @@ const getAndRemoveActionCard = (game: Game, actionCardName: string): ActionCard 
 
     let actionCard = findCard(player.usedCards, actionCardName);
 
-    if (actionCard !== undefined) {
+    if (actionCard !== null) {
         removeCard(player.usedCards, actionCard as GameCard);
         return actionCard as ActionCard;
     }
 
     actionCard = findCard(player.deck, actionCardName);
 
-    if (actionCard !== undefined) {
+    if (actionCard !== null) {
         removeCard(player.deck, actionCard as GameCard);
         return actionCard as ActionCard;
     }
 
     actionCard = findCard(player.hand, actionCardName);
 
-    if (actionCard !== undefined) {
-        removeCard(player.deck, actionCard as GameCard);
+    if (actionCard !== null) {
+        removeCard(player.hand, actionCard as GameCard);
         return actionCard as ActionCard;
     }
 
     return null;
 }
 
-const findCard = (cards: GameCard[], selectedCardName: string) => {
+const findCard = (cards: GameCard[], selectedCardName: string): GameCard|null => {
     const card = cards.find((x) => x.name === selectedCardName);
-    return card;
+    return card ?? null;
 }
 
 const getChampionStatValue = (champion: ChampionCard, stat: Stats): number => {
