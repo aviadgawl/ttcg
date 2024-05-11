@@ -22,11 +22,11 @@ const Hand: FC = () => {
   };
 
   return <div className={styles.Hand}>
-    <Button onClick={() => dispatch(setShowHand(true))}>Open drawer</Button>
+    <Button onClick={() => dispatch(setShowHand(true))}>Hand</Button>
 
     <Drawer anchor="bottom" open={showHand} onClose={() => dispatch(setShowHand(false))}>
 
-      <Button onClick={() => dispatch(setShowHand(false))}>Close drawer</Button>
+      <Button onClick={() => dispatch(setShowHand(false))}>Hand</Button>
 
       <div className={styles.CardContainer}>
         <div className={styles.ButtonsContainer}>

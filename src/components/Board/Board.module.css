@@ -3,7 +3,7 @@
 }
 
 .Board td {
-    width: 220px;
+    width: 150px;
     height: 150px;
     border: 1px solid black;
 }
@@ -14,11 +14,4 @@
 
 .PlayerOneBase {
     background-color: rgb(133, 173, 133, 0.5);
-}
-
-.TargetButton {
-    background-color: black!important;
-    position: absolute!important;
-    margin-left: -4.5%!important;
-    margin-top: 0px!important;
 }

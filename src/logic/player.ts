@@ -64,7 +64,7 @@ const getValidChampionsBoardLocations = (game: Game, selectedCard: GameCard | nu
             for (let columnIndex = 0; columnIndex < game.board[rowIndex].length; columnIndex++) {
                 const boardCell = game.board[rowIndex][columnIndex];
 
-                if (isChampion(boardCell) && predicate(boardCell, selectedCard))
+                if (isChampion(boardCell) && predicate(boardCell, selectedCard).isValid)
                     locations.push({ rowIndex: rowIndex, columnIndex: columnIndex });
             }
         }
@@ -198,13 +198,15 @@ const equip = (game: Game, selectedCard: GearCard, targetLocation: BoardLocation
 const upgrade = (game: Game, selectedCard: ClassCard, targetLocation: BoardLocation): string => {
     if (selectedCard === null) return 'Upgrade card can not be null';
 
-    var targetChampion = game.board[targetLocation.rowIndex][targetLocation.columnIndex] as ChampionCard;
+    const targetChampion = game.board[targetLocation.rowIndex][targetLocation.columnIndex] as ChampionCard;
 
     if (targetChampion === null) return 'Champion was not found';
 
     if (selectedCard.learnedAction === null) return 'Class card learned Action can not be null';
 
-    if (!isValidForUpgrade(targetChampion, selectedCard)) return `Champion das not have the required class of ${selectedCard.requiredClassName}`;
+    const isValidForUpgradeResult = isValidForUpgrade(targetChampion, selectedCard);
+
+    if (!isValidForUpgradeResult.isValid) return isValidForUpgradeResult.message;
 
     const classActionCard = getAndRemoveActionCard(game, selectedCard.learnedAction);
 
