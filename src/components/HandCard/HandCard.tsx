@@ -1,15 +1,12 @@
 import { FC } from 'react';
 import { GameCard, isGear, isChampion, isClass, isAction } from '../../logic/game-card';
 import { PlayerActionsName } from '../../logic/player';
-import styles from './HandCard.module.css';
 import { useAppDispatch } from '../../redux/hooks';
 import { setSelectedActionData, setShowHand, createSelectedData } from '../../redux/store';
 import { GameStoreActionTypes } from '../../redux/types';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
+import GameCardDraw from '../GameCardDraw/GameCardDraw';
+import styles from './HandCard.module.css';
 
 export enum HandCardMode {
   DeckBuilding = 1,
@@ -30,28 +27,8 @@ const HandCard: FC<CardProps> = (props) => {
     dispatch(setShowHand(false));
   }
 
-  return <Card className={`${styles.Card} App-text-color`} style={{ backgroundImage: `url(${props.card.image})` }} sx={{ maxWidth: 345 }}>
-    <CardContent>
-      <Typography className={styles.CardName} gutterBottom variant="h5" component="div">
-        {props.card.name}
-      </Typography>
-
-      {(isClass(props.card) || isGear(props.card) || isChampion(props.card)) && <div className={styles.CardStats}>
-        <Typography> HP: {props.card.hp} </Typography>
-        <Typography> STR: {props.card.str} </Typography>
-        <Typography> DEX: {props.card.dex} </Typography>
-        <Typography> INT: {props.card.int} </Typography>
-      </div>}
-
-      <div className={styles.CardActions}>
-        {isChampion(props.card) && <>
-          {props.card.learnedActions.map((action, actionIndex) =>
-            <Typography key={actionIndex}>{action}</Typography>
-          )}
-        </>}
-      </div>
-    </CardContent>
-    {props.mode === HandCardMode.Hand && <CardActions className={styles.CardActions}>
+  return <GameCardDraw card={props.card}>
+    {props.mode === HandCardMode.Hand && <>
       {isClass(props.card) && <Button className="App-button" variant="contained" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Upgrade)}>
         {PlayerActionsName.Upgrade} </Button>}
       {isGear(props.card) && <Button className="App-button" variant="contained" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Equip)}>
@@ -60,8 +37,8 @@ const HandCard: FC<CardProps> = (props) => {
         {PlayerActionsName.Summon} </Button>}
       {isAction(props.card) && <Button className="App-button" variant="contained" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Attach)}>
         {PlayerActionsName.Attach} </Button>}
-    </CardActions>}
-  </Card>
+    </>}
+    </GameCardDraw>;
 };
 
 export default HandCard;

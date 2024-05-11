@@ -5,10 +5,9 @@ import { setSelectedActionData, createSelectedData } from '../../redux/store';
 import { GameStoreActionTypes } from '../../redux/types';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import GameCardDraw from '../GameCardDraw/GameCardDraw';
 import styles from './BoardChampion.module.css';
 
 interface BoardChampionProps {
@@ -47,22 +46,8 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
       open={open}
       className={styles.Dialog}
       onClose={handleClose}>
-      <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
-        {props.champion.name}
-      </DialogTitle>
-      <DialogContent>
-        <DialogContentText>
-          <span> HP: {props.champion.currentHp}/{props.champion.hp} </span>
-          <span> Armor: {props.champion.armor}/{props.champion.calStr}</span>
-          <span> Mental: {props.champion.mental}/{props.champion.calInt}</span>
-          <span> STR: {props.champion.calStr} </span>
-          <span> DEX: {props.champion.calDex} </span>
-          <span> INT: {props.champion.calInt} </span>
-          <span> STM: {props.champion.stm} </span>
-          <div> Class: {props.champion.calClass}</div>
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions>
+      <DialogContent className={styles.DialogContent}>
+        <GameCardDraw card={props.champion}>
         <div>
           {props.champion.learnedActionsCards.map((card, actionIndex) =>
             <Button disabled={props.champion.stm <= 0} size="small" variant="contained" className="App-button" key={actionIndex}
@@ -75,7 +60,17 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
             </Button>
           )}
         </div>
-      </DialogActions>
+        </GameCardDraw>
+          {/* <div>{props.champion.name}</div>
+          <span> HP: {props.champion.currentHp}/{props.champion.hp} </span>
+          <span> Armor: {props.champion.armor}/{props.champion.calStr}</span>
+          <span> Mental: {props.champion.mental}/{props.champion.calInt}</span>
+          <span> STR: {props.champion.calStr} </span>
+          <span> DEX: {props.champion.calDex} </span>
+          <span> INT: {props.champion.calInt} </span>
+          <span> STM: {props.champion.stm} </span>
+          <div> Class: {props.champion.calClass}</div> */}
+      </DialogContent>
     </Dialog>
   </div>);
 };

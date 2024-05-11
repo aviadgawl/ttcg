@@ -21,6 +21,6 @@ span {
     height: 100%;
 }
 
-.Dialog {
-
+.DialogContent {
+    padding: 0px!important;
 }
