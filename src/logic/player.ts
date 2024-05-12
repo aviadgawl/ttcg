@@ -48,7 +48,10 @@ const getSummonBoardLocations = (game: Game): AllowedBoardLocationResponse => {
     if (game.playerIndex === 0) {
         for (let rowIndex = game.board.length - 2; rowIndex < game.board.length; rowIndex++) {
             for (let columnIndex = 0; columnIndex < game.board[rowIndex].length; columnIndex++) {
-                locations.push({ rowIndex: rowIndex, columnIndex: columnIndex });
+                const boardLocation = game.board[rowIndex][columnIndex];
+
+                if(boardLocation === null)
+                    locations.push({ rowIndex: rowIndex, columnIndex: columnIndex });
             }
         }
     }
@@ -140,6 +143,10 @@ const summon = (game: Game, selectedCard: ChampionCard, targetLocation: BoardLoc
 
     if ((game.playerIndex === 0 && targetLocation.rowIndex < 11) || (game.playerIndex === 1 && targetLocation.rowIndex > 2))
         return `Player ${game.playerIndex + 1} can not summon here ${targetLocation.rowIndex}-${targetLocation.columnIndex}`;
+
+    const boardLocation = game.board[targetLocation.rowIndex][targetLocation.columnIndex];
+
+    if(boardLocation !== null) return 'Location is not empty';
 
     game.board[targetLocation.rowIndex][targetLocation.columnIndex] = selectedCard;
 
