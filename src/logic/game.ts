@@ -1,6 +1,6 @@
 import { Player } from './player';
-import { GameCard, GearCard, CrystalCard, ChampionCard, ClassCard, ActionCard } from './game-card';
-import { ActionType, Stats, ActionDirections, GameStatus } from './enums';
+import { GameCard, GearCard, CrystalCard, ChampionCard, ClassCard, ActionCard, OrderCard } from './game-card';
+import { ActionType, Stats, ActionDirections, GameStatus, GearCategory } from './enums';
 import cardsListJson from '../assets/cards/cards-list.json';
 
 export const cardsList = cardsListJson.map(x => {
@@ -14,7 +14,7 @@ export const cardsList = cardsListJson.map(x => {
                 int: x.int, calInt: x.int, mental: x.int,
                 stm: 2, learnedActions: x.actionsName, learnedActionsCards: [], attachedActionsCards: [],
                 body: null, rightHand: null, leftHand: null,
-                class: x.class, calClass: x.class, upgrade: null
+                class: x.class, calClass: x.class, upgrade: null, calHp: x.hp
             } as ChampionCard;
         case 'Class':
             return {
@@ -27,7 +27,8 @@ export const cardsList = cardsListJson.map(x => {
             return {
                 guid: x.guid, name: x.name, str: x.str,
                 dex: x.dex, int: x.int, hp: x.hp, currentHp: x.hp, bodyPart: x.bodyPart,
-                image: x.image, playerIndex: 0, isBlocking: x.isBlocking
+                image: x.image, playerIndex: 0, isBlocking: x.isBlocking,
+                category: GearCategory[x.category as keyof typeof GearCategory]
             } as GearCard
         case 'Action':
             return {
@@ -44,8 +45,18 @@ export const cardsList = cardsListJson.map(x => {
                 requiredClassName: x.requiredClassName,
                 requiredStat: Stats[(x.requiredStat ?? '') as keyof typeof Stats],
                 requiredStatValue: x.requiredStatValue,
-                requiredGearName: x.requiredGearName
+                requiredGearCategory: x.requiredGearCategory,
+                isFreeTargeting: x.isFreeTargeting
             } as ActionCard
+        case 'Order':
+            return {
+                playerIndex: 0,
+                guid: x.guid,
+                name: x.name,
+                image: x.image,
+                duration: x.duration,
+                info: x.info
+            } as OrderCard
         default:
             return null;
     }
@@ -73,6 +84,7 @@ export const createGame = (): Game => {
     return { board: board, players: [mockPlayerOne, mockPlayerTwo], status: GameStatus.onGoing, playerIndex: 0, playingPlayerIndex: 0, loser: null };
 }
 
+const mockOrder: OrderCard = cardsList[6] as OrderCard;
 const mockChampion1: ChampionCard = cardsList[0] as ChampionCard;
 const mockChampion2: ChampionCard = cardsList[0] as ChampionCard;
 const mockAction1: ActionCard = cardsList[3] as ActionCard;
@@ -80,7 +92,7 @@ const mockAction2: ActionCard = cardsList[4] as ActionCard;
 const actionCardDaggerThrow: ActionCard = cardsList[5] as ActionCard;
 const mockClass: ClassCard = cardsList[1] as ClassCard;
 const mockGear: GearCard = cardsList[2] as GearCard;
-const mockPlayerOne: Player = { name: 'AviadP', hand: [mockClass, mockGear, actionCardDaggerThrow], deck: [mockAction1, mockAction2, mockChampion2], usedCards: [], didDraw: false, summonsLeft: 1 };
+const mockPlayerOne: Player = { name: 'AviadP', hand: [mockClass, mockGear, actionCardDaggerThrow, mockChampion1, mockOrder], deck: [mockAction1, mockAction2, mockChampion2], usedCards: [], didDraw: false, summonsLeft: 1 };
 const mockPlayerTwo: Player = { name: 'MorP', hand: [], deck: [], usedCards: [], didDraw: false, summonsLeft: 1 };
-const mockCrystalOne: CrystalCard = { image: 'https://img.freepik.com/premium-photo/magical-crystal-with-swirling-colors-digital-art-style-illustration_812426-6398.jpg', hp: 20, currentHp: 20, name: 'Warrior Spirit', guid: '5', effect: null, playerIndex: 0, isBlocking: true }
-const mockCrystalTwo: CrystalCard = { image: 'https://img.freepik.com/premium-photo/magical-crystal-with-swirling-colors-digital-art-style-illustration_812426-6466.jpg?w=740', hp: 20, currentHp: 20, name: 'Warrior Spirit', guid: '5', effect: null, playerIndex: 1, isBlocking: true }
+const mockCrystalOne: CrystalCard = { image: 'https://img.freepik.com/premium-photo/magical-crystal-with-swirling-colors-digital-art-style-illustration_812426-6398.jpg', hp: 20, currentHp: 20, name: 'Warrior Spirit', guid: '5', effect: null, playerIndex: 0, isBlocking: true, calHp: 20 }
+const mockCrystalTwo: CrystalCard = { image: 'https://img.freepik.com/premium-photo/magical-crystal-with-swirling-colors-digital-art-style-illustration_812426-6466.jpg?w=740', hp: 20, currentHp: 20, name: 'Warrior Spirit', guid: '5', effect: null, playerIndex: 1, isBlocking: true, calHp: 20 }

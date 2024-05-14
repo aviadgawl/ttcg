@@ -1,5 +1,5 @@
-import { GameCard, isCrystal, isSummoning, SummoningCard, ChampionCard, isChampion, ActionCard } from './game-card';
-import { ChampionActionsName, ActionDirections, GameStatus } from './enums';
+import { GameCard, isCrystal, SummoningCard, ChampionCard, isChampion, ActionCard } from './game-card';
+import { ActionDirections, GameStatus, ActionType, Stats } from './enums';
 import { Game } from './game';
 import { AllowedBoardLocationResponse, BoardLocation, } from './common';
 
@@ -41,15 +41,29 @@ export const applyPhysicalDamage = (target: SummoningCard, damage: number) => {
     target.currentHp -= pureDmg;
 }
 
+const getStateByDmgStat = (champion: ChampionCard, damageStat: Stats | null): number => {
+    switch (damageStat) {
+        case Stats.Str:
+            return champion.calStr;
+        case Stats.Dex:
+            return champion.calDex;
+        case Stats.Int:
+            return champion.calInt;
+        default:
+            return 0;
+    }
+}
+
 export const calculateStats = (champion: ChampionCard) => {
     champion.calStr = champion.str + (champion.body?.str ?? 0) + (champion.rightHand?.str ?? 0) + (champion.leftHand?.str ?? 0) + (champion.upgrade?.str ?? 0);
     champion.calDex = champion.dex + (champion.body?.dex ?? 0) + (champion.rightHand?.dex ?? 0) + (champion.leftHand?.dex ?? 0) + (champion.upgrade?.dex ?? 0);
     champion.calInt = champion.int + (champion.body?.int ?? 0) + (champion.rightHand?.int ?? 0) + (champion.leftHand?.int ?? 0) + (champion.upgrade?.int ?? 0);
     champion.armor = champion.calStr;
 
-    const calHp = (champion.body?.hp ?? 0) + (champion.rightHand?.hp ?? 0) + (champion.leftHand?.hp ?? 0) + (champion.upgrade?.hp ?? 0);
-    champion.hp += calHp
-    champion.currentHp += calHp;
+    const newCalHp = champion.hp + (champion.body?.hp ?? 0) + (champion.rightHand?.hp ?? 0) + (champion.leftHand?.hp ?? 0) + (champion.upgrade?.hp ?? 0);
+    const hpDiff = newCalHp - champion.calHp;
+    champion.calHp = newCalHp;
+    champion.currentHp += hpDiff;
 }
 
 export const moveChampion = (board: (GameCard | null)[][], entityToMove: ChampionCard, sourceLocation: BoardLocation, targetLocation: BoardLocation): ChampionActionResult => {
@@ -67,29 +81,8 @@ export const moveChampion = (board: (GameCard | null)[][], entityToMove: Champio
     return { status: 'success', targetedCard: null };
 }
 
-export const basicHit = (board: (GameCard | null)[][], attackingChampion: ChampionCard,
-    sourceLocation: BoardLocation, targetLocation: BoardLocation): ChampionActionResult => {
-
-    const target = board[targetLocation.rowIndex][targetLocation.columnIndex] as unknown as SummoningCard;
-
-    if (target === null) return { status: 'Target is not found', targetedCard: null };
-
-    if (!isSummoning(target)) return { status: 'Target is not a summoning card', targetedCard: null };
-
-    const validTarget = checkValidTarget(target);
-    if (!validTarget) return { status: 'Target is not a champion or crystal', targetedCard: target };
-
-    const validDistance = checkAllowedDistance(1, 1, sourceLocation, targetLocation);
-    if (!validDistance) return { status: 'Location to far', targetedCard: target };
-
-    applyPhysicalDamage(target, attackingChampion.calStr);
-    if (target.currentHp === 0) board[targetLocation.rowIndex][targetLocation.columnIndex] = null;
-
-    return { status: 'success', targetedCard: target };
-}
-
-export const daggerThrow = (board: (GameCard | null)[][], attackingChampion: ChampionCard,
-    sourceLocation: BoardLocation, targetLocation: BoardLocation): ChampionActionResult => {
+export const attack = (board: (GameCard | null)[][], attackingChampion: ChampionCard,
+    actionCard: ActionCard, sourceLocation: BoardLocation, targetLocation: BoardLocation): ChampionActionResult => {
 
     const target = board[targetLocation.rowIndex][targetLocation.columnIndex] as unknown as SummoningCard;;
 
@@ -98,16 +91,18 @@ export const daggerThrow = (board: (GameCard | null)[][], attackingChampion: Cha
     const validTarget = checkValidTarget(target);
     if (!validTarget) return { status: 'Target is not a champion or crystal', targetedCard: target };
 
-    const validDistance = checkAllowedDistance(3, 1, sourceLocation, targetLocation);
+    const validDistance = checkAllowedDistance(actionCard.distance, 1, sourceLocation, targetLocation);
     if (!validDistance) return { status: 'Location to far', targetedCard: target };
 
-    const validDirection = checkAllowedDirection(ActionDirections.Straight, sourceLocation, targetLocation);
+    const validDirection = checkAllowedDirection(actionCard.direction, sourceLocation, targetLocation);
     if (!validDirection) return { status: `Not a valid direction for direction: ${ActionDirections.Straight}`, targetedCard: null };
 
     const isPathBlocked = checkBlockingObjects(board, sourceLocation, targetLocation);
     if (isPathBlocked) return { status: 'Hit path is blocked', targetedCard: null };
 
-    applyPhysicalDamage(target, attackingChampion.calDex);
+    const baseStat = getStateByDmgStat(attackingChampion, actionCard.dmgStat);
+
+    applyPhysicalDamage(target, baseStat);
     if (target.currentHp <= 0) board[targetLocation.rowIndex][targetLocation.columnIndex] = null;
 
     return { status: 'success', targetedCard: target };
@@ -160,7 +155,7 @@ export const checkBlockingObjects = (board: (GameCard | null)[][], sourceLocatio
     return false;
 }
 
-export const championAction = (game: Game, action: string, sourceLocation: BoardLocation, targetLocation: BoardLocation): string => {
+export const championAction = (game: Game, actionCard: ActionCard, sourceLocation: BoardLocation, targetLocation: BoardLocation): string => {
     const sourceChampion = game.board[sourceLocation.rowIndex][sourceLocation.columnIndex];
 
     if (sourceChampion === null) return 'Entity was not found';
@@ -171,18 +166,15 @@ export const championAction = (game: Game, action: string, sourceLocation: Board
 
     let result: ChampionActionResult | null = null;
 
-    switch (action) {
-        case ChampionActionsName.Step:
+    switch (actionCard.actionType) {
+        case ActionType.Movement:
             result = moveChampion(game.board, sourceChampion, sourceLocation, targetLocation);
             break;
-        case ChampionActionsName.BasicHit:
-            result = basicHit(game.board, sourceChampion, sourceLocation, targetLocation);
-            break;
-        case ChampionActionsName.DaggerThrow:
-            result = daggerThrow(game.board, sourceChampion, sourceLocation, targetLocation);
+        case ActionType.Attack:
+            result = attack(game.board, sourceChampion, actionCard, sourceLocation, targetLocation);
             break;
         default:
-            result = { status: `Action ${action} is not implemented yet`, targetedCard: null };
+            result = { status: `Action ${actionCard.actionType} is not implemented yet`, targetedCard: null };
             break;
     }
 
@@ -200,10 +192,12 @@ export const championAction = (game: Game, action: string, sourceLocation: Board
 }
 
 const getBoardLocationInStraightPath = (board: (GameCard | null)[][],
-    initialLocation: BoardLocation, distance: number, stopOnBlockers: boolean): BoardLocation[] => {
+    initialLocation: BoardLocation, sourceChampion: ChampionCard, actionCard: ActionCard): BoardLocation[] => {
 
     const allowedLocations: BoardLocation[] = [];
 
+    const distance = actionCard.actionType === ActionType.Movement ? sourceChampion.calDex : actionCard.distance;
+    const stopOnBlockers = !actionCard.isFreeTargeting;
     const initialRowIndex = initialLocation.rowIndex;
     const initialColumnIndex = initialLocation.columnIndex;
 
@@ -254,21 +248,6 @@ const getBoardLocationInStraightPath = (board: (GameCard | null)[][],
     return allowedLocations;
 }
 
-const getDaggerThrowBoardLocations = (board: (GameCard | null)[][], sourceBoardLocation: BoardLocation, actionCard: ActionCard): AllowedBoardLocationResponse => {
-    const allowedLocations = getBoardLocationInStraightPath(board, sourceBoardLocation, actionCard.distance, false);
-    return { message: 'success', locations: allowedLocations };
-}
-
-const getBasicHitBoardLocations = (board: (GameCard | null)[][], sourceBoardLocation: BoardLocation, actionCard: ActionCard): AllowedBoardLocationResponse => {
-    const allowedLocations = getBoardLocationInStraightPath(board, sourceBoardLocation, actionCard.distance, false);
-    return { message: 'success', locations: allowedLocations };
-}
-
-const getStepBoardLocations = (board: (GameCard | null)[][], sourceBoardLocation: BoardLocation, sourceChampion: ChampionCard): AllowedBoardLocationResponse => {
-    const allowedLocations = getBoardLocationInStraightPath(board, sourceBoardLocation, sourceChampion.calDex, true);
-    return { message: 'success', locations: allowedLocations };
-}
-
 export const getChampionsActionsAllowedBoardLocations = (game: Game, actionCard: ActionCard, sourceBoardLocation: BoardLocation | null): AllowedBoardLocationResponse => {
     let resultLocations: BoardLocation[] = [];
 
@@ -279,14 +258,13 @@ export const getChampionsActionsAllowedBoardLocations = (game: Game, actionCard:
     if (sourceChampion === null || !isChampion(sourceChampion))
         return { message: 'Champion was not found', locations: resultLocations };
 
-    switch (actionCard.name) {
-        case ChampionActionsName.Step:
-            return getStepBoardLocations(game.board, sourceBoardLocation, sourceChampion);
-        case ChampionActionsName.BasicHit:
-            return getBasicHitBoardLocations(game.board, sourceBoardLocation, actionCard);
-        case ChampionActionsName.DaggerThrow:
-            return getDaggerThrowBoardLocations(game.board, sourceBoardLocation, actionCard);
+    switch (actionCard.direction) {
+        case ActionDirections.Straight:
+            resultLocations = getBoardLocationInStraightPath(game.board, sourceBoardLocation, sourceChampion, actionCard);
+            break;
         default:
             return { message: `Champion allowed board locations ${actionCard.name} is not implemented yet`, locations: resultLocations };
     }
+
+    return { message: 'success', locations: resultLocations };
 }

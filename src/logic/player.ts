@@ -1,22 +1,9 @@
-import { GameCard, GearCard, ClassCard, ChampionCard, isChampion, ActionCard } from './game-card';
+import { GameCard, GearCard, ClassCard, ChampionCard, isChampion, ActionCard, OrderCard } from './game-card';
 import { calculateStats } from './champion';
-import { Stats, GameStatus } from './enums';
+import { Stats, GameStatus, PlayerActionsName } from './enums';
 import { ValidationResult, BoardLocation, AllowedBoardLocationResponse } from './common';
 
 import { Game,  } from './game';
-
-export enum PlayerActionsName {
-    Draw = 'Draw',
-    Surrender = 'Surrender',
-    Summon = 'Summon',
-    EndTurn = 'End Turn',
-    InitialDraw = 'Initial Draw',
-    Equip = 'Equip',
-    Upgrade = 'Upgrade',
-    AddCardToDeck = 'Add Card To Deck',
-    removeCardFromDeck = 'Remove Card From Deck',
-    Attach = 'Attach'
-}
 
 export interface Player {
     name: string;
@@ -101,9 +88,15 @@ export const playerAction = (action: string | null, game: Game, data: any) => {
             return removeCardFromDeck(game, data.selectedCard as GameCard);
         case PlayerActionsName.Attach:
             return attachAction(game, data.selectedCard as ActionCard, data.extendedData as BoardLocation);
+        case PlayerActionsName.PlayOrder:
+            return playOrder(game, data.selectedCard as OrderCard);
         default:
             return `Player action ${action} is not implemented yet`;
     }
+}
+
+const playOrder = (game: Game, selectedCard: OrderCard): string => {
+    return 'success';
 }
 
 const initialDraw = (player: Player): string => {
@@ -367,12 +360,13 @@ const isValidForAttach = (championCard: ChampionCard, actionCard: ActionCard): V
     if (championCard.calClass !== actionCard.requiredClassName)
         return { message: `Champion das not have the required class of ${actionCard.requiredClassName}`, isValid: false };
 
-    if (actionCard.requiredGearName !== null) {
-        const isRequiredGearFound = championCard.body?.guid === actionCard.requiredGearName
-            || championCard.rightHand?.guid === actionCard.requiredGearName
-            || championCard.leftHand?.guid === actionCard.requiredGearName
+    if (actionCard.requiredGearCategory !== null) {
+        const isRequiredGearFound = championCard.body?.category === actionCard.requiredGearCategory
+            || championCard.rightHand?.category === actionCard.requiredGearCategory
+            || championCard.leftHand?.category === actionCard.requiredGearCategory
 
-        if (!isRequiredGearFound) return { message: `Champion das not meet the gear requirement of this action ${actionCard.requiredGearName}`, isValid: false };
+        if (!isRequiredGearFound) 
+            return { message: `Champion das not meet the gear requirement of this action ${actionCard.requiredGearCategory}`, isValid: false };
     }
 
     if (actionCard.requiredStat !== null && actionCard.requiredStatValue !== null) {

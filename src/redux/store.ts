@@ -1,6 +1,6 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 import { createGame, Game } from '../logic/game';
-import { GameCard, isAction } from '../logic/game-card';
+import { ActionCard, GameCard, isAction } from '../logic/game-card';
 import { championAction, getChampionsActionsAllowedBoardLocations } from '../logic/champion';
 import { playerAction, getPlayerActionsAllowedBoardLocations } from '../logic/player';
 import { playSoundByPlayerActionName, playSoundByCardActionName } from '../helpers/audio-helper';
@@ -51,10 +51,15 @@ const gameSlice = createSlice({
                 return;
             };
 
-            const result = championAction(state.game, card.name, sourceLocation, targetLocation);
+            if (!isAction(card)) {
+                alert('SelectedData is not action card');
+                return;
+            };
+
+            const result = championAction(state.game, card as ActionCard, sourceLocation, targetLocation);
 
             if (result !== 'success') alert(result);
-            else playSoundByCardActionName(card.name);
+            else playSoundByCardActionName(card.actionType);
         },
         playerActions(state, action) {
             const { data } = action.payload;

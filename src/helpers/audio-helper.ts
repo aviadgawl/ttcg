@@ -1,5 +1,4 @@
-import { PlayerActionsName } from '../logic/player';
-import { ChampionActionsName } from '../logic/enums';
+import { PlayerActionsName, ActionType } from '../logic/enums';
 import equipSound from '../assets/audio/equip.mp3';
 import upgradeSound from '../assets/audio/upgrade.mp3';
 import summonSound from '../assets/audio/summon.mp3';
@@ -24,10 +23,8 @@ export const playSoundByPlayerActionName = (actionName: string) => {
         case PlayerActionsName.Summon:
             playSound(summonSound);
             break;
-        case PlayerActionsName.Draw:
-            playSound(drawSound);
-            break;
         case PlayerActionsName.InitialDraw:
+        case PlayerActionsName.Draw:
             playSound(drawSound);
             break;
         default:
@@ -35,15 +32,15 @@ export const playSoundByPlayerActionName = (actionName: string) => {
     }
 }
 
-export const playSoundByCardActionName = (actionName: string) => {
-    switch (actionName) {
-        case ChampionActionsName.BasicHit:
+export const playSoundByCardActionName = (actionType: ActionType) => {
+    switch (actionType) {
+        case ActionType.Attack:
             playSound(basicHitSound);
             break;
-        case ChampionActionsName.Step:
+        case ActionType.Movement:
             playSound(stepSound);
             break;
-        case ChampionActionsName.DaggerThrow:
+        case ActionType.Ranged:
             playSound(daggerThrowSound);
             break;
         default:

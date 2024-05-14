@@ -1,5 +1,7 @@
 .Card{
-    background-size: cover;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
     width: 200px;
     height: 280px;
     border: 5px solid black;
@@ -18,8 +20,15 @@
 .CardStats {
     background-color: rgba(0,0,0,.5);
     display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
 }
 
 .CardName {
     background-color: rgba(0,0,0,.5);
+}
+
+.CardContent {
+    width: 100%;
+    padding: 0!important;
 }

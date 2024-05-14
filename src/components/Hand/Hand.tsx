@@ -3,7 +3,7 @@ import styles from './Hand.module.css';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { playerActions, setShowHand, createSelectedData } from '../../redux/store';
 import { GameStoreActionTypes } from '../../redux/types';
-import { PlayerActionsName } from '../../logic/player';
+import { PlayerActionsName } from '../../logic/enums';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
 import HandCard, {HandCardMode} from '../HandCard/HandCard';

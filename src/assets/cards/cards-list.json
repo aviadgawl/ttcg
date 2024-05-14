@@ -2,8 +2,8 @@
     {
         "guid": "1",
         "type": "Champion",
-        "name": "Aviad",
-        "image": "https://ih1.redbubble.net/image.5268916617.1284/flat,750x,075,f-pad,750x1000,f8f8f8.jpg",
+        "name": "Eduard",
+        "image": "https://firebasestorage.googleapis.com/v0/b/battlelordstoolapp.appspot.com/o/eduard.png?alt=media&token=5a6972f0-7bd8-4e46-a194-dfa5c7af1204",
         "hp": 2,
         "str": 2,
         "dex": 2,
@@ -11,9 +11,9 @@
         "stm": 2,
         "actionsName": [
             "Step",
-            "Dagger Throw"
+            "Basic Hit"
         ],
-        "class": "Rouge",
+        "class": "Fighter",
         "isBlocking": false
     },
     {
@@ -27,27 +27,28 @@
         "hp": 4,
         "action": "Block",
         "requiredClass": "Fighter",
-        "image": "https://v.etsystatic.com/video/upload/q_auto/Untitled_design_18_hx9pqm.jpg",
+        "image": "https://firebasestorage.googleapis.com/v0/b/battlelordstoolapp.appspot.com/o/class-knight.png?alt=media&token=c8135d58-5852-4b9a-ad94-448d892532b5",
         "isBlocking": false
     },
     {
         "guid": "3",
         "type": "Gear",
         "name": "Sword",
+        "category": "swords",
         "str": 2,
         "dex": 0,
         "int": 0,
         "hp": 0,
         "bodyPart": "Hand",
-        "image": "https://pics.craiyon.com/2023-10-08/42b36e89ac864496855393cd033a545a.webp",
+        "image": "https://firebasestorage.googleapis.com/v0/b/battlelordstoolapp.appspot.com/o/simple-sword.png?alt=media&token=45185798-8942-415a-a36f-6358e012c559",
         "isBlocking": false
     },
     {
         "guid": "4",
         "type": "Action",
-        "subType": "attack",
+        "actionType": "Attack",
         "name": "Basic Hit",
-        "image": "https://pics.craiyon.com/2023-10-08/42b36e89ac864496855393cd033a545a.webp",
+        "image": "https://firebasestorage.googleapis.com/v0/b/battlelordstoolapp.appspot.com/o/basic-hit.png?alt=media&token=877dfdd0-ddd9-43ab-afa4-4957510079a3",
         "distance": 1,
         "direction": "Straight",
         "dmgStat": "STR",
@@ -56,14 +57,15 @@
         "requiredClass": null,
         "requiredStat": null,
         "requiredStatValue": null,
-        "requiredGear": null
+        "requiredGearCategory": null,
+        "isFreeTargeting": true
     },
     {
         "guid": "5",
         "type": "Action",
         "actionType": "Movement",
         "name": "Step",
-        "image": "https://pics.craiyon.com/2023-10-08/42b36e89ac864496855393cd033a545a.webp",
+        "image": "https://firebasestorage.googleapis.com/v0/b/battlelordstoolapp.appspot.com/o/step.png?alt=media&token=2138e6a1-2b5c-44c4-a202-e48c8b298fd3",
         "distance": 1,
         "direction": "Straight",
         "dmgStat": "STR",
@@ -72,12 +74,13 @@
         "requiredClassName": null,
         "requiredStat": null,
         "requiredStatValue": null,
-        "requiredGearName": null
+        "requiredGearCategory": null,
+        "isFreeTargeting": false
     },
     {
         "guid": "6",
         "type": "Action",
-        "subType": "attack",
+        "actionType": "Attack",
         "name": "Dagger Throw",
         "image": "https://pics.craiyon.com/2023-10-08/42b36e89ac864496855393cd033a545a.webp",
         "distance": 3,
@@ -85,9 +88,18 @@
         "dmgStat": "STR",
         "dmgModifier": null,
         "dmgModifierValue": null,
-        "requiredClass": null,
+        "requiredClassName": null,
         "requiredStat": null,
         "requiredStatValue": null,
-        "requiredGear": null
+        "requiredGearCategory": null,
+        "isFreeTargeting": true
+    },
+    {
+        "guid": "7",
+        "type": "Order",
+        "name": "Give Me More!",
+        "image": "https://firebasestorage.googleapis.com/v0/b/battlelordstoolapp.appspot.com/o/give-me-more.png?alt=media&token=17ecd781-0429-455e-89a3-54a9ac27768f",
+        "duration": 0,
+        "info": "Discard one card and draw two cards"
     }
 ]

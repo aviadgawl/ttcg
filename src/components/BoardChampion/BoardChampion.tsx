@@ -6,7 +6,6 @@ import { GameStoreActionTypes } from '../../redux/types';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import GameCardDraw from '../GameCardDraw/GameCardDraw';
 import styles from './BoardChampion.module.css';
 
@@ -41,13 +40,14 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
     <div style={{ backgroundImage: `url(${props.champion.image})` }}
       className={styles.Panel}
       onClick={handleClickOpen}>
+        <h2>{props.champion.currentHp} / {props.champion.calHp}</h2>
     </div>
     <Dialog
       open={open}
       className={styles.Dialog}
       onClose={handleClose}>
       <DialogContent className={styles.DialogContent}>
-        <GameCardDraw card={props.champion}>
+        <GameCardDraw showChampionCardActions={false} card={props.champion}>
         <div>
           {props.champion.learnedActionsCards.map((card, actionIndex) =>
             <Button disabled={props.champion.stm <= 0} size="small" variant="contained" className="App-button" key={actionIndex}
@@ -61,15 +61,6 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
           )}
         </div>
         </GameCardDraw>
-          {/* <div>{props.champion.name}</div>
-          <span> HP: {props.champion.currentHp}/{props.champion.hp} </span>
-          <span> Armor: {props.champion.armor}/{props.champion.calStr}</span>
-          <span> Mental: {props.champion.mental}/{props.champion.calInt}</span>
-          <span> STR: {props.champion.calStr} </span>
-          <span> DEX: {props.champion.calDex} </span>
-          <span> INT: {props.champion.calInt} </span>
-          <span> STM: {props.champion.stm} </span>
-          <div> Class: {props.champion.calClass}</div> */}
       </DialogContent>
     </Dialog>
   </div>);

@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { cardsList } from '../../logic/game';
-import { PlayerActionsName } from '../../logic/player';
+import { PlayerActionsName } from '../../logic/enums';
 import HandCard, { HandCardMode } from '../HandCard/HandCard';
 import Button from '@mui/material/Button';
 import styles from './DeckBuilder.module.css';
