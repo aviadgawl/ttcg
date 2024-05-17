@@ -57,7 +57,7 @@ const Board: FC = () => {
             {row.map((card, columnIndex) => {
               return <td className={playerBaseClassName(rowIndex)} key={`${rowIndex}-${columnIndex}`}>
                 {isAllowedLocation(rowIndex, columnIndex) &&
-                  <Button size="small" variant="contained" onClick={() => handleAction(rowIndex, columnIndex)}>
+                  <Button className={styles.TargetButton} size="small" variant="contained" onClick={() => handleAction(rowIndex, columnIndex)}>
                     <FaBullseye />
                   </Button>}
                 {isChampion(card) && <BoardChampion rotate={shouldRotate} champion={card}

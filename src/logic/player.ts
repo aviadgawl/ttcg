@@ -47,7 +47,7 @@ const getSummonBoardLocations = (game: Game): AllowedBoardLocationResponse => {
 }
 
 const getValidChampionsBoardLocations = (game: Game, selectedCard: GameCard | null, predicate: Function): AllowedBoardLocationResponse => {
-    let locations: BoardLocation[] = [];
+    const locations: BoardLocation[] = [];
 
     if (selectedCard !== null)
         for (let rowIndex = 0; rowIndex < game.board.length; rowIndex++) {
@@ -357,7 +357,7 @@ const isValidForEquip = (championCard: ChampionCard, gearCard: GearCard): Valida
 }
 
 const isValidForAttach = (championCard: ChampionCard, actionCard: ActionCard): ValidationResult => {
-    if (championCard.calClass !== actionCard.requiredClassName)
+    if (actionCard.requiredClassName !== null && championCard.calClass !== actionCard.requiredClassName)
         return { message: `Champion das not have the required class of ${actionCard.requiredClassName}`, isValid: false };
 
     if (actionCard.requiredGearCategory !== null) {

@@ -85,7 +85,7 @@
         "image": "https://pics.craiyon.com/2023-10-08/42b36e89ac864496855393cd033a545a.webp",
         "distance": 3,
         "direction": "Straight",
-        "dmgStat": "STR",
+        "dmgStat": "DEX",
         "dmgModifier": null,
         "dmgModifierValue": null,
         "requiredClassName": null,
