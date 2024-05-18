@@ -101,5 +101,22 @@
         "image": "https://firebasestorage.googleapis.com/v0/b/battlelordstoolapp.appspot.com/o/give-me-more.png?alt=media&token=17ecd781-0429-455e-89a3-54a9ac27768f",
         "duration": 0,
         "info": "Discard one card and draw two cards"
+    },
+    {
+        "guid": "8",
+        "type": "Champion",
+        "name": "Robin",
+        "image": "https://firebasestorage.googleapis.com/v0/b/battlelordstoolapp.appspot.com/o/robin.jpg?alt=media&token=c2317e4e-1fa6-4df4-be85-80a385f92790",
+        "hp": 9,
+        "str": 1,
+        "dex": 2,
+        "int": 1,
+        "stm": 2,
+        "actionsName": [
+            "Step",
+            "Dagger Throw"
+        ],
+        "class": "Rouge",
+        "isBlocking": false
     }
 ]

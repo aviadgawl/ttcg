@@ -22,13 +22,13 @@ export interface SelectedData {
 }
 
 export const createSelectedData = (card: GameCard | null, actionName: string, actionType: GameStoreActionTypes | null, sourceLocation: BoardLocation|null = null): SelectedData => {
-    return { card: card, actionName: actionName, actionType: actionType, sourceLocation: sourceLocation, allowedBoardLocations: [] };
+    return { card: card, actionName: actionName, actionType: actionType, sourceLocation: sourceLocation, allowedBoardLocations: []};
 }
 
 export const initialState = {
     game: createGame() as Game,
     playerIndex: 0 as number,
-    selectedActionData: { card: null, actionName: '', actionType: null, sourceLocation: null, allowedBoardLocations: [] } as SelectedData,
+    selectedActionData: { card: null, actionName: '', actionType: null, sourceLocation: null, allowedBoardLocations: [], isAttached: false } as SelectedData,
     showHand: false as boolean,
     dialog: null as unknown as GameDialog
 }

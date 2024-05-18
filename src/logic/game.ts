@@ -86,7 +86,7 @@ export const createGame = (): Game => {
 
 const mockOrder: OrderCard = cardsList[6] as OrderCard;
 const mockChampion1: ChampionCard = cardsList[0] as ChampionCard;
-const mockChampion2: ChampionCard = cardsList[0] as ChampionCard;
+const mockChampion2: ChampionCard = cardsList[7] as ChampionCard;
 const mockAction1: ActionCard = cardsList[3] as ActionCard;
 const mockAction2: ActionCard = cardsList[4] as ActionCard;
 const actionCardDaggerThrow: ActionCard = cardsList[5] as ActionCard;

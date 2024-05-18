@@ -12,6 +12,7 @@ const Hand: FC = () => {
   const playingPlayerIndex = useAppSelector((state) => state.gameActions.game.playingPlayerIndex);
   const playerHand = useAppSelector((state) => state.gameActions.game.players[playingPlayerIndex].hand);
   const playerDeck = useAppSelector((state) => state.gameActions.game.players[playingPlayerIndex].deck);
+  const playerUsedCards = useAppSelector((state) => state.gameActions.game.players[playingPlayerIndex].usedCards);
   const showHand = useAppSelector((state) => state.gameActions.showHand);
 
   const dispatch = useAppDispatch();
@@ -30,6 +31,7 @@ const Hand: FC = () => {
 
       <div className={styles.CardContainer}>
         <div className={styles.ButtonsContainer}>
+          <h3> Used Cards: {playerUsedCards.length}</h3>
           <Button onClick={() => handleAction(PlayerActionsName.InitialDraw)} variant="outlined">Deck: {playerDeck.length}</Button>
           <Button onClick={() => handleAction(PlayerActionsName.EndTurn)} variant="outlined">{PlayerActionsName.EndTurn}</Button>
           <Button onClick={() => handleAction(PlayerActionsName.Surrender)} variant="outlined">{PlayerActionsName.Surrender}</Button>

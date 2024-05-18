@@ -2,6 +2,7 @@ import { GameCard, isCrystal, SummoningCard, ChampionCard, isChampion, ActionCar
 import { ActionDirections, GameStatus, ActionType, Stats } from './enums';
 import { Game } from './game';
 import { AllowedBoardLocationResponse, BoardLocation, } from './common';
+import { Player } from './player';
 
 interface ChampionActionResult {
     status: string,
@@ -181,6 +182,8 @@ export const championAction = (game: Game, actionCard: ActionCard, sourceLocatio
     if (result.status === 'success') {
         sourceChampion.stm--;
 
+        checkAndRemoveFromAttachedActions(game.players[game.playerIndex],sourceChampion, actionCard);
+
         if (result.targetedCard !== null && isCrystal(result.targetedCard) && result.targetedCard.currentHp < 0) {
             const loosingPlayer = game.players[result.targetedCard.playerIndex];
             game.loser = loosingPlayer;
@@ -246,6 +249,16 @@ const getBoardLocationInStraightPath = (board: (GameCard | null)[][],
     }
 
     return allowedLocations;
+}
+
+const checkAndRemoveFromAttachedActions = (player: Player, sourceChampion: ChampionCard, actionCard: ActionCard) => {
+    const index = sourceChampion.attachedActionsCards.findIndex(x => x.guid === actionCard.guid);
+
+    if(index === -1) return;
+
+    const newUsedCards = sourceChampion.attachedActionsCards.splice(index, 1);
+
+    player.usedCards.push(newUsedCards[0]);
 }
 
 export const getChampionsActionsAllowedBoardLocations = (game: Game, actionCard: ActionCard, sourceBoardLocation: BoardLocation | null): AllowedBoardLocationResponse => {
