@@ -1,5 +1,5 @@
 import { GameCard, isCrystal, SummoningCard, ChampionCard, isChampion, ActionCard } from './game-card';
-import { ActionDirections, GameStatus, ActionType, Stats } from './enums';
+import { ActionDirections, GameStatus, ActionType, Stats, DamageModifier } from './enums';
 import { Game } from './game';
 import { AllowedBoardLocationResponse, BoardLocation, } from './common';
 import { Player } from './player';
@@ -25,8 +25,8 @@ export const getRowDirection = (sourceRowIndex: number, targetRowIndex: number):
     return (sourceRowIndex - targetRowIndex) > 0 ? 'up' : 'down';
 }
 
-export const applyPhysicalDamage = (target: SummoningCard, damage: number) => {
-    let pureDmg = damage;
+export const applyPhysicalDamage = (sourceChampion: ChampionCard, damageStat: Stats | null, target: SummoningCard) => {
+    let pureDmg = getStatByDmgStat(sourceChampion, damageStat);
 
     if (isChampion(target)) {
         const dmg = pureDmg - target.armor;
@@ -42,7 +42,7 @@ export const applyPhysicalDamage = (target: SummoningCard, damage: number) => {
     target.currentHp -= pureDmg;
 }
 
-const getStateByDmgStat = (champion: ChampionCard, damageStat: Stats | null): number => {
+const getStatByDmgStat = (champion: ChampionCard, damageStat: Stats | null): number => {
     switch (damageStat) {
         case Stats.Str:
             return champion.calStr;
@@ -56,9 +56,14 @@ const getStateByDmgStat = (champion: ChampionCard, damageStat: Stats | null): nu
 }
 
 export const calculateStats = (champion: ChampionCard) => {
-    champion.calStr = champion.str + (champion.body?.str ?? 0) + (champion.rightHand?.str ?? 0) + (champion.leftHand?.str ?? 0) + (champion.upgrade?.str ?? 0);
-    champion.calDex = champion.dex + (champion.body?.dex ?? 0) + (champion.rightHand?.dex ?? 0) + (champion.leftHand?.dex ?? 0) + (champion.upgrade?.dex ?? 0);
-    champion.calInt = champion.int + (champion.body?.int ?? 0) + (champion.rightHand?.int ?? 0) + (champion.leftHand?.int ?? 0) + (champion.upgrade?.int ?? 0);
+    const strBuffsValue = champion.buffs.filter(x => x.effectStat === Stats.Str).reduce((accumulator, buff) => accumulator + (buff.effectModifierValue ?? 0), 0)
+    console.log(champion.buffs.filter(x => x.effectStat === Stats.Str));
+    const dexBuffsValue = champion.buffs.filter(x => x.effectStat === Stats.Dex).reduce((accumulator, buff) => accumulator + (buff.effectModifierValue ?? 0), 0)
+    const intBuffsValue = champion.buffs.filter(x => x.effectStat === Stats.Int).reduce((accumulator, buff) => accumulator + (buff.effectModifierValue ?? 0), 0)
+
+    champion.calStr = champion.str + (champion.body?.str ?? 0) + (champion.rightHand?.str ?? 0) + (champion.leftHand?.str ?? 0) + (champion.upgrade?.str ?? 0) + strBuffsValue;
+    champion.calDex = champion.dex + (champion.body?.dex ?? 0) + (champion.rightHand?.dex ?? 0) + (champion.leftHand?.dex ?? 0) + (champion.upgrade?.dex ?? 0) + dexBuffsValue;
+    champion.calInt = champion.int + (champion.body?.int ?? 0) + (champion.rightHand?.int ?? 0) + (champion.leftHand?.int ?? 0) + (champion.upgrade?.int ?? 0) + intBuffsValue;
     champion.armor = champion.calStr;
 
     const newCalHp = champion.hp + (champion.body?.hp ?? 0) + (champion.rightHand?.hp ?? 0) + (champion.leftHand?.hp ?? 0) + (champion.upgrade?.hp ?? 0);
@@ -92,7 +97,7 @@ export const attack = (board: (GameCard | null)[][], attackingChampion: Champion
     const validTarget = checkValidTarget(target);
     if (!validTarget) return { status: 'Target is not a champion or crystal', targetedCard: target };
 
-    const validDistance = checkAllowedDistance(actionCard.distance, 1, sourceLocation, targetLocation);
+    const validDistance = checkAllowedDistance(actionCard.distance[1], actionCard.distance[0], sourceLocation, targetLocation);
     if (!validDistance) return { status: 'Location to far', targetedCard: target };
 
     const validDirection = checkAllowedDirection(actionCard.direction, sourceLocation, targetLocation);
@@ -101,9 +106,14 @@ export const attack = (board: (GameCard | null)[][], attackingChampion: Champion
     const isPathBlocked = checkBlockingObjects(board, sourceLocation, targetLocation);
     if (isPathBlocked) return { status: 'Hit path is blocked', targetedCard: null };
 
-    const baseStat = getStateByDmgStat(attackingChampion, actionCard.dmgStat);
+    if (actionCard.dmgStat !== null)
+        applyPhysicalDamage(attackingChampion, actionCard.dmgStat, target);
 
-    applyPhysicalDamage(target, baseStat);
+    if (actionCard.effectStat !== null && isChampion(target)) {
+        target.buffs.push(actionCard);
+        calculateStats(target);
+    }
+
     if (target.currentHp <= 0) board[targetLocation.rowIndex][targetLocation.columnIndex] = null;
 
     return { status: 'success', targetedCard: target };
@@ -172,6 +182,7 @@ export const championAction = (game: Game, actionCard: ActionCard, sourceLocatio
             result = moveChampion(game.board, sourceChampion, sourceLocation, targetLocation);
             break;
         case ActionType.Attack:
+        case ActionType.Buff:
             result = attack(game.board, sourceChampion, actionCard, sourceLocation, targetLocation);
             break;
         default:
@@ -182,7 +193,7 @@ export const championAction = (game: Game, actionCard: ActionCard, sourceLocatio
     if (result.status === 'success') {
         sourceChampion.stm--;
 
-        checkAndRemoveFromAttachedActions(game.players[game.playerIndex],sourceChampion, actionCard);
+        checkAndRemoveFromAttachedActions(game.players[game.playerIndex], sourceChampion, actionCard);
 
         if (result.targetedCard !== null && isCrystal(result.targetedCard) && result.targetedCard.currentHp < 0) {
             const loosingPlayer = game.players[result.targetedCard.playerIndex];
@@ -197,9 +208,12 @@ export const championAction = (game: Game, actionCard: ActionCard, sourceLocatio
 const getBoardLocationInStraightPath = (board: (GameCard | null)[][],
     initialLocation: BoardLocation, sourceChampion: ChampionCard, actionCard: ActionCard): BoardLocation[] => {
 
+    const distance = actionCard.actionType === ActionType.Movement ? sourceChampion.calDex : actionCard.distance[1];
+
+    if (distance === 0) return [initialLocation];
+
     const allowedLocations: BoardLocation[] = [];
 
-    const distance = actionCard.actionType === ActionType.Movement ? sourceChampion.calDex : actionCard.distance;
     const stopOnBlockers = !actionCard.isFreeTargeting;
     const initialRowIndex = initialLocation.rowIndex;
     const initialColumnIndex = initialLocation.columnIndex;
@@ -254,7 +268,7 @@ const getBoardLocationInStraightPath = (board: (GameCard | null)[][],
 const checkAndRemoveFromAttachedActions = (player: Player, sourceChampion: ChampionCard, actionCard: ActionCard) => {
     const index = sourceChampion.attachedActionsCards.findIndex(x => x.guid === actionCard.guid);
 
-    if(index === -1) return;
+    if (index === -1) return;
 
     const newUsedCards = sourceChampion.attachedActionsCards.splice(index, 1);
 

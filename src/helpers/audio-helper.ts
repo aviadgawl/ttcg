@@ -6,6 +6,7 @@ import drawSound from '../assets/audio/draw.mp3';
 import stepSound from '../assets/audio/step.mp3';
 import basicHitSound from '../assets/audio/basic-hit.mp3';
 import daggerThrowSound from '../assets/audio/dagger-throw.mp3';
+import buffSound from '../assets/audio/buff.mp3';
 
 const playSound = (soundFile: string) => {
     const audio = new Audio(soundFile);
@@ -42,6 +43,9 @@ export const playSoundByCardActionName = (actionType: ActionType) => {
             break;
         case ActionType.Ranged:
             playSound(daggerThrowSound);
+            break;
+        case ActionType.Buff:
+            playSound(buffSound);
             break;
         default:
             break;

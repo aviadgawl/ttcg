@@ -1,19 +1,21 @@
 export enum ActionDirections {
     Straight = 'Straight',
-    None = 'None'
+    Any = 'Any'
 }
 
 export enum Stats {
     Str = 'STR',
     Dex = 'DEX',
-    Int = 'INT'
+    Int = 'INT',
+    Hp = 'HP'
 }
 
 export enum ActionType {
     Movement = 0,
     Attack = 1,
     Ranged = 2,
-    Magic = 3
+    Magic = 3,
+    Buff = 4
 }
 
 export enum GameStatus {
@@ -40,4 +42,9 @@ export enum PlayerActionsName {
     removeCardFromDeck = 'Remove Card From Deck',
     Attach = 'Attach',
     PlayOrder = 'Play Order'
+}
+
+export enum DamageModifier {
+    Plus = 0,
+    Multiply = 1
 }

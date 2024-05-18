@@ -1,4 +1,4 @@
-import { ActionDirections, Stats, ActionType, GearCategory } from './enums';
+import { ActionDirections, Stats, ActionType, GearCategory, DamageModifier } from './enums';
 
 export interface GameEffect {
     area: string,
@@ -19,6 +19,7 @@ export interface SummoningCard extends GameCard {
     calHp: number;
     currentHp: number;
     isBlocking: boolean;
+    buffs: ActionCard[];
 }
 
 export interface CrystalCard extends SummoningCard {
@@ -41,16 +42,21 @@ export interface OrderCard extends GameCard {
 
 export interface ActionCard extends GameCard {
     actionType: ActionType;
-    distance: number;
+    distance: number[];
     direction: ActionDirections;
+    duration: Number;
+    calDuration: Number;
     dmgStat: Stats|null;
-    dmgModifier: string|null;
+    dmgModifier: DamageModifier|null;
     dmgModifierValue: number|null;
     requiredClassName: string|null;
     requiredStat: Stats|null;
     requiredStatValue: number|null;
     requiredGearCategory: GearCategory|null;
     isFreeTargeting: boolean;
+    effectStat: Stats|null;
+    effectModifier: DamageModifier|null,
+    effectModifierValue: number|null
 }
 
 export interface ClassCard extends SummoningCard {
@@ -98,6 +104,6 @@ export const isClass = (value: any): value is ClassCard => !!value?.learnedActio
 
 export const isChampion = (value: any): value is ChampionCard => !!value?.learnedActions;
 
-export const isAction = (value: any): value is ActionCard => !!value?.distance;
+export const isAction = (value: any): value is ActionCard => !!value?.actionType;
 
 export const isOrder = (value: any): value is OrderCard => !!value?.info;
