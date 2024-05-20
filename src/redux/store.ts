@@ -81,7 +81,7 @@ const gameSlice = createSlice({
             
             if (selectedData.actionType === GameStoreActionTypes.PlayerAction)
                 allowedLocationsResult = getPlayerActionsAllowedBoardLocations(state.game, selectedData.actionName, selectedData.card);
-            else if(selectedData.actionType === GameStoreActionTypes.ChampionAction && selectedData.card !== null && isAction(selectedData.card))
+            else if(selectedData.actionType === GameStoreActionTypes.ChampionAction && isAction(selectedData.card))
                 allowedLocationsResult = getChampionsActionsAllowedBoardLocations(state.game, selectedData.card, selectedData.sourceLocation); 
                
             if (allowedLocationsResult.message === 'success')

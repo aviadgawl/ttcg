@@ -62,7 +62,8 @@
         "isFreeTargeting": true,
         "effectStat": null,
         "effectModifier": null,
-        "effectModifierValue": null
+        "effectModifierValue": null,
+        "effectStatus": null
     },
     {
         "guid": "5",
@@ -71,7 +72,7 @@
         "name": "Step",
         "image": "https://firebasestorage.googleapis.com/v0/b/battlelordstoolapp.appspot.com/o/step.png?alt=media&token=2138e6a1-2b5c-44c4-a202-e48c8b298fd3",
         "duration": 0,
-        "distance": [1,1],
+        "distance": [-1,-1],
         "direction": "Straight",
         "dmgStat": "Str",
         "dmgModifier": null,
@@ -83,7 +84,8 @@
         "isFreeTargeting": false,
         "effectStat": null,
         "effectModifier": null,
-        "effectModifierValue": null
+        "effectModifierValue": null,
+        "effectStatus": null
     },
     {
         "guid": "6",
@@ -104,7 +106,8 @@
         "isFreeTargeting": true,
         "effectStat": null,
         "effectModifier": null,
-        "effectModifierValue": null
+        "effectModifierValue": null,
+        "effectStatus": null
     },
     {
         "guid": "7",
@@ -150,6 +153,7 @@
         "isFreeTargeting": true,
         "effectStat": "Str",
         "effectModifier": 0,
-        "effectModifierValue": 2
+        "effectModifierValue": 2,
+        "effectStatus": "Immobilize"
     }
 ]

@@ -1,4 +1,4 @@
-import { ActionDirections, Stats, ActionType, GearCategory, DamageModifier } from './enums';
+import { ActionDirections, Stats, ActionType, GearCategory, DamageModifier, EffectStatus } from './enums';
 
 export interface GameEffect {
     area: string,
@@ -56,7 +56,8 @@ export interface ActionCard extends GameCard {
     isFreeTargeting: boolean;
     effectStat: Stats|null;
     effectModifier: DamageModifier|null,
-    effectModifierValue: number|null
+    effectModifierValue: number|null,
+    effectStatus: EffectStatus|null
 }
 
 export interface ClassCard extends SummoningCard {

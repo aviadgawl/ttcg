@@ -11,11 +11,11 @@ export enum Stats {
 }
 
 export enum ActionType {
-    Movement = 0,
-    Attack = 1,
-    Ranged = 2,
-    Magic = 3,
-    Buff = 4
+    Movement = 1,
+    Attack,
+    Ranged,
+    Magic,
+    Buff
 }
 
 export enum GameStatus {
@@ -25,7 +25,7 @@ export enum GameStatus {
 }
 
 export enum GearCategory {
-    swords = 0,
+    swords = 1,
     axes,
     daggers
 }
@@ -45,6 +45,12 @@ export enum PlayerActionsName {
 }
 
 export enum DamageModifier {
-    Plus = 0,
-    Multiply = 1
+    Plus = 1,
+    Multiply
+}
+
+export enum EffectStatus {
+    Burn = 'Burn',
+    Poison = 'Poison',
+    Immobilize = 'Immobilize'
 }

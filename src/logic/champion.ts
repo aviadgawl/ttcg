@@ -1,5 +1,5 @@
 import { GameCard, isCrystal, SummoningCard, ChampionCard, isChampion, ActionCard } from './game-card';
-import { ActionDirections, GameStatus, ActionType, Stats, DamageModifier } from './enums';
+import { ActionDirections, GameStatus, ActionType, Stats, DamageModifier, EffectStatus } from './enums';
 import { Game } from './game';
 import { AllowedBoardLocationResponse, BoardLocation, } from './common';
 import { Player } from './player';
@@ -77,6 +77,9 @@ export const moveChampion = (board: (GameCard | null)[][], entityToMove: Champio
     if (targetCell !== null) return { status: 'Target location isn\'t empty', targetedCard: null };
 
     if (entityToMove.calDex <= 0) return { status: 'Dex must be higher than zero', targetedCard: null };
+
+    if (entityToMove.buffs.length > 0 && entityToMove.buffs.filter(x => x.effectStatus === EffectStatus.Immobilize))
+        return { status: `Champion is under the effect of ${EffectStatus.Immobilize}`, targetedCard: null };
 
     const distance = calculateDistance(sourceLocation, targetLocation);
     if (distance > entityToMove.calDex) return { status: 'Location to far', targetedCard: null };
