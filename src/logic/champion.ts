@@ -211,11 +211,16 @@ export const championAction = (game: Game, actionCard: ActionCard, sourceLocatio
 const getBoardLocationInStraightPath = (board: (GameCard | null)[][],
     initialLocation: BoardLocation, sourceChampion: ChampionCard, actionCard: ActionCard): BoardLocation[] => {
 
-    const distance = actionCard.actionType === ActionType.Movement ? sourceChampion.calDex : actionCard.distance[1];
+    const isMovementCard = actionCard.actionType === ActionType.Movement;
+
+    const distance = isMovementCard ? sourceChampion.calDex : actionCard.distance[1];
 
     if (distance === 0) return [initialLocation];
 
     const allowedLocations: BoardLocation[] = [];
+
+    if (isMovementCard && sourceChampion.buffs.filter(x => x.effectStatus === EffectStatus.Immobilize))
+        return allowedLocations;
 
     const stopOnBlockers = !actionCard.isFreeTargeting;
     const initialRowIndex = initialLocation.rowIndex;

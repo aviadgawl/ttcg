@@ -5,8 +5,11 @@ import { setSelectedActionData, createSelectedData } from '../../redux/store';
 import { GameStoreActionTypes } from '../../redux/types';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import DialogContent from '@mui/material/DialogContent';
 import GameCardDraw from '../GameCardDraw/GameCardDraw';
+import ChampionMenu from '../ChampionMenu/ChampionMenu';
 import styles from './BoardChampion.module.css';
 
 interface BoardChampionProps {
@@ -20,47 +23,59 @@ interface BoardChampionProps {
 const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
   const dispatch = useAppDispatch();
 
-  const [open, setOpen] = useState(false);
+  const [showDialog, setShowDialog] = useState(false);
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handlePanelClick = () => {
+    setShowDialog(true);
   };
 
+  const handleChampionCardClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  }
+
   const handleClose = () => {
-    setOpen(false);
+    setShowDialog(false);
   };
 
   const handleAction = (card: ActionCard) => {
     const selectedActionData = createSelectedData(card, card.name, GameStoreActionTypes.ChampionAction, { rowIndex: props.x, columnIndex: props.y });
     dispatch(setSelectedActionData(selectedActionData));
-    setOpen(false);
+    setShowDialog(false);
   }
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
 
   return (<div className={`App-text-color ${styles.Container} ${props.isSelected ? styles.Selected : styles.NotSelected} ${props.rotate ? 'App-rotate' : ''}`}>
     <div style={{ backgroundImage: `url(${props.champion.image})` }}
       className={styles.Panel}
-      onClick={handleClickOpen}>
-        <h2>{props.champion.currentHp} / {props.champion.calHp}</h2>
+      onClick={handlePanelClick}>
+      <h2>{props.champion.currentHp} / {props.champion.calHp}</h2>
     </div>
     <Dialog
-      open={open}
+      open={showDialog}
       className={styles.Dialog}
       onClose={handleClose}>
       <DialogContent className={styles.DialogContent}>
-        <GameCardDraw showChampionCardActions={false} card={props.champion}>
-        <div>
-          {props.champion.learnedActionsCards.map((card, actionIndex) =>
-            <Button disabled={props.champion.stm <= 0} size="small" variant="contained" className="App-button" key={actionIndex}
-              onClick={() => handleAction(card)}>{card.name}
-            </Button>
-          )}
-          {props.champion.attachedActionsCards.map((card, actionIndex) =>
-            <Button size="small" variant="contained" className="App-button" key={actionIndex}
-              onClick={() => handleAction(card)}>{card.name}
-            </Button>
-          )}
-        </div>
+        <GameCardDraw onClick={handleChampionCardClick} showChampionCardActions={false} card={props.champion}>
+          <div>
+            {props.champion.learnedActionsCards.map((card, actionIndex) =>
+              <Button disabled={props.champion.stm <= 0} size="small" variant="contained" className="App-button" key={actionIndex}
+                onClick={() => handleAction(card)}>{card.name}
+              </Button>
+            )}
+            {props.champion.attachedActionsCards.map((card, actionIndex) =>
+              <Button size="small" variant="contained" className="App-button" key={actionIndex}
+                onClick={() => handleAction(card)}>{card.name}
+              </Button>
+            )}
+          </div>
         </GameCardDraw>
+        <ChampionMenu anchorEl={anchorEl} open={open} onClose={handleCloseMenu} championCard={props.champion} />
       </DialogContent>
     </Dialog>
   </div>);

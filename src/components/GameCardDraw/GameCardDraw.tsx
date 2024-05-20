@@ -9,11 +9,12 @@ import Typography from '@mui/material/Typography';
 interface CardProps {
   card: GameCard,
   showChampionCardActions: boolean,
-  children: React.ReactNode
+  children?: React.ReactNode,
+  onClick?: any
 }
 
 const GameCardDraw: FC<CardProps> = (props) => {
-  return <Card className={`${styles.Card} App-text-color`} style={{ backgroundImage: `url(${props.card.image})` }} sx={{ maxWidth: 345 }}>
+  return <Card onClick={props.onClick} className={`${styles.Card} App-text-color`} style={{ backgroundImage: `url(${props.card.image})` }} sx={{ maxWidth: 345 }}>
     <CardContent className={styles.CardContent}>
       <Typography className={styles.CardName} gutterBottom variant="h5" component="div">
         {props.card.name}
