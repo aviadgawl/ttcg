@@ -1,6 +1,6 @@
 import { Player } from './player';
 import { GameCard, GearCard, CrystalCard, ChampionCard, ClassCard, ActionCard, OrderCard } from './game-card';
-import { ActionType, Stats, ActionDirections, GameStatus, GearCategory, DamageModifier, EffectStatus } from './enums';
+import { ActionType, Stats, ActionDirections, GameStatus, GearCategory, MathModifier, EffectStatus } from './enums';
 import cardsListJson from '../assets/cards/cards-list.json';
 
 export const cardsList = cardsListJson.map(x => {
@@ -42,7 +42,7 @@ export const cardsList = cardsListJson.map(x => {
                 distance: x.distance,
                 direction: ActionDirections[(x.direction ?? '') as keyof typeof ActionDirections],
                 dmgStat: Stats[(x.dmgStat ?? '') as keyof typeof Stats],
-                dmgModifier: DamageModifier[(x.dmgModifier ?? '') as keyof typeof DamageModifier],
+                dmgModifier: MathModifier[(x.dmgModifier ?? '') as keyof typeof MathModifier],
                 dmgModifierValue: x.dmgModifierValue,
                 requiredClassName: x.requiredClassName,
                 requiredStat: Stats[(x.requiredStat ?? '') as keyof typeof Stats],
@@ -50,7 +50,7 @@ export const cardsList = cardsListJson.map(x => {
                 requiredGearCategory: x.requiredGearCategory,
                 isFreeTargeting: x.isFreeTargeting,
                 effectStat: Stats[(x.effectStat ?? '') as keyof typeof Stats],
-                effectModifier: DamageModifier[(x.effectModifier ?? '') as keyof typeof DamageModifier],
+                effectModifier: MathModifier[(x.effectModifier ?? '') as keyof typeof MathModifier],
                 effectModifierValue: x.effectModifierValue,
                 effectStatus: EffectStatus[(x.effectStatus ?? '') as keyof typeof EffectStatus],
             } as ActionCard

@@ -44,7 +44,7 @@ export enum PlayerActionsName {
     PlayOrder = 'Play Order'
 }
 
-export enum DamageModifier {
+export enum MathModifier {
     Plus = 1,
     Multiply
 }

@@ -1,4 +1,4 @@
-import { ActionDirections, Stats, ActionType, GearCategory, DamageModifier, EffectStatus } from './enums';
+import { ActionDirections, Stats, ActionType, GearCategory, MathModifier, EffectStatus } from './enums';
 
 export interface GameEffect {
     area: string,
@@ -47,7 +47,7 @@ export interface ActionCard extends GameCard {
     duration: Number;
     calDuration: Number;
     dmgStat: Stats|null;
-    dmgModifier: DamageModifier|null;
+    dmgModifier: MathModifier|null;
     dmgModifierValue: number|null;
     requiredClassName: string|null;
     requiredStat: Stats|null;
@@ -55,7 +55,7 @@ export interface ActionCard extends GameCard {
     requiredGearCategory: GearCategory|null;
     isFreeTargeting: boolean;
     effectStat: Stats|null;
-    effectModifier: DamageModifier|null,
+    effectModifier: MathModifier|null,
     effectModifierValue: number|null,
     effectStatus: EffectStatus|null
 }
