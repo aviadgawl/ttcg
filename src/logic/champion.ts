@@ -134,7 +134,7 @@ export const checkAllowedDirection = (allowedDirection: ActionDirections,
 
     switch (allowedDirection) {
         case ActionDirections.Straight:
-            return sourceLocation.columnIndex === targetLocation.columnIndex || sourceLocation.rowIndex === targetLocation.columnIndex;
+            return sourceLocation.columnIndex === targetLocation.columnIndex || sourceLocation.rowIndex === targetLocation.rowIndex;
         default:
             break;
     }
