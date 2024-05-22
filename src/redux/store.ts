@@ -18,17 +18,18 @@ export interface SelectedData {
     actionName: string,
     actionType: GameStoreActionTypes | null,
     sourceLocation: BoardLocation | null,
-    allowedBoardLocations: BoardLocation[]
+    allowedBoardLocations: BoardLocation[],
+    isAttachedAction: boolean
 }
 
-export const createSelectedData = (card: GameCard | null, actionName: string, actionType: GameStoreActionTypes | null, sourceLocation: BoardLocation|null = null): SelectedData => {
-    return { card: card, actionName: actionName, actionType: actionType, sourceLocation: sourceLocation, allowedBoardLocations: []};
+export const createSelectedData = (card: GameCard | null, actionName: string, actionType: GameStoreActionTypes | null, sourceLocation: BoardLocation|null = null, isAttachedAction = false): SelectedData => {
+    return { card: card, actionName: actionName, actionType: actionType, sourceLocation: sourceLocation, allowedBoardLocations: [], isAttachedAction: isAttachedAction};
 }
 
 export const initialState = {
     game: createGame() as Game,
     playerIndex: 0 as number,
-    selectedActionData: { card: null, actionName: '', actionType: null, sourceLocation: null, allowedBoardLocations: [], isAttached: false } as SelectedData,
+    selectedActionData: { card: null, actionName: '', actionType: null, sourceLocation: null, allowedBoardLocations: [], isAttachedAction: false } as SelectedData,
     showHand: false as boolean,
     dialog: null as unknown as GameDialog
 }
@@ -39,27 +40,27 @@ const gameSlice = createSlice({
     reducers: {
         championActions(state, action) {
             const { targetLocation } = action.payload;
-            const { card, sourceLocation } = state.selectedActionData;
+            const selectedData = state.selectedActionData as SelectedData;
 
-            if (card === null) {
+            if (selectedData.card === null) {
                 alert('SelectedData card can not be null');
                 return;
             }
 
-            if (sourceLocation === null) {
+            if (selectedData.sourceLocation === null) {
                 alert('No source location');
                 return;
             };
 
-            if (!isAction(card)) {
+            if (!isAction(selectedData.card)) {
                 alert('SelectedData is not action card');
                 return;
             };
 
-            const result = championAction(state.game, card as ActionCard, sourceLocation, targetLocation);
+            const result = championAction(state.game, selectedData.card as ActionCard, selectedData.sourceLocation, targetLocation, selectedData.isAttachedAction);
 
             if (result !== 'success') alert(result);
-            else playSoundByCardActionName(card.actionType);
+            else playSoundByCardActionName(selectedData.card.actionType);
         },
         playerActions(state, action) {
             const { data } = action.payload;

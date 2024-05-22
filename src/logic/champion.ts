@@ -169,14 +169,14 @@ export const checkBlockingObjects = (board: (GameCard | null)[][], sourceLocatio
     return false;
 }
 
-export const championAction = (game: Game, actionCard: ActionCard, sourceLocation: BoardLocation, targetLocation: BoardLocation): string => {
+export const championAction = (game: Game, actionCard: ActionCard, sourceLocation: BoardLocation, targetLocation: BoardLocation, isAttachedAction: boolean): string => {
     const sourceChampion = game.board[sourceLocation.rowIndex][sourceLocation.columnIndex];
 
     if (sourceChampion === null) return 'Entity was not found';
     if (!isChampion(sourceChampion)) return 'Entity is not a champion';
     if (sourceChampion.playerIndex !== game.playingPlayerIndex)
         return `Player number ${game.playingPlayerIndex + 1} can not use card of player number ${sourceChampion.playerIndex + 1}`;
-    if (sourceChampion.stm <= 0) return 'Champion stamina is depleted';
+    if (sourceChampion.stm <= 0 && !isAttachedAction) return 'Champion stamina is depleted';
 
     let result: ChampionActionResult | null = null;
 

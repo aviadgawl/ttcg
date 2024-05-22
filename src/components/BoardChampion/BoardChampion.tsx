@@ -36,8 +36,8 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
     setShowDialog(false);
   };
 
-  const handleAction = (card: ActionCard) => {
-    const selectedActionData = createSelectedData(card, card.name, GameStoreActionTypes.ChampionAction, { rowIndex: props.x, columnIndex: props.y });
+  const handleAction = (card: ActionCard, isAttachedAction: boolean) => {
+    const selectedActionData = createSelectedData(card, card.name, GameStoreActionTypes.ChampionAction, { rowIndex: props.x, columnIndex: props.y }, isAttachedAction);
     dispatch(setSelectedActionData(selectedActionData));
     setShowDialog(false);
   }
@@ -64,12 +64,12 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
           <div>
             {props.champion.learnedActionsCards.map((card, actionIndex) =>
               <Button disabled={props.champion.stm <= 0} size="small" variant="contained" className="App-button" key={actionIndex}
-                onClick={() => handleAction(card)}>{card.name}
+                onClick={() => handleAction(card, false)}>{card.name}
               </Button>
             )}
             {props.champion.attachedActionsCards.map((card, actionIndex) =>
               <Button size="small" variant="contained" className="App-button" key={actionIndex}
-                onClick={() => handleAction(card)}>{card.name}
+                onClick={() => handleAction(card, true)}>{card.name}
               </Button>
             )}
             <Button size="small" variant="outlined" onClick={handleChampionCardClick}><FaCircleInfo /></Button>
