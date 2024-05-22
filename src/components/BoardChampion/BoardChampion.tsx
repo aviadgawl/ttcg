@@ -5,11 +5,10 @@ import { setSelectedActionData, createSelectedData } from '../../redux/store';
 import { GameStoreActionTypes } from '../../redux/types';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import DialogContent from '@mui/material/DialogContent';
 import GameCardDraw from '../GameCardDraw/GameCardDraw';
 import ChampionMenu from '../ChampionMenu/ChampionMenu';
+import { FaCircleInfo } from "react-icons/fa6";
 import styles from './BoardChampion.module.css';
 
 interface BoardChampionProps {
@@ -61,7 +60,7 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
       className={styles.Dialog}
       onClose={handleClose}>
       <DialogContent className={styles.DialogContent}>
-        <GameCardDraw onClick={handleChampionCardClick} showChampionCardActions={false} card={props.champion}>
+        <GameCardDraw showChampionCardActions={false} card={props.champion}>
           <div>
             {props.champion.learnedActionsCards.map((card, actionIndex) =>
               <Button disabled={props.champion.stm <= 0} size="small" variant="contained" className="App-button" key={actionIndex}
@@ -73,6 +72,7 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
                 onClick={() => handleAction(card)}>{card.name}
               </Button>
             )}
+            <Button size="small" variant="outlined" onClick={handleChampionCardClick}><FaCircleInfo /></Button>
           </div>
         </GameCardDraw>
         <ChampionMenu anchorEl={anchorEl} open={open} onClose={handleCloseMenu} championCard={props.champion} />

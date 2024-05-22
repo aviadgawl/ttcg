@@ -219,7 +219,7 @@ const getBoardLocationInStraightPath = (board: (GameCard | null)[][],
 
     const allowedLocations: BoardLocation[] = [];
 
-    if (isMovementCard && sourceChampion.buffs.filter(x => x.effectStatus === EffectStatus.Immobilize))
+    if (isMovementCard && sourceChampion.buffs.some(x => x.effectStatus === EffectStatus.Immobilize))
         return allowedLocations;
 
     const stopOnBlockers = !actionCard.isFreeTargeting;

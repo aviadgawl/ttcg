@@ -21,6 +21,7 @@ const ChampionMenu: FC<ChampionMenuProps> = (props) => (
     MenuListProps={{
       'aria-labelledby': 'basic-button',
     }}
+    className={styles.ChampionMenuList}
   >
     {props.championCard.upgrade && <MenuItem><GameCardDraw showChampionCardActions={false} card={props.championCard.upgrade}/></MenuItem>}
     {props.championCard.body && <MenuItem><GameCardDraw showChampionCardActions={false} card={props.championCard.body}/></MenuItem>}
