@@ -166,7 +166,7 @@
         "distance": [1,1],
         "direction": "Straight",
         "dmgStat": "Dex",
-        "dmgModifier": "+",
+        "dmgModifier": "Plus",
         "dmgModifierValue": 1,
         "requiredClassName": null,
         "requiredStat": null,
@@ -190,5 +190,27 @@
         "bodyPart": "Hand",
         "image": "https://firebasestorage.googleapis.com/v0/b/battlelordstoolapp.appspot.com/o/dagger.jpg?alt=media&token=5ef0e203-19b8-4d94-a430-fac5296592f5",
         "isBlocking": false
+    },
+    {
+        "guid": "12",
+        "type": "Action",
+        "actionType": "Attack",
+        "name": "Mighty Blow",
+        "image": "https://firebasestorage.googleapis.com/v0/b/battlelordstoolapp.appspot.com/o/mighty-blow.png?alt=media&token=1af1bc44-ec98-49eb-ae41-72563d7fa8d4",
+        "duration": 0,
+        "distance": [1,1],
+        "direction": "Straight",
+        "dmgStat": "Str",
+        "dmgModifier": "Plus",
+        "dmgModifierValue": 1,
+        "requiredClassName": null,
+        "requiredStat": "Str",
+        "requiredStatValue": 3,
+        "requiredGearCategory": null,
+        "isFreeTargeting": true,
+        "effectStat": null,
+        "effectModifier": null,
+        "effectModifierValue": null,
+        "effectStatus": null
     }
 ]

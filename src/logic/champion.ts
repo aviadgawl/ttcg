@@ -1,5 +1,5 @@
 import { GameCard, isCrystal, SummoningCard, ChampionCard, isChampion, ActionCard } from './game-card';
-import { ActionDirections, GameStatus, ActionType, Stats, EffectStatus } from './enums';
+import { ActionDirections, GameStatus, ActionType, Stats, EffectStatus, MathModifier } from './enums';
 import { Game } from './game';
 import { AllowedBoardLocationResponse, BoardLocation, } from './common';
 import { Player } from './player';
@@ -25,21 +25,35 @@ export const getRowDirection = (sourceRowIndex: number, targetRowIndex: number):
     return (sourceRowIndex - targetRowIndex) > 0 ? 'up' : 'down';
 }
 
-export const applyPhysicalDamage = (sourceChampion: ChampionCard, damageStat: Stats | null, target: SummoningCard) => {
-    let pureDmg = getStatByDmgStat(sourceChampion, damageStat);
+export const applyPhysicalDamage = (sourceChampion: ChampionCard, actionCard: ActionCard, target: SummoningCard) => {
+    const pureDmg = getStatByDmgStat(sourceChampion, actionCard.dmgStat);
+    let calDamage = calculateDamageWithModifier(pureDmg, actionCard);
 
     if (isChampion(target)) {
         const dmg = pureDmg - target.armor;
 
         if (dmg > 0) {
             target.armor = 0;
-            pureDmg -= dmg;
+            calDamage -= dmg;
         }
         else if (dmg < 0) target.armor -= Math.abs(dmg);
         else if (dmg === 0) return;
     }
 
-    target.currentHp -= pureDmg;
+    target.currentHp -= calDamage;
+}
+
+const calculateDamageWithModifier = (baseDamage: number, actionCard: ActionCard): number => {
+    if (actionCard.dmgModifier === null || actionCard.dmgModifierValue === null) return 0;
+
+    switch (actionCard.dmgModifier) {
+        case MathModifier.Plus:
+            return baseDamage + actionCard.dmgModifierValue;
+        case MathModifier.Multiply:
+            return baseDamage * actionCard.dmgModifierValue;
+        default:
+            return 0;
+    }
 }
 
 const getStatByDmgStat = (champion: ChampionCard, damageStat: Stats | null): number => {
@@ -110,7 +124,7 @@ export const attack = (board: (GameCard | null)[][], attackingChampion: Champion
     if (isPathBlocked) return { status: 'Hit path is blocked', targetedCard: null };
 
     if (actionCard.dmgStat !== null)
-        applyPhysicalDamage(attackingChampion, actionCard.dmgStat, target);
+        applyPhysicalDamage(attackingChampion, actionCard, target);
 
     if (actionCard.effectStat !== null && isChampion(target)) {
         target.buffs.push(actionCard);
