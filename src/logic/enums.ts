@@ -25,9 +25,9 @@ export enum GameStatus {
 }
 
 export enum GearCategory {
-    swords = 1,
-    axes,
-    daggers
+    Swords = 'Swords',
+    Axes = 'Axes',
+    Daggers = 'Daggers'
 }
 
 export enum PlayerActionsName {
@@ -45,8 +45,8 @@ export enum PlayerActionsName {
 }
 
 export enum MathModifier {
-    Plus = 1,
-    Multiply
+    Plus = '+',
+    Multiply = 'x'
 }
 
 export enum EffectStatus {
