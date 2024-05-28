@@ -24,6 +24,8 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
 
   const [showDialog, setShowDialog] = useState(false);
 
+  const showInfoButton = props?.champion?.body || props?.champion?.rightHand || props?.champion?.leftHand || props?.champion?.upgrade;
+
   const handlePanelClick = () => {
     setShowDialog(true);
   };
@@ -72,7 +74,7 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
                 onClick={() => handleAction(card, true)}>{card.name}
               </Button>
             )}
-            <Button size="small" variant="outlined" onClick={handleChampionCardClick}><FaCircleInfo /></Button>
+            {showInfoButton && <Button size="small" variant="outlined" onClick={handleChampionCardClick}><FaCircleInfo /></Button>}
           </div>
         </GameCardDraw>
         <ChampionMenu anchorEl={anchorEl} open={open} onClose={handleCloseMenu} championCard={props.champion} />

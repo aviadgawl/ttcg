@@ -1,11 +1,10 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 import { createGame, Game } from '../logic/game';
-import { ActionCard, GameCard, isAction } from '../logic/game-card';
+import { ActionCard, GameCard, isAction, isOrder, OrderCard, AllowedBoardLocationResponse, BoardLocation, AllowedHandCardSelectResponse } from '../logic/game-card';
 import { championAction, getChampionsActionsAllowedBoardLocations } from '../logic/champion';
-import { playerAction, getPlayerActionsAllowedBoardLocations } from '../logic/player';
+import { playerAction, getPlayerActionsAllowedBoardLocations, getPlayerAllowedHandCardSelect } from '../logic/player';
 import { playSoundByPlayerActionName, playSoundByCardActionName } from '../helpers/audio-helper';
 import { GameStoreActionTypes } from './types';
-import { AllowedBoardLocationResponse, BoardLocation } from '../logic/common';
 
 export interface GameDialog {
     title: string;
@@ -19,17 +18,35 @@ export interface SelectedData {
     actionType: GameStoreActionTypes | null,
     sourceLocation: BoardLocation | null,
     allowedBoardLocations: BoardLocation[],
-    isAttachedAction: boolean
+    isAttachedAction: boolean,
+    allowedHandCardSelect: GameCard[]
 }
 
-export const createSelectedData = (card: GameCard | null, actionName: string, actionType: GameStoreActionTypes | null, sourceLocation: BoardLocation|null = null, isAttachedAction = false): SelectedData => {
-    return { card: card, actionName: actionName, actionType: actionType, sourceLocation: sourceLocation, allowedBoardLocations: [], isAttachedAction: isAttachedAction};
+export const createSelectedData = (card: GameCard | null,
+    actionName: string, actionType: GameStoreActionTypes | null, sourceLocation: BoardLocation | null = null, isAttachedAction = false): SelectedData => {
+    return {
+        card: card,
+        actionName: actionName,
+        actionType: actionType,
+        sourceLocation: sourceLocation,
+        allowedBoardLocations: [],
+        isAttachedAction: isAttachedAction,
+        allowedHandCardSelect: []
+    };
 }
 
 export const initialState = {
     game: createGame() as Game,
     playerIndex: 0 as number,
-    selectedActionData: { card: null, actionName: '', actionType: null, sourceLocation: null, allowedBoardLocations: [], isAttachedAction: false } as SelectedData,
+    selectedActionData: {
+        card: null,
+        actionName: '',
+        actionType: null,
+        sourceLocation: null,
+        allowedBoardLocations: [],
+        isAttachedAction: false,
+        allowedHandCardSelect: []
+    } as SelectedData,
     showHand: false as boolean,
     dialog: null as unknown as GameDialog
 }
@@ -78,16 +95,25 @@ const gameSlice = createSlice({
         },
         setSelectedActionData(state, action) {
             let selectedData = action.payload as SelectedData;
-            let allowedLocationsResult: AllowedBoardLocationResponse | null = { message: 'success', locations: [] };
-            
-            if (selectedData.actionType === GameStoreActionTypes.PlayerAction)
+            let allowedHandCardSelectResult: AllowedHandCardSelectResponse = { message: 'success', handCards: [] };
+            let allowedLocationsResult: AllowedBoardLocationResponse = { message: 'success', locations: [] };
+
+            if (selectedData.actionType === GameStoreActionTypes.PlayerAction) {
+                if (isOrder(selectedData.card))
+                    allowedHandCardSelectResult = getPlayerAllowedHandCardSelect(state.game, selectedData.card as OrderCard);
+
                 allowedLocationsResult = getPlayerActionsAllowedBoardLocations(state.game, selectedData.actionName, selectedData.card);
-            else if(selectedData.actionType === GameStoreActionTypes.ChampionAction && isAction(selectedData.card))
-                allowedLocationsResult = getChampionsActionsAllowedBoardLocations(state.game, selectedData.card, selectedData.sourceLocation); 
-               
+            }
+            else if (selectedData.actionType === GameStoreActionTypes.ChampionAction && isAction(selectedData.card))
+                allowedLocationsResult = getChampionsActionsAllowedBoardLocations(state.game, selectedData.card, selectedData.sourceLocation);
+
             if (allowedLocationsResult.message === 'success')
                 selectedData = { ...selectedData, ...{ allowedBoardLocations: allowedLocationsResult.locations } }
-            else alert(allowedLocationsResult.message);
+            else console.log(allowedLocationsResult.message);
+
+            if (allowedHandCardSelectResult.message === 'success')
+                selectedData = { ...selectedData, ...{ allowedHandCardSelect: allowedHandCardSelectResult.handCards } }
+            else console.log(allowedHandCardSelectResult.message);
 
             state.selectedActionData = selectedData;
         },

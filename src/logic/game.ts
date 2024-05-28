@@ -61,7 +61,9 @@ export const cardsList = cardsListJson.map(x => {
                 name: x.name,
                 image: x.image,
                 duration: x.duration,
-                info: x.info
+                info: x.info,
+                requirement: x.requirement,
+                reward: x.reward
             } as OrderCard
         default:
             return null;

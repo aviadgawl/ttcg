@@ -115,6 +115,8 @@
         "name": "Give Me More!",
         "image": "https://firebasestorage.googleapis.com/v0/b/battlelordstoolapp.appspot.com/o/give-me-more.png?alt=media&token=17ecd781-0429-455e-89a3-54a9ac27768f",
         "duration": 0,
+        "requirement": [{"name": "discard", "amount": 1, "cardType": null}],
+        "reward": { "name": "Draw", "amount": 2 },
         "info": "Discard one card and draw two cards"
     },
     {
@@ -145,7 +147,7 @@
         "direction": "Straight",
         "dmgStat": null,
         "dmgModifier": null,
-        "dmgModifierValue": 0,
+        "dmgModifierValue": null,
         "requiredClassName": null,
         "requiredStat": null,
         "requiredStatValue": null,
@@ -165,7 +167,7 @@
         "duration": 0,
         "distance": [1,1],
         "direction": "Straight",
-        "dmgStat": "Dex",
+        "dmgStat": "Str",
         "dmgModifier": "Plus",
         "dmgModifierValue": 1,
         "requiredClassName": null,

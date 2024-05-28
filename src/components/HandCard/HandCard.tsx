@@ -24,6 +24,10 @@ const HandCard: FC<CardProps> = (props) => {
   const handleCardActionOnTarget = (cardAction: string) => {
     const selectedData = createSelectedData(props.card, cardAction, GameStoreActionTypes.PlayerAction);
     dispatch(setSelectedActionData(selectedData));
+
+    if(isOrder(props.card) && props.card.requirement.length > 0)
+      return;
+      
     dispatch(setShowHand(false));
   }
 

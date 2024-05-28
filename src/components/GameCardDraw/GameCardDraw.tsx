@@ -36,9 +36,9 @@ const GameCardDraw: FC<CardProps> = (props) => {
       </div>}
 
       {isAction(props.card) && <div className={styles.CardStats}>
-        <div>Type: {props.card.actionType}</div>
-        <div>Stat: {props.card.dmgStat} </div>
-        <div>Damage: {props.card.dmgModifier} {props.card.dmgModifierValue}</div>
+        <div>Type: {props.card.actionType} </div>
+        <div>Damage: {props.card.dmgStat} {props.card.dmgModifier} {props.card.dmgModifierValue} </div>
+        <div>Effect: {props.card.effectStat} {props.card.effectModifier} {props.card.effectModifierValue} </div>
       </div>}
 
       {isChampion(props.card) && <div className={styles.CardStats}>

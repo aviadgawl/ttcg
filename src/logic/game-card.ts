@@ -1,4 +1,35 @@
-import { ActionDirections, Stats, ActionType, GearCategory, MathModifier, EffectStatus } from './enums';
+import { ActionDirections, Stats, ActionType, GearCategory, MathModifier, EffectStatus, CardType } from './enums';
+
+export interface ValidationResult {
+    message: string;
+    isValid: boolean;
+}
+
+export interface BoardLocation {
+    rowIndex: number;
+    columnIndex: number;
+}
+
+export interface AllowedBoardLocationResponse {
+    message: string;
+    locations: BoardLocation[];
+}
+
+export interface AllowedHandCardSelectResponse {
+    message: string;
+    handCards: GameCard[];
+}
+
+export interface OrderCardReward {
+    name: string,
+    amount: number
+}
+
+export interface OrderCardRequirement {
+    name: string,
+    amount: number,
+    cardType: CardType | null
+}
 
 export interface GameEffect {
     area: string,
@@ -38,6 +69,8 @@ export interface GearCard extends GameCard {
 export interface OrderCard extends GameCard {
     duration: number;
     info: string;
+    requirement: OrderCardRequirement[],
+    reward: OrderCardReward
 }
 
 export interface ActionCard extends GameCard {

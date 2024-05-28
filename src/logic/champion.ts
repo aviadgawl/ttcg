@@ -1,7 +1,6 @@
-import { GameCard, isCrystal, SummoningCard, ChampionCard, isChampion, ActionCard } from './game-card';
+import { GameCard, isCrystal, SummoningCard, ChampionCard, isChampion, ActionCard, AllowedBoardLocationResponse, BoardLocation } from './game-card';
 import { ActionDirections, GameStatus, ActionType, Stats, EffectStatus, MathModifier } from './enums';
 import { Game } from './game';
-import { AllowedBoardLocationResponse, BoardLocation, } from './common';
 import { Player } from './player';
 
 interface ChampionActionResult {

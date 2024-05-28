@@ -2,13 +2,12 @@ import { FC, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { championActions, playerActions, setSelectedActionData, initialState } from '../../redux/store';
 import { GameStoreActionTypes } from '../../redux/types';
-import { isCrystal, CrystalCard, isChampion } from '../../logic/game-card';
+import { isCrystal, CrystalCard, isChampion, BoardLocation } from '../../logic/game-card';
 import Button from '@mui/material/Button';
 import BoardChampion from '../BoardChampion/BoardChampion';
 import BoardCrystal from '../BoardCrystal/BoardCrystal';
 import { FaBullseye } from "react-icons/fa";
 import styles from './Board.module.css';
-import { BoardLocation } from '../../logic/common';
 
 const Board: FC = () => {
   const boardState = useAppSelector((state) => state.gameActions.game.board);

@@ -24,6 +24,10 @@
     justify-content: space-around;
 }
 
+.CardStats div {
+    padding: 3px;
+}
+
 .CardName {
     background-color: rgba(0,0,0,.5);
 }

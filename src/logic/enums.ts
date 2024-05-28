@@ -11,11 +11,11 @@ export enum Stats {
 }
 
 export enum ActionType {
-    Movement = 1,
-    Attack,
-    Ranged,
-    Magic,
-    Buff
+    Movement = 'Movement',
+    Attack = 'Attack',
+    Ranged = 'Ranged',
+    Magic = 'Magic',
+    Buff = 'Buff'
 }
 
 export enum GameStatus {
@@ -53,4 +53,8 @@ export enum EffectStatus {
     Burn = 'Burn',
     Poison = 'Poison',
     Immobilize = 'Immobilize'
+}
+
+export enum CardType {
+    OrderCard = 'OrderCard'
 }
