@@ -38,6 +38,13 @@ export interface GameEffect {
     duration: number
 }
 
+export interface StatusEffect {
+    name: EffectStatus,
+    duration: number,
+    stat: Stats|null,
+    value: number|null
+}
+
 export interface GameCard {
     playerIndex: number;
     image: string;
@@ -50,7 +57,7 @@ export interface SummoningCard extends GameCard {
     calHp: number;
     currentHp: number;
     isBlocking: boolean;
-    buffs: ActionCard[];
+    statusEffects: StatusEffect[];
 }
 
 export interface CrystalCard extends SummoningCard {
@@ -87,10 +94,7 @@ export interface ActionCard extends GameCard {
     requiredStatValue: number|null;
     requiredGearCategory: GearCategory|null;
     isFreeTargeting: boolean;
-    effectStat: Stats|null;
-    effectModifier: MathModifier|null,
-    effectModifierValue: number|null,
-    effectStatus: EffectStatus|null
+    targetEffects: StatusEffect[]
 }
 
 export interface ClassCard extends SummoningCard {

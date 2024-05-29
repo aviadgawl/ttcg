@@ -37,8 +37,11 @@ const GameCardDraw: FC<CardProps> = (props) => {
 
       {isAction(props.card) && <div className={styles.CardStats}>
         <div>Type: {props.card.actionType} </div>
-        <div>Damage: {props.card.dmgStat} {props.card.dmgModifier} {props.card.dmgModifierValue} </div>
-        <div>Effect: {props.card.effectStat} {props.card.effectModifier} {props.card.effectModifierValue} </div>
+        {props.card.dmgStat && <div>Damage: {props.card.dmgStat} {props.card.dmgModifier} {props.card.dmgModifierValue} </div>}
+        {props.card.targetEffects.length > 0 &&
+          <div>
+            Effects: {props.card.targetEffects.map((effect, index) => <div key={index}> {effect.name} {effect.stat} {effect.value} Duration: {effect.duration}</div>)}
+          </div>}
       </div>}
 
       {isChampion(props.card) && <div className={styles.CardStats}>
@@ -49,6 +52,7 @@ const GameCardDraw: FC<CardProps> = (props) => {
         <div>DEX: {props.card.calDex}</div>
         <div>INT: {props.card.calInt}</div>
         <div>Class: {props.card.calClass}</div>
+        <div className={styles.ChampionStatusEffect}>{props.card.statusEffects.map(effect => <span> {effect.name} </span>)}</div>
       </div>}
 
       <div className={styles.CardActions}>

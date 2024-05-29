@@ -52,7 +52,8 @@ export enum MathModifier {
 export enum EffectStatus {
     Burn = 'Burn',
     Poison = 'Poison',
-    Immobilize = 'Immobilize'
+    Immobilize = 'Immobilize',
+    PhysicalImmunity = 'Physical Immunity'
 }
 
 export enum CardType {

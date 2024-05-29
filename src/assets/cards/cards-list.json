@@ -50,7 +50,10 @@
         "name": "Basic Hit",
         "image": "https://firebasestorage.googleapis.com/v0/b/battlelordstoolapp.appspot.com/o/basic-hit.png?alt=media&token=877dfdd0-ddd9-43ab-afa4-4957510079a3",
         "duration": 0,
-        "distance": [1,1],
+        "distance": [
+            1,
+            1
+        ],
         "direction": "Straight",
         "dmgStat": "Str",
         "dmgModifier": null,
@@ -60,10 +63,7 @@
         "requiredStatValue": null,
         "requiredGearCategory": null,
         "isFreeTargeting": true,
-        "effectStat": null,
-        "effectModifier": null,
-        "effectModifierValue": null,
-        "effectStatus": null
+        "targetEffects": []
     },
     {
         "guid": "5",
@@ -72,7 +72,10 @@
         "name": "Step",
         "image": "https://firebasestorage.googleapis.com/v0/b/battlelordstoolapp.appspot.com/o/step.png?alt=media&token=2138e6a1-2b5c-44c4-a202-e48c8b298fd3",
         "duration": 0,
-        "distance": [-1,-1],
+        "distance": [
+            -1,
+            -1
+        ],
         "direction": "Straight",
         "dmgStat": "Str",
         "dmgModifier": null,
@@ -82,10 +85,7 @@
         "requiredStatValue": null,
         "requiredGearCategory": null,
         "isFreeTargeting": false,
-        "effectStat": null,
-        "effectModifier": null,
-        "effectModifierValue": null,
-        "effectStatus": null
+        "targetEffects": []
     },
     {
         "guid": "6",
@@ -94,7 +94,10 @@
         "name": "Dagger Throw",
         "image": "https://pics.craiyon.com/2023-10-08/42b36e89ac864496855393cd033a545a.webp",
         "duration": 0,
-        "distance": [0,3],
+        "distance": [
+            0,
+            3
+        ],
         "direction": "Straight",
         "dmgStat": "Dex",
         "dmgModifier": null,
@@ -104,10 +107,7 @@
         "requiredStatValue": null,
         "requiredGearCategory": null,
         "isFreeTargeting": true,
-        "effectStat": null,
-        "effectModifier": null,
-        "effectModifierValue": null,
-        "effectStatus": null
+        "targetEffects": []
     },
     {
         "guid": "7",
@@ -115,8 +115,17 @@
         "name": "Give Me More!",
         "image": "https://firebasestorage.googleapis.com/v0/b/battlelordstoolapp.appspot.com/o/give-me-more.png?alt=media&token=17ecd781-0429-455e-89a3-54a9ac27768f",
         "duration": 0,
-        "requirement": [{"name": "discard", "amount": 1, "cardType": null}],
-        "reward": { "name": "Draw", "amount": 2 },
+        "requirement": [
+            {
+                "name": "discard",
+                "amount": 1,
+                "cardType": null
+            }
+        ],
+        "reward": {
+            "name": "Draw",
+            "amount": 2
+        },
         "info": "Discard one card and draw two cards"
     },
     {
@@ -143,7 +152,10 @@
         "name": "Enrage",
         "image": "https://firebasestorage.googleapis.com/v0/b/battlelordstoolapp.appspot.com/o/enrage.png?alt=media&token=17d74bc3-98b1-475f-b9bc-69d33a96ca53",
         "duration": 0,
-        "distance": [0,0],
+        "distance": [
+            0,
+            0
+        ],
         "direction": "Straight",
         "dmgStat": null,
         "dmgModifier": null,
@@ -153,10 +165,14 @@
         "requiredStatValue": null,
         "requiredGearCategory": null,
         "isFreeTargeting": true,
-        "effectStat": "Str",
-        "effectModifier": 0,
-        "effectModifierValue": 2,
-        "effectStatus": "Immobilize"
+        "targetEffects": [
+            {
+                "name": "Immobilize",
+                "duration": 2,
+                "stat": null,
+                "value": null
+            }
+        ]
     },
     {
         "guid": "10",
@@ -165,7 +181,10 @@
         "name": "Dagger Slash",
         "image": "https://firebasestorage.googleapis.com/v0/b/battlelordstoolapp.appspot.com/o/dagger-slash.png?alt=media&token=0c64a5e3-b474-49c5-99f9-d078d7302c2d",
         "duration": 0,
-        "distance": [1,1],
+        "distance": [
+            1,
+            1
+        ],
         "direction": "Straight",
         "dmgStat": "Str",
         "dmgModifier": "Plus",
@@ -175,10 +194,7 @@
         "requiredStatValue": null,
         "requiredGearCategory": "Daggers",
         "isFreeTargeting": true,
-        "effectStat": null,
-        "effectModifier": null,
-        "effectModifierValue": null,
-        "effectStatus": null
+        "targetEffects": []
     },
     {
         "guid": "11",
@@ -200,7 +216,10 @@
         "name": "Mighty Blow",
         "image": "https://firebasestorage.googleapis.com/v0/b/battlelordstoolapp.appspot.com/o/mighty-blow.png?alt=media&token=1af1bc44-ec98-49eb-ae41-72563d7fa8d4",
         "duration": 0,
-        "distance": [1,1],
+        "distance": [
+            1,
+            1
+        ],
         "direction": "Straight",
         "dmgStat": "Str",
         "dmgModifier": "Plus",
@@ -210,9 +229,41 @@
         "requiredStatValue": 3,
         "requiredGearCategory": null,
         "isFreeTargeting": true,
-        "effectStat": null,
-        "effectModifier": null,
-        "effectModifierValue": null,
-        "effectStatus": null
+        "targetEffects": []
+    },
+    {
+        "guid": "13",
+        "type": "Action",
+        "actionType": "Buff",
+        "name": "Ultimate Defense",
+        "image": "https://firebasestorage.googleapis.com/v0/b/battlelordstoolapp.appspot.com/o/UltimateDefence.png?alt=media&token=a3207546-b535-422a-b0d9-15215980ac42",
+        "duration": 0,
+        "distance": [
+            0,
+            0
+        ],
+        "direction": "Straight",
+        "dmgStat": null,
+        "dmgModifier": null,
+        "dmgModifierValue": null,
+        "requiredClassName": null,
+        "requiredStat": null,
+        "requiredStatValue": null,
+        "requiredGearCategory": null,
+        "isFreeTargeting": true,
+        "targetEffects": [
+            {
+                "name": "PhysicalImmunity",
+                "duration": 2,
+                "stat": null,
+                "value": null
+            },
+            {
+                "name": "Immobilize",
+                "duration": 2,
+                "stat": null,
+                "value": null
+            }
+        ]
     }
 ]

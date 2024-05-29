@@ -69,10 +69,9 @@ const getStatByDmgStat = (champion: ChampionCard, damageStat: Stats | null): num
 }
 
 export const calculateStats = (champion: ChampionCard) => {
-    const strBuffsValue = champion.buffs.filter(x => x.effectStat === Stats.Str).reduce((accumulator, buff) => accumulator + (buff.effectModifierValue ?? 0), 0)
-    console.log(champion.buffs.filter(x => x.effectStat === Stats.Str));
-    const dexBuffsValue = champion.buffs.filter(x => x.effectStat === Stats.Dex).reduce((accumulator, buff) => accumulator + (buff.effectModifierValue ?? 0), 0)
-    const intBuffsValue = champion.buffs.filter(x => x.effectStat === Stats.Int).reduce((accumulator, buff) => accumulator + (buff.effectModifierValue ?? 0), 0)
+    const strBuffsValue = champion.statusEffects.filter(x => x.stat === Stats.Str).reduce((accumulator, effect) => accumulator + (effect.value ?? 0), 0)
+    const dexBuffsValue = champion.statusEffects.filter(x => x.stat === Stats.Dex).reduce((accumulator, effect) => accumulator + (effect.value ?? 0), 0)
+    const intBuffsValue = champion.statusEffects.filter(x => x.stat === Stats.Int).reduce((accumulator, effect) => accumulator + (effect.value ?? 0), 0)
 
     champion.calStr = champion.str + (champion.body?.str ?? 0) + (champion.rightHand?.str ?? 0) + (champion.leftHand?.str ?? 0) + (champion.upgrade?.str ?? 0) + strBuffsValue;
     champion.calDex = champion.dex + (champion.body?.dex ?? 0) + (champion.rightHand?.dex ?? 0) + (champion.leftHand?.dex ?? 0) + (champion.upgrade?.dex ?? 0) + dexBuffsValue;
@@ -91,7 +90,7 @@ export const moveChampion = (board: (GameCard | null)[][], entityToMove: Champio
 
     if (entityToMove.calDex <= 0) return { status: 'Dex must be higher than zero', targetedCard: null };
 
-    if (entityToMove.buffs.length > 0 && entityToMove.buffs.filter(x => x.effectStatus === EffectStatus.Immobilize))
+    if (entityToMove.statusEffects.length > 0 && entityToMove.statusEffects.filter(x => x.name === EffectStatus.Immobilize))
         return { status: `Champion is under the effect of ${EffectStatus.Immobilize}`, targetedCard: null };
 
     const distance = calculateDistance(sourceLocation, targetLocation);
@@ -125,8 +124,8 @@ export const attack = (board: (GameCard | null)[][], attackingChampion: Champion
     if (actionCard.dmgStat !== null)
         applyPhysicalDamage(attackingChampion, actionCard, target);
 
-    if (actionCard.effectStat !== null && isChampion(target)) {
-        target.buffs.push(actionCard);
+    if (actionCard.targetEffects.length > 0 && isChampion(target)) {
+        target.statusEffects = target.statusEffects.concat(actionCard.targetEffects);
         calculateStats(target);
     }
 
@@ -232,7 +231,7 @@ const getBoardLocationInStraightPath = (board: (GameCard | null)[][],
 
     const allowedLocations: BoardLocation[] = [];
 
-    if (isMovementCard && sourceChampion.buffs.some(x => x.effectStatus === EffectStatus.Immobilize))
+    if (isMovementCard && sourceChampion.statusEffects.some(x => x.name === EffectStatus.Immobilize))
         return allowedLocations;
 
     const stopOnBlockers = !actionCard.isFreeTargeting;
