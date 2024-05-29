@@ -77,7 +77,10 @@ const gameSlice = createSlice({
             const result = championAction(state.game, selectedData.card as ActionCard, selectedData.sourceLocation, targetLocation, selectedData.isAttachedAction);
 
             if (result !== 'success') alert(result);
-            else playSoundByCardActionName(selectedData.card.actionType);
+            else {
+                playSoundByCardActionName(selectedData.card.actionType);
+                state.selectedActionData = initialState.selectedActionData;
+            }
         },
         playerActions(state, action) {
             const { data } = action.payload;
@@ -85,7 +88,10 @@ const gameSlice = createSlice({
             const result = playerAction(actionName, state.game, { selectedCard: card, extendedData: data });
 
             if (result !== 'success') alert(result);
-            else playSoundByPlayerActionName(actionName);
+            else {
+                playSoundByPlayerActionName(actionName);
+                state.selectedActionData = initialState.selectedActionData;
+            }
         },
         setPlayer(state, action) {
             state.playerIndex = action.payload;

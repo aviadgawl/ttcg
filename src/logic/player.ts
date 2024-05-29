@@ -23,7 +23,7 @@ const getValidCardsForDiscard = (cards: GameCard[], orderCard: OrderCard): { car
 
     if (orderCardRequirements !== undefined) {
         const newCardAllowedToDiscard =
-            cards.filter(card => orderCardRequirements.cardType === null || (typeof card) === orderCardRequirements.cardType?.toString());
+            cards.filter(card => (orderCardRequirements.cardType === null || (typeof card) === orderCardRequirements.cardType?.toString()) && card.guid !== orderCard.guid);
         cardAllowedToDiscard = [...cardAllowedToDiscard, ...newCardAllowedToDiscard];
     }
 
@@ -116,10 +116,13 @@ export const playerAction = (action: string | null, game: Game, data: any) => {
     }
 }
 
-const playOrder = (game: Game, selectedCard: OrderCard, cardsPayment: GameCard[]|undefined): string => {
-    if(cardsPayment === undefined) return 'cardsPayment can not be undefined';
+const playOrder = (game: Game, selectedCard: OrderCard, cardsPayment: GameCard[] | undefined): string => {
+    if (cardsPayment === undefined) return 'cardsPayment can not be undefined';
 
     const { cardToDiscard, amountToDiscard } = getValidCardsForDiscard(cardsPayment, selectedCard);
+
+    if (cardToDiscard.some(x => x.guid === selectedCard.guid))
+        return 'You cant not discard the played order card as payment';
 
     if (cardToDiscard.length !== amountToDiscard)
         return `Valid cards to discard (${cardToDiscard.length}) is not equal to the requirement ${amountToDiscard}`;
@@ -134,6 +137,9 @@ const playOrder = (game: Game, selectedCard: OrderCard, cardsPayment: GameCard[]
     if (selectedCard.reward.name === 'Draw')
         draw(player, selectedCard.reward.amount);
 
+    removeCardFromHand(game, selectedCard);
+    player.usedCards.push(selectedCard);
+
     return 'success';
 }
 
@@ -147,8 +153,8 @@ const initialDraw = (player: Player): string => {
     return result;
 }
 
-const draw = (player: Player, amount: number|undefined): string => {
-    if(amount === undefined) return 'Amount can not be undefined';
+const draw = (player: Player, amount: number | undefined): string => {
+    if (amount === undefined) return 'Amount can not be undefined';
 
     if (player?.deck && player.deck.length < amount) return 'Not enough cards in deck';
 
@@ -167,8 +173,8 @@ const surrender = (game: Game) => {
     game.status = GameStatus.over;
 };
 
-const summon = (game: Game, selectedCard: ChampionCard, targetLocation: BoardLocation|undefined): string => {
-    if(targetLocation === undefined) return 'targetLocation can not be undefined';
+const summon = (game: Game, selectedCard: ChampionCard, targetLocation: BoardLocation | undefined): string => {
+    if (targetLocation === undefined) return 'targetLocation can not be undefined';
 
     const player = game.players[game.playerIndex];
 
@@ -215,8 +221,8 @@ const endTurn = (game: Game): string => {
     return 'success';
 }
 
-const equip = (game: Game, selectedCard: GearCard, targetLocation: BoardLocation|undefined): string => {
-    if(targetLocation === undefined) return 'targetLocation can not be undefined';
+const equip = (game: Game, selectedCard: GearCard, targetLocation: BoardLocation | undefined): string => {
+    if (targetLocation === undefined) return 'targetLocation can not be undefined';
 
     var targetChampion = game.board[targetLocation.rowIndex][targetLocation.columnIndex] as ChampionCard;
 
@@ -237,9 +243,9 @@ const equip = (game: Game, selectedCard: GearCard, targetLocation: BoardLocation
     return 'success';
 }
 
-const upgrade = (game: Game, selectedCard: ClassCard, targetLocation: BoardLocation|undefined): string => {
-    if(targetLocation === undefined) return 'targetLocation can not be undefined';
-    
+const upgrade = (game: Game, selectedCard: ClassCard, targetLocation: BoardLocation | undefined): string => {
+    if (targetLocation === undefined) return 'targetLocation can not be undefined';
+
     if (selectedCard === null) return 'Upgrade card can not be null';
 
     const targetChampion = game.board[targetLocation.rowIndex][targetLocation.columnIndex] as ChampionCard;
@@ -277,9 +283,9 @@ const addCardToDeck = (game: Game, selectedCard: GameCard) => {
     return 'success';
 }
 
-const attachAction = (game: Game, selectedCard: ActionCard, targetLocation: BoardLocation|undefined) => {
-    if(targetLocation === undefined) return 'targetLocation can not be undefined';
-    
+const attachAction = (game: Game, selectedCard: ActionCard, targetLocation: BoardLocation | undefined) => {
+    if (targetLocation === undefined) return 'targetLocation can not be undefined';
+
     if (selectedCard === null)
         return 'Action card can not be null';
 
