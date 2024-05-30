@@ -2,8 +2,6 @@ import { Player } from './player';
 import { GameCard, GearCard, CrystalCard, ChampionCard, ClassCard, ActionCard, OrderCard } from './game-card';
 import { ActionType, Stats, ActionDirections, GameStatus, GearCategory, MathModifier, EffectStatus } from './enums';
 import cardsListJson from '../assets/cards/cards-list.json';
-import { duration } from '@mui/material';
-import { stat } from 'fs';
 
 export const cardsList = cardsListJson.map(x => {
     switch (x.type) {

@@ -246,7 +246,7 @@
         "dmgStat": null,
         "dmgModifier": null,
         "dmgModifierValue": null,
-        "requiredClassName": null,
+        "requiredClassName": "Knight",
         "requiredStat": null,
         "requiredStatValue": null,
         "requiredGearCategory": null,

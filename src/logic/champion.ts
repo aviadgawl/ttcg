@@ -112,6 +112,9 @@ export const attack = (board: (GameCard | null)[][], attackingChampion: Champion
     const validTarget = checkValidTarget(target);
     if (!validTarget) return { status: 'Target is not a champion or crystal', targetedCard: target };
 
+    if (target.statusEffects.some(effect => effect.name === EffectStatus.PhysicalImmunity))
+        return { status: 'Target is immune to physical damage', targetedCard: target };
+
     const validDistance = checkAllowedDistance(actionCard.distance[1], actionCard.distance[0], sourceLocation, targetLocation);
     if (!validDistance) return { status: 'Location to far', targetedCard: target };
 

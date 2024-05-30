@@ -36,8 +36,10 @@ const GameCardDraw: FC<CardProps> = (props) => {
       </div>}
 
       {isAction(props.card) && <div className={styles.CardStats}>
-        <div>Type: {props.card.actionType} </div>
         {props.card.dmgStat && <div>Damage: {props.card.dmgStat} {props.card.dmgModifier} {props.card.dmgModifierValue} </div>}
+        {props.card.requiredClassName && <div className={styles.RequirementsText}>Class: {props.card.requiredClassName} </div>}
+        {props.card.requiredGearCategory && <div className={styles.RequirementsText}>Gear: {props.card.requiredGearCategory} </div>}
+        {props.card.requiredStat && <div className={styles.RequirementsText}>{props.card.requiredStat}: {props.card.requiredStatValue} </div>}
         {props.card.targetEffects.length > 0 &&
           <div>
             Effects: {props.card.targetEffects.map((effect, index) => <div key={index}> {effect.name} {effect.stat} {effect.value} Duration: {effect.duration}</div>)}
