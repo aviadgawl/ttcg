@@ -57,7 +57,6 @@ export interface SummoningCard extends GameCard {
     calHp: number;
     currentHp: number;
     isBlocking: boolean;
-    statusEffects: StatusEffect[];
 }
 
 export interface CrystalCard extends SummoningCard {
@@ -97,10 +96,11 @@ export interface ActionCard extends GameCard {
     targetEffects: StatusEffect[]
 }
 
-export interface ClassCard extends SummoningCard {
+export interface ClassCard extends GameCard {
     str: number;
     dex: number;
     int: number;
+    hp: number;
     learnedAction: string;
     requiredClassName: string;
     class: string;
@@ -130,6 +130,8 @@ export interface ChampionCard extends SummoningCard {
     class: string;
     calClass: string;
     upgrade: ClassCard | null;
+
+    statusEffects: StatusEffect[];
 }
 
 export const isCrystal = (value: any): value is CrystalCard => !!value?.effect || value?.effect === null;

@@ -33,7 +33,7 @@
     {
         "guid": "3",
         "type": "Gear",
-        "name": "Sword",
+        "name": "Simple Sword",
         "category": "Swords",
         "str": 2,
         "dex": 0,
@@ -199,7 +199,7 @@
     {
         "guid": "11",
         "type": "Gear",
-        "name": "Dagger",
+        "name": "Simple Dagger",
         "category": "Daggers",
         "str": 0,
         "dex": 2,
