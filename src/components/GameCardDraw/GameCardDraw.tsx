@@ -16,31 +16,31 @@ interface CardProps {
 const GameCardDraw: FC<CardProps> = (props) => {
   return <Card onClick={props.onClick} className={`${styles.Card} App-text-color`} style={{ backgroundImage: `url(${props.card.image})` }} sx={{ maxWidth: 345 }}>
     <CardContent className={styles.CardContent}>
-      <Typography className={styles.CardName} gutterBottom variant="h5" component="div">
+      {/* <Typography className={styles.CardName} gutterBottom variant="h5" component="div">
         {props.card.name}
-      </Typography>
+      </Typography> */}
 
-      {isOrder(props.card) && <Typography variant='body2'>
+      {/* {isOrder(props.card) && <Typography variant='body2'>
         {props.card.info}
-      </Typography>}
+      </Typography>} */}
 
-      {(isClass(props.card) || isGear(props.card)) && <div className={styles.CardStats}>
+      {/* {(isClass(props.card) || isGear(props.card)) && <div className={styles.CardStats}>
         {props.card.hp > 0 && <div>HP: {props.card.hp}</div>}
         {props.card.str > 0 && <div>STR: {props.card.str}</div>}
         {props.card.dex > 0 && <div>DEX: {props.card.dex}</div>}
         {props.card.int > 0 && <div>INT: {props.card.int}</div>}
-      </div>}
+      </div>} */}
 
-      {isClass(props.card) && <div className={styles.CardStats}>
+      {/* {isClass(props.card) && <div className={styles.CardStats}>
         {props.card.requiredClassName && <div className={styles.RequirementsText}>Class: {props.card.requiredClassName} </div>}
         {props.showChampionCardActions && <Typography>{props.card.learnedAction}</Typography>}
       </div>}
 
       {isGear(props.card) && <div className={styles.CardStats}>
         <div>Category: {props.card.category}</div>
-      </div>}
+      </div>} */}
 
-      {isAction(props.card) && <div className={styles.CardStats}>
+      {/* {isAction(props.card) && <div className={styles.CardStats}>
         {props.card.dmgStat && <div>Damage: {props.card.dmgStat} {props.card.dmgModifier} {props.card.dmgModifierValue} </div>}
         {props.card.requiredClassName && <div className={styles.RequirementsText}>Class: {props.card.requiredClassName} </div>}
         {props.card.requiredGearCategory && <div className={styles.RequirementsText}>Gear: {props.card.requiredGearCategory} </div>}
@@ -49,7 +49,7 @@ const GameCardDraw: FC<CardProps> = (props) => {
           <div>
             Effects: {props.card.targetEffects.map((effect, index) => <div key={index}> {effect.name} {effect.stat} {effect.value} Duration: {effect.duration}</div>)}
           </div>}
-      </div>}
+      </div>} */}
 
       {isChampion(props.card) && <div className={styles.CardStats}>
         <div>HP: {props.card.currentHp} / {props.card.calHp}</div>
@@ -60,7 +60,7 @@ const GameCardDraw: FC<CardProps> = (props) => {
         <div>INT: {props.card.calInt}</div>
         <div>Class: {props.card.calClass}</div>
         <div className={styles.ChampionStatusEffect}>{props.card.statusEffects.map(effect => <span> {effect.name} </span>)}</div>
-        {isChampion(props.card) && <>
+        {props.showChampionCardActions && isChampion(props.card) && <>
           {props.card.learnedActions.map((action, actionIndex) =>
             <Typography key={actionIndex}>{action}</Typography>
           )}</>}

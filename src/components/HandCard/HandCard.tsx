@@ -6,7 +6,6 @@ import { setSelectedActionData, setShowHand, createSelectedData } from '../../re
 import { GameStoreActionTypes } from '../../redux/types';
 import Button from '@mui/material/Button';
 import GameCardDraw from '../GameCardDraw/GameCardDraw';
-import styles from './HandCard.module.css';
 
 export enum HandCardMode {
   DeckBuilding = 1,

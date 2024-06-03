@@ -61,7 +61,7 @@ export const cardsList = cardsListJson.map(x => {
                 playerIndex: 0,
                 guid: x.guid,
                 name: x.name,
-                image: x.image,
+                image: getImage(x.name),
                 duration: x.duration,
                 info: x.info,
                 requirement: x.requirement,

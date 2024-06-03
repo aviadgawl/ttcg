@@ -129,6 +129,9 @@ const playOrder = (game: Game, selectedCard: OrderCard, cardsPayment: GameCard[]
 
     const player = game.players[game.playerIndex];
 
+    if (selectedCard.reward.name === 'Draw' && player.deck.length < selectedCard.reward.amount) 
+        return `Not enough cards in deck, in deck ${player.deck.length} amount to draw: ${selectedCard.reward.amount}`;
+
     cardToDiscard.forEach(card => {
         removeCardFromHand(game, card);
         player.usedCards.push(card);

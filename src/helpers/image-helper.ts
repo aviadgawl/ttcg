@@ -12,6 +12,8 @@ import DaggerSlash from '../assets/images/DaggerSlash.png';
 import DaggerThrow from '../assets/images/DaggerThrow.png';
 import Enrage from '../assets/images/Enrage.png';
 import UltimateDefense from '../assets/images/UltimateDefense.png';
+// Orders
+import GiveMeMore from '../assets/images/GiveMeMore.png';
 
 export const getImage = (id: string): string => {
     switch (id) {
@@ -40,6 +42,9 @@ export const getImage = (id: string): string => {
             return Enrage;
         case 'Ultimate Defense':
             return UltimateDefense;
+        // Orders
+        case 'Give Me More!':
+            return GiveMeMore;
         default:
             return '';
     }
