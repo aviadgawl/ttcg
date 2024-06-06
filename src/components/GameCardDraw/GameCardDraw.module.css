@@ -43,3 +43,12 @@
 .RequirementsText {
     color: yellow;
 }
+
+.DialogContent {
+    padding: 0px!important;
+    background-color: black;
+}
+
+.CardImage {
+    height: 500px;
+}

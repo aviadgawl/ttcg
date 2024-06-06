@@ -3,7 +3,6 @@
         "guid": "1",
         "type": "Champion",
         "name": "Eduard",
-        "image": "https://firebasestorage.googleapis.com/v0/b/battlelordstoolapp.appspot.com/o/eduard.png?alt=media&token=5a6972f0-7bd8-4e46-a194-dfa5c7af1204",
         "hp": 2,
         "str": 2,
         "dex": 2,
@@ -27,7 +26,6 @@
         "hp": 4,
         "action": "Block",
         "requiredClass": "Fighter",
-        "image": "https://firebasestorage.googleapis.com/v0/b/battlelordstoolapp.appspot.com/o/class-knight.png?alt=media&token=c8135d58-5852-4b9a-ad94-448d892532b5",
         "isBlocking": false
     },
     {
@@ -40,7 +38,6 @@
         "int": 0,
         "hp": 0,
         "bodyPart": "Hand",
-        "image": "https://firebasestorage.googleapis.com/v0/b/battlelordstoolapp.appspot.com/o/simple-sword.png?alt=media&token=45185798-8942-415a-a36f-6358e012c559",
         "isBlocking": false
     },
     {
@@ -48,7 +45,6 @@
         "type": "Action",
         "actionType": "Attack",
         "name": "Basic Hit",
-        "image": "https://firebasestorage.googleapis.com/v0/b/battlelordstoolapp.appspot.com/o/basic-hit.png?alt=media&token=877dfdd0-ddd9-43ab-afa4-4957510079a3",
         "duration": 0,
         "distance": [
             1,
@@ -70,7 +66,6 @@
         "type": "Action",
         "actionType": "Movement",
         "name": "Step",
-        "image": "https://firebasestorage.googleapis.com/v0/b/battlelordstoolapp.appspot.com/o/step.png?alt=media&token=2138e6a1-2b5c-44c4-a202-e48c8b298fd3",
         "duration": 0,
         "distance": [
             -1,
@@ -92,7 +87,6 @@
         "type": "Action",
         "actionType": "Attack",
         "name": "Dagger Throw",
-        "image": "https://pics.craiyon.com/2023-10-08/42b36e89ac864496855393cd033a545a.webp",
         "duration": 0,
         "distance": [
             0,
@@ -113,7 +107,6 @@
         "guid": "7",
         "type": "Order",
         "name": "Give Me More!",
-        "image": "https://firebasestorage.googleapis.com/v0/b/battlelordstoolapp.appspot.com/o/give-me-more.png?alt=media&token=17ecd781-0429-455e-89a3-54a9ac27768f",
         "duration": 0,
         "requirement": [
             {
@@ -132,7 +125,6 @@
         "guid": "8",
         "type": "Champion",
         "name": "Robin",
-        "image": "https://firebasestorage.googleapis.com/v0/b/battlelordstoolapp.appspot.com/o/robin.jpg?alt=media&token=c2317e4e-1fa6-4df4-be85-80a385f92790",
         "hp": 9,
         "str": 1,
         "dex": 2,
@@ -150,7 +142,6 @@
         "type": "Action",
         "actionType": "Buff",
         "name": "Enrage",
-        "image": "https://firebasestorage.googleapis.com/v0/b/battlelordstoolapp.appspot.com/o/enrage.png?alt=media&token=17d74bc3-98b1-475f-b9bc-69d33a96ca53",
         "duration": 0,
         "distance": [
             0,
@@ -179,7 +170,6 @@
         "type": "Action",
         "actionType": "Attack",
         "name": "Dagger Slash",
-        "image": "https://firebasestorage.googleapis.com/v0/b/battlelordstoolapp.appspot.com/o/dagger-slash.png?alt=media&token=0c64a5e3-b474-49c5-99f9-d078d7302c2d",
         "duration": 0,
         "distance": [
             1,
@@ -206,7 +196,6 @@
         "int": 0,
         "hp": 0,
         "bodyPart": "Hand",
-        "image": "https://firebasestorage.googleapis.com/v0/b/battlelordstoolapp.appspot.com/o/dagger.jpg?alt=media&token=5ef0e203-19b8-4d94-a430-fac5296592f5",
         "isBlocking": false
     },
     {
@@ -214,7 +203,6 @@
         "type": "Action",
         "actionType": "Attack",
         "name": "Mighty Blow",
-        "image": "https://firebasestorage.googleapis.com/v0/b/battlelordstoolapp.appspot.com/o/mighty-blow.png?alt=media&token=1af1bc44-ec98-49eb-ae41-72563d7fa8d4",
         "duration": 0,
         "distance": [
             1,
@@ -236,7 +224,74 @@
         "type": "Action",
         "actionType": "Buff",
         "name": "Ultimate Defense",
-        "image": "https://firebasestorage.googleapis.com/v0/b/battlelordstoolapp.appspot.com/o/UltimateDefence.png?alt=media&token=a3207546-b535-422a-b0d9-15215980ac42",
+        "duration": 0,
+        "distance": [
+            0,
+            0
+        ],
+        "direction": "Straight",
+        "dmgStat": null,
+        "dmgModifier": null,
+        "dmgModifierValue": null,
+        "requiredClassName": "Knight",
+        "requiredStat": null,
+        "requiredStatValue": null,
+        "requiredGearCategory": null,
+        "isFreeTargeting": true,
+        "targetEffects": [
+            {
+                "name": "PhysicalImmunity",
+                "duration": 2,
+                "stat": null,
+                "value": null
+            },
+            {
+                "name": "Immobilize",
+                "duration": 2,
+                "stat": null,
+                "value": null
+            }
+        ]
+    },
+    {
+        "guid": "14",
+        "type": "Action",
+        "actionType": "Buff",
+        "name": "Ultimate Defense",
+        "duration": 0,
+        "distance": [
+            0,
+            0
+        ],
+        "direction": "Straight",
+        "dmgStat": null,
+        "dmgModifier": null,
+        "dmgModifierValue": null,
+        "requiredClassName": "Knight",
+        "requiredStat": null,
+        "requiredStatValue": null,
+        "requiredGearCategory": null,
+        "isFreeTargeting": true,
+        "targetEffects": [
+            {
+                "name": "PhysicalImmunity",
+                "duration": 2,
+                "stat": null,
+                "value": null
+            },
+            {
+                "name": "Immobilize",
+                "duration": 2,
+                "stat": null,
+                "value": null
+            }
+        ]
+    },
+    {
+        "guid": "15",
+        "type": "Action",
+        "actionType": "Buff",
+        "name": "Ultimate Defense",
         "duration": 0,
         "distance": [
             0,

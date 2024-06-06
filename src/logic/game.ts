@@ -22,7 +22,7 @@ export const cardsList = cardsListJson.map(x => {
                 guid: x.guid, name: x.name, class: x.class,
                 str: x.str, dex: x.dex, int: x.int, hp: x.hp, learnedAction: x.action,
                 requiredClassName: x.requiredClass, currentHp: 0,
-                image: x.image, playerIndex: 0, isBlocking: x.isBlocking
+                image: getImage(x.name), playerIndex: 0, isBlocking: x.isBlocking
             } as ClassCard
         case 'Gear':
             return {

@@ -1,6 +1,8 @@
 // Champions
 import EduardImage from '../assets/images/Eduard.png';
 import RobinImage from '../assets/images/Robin.png';
+// Upgrades
+import HighKnightImage from '../assets/images/HighKnight.png';
 // Gear
 import SimpleSword from '../assets/images/SimpleSword.png';
 import SimpleDagger from '../assets/images/SimpleDagger.png';
@@ -22,6 +24,9 @@ export const getImage = (id: string): string => {
             return EduardImage;
         case 'Robin':
             return RobinImage;
+        // Upgrades
+        case 'High Knight':
+            return HighKnightImage;
         // Gear
         case 'Simple Sword':
             return SimpleSword;

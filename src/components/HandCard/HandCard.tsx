@@ -30,7 +30,7 @@ const HandCard: FC<CardProps> = (props) => {
     dispatch(setShowHand(false));
   }
 
-  return <GameCardDraw showChampionCardActions={true} card={props.card}>
+  return <GameCardDraw zoom={true} card={props.card}>
     {props.mode === HandCardMode.Hand && <>
       {isClass(props.card) && <Button className="App-button" variant="contained" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Upgrade)}>
         {PlayerActionsName.Upgrade} </Button>}

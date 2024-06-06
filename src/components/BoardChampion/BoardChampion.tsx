@@ -62,7 +62,7 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
       className={styles.Dialog}
       onClose={handleClose}>
       <DialogContent className={styles.DialogContent}>
-        <GameCardDraw showChampionCardActions={false} card={props.champion}>
+        <GameCardDraw showChampionStats={true} card={props.champion}>
           <div>
             {props.champion.learnedActionsCards.map((card, actionIndex) =>
               <Button disabled={props.champion.stm <= 0} size="small" variant="contained" className="App-button" key={actionIndex}
