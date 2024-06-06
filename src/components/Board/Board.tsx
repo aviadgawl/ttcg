@@ -8,6 +8,7 @@ import BoardChampion from '../BoardChampion/BoardChampion';
 import BoardCrystal from '../BoardCrystal/BoardCrystal';
 import { FaBullseye } from "react-icons/fa";
 import styles from './Board.module.css';
+import BackGroundImage from '../../assets/images/background.jpg';
 
 const Board: FC = () => {
   const boardState = useAppSelector((state) => state.gameActions.game.board);
@@ -49,7 +50,7 @@ const Board: FC = () => {
   const shouldRotate = playingPlayerIndex === 1;
 
   return (
-    <table className={`${styles.Board} ${shouldRotate ? 'App-rotate' : ''}`} >
+    <table style={{backgroundImage: BackGroundImage}} className={`${styles.Board} ${shouldRotate ? 'App-rotate' : ''}`} >
       <tbody>
         {boardState.map((row, rowIndex) => {
           return <tr key={`${rowIndex}`}>

@@ -24,26 +24,31 @@ const HandCard: FC<CardProps> = (props) => {
     const selectedData = createSelectedData(props.card, cardAction, GameStoreActionTypes.PlayerAction);
     dispatch(setSelectedActionData(selectedData));
 
-    if(isOrder(props.card) && props.card.requirement.length > 0)
+    if (isOrder(props.card) && props.card.requirement.length > 0)
       return;
-      
+
     dispatch(setShowHand(false));
   }
 
-  return <GameCardDraw zoom={true} card={props.card}>
-    {props.mode === HandCardMode.Hand && <>
-      {isClass(props.card) && <Button className="App-button" variant="contained" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Upgrade)}>
+  return <div>
+    <GameCardDraw zoom={true} card={props.card} />
+    {props.mode === HandCardMode.Hand && <div>
+      {isClass(props.card) && <Button variant="outlined" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Upgrade)}>
         {PlayerActionsName.Upgrade} </Button>}
-      {isGear(props.card) && <Button className="App-button" variant="contained" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Equip)}>
+
+      {isGear(props.card) && <Button variant="outlined" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Equip)}>
         {PlayerActionsName.Equip} </Button>}
-      {isChampion(props.card) && <Button className="App-button" variant="contained" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Summon)}>
+
+      {isChampion(props.card) && <Button variant="outlined" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Summon)}>
         {PlayerActionsName.Summon} </Button>}
-      {isAction(props.card) && <Button className="App-button" variant="contained" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Attach)}>
+
+      {isAction(props.card) && <Button variant="outlined" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Attach)}>
         {PlayerActionsName.Attach} </Button>}
-      {isOrder(props.card) && <Button className="App-button" variant="contained" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.PlayOrder)}>
+
+      {isOrder(props.card) && <Button variant="outlined" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.PlayOrder)}>
         {PlayerActionsName.PlayOrder} </Button>}
-    </>}
-  </GameCardDraw>;
-};
+    </div>}
+  </div>;
+}
 
 export default HandCard;
