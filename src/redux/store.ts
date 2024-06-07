@@ -125,6 +125,9 @@ const gameSlice = createSlice({
         },
         setDialog(state, action) {
             state.dialog = action.payload;
+        },
+        setGameStatus(state, action) {
+            state.game.status = action.payload;
         }
     }
 });
@@ -142,6 +145,7 @@ export const {
     setSelectedActionData,
     setDialog,
     setPlayer,
+    setGameStatus,
 } = gameSlice.actions;
 
 export type AppDispatch = typeof store.dispatch;

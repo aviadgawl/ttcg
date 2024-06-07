@@ -21,7 +21,8 @@ export enum ActionType {
 export enum GameStatus {
     starting = 1,
     onGoing,
-    over
+    over,
+    started
 }
 
 export enum GearCategory {
