@@ -12,9 +12,11 @@ import BackGroundImage from '../../assets/images/background.jpg';
 
 const Board: FC = () => {
   const boardState = useAppSelector((state) => state.gameActions.game.board);
-  const playingPlayerIndex = useAppSelector((state) => state.gameActions.game.playingPlayerIndex);
+  const playerIndex = useAppSelector((state) => state.gameActions.game.playerIndex);
   const selectedActionData = useAppSelector((state) => state.gameActions.selectedActionData);
   const dispatch = useAppDispatch();
+
+  const shouldRotate = playerIndex === 1;
 
   useEffect(() => {
 
@@ -46,8 +48,6 @@ const Board: FC = () => {
 
     return selectedActionData.allowedBoardLocations.some(loc => loc.rowIndex === rowIndex && loc.columnIndex === columnIndex);
   }
-
-  const shouldRotate = playingPlayerIndex === 1;
 
   return (
     <table style={{backgroundImage: BackGroundImage}} className={`${styles.Board} ${shouldRotate ? 'App-rotate' : ''}`} >

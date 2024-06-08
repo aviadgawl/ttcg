@@ -6,9 +6,10 @@ interface GameDetailsProps {}
 
 const GameDetails: FC<GameDetailsProps> = () => {
   const playingPlayer = useAppSelector((state) => state.gameActions.game.playingPlayerIndex);
+  const playerIndex = useAppSelector((state) => state.gameActions.game.playerIndex);
 
   return <div className={styles.GameDetails}>
-    <h1>Playing Player: {playingPlayer + 1}</h1>
+    <h1>Player Number: {playerIndex + 1} | Playing Player: {playingPlayer + 1}</h1>
   </div>
 };
 

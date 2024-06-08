@@ -131,6 +131,15 @@ const gameSlice = createSlice({
         },
         setGame(state, action) {
             state.game = action.payload;
+        },
+        setPartialGame(state, action) {
+            const updatedGame = {
+                ...state.game,
+                players: action.payload.players,
+                board: action.payload.board,
+                playingPlayerIndex: action.payload.playingPlayerIndex
+            };
+            state.game = updatedGame;
         }
     }
 });
@@ -150,6 +159,7 @@ export const {
     setPlayer,
     setGameStatus,
     setGame,
+    setPartialGame,
 } = gameSlice.actions;
 
 export type AppDispatch = typeof store.dispatch;

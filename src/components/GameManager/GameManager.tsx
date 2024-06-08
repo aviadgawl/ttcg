@@ -6,7 +6,7 @@ import { GameStatus } from '../../logic/enums';
 import { Game } from '../../logic/game';
 import { gameSubscriber, getGameAsync, addGameAsync, updateGameAsync } from '../../firebase/firebase';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { setGameStatus, setGame } from '../../redux/store';
+import { setGameStatus, setGame, setPartialGame } from '../../redux/store';
 import Board from '../Board/Board';
 import GameDetails from '../GameDetails/GameDetails';
 import Hand from '../Hand/Hand';
@@ -42,12 +42,12 @@ const GameJoinCreate: FC<GameJoinCreateProps> = () => {
       alert(`Unable to join game ${gameCode}, game was over`);
       return;
     };
+    
+    game.players[1] = game.players[0];
+    game.playerIndex = 1;
+    dispatch(setGame(game));
 
-    activeGameRef.current = gameSubscriber(gameCode, (gameFromDb: Game) => {
-      dispatch(setGame(gameFromDb));
-    });
-
-    dispatch(setGameStatus(GameStatus.started));
+    gameUpdatesSubscriber();
   }
 
   const handleCreateGame = async () => {
@@ -60,6 +60,13 @@ const GameJoinCreate: FC<GameJoinCreateProps> = () => {
 
     await addGameAsync(gameCode, { ...game, status: GameStatus.started });
     dispatch(setGameStatus(GameStatus.started));
+    gameUpdatesSubscriber();
+  }
+
+  const gameUpdatesSubscriber = () => {
+    activeGameRef.current = gameSubscriber(gameCode, (gameFromDb: Game) => {
+      dispatch(setPartialGame(gameFromDb));
+    });
   }
 
   return <div className={styles.GameJoinCreate}>
