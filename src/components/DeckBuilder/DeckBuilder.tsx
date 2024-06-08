@@ -77,7 +77,7 @@ const DeckBuilder: FC = () => {
             <HandCard mode={HandCardMode.DeckBuilding} card={card} />
             <Button onClick={() => addCardToDeck(card as GameCard)}>Add to deck</Button>
           </div>
-        else return '';
+        else return <></>;
       })}
     </div>
   </div>

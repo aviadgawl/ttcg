@@ -281,6 +281,9 @@ const addCardToDeck = (game: Game, selectedCard: GameCard) => {
 
     const player = game.players[game.playerIndex];
 
+    if(player.deck.filter(card => card.name === selectedCard.name).length === 3)
+        return `Can not add more copies of ${selectedCard.name}`;
+
     player.deck.push(selectedCard);
 
     return 'success';

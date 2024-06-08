@@ -2,13 +2,10 @@
     display: flex;
 }
 
-.DeckBuilder > * {
-    flex: 10% 90%;
-}
-
 .Deck {
     border: 2px solid black;
     padding: 10px;
+    min-width: 200px;
 }
 
 .CardsCollection {
@@ -17,8 +14,4 @@
     flex: auto;
     flex-wrap: wrap;
     height: fit-content;
-}
-
-.CardsInHand {
-    
 }
