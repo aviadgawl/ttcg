@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import { cardsList } from '../../logic/game';
 import { PlayerActionsName } from '../../logic/enums';
 import HandCard, { HandCardMode } from '../HandCard/HandCard';
 import Button from '@mui/material/Button';
@@ -17,6 +16,7 @@ const groupBy = <T, K extends keyof any>(arr: T[], key: (i: T) => K) =>
 const DeckBuilder: FC = () => {
   const playerIndex = useAppSelector((state) => state.gameActions.game.playerIndex);
   const playerDeck = useAppSelector((state) => state.gameActions.game.players[playerIndex].deck);
+  const cardsList = useAppSelector((state) => state.gameActions.cardsList);
   const dispatch = useAppDispatch();
 
   const cardsInDeckGroupedByName = groupBy(playerDeck, card => card.name);

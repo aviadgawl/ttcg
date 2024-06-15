@@ -94,7 +94,7 @@ const getValidChampionsBoardLocations = (game: Game, selectedCard: GameCard | nu
     return { message: 'success', locations: locations };
 }
 
-export const playerAction = (action: string | null, game: Game, data: any) => {
+export const playerAction = (action: string | null, cardsList: GameCard[] ,game: Game, data: any) => {
     if (action === null) return 'Action can not be null';
 
     if(game.playingPlayerIndex !== game.playerIndex) 
@@ -118,9 +118,9 @@ export const playerAction = (action: string | null, game: Game, data: any) => {
         case PlayerActionsName.Upgrade:
             return upgrade(game, data.selectedCard as ClassCard, data.extendedData as BoardLocation);
         case PlayerActionsName.AddCardToDeck:
-            return addCardToDeck(game, data.selectedCard as GameCard);
+            return addCardToDeck(game, cardsList, data.selectedCard as GameCard);
         case PlayerActionsName.removeCardFromDeck:
-            return removeCardFromDeck(game, data.selectedCard as GameCard);
+            return removeCardFromDeck(game, cardsList, data.selectedCard as GameCard);
         case PlayerActionsName.Attach:
             return attachAction(game, data.selectedCard as ActionCard, data.extendedData as BoardLocation);
         case PlayerActionsName.PlayOrder:
@@ -290,13 +290,16 @@ const upgrade = (game: Game, selectedCard: ClassCard, targetLocation: BoardLocat
     return 'success';
 }
 
-const addCardToDeck = (game: Game, selectedCard: GameCard) => {
+const addCardToDeck = (game: Game, cardsList: GameCard[], selectedCard: GameCard) => {
     if (selectedCard === null) return 'Card can not be null';
 
     const player = game.players[game.playerIndex];
 
     if (player.deck.filter(card => card.name === selectedCard.name).length === 3)
         return `Can not add more copies of ${selectedCard.name}`;
+
+    const deletedCards = removeCard(cardsList, selectedCard);
+    if (deletedCards === null) return 'Error removing card from cards list';
 
     player.deck.push(selectedCard);
 
@@ -329,21 +332,22 @@ const attachAction = (game: Game, selectedCard: ActionCard, targetLocation: Boar
     return 'success';
 }
 
-const removeCardFromDeck = (game: Game, selectedCard: GameCard) => {
+const removeCardFromDeck = (game: Game, cardsList: GameCard[], selectedCard: GameCard) => {
     if (selectedCard === null) return 'Card can not be null';
 
     const player = game.players[game.playerIndex];
     const deletedCards = removeCard(player.deck, selectedCard);
 
-    if (deletedCards.length !== 1) return 'Error removing card from deck';
+    if (deletedCards === null) return 'Error removing card from deck';
+    cardsList.push(selectedCard);
 
     return 'success';
 }
 
-const removeCard = (cards: GameCard[], selectedCard: GameCard): GameCard[] => {
+const removeCard = (cards: GameCard[], selectedCard: GameCard): GameCard[]|null => {
     const cardIndexToRemove = cards.findIndex(card => card.guid === selectedCard.guid);
 
-    if (cardIndexToRemove === -1) return cards;
+    if (cardIndexToRemove === -1) return null;
 
     return cards.splice(cardIndexToRemove, 1);
 }

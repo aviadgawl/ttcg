@@ -1,5 +1,5 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
-import { createGame, Game } from '../logic/game';
+import { createGame, Game, cardsList } from '../logic/game';
 import { ActionCard, GameCard, isAction, isOrder, OrderCard, AllowedBoardLocationResponse, BoardLocation, AllowedHandCardSelectResponse } from '../logic/game-card';
 import { championAction, getChampionsActionsAllowedBoardLocations } from '../logic/champion';
 import { GameStatus } from '../logic/enums';
@@ -50,7 +50,8 @@ export const initialState = {
         allowedHandCardSelect: []
     } as SelectedData,
     showHand: false as boolean,
-    dialog: null as unknown as GameDialog
+    dialog: null as unknown as GameDialog,
+    cardsList: cardsList as GameCard[]
 }
 
 const gameSlice = createSlice({
@@ -89,7 +90,7 @@ const gameSlice = createSlice({
         playerActions(state, action) {
             const { data } = action.payload;
             const { card, actionName } = action.payload.selectedActionData ?? state.selectedActionData;
-            const result = playerAction(actionName, state.game, { selectedCard: card, extendedData: data });
+            const result = playerAction(actionName, state.cardsList, state.game, { selectedCard: card, extendedData: data });
 
             if (result !== 'success') alert(result);
             else {

@@ -50,7 +50,7 @@ const GameJoinCreate: FC<GameJoinCreateProps> = () => {
 
     dispatch(setJoinedGame(gameFromDb));
     const newSelectedActionData = createSelectedData(null, PlayerActionsName.Draw, GameStoreActionTypes.PlayerAction);
-    dispatch(playerActions({ selectedActionData: newSelectedActionData, data: 5}));
+    dispatch(playerActions({ selectedActionData: newSelectedActionData, data: 5 }));
     gameUpdatesSubscriber(1);
   }
 
@@ -64,7 +64,7 @@ const GameJoinCreate: FC<GameJoinCreateProps> = () => {
 
     dispatch(setCreatedGame(gameCode));
     const newSelectedActionData = createSelectedData(null, PlayerActionsName.Draw, GameStoreActionTypes.PlayerAction);
-    dispatch(playerActions({ selectedActionData: newSelectedActionData, data: 5}));
+    dispatch(playerActions({ selectedActionData: newSelectedActionData, data: 5 }));
     gameUpdatesSubscriber(0);
   }
 
