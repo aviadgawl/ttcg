@@ -1,12 +1,12 @@
-import { FC, useState, useRef, useEffect } from 'react';
+import { FC, useState, useRef } from 'react';
 import styles from './GameManager.module.css';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { GameStatus } from '../../logic/enums';
 import { Game } from '../../logic/game';
-import { gameSubscriber, getGameAsync, addGameAsync } from '../../firebase/firebase';
+import { gameSubscriber, getGameAsync, addGameAsync, updateGameAsync } from '../../firebase/firebase';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { setGameStatus, setGame, setPartialGame } from '../../redux/store';
+import { setGame, setPartialGame } from '../../redux/store';
 import Board from '../Board/Board';
 import GameDetails from '../GameDetails/GameDetails';
 import Hand from '../Hand/Hand';
@@ -47,9 +47,11 @@ const GameJoinCreate: FC<GameJoinCreateProps> = () => {
       return;
     };
 
-    const joinedGame = { ...game, player: [...game.players, game.players[0]], playerIndex: 1, code: gameCode, status: GameStatus.started };
+    const playerTwo = { ...game.players[0], name: 'Player Two' };
+    const joinedGame = { ...game, players: [gameFromDb.players[0], playerTwo], playerIndex: 1, code: gameCode, status: GameStatus.started };
+    
     dispatch(setGame(joinedGame));
-
+    await updateGameAsync(gameCode, joinedGame);
     gameUpdatesSubscriber(1);
   }
 
@@ -61,9 +63,9 @@ const GameJoinCreate: FC<GameJoinCreateProps> = () => {
       return;
     };
 
-    const newGame = { ...game, status: GameStatus.started, code: gameCode };
-    await addGameAsync(gameCode, newGame);
-    dispatch(setGameStatus(GameStatus.started));
+    const createdGame = { ...game, status: GameStatus.started, code: gameCode };
+    dispatch(setGame(createdGame));
+    await addGameAsync(gameCode, createdGame);
     gameUpdatesSubscriber(0);
   }
 

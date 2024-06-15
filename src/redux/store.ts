@@ -131,15 +131,13 @@ const gameSlice = createSlice({
         setDialog(state, action) {
             state.dialog = action.payload;
         },
-        setGameStatus(state, action) {
-            state.game.status = action.payload;
-        },
         setGame(state, action) {
             state.game = action.payload;
         },
         setPartialGame(state, action) {
             const updatedGame = {
                 ...state.game,
+                players: action.payload.players,
                 board: action.payload.board,
                 playingPlayerIndex: action.payload.playingPlayerIndex,
             };
@@ -161,7 +159,6 @@ export const {
     setSelectedActionData,
     setDialog,
     setPlayer,
-    setGameStatus,
     setGame,
     setPartialGame,
 } = gameSlice.actions;
