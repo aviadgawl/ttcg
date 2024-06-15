@@ -29,7 +29,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy": "react-scripts build & firebase deploy --only hosting:ttcg"
+    "deploy": "react-scripts build & firebase deploy --only hosting:ttcg",
+    "start:test": "set REACT_APP_NOT_SECRET_CODE=\"on\" && react-scripts start"
   },
   "eslintConfig": {
     "extends": [

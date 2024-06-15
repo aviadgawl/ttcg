@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { GameStatus } from '../../logic/enums';
 import { Game } from '../../logic/game';
-import { gameSubscriber, getGameAsync, addGameAsync, updateGameAsync } from '../../firebase/firebase';
+import { gameSubscriber, getGameAsync, addGameAsync } from '../../firebase/firebase';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { setGameStatus, setGame, setPartialGame } from '../../redux/store';
 import Board from '../Board/Board';
@@ -15,39 +15,42 @@ interface GameJoinCreateProps { }
 
 const GameJoinCreate: FC<GameJoinCreateProps> = () => {
   const [gameCode, setGameCode] = useState('');
-  const activeGameRef = useRef(null as any);
 
   const dispatch = useAppDispatch();
   const winner = useAppSelector((state) => state.gameActions.game.loser);
   const game = useAppSelector((state) => state.gameActions.game);
 
-  useEffect(() => {
-    if (game && game.status === GameStatus.started && gameCode !== '')
-      updateGameAsync(gameCode, game).catch(console.error);
+  const gameSubRef = useRef(null as any);
 
-  }, [game, gameCode]);
+  const gameUpdatesSubscriber = (playerIndex: number) => {
+    gameSubRef.current = gameSubscriber(gameCode, (gameFromDb: Game) => {
+
+      // Update state if the update was triggered not by the local player
+      if (gameFromDb.playerIndex !== playerIndex)
+        dispatch(setPartialGame(gameFromDb));
+    });
+  }
 
   if (game.status === GameStatus.over && winner !== null)
     alert(`Player ${winner.name} has lost!`);
 
   const handleJoinGame = async () => {
-    const game = await getGameAsync(gameCode);
+    const gameFromDb = await getGameAsync(gameCode);
 
-    if (game === null) {
+    if (gameFromDb === null) {
       alert(`Unable to join game ${gameCode}, game was not found`);
       return;
     };
 
-    if (game.status === GameStatus.over) {
+    if (gameFromDb.status === GameStatus.over) {
       alert(`Unable to join game ${gameCode}, game was over`);
       return;
     };
-    
-    game.players[1] = game.players[0];
-    game.playerIndex = 1;
-    dispatch(setGame(game));
 
-    gameUpdatesSubscriber();
+    const joinedGame = { ...game, player: [...game.players, game.players[0]], playerIndex: 1, code: gameCode, status: GameStatus.started };
+    dispatch(setGame(joinedGame));
+
+    gameUpdatesSubscriber(1);
   }
 
   const handleCreateGame = async () => {
@@ -58,15 +61,10 @@ const GameJoinCreate: FC<GameJoinCreateProps> = () => {
       return;
     };
 
-    await addGameAsync(gameCode, { ...game, status: GameStatus.started });
+    const newGame = { ...game, status: GameStatus.started, code: gameCode };
+    await addGameAsync(gameCode, newGame);
     dispatch(setGameStatus(GameStatus.started));
-    gameUpdatesSubscriber();
-  }
-
-  const gameUpdatesSubscriber = () => {
-    activeGameRef.current = gameSubscriber(gameCode, (gameFromDb: Game) => {
-      dispatch(setPartialGame(gameFromDb));
-    });
+    gameUpdatesSubscriber(0);
   }
 
   return <div className={styles.GameJoinCreate}>

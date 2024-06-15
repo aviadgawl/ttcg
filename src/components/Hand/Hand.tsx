@@ -10,10 +10,10 @@ import Button from '@mui/material/Button';
 import HandCard, { HandCardMode } from '../HandCard/HandCard';
 
 const Hand: FC = () => {
-  const playingPlayerIndex = useAppSelector((state) => state.gameActions.game.playingPlayerIndex);
-  const playerHand = useAppSelector((state) => state.gameActions.game.players[playingPlayerIndex].hand);
-  const playerDeck = useAppSelector((state) => state.gameActions.game.players[playingPlayerIndex].deck);
-  const playerUsedCards = useAppSelector((state) => state.gameActions.game.players[playingPlayerIndex].usedCards);
+  const playerIndex = useAppSelector((state) => state.gameActions.game.playerIndex);
+  const playerHand = useAppSelector((state) => state.gameActions.game.players[playerIndex].hand);
+  const playerDeck = useAppSelector((state) => state.gameActions.game.players[playerIndex].deck);
+  const playerUsedCards = useAppSelector((state) => state.gameActions.game.players[playerIndex].usedCards);
   const showHand = useAppSelector((state) => state.gameActions.showHand);
   const selectedActionData = useAppSelector((state) => state.gameActions.selectedActionData);
 

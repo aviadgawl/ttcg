@@ -73,6 +73,7 @@ export const cardsList = cardsListJson.map(x => {
 });
 
 export interface Game {
+    code: string;
     playingPlayerIndex: number;
     playerIndex: number;
     players: Player[];
@@ -91,7 +92,7 @@ export const createGame = (): Game => {
         else board[index] = [null, null, null, null, null, null, null, null];
     }
 
-    return { board: board, players: [mockPlayerOne], status: GameStatus.over, playerIndex: 0, playingPlayerIndex: 0, loser: null };
+    return { board: board, players: [mockPlayerOne], status: GameStatus.over, playerIndex: 0, playingPlayerIndex: 0, loser: null, code: '' };
 }
 
 const mockOrder: OrderCard = cardsList[6] as OrderCard;

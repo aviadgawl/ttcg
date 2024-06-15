@@ -6,3 +6,7 @@
 .App-content {
   padding: 5px;
 }
+
+.App-rotate {
+  transform: rotate(180deg);
+}

@@ -5,6 +5,7 @@ import { championAction, getChampionsActionsAllowedBoardLocations } from '../log
 import { playerAction, getPlayerActionsAllowedBoardLocations, getPlayerAllowedHandCardSelect } from '../logic/player';
 import { playSoundByPlayerActionName, playSoundByCardActionName } from '../helpers/audio-helper';
 import { GameStoreActionTypes } from './types';
+import { updateGameAsync } from '../firebase/firebase';
 
 export interface GameDialog {
     title: string;
@@ -80,6 +81,8 @@ const gameSlice = createSlice({
             else {
                 playSoundByCardActionName(selectedData.card.actionType);
                 state.selectedActionData = initialState.selectedActionData;
+                if (state.game.code !== '')
+                    updateGameAsync(state.game.code, state.game).catch(console.error);
             }
         },
         playerActions(state, action) {
@@ -91,6 +94,8 @@ const gameSlice = createSlice({
             else {
                 playSoundByPlayerActionName(actionName);
                 state.selectedActionData = initialState.selectedActionData;
+                if (state.game.code !== '')
+                    updateGameAsync(state.game.code, state.game).catch(console.error);
             }
         },
         setPlayer(state, action) {
@@ -135,9 +140,8 @@ const gameSlice = createSlice({
         setPartialGame(state, action) {
             const updatedGame = {
                 ...state.game,
-                players: action.payload.players,
                 board: action.payload.board,
-                playingPlayerIndex: action.payload.playingPlayerIndex
+                playingPlayerIndex: action.payload.playingPlayerIndex,
             };
             state.game = updatedGame;
         }
