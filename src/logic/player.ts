@@ -50,19 +50,30 @@ export const getPlayerActionsAllowedBoardLocations = (game: Game, actionName: st
     }
 }
 
+const getSummonBoardLocation = (game: Game, startingRow: number, endRow: number): BoardLocation[] => {
+    let locations: BoardLocation[] = [];
+
+    for (let rowIndex = startingRow; rowIndex < endRow; rowIndex++) {
+        for (let columnIndex = 0; columnIndex < game.board[rowIndex].length; columnIndex++) {
+            const boardLocation = game.board[rowIndex][columnIndex];
+
+            if (boardLocation === null)
+                locations.push({ rowIndex: rowIndex, columnIndex: columnIndex });
+        }
+    }
+
+    return locations;
+}
+
 const getSummonBoardLocations = (game: Game): AllowedBoardLocationResponse => {
     let locations: BoardLocation[] = [];
 
-    if (game.playerIndex === 0) {
-        for (let rowIndex = game.board.length - 2; rowIndex < game.board.length; rowIndex++) {
-            for (let columnIndex = 0; columnIndex < game.board[rowIndex].length; columnIndex++) {
-                const boardLocation = game.board[rowIndex][columnIndex];
-
-                if (boardLocation === null)
-                    locations.push({ rowIndex: rowIndex, columnIndex: columnIndex });
-            }
-        }
-    }
+    if (game.playerIndex === 0)
+        locations = getSummonBoardLocation(game, game.board.length - 2, game.board.length);
+    else if (game.playerIndex === 1)
+        locations = getSummonBoardLocation(game, 0, 2);
+    else
+        return { message: `PlayerIndex: ${game.playerIndex} is not supported`, locations: locations };
 
     return { message: 'success', locations: locations };
 }
@@ -85,6 +96,9 @@ const getValidChampionsBoardLocations = (game: Game, selectedCard: GameCard | nu
 
 export const playerAction = (action: string | null, game: Game, data: any) => {
     if (action === null) return 'Action can not be null';
+
+    if(game.playingPlayerIndex !== game.playerIndex) 
+        return `Player ${game.playerIndex + 1} can not play on other player (${game.playingPlayerIndex + 1}) turn`;
 
     const player = game.players[game.playerIndex];
 
@@ -129,7 +143,7 @@ const playOrder = (game: Game, selectedCard: OrderCard, cardsPayment: GameCard[]
 
     const player = game.players[game.playerIndex];
 
-    if (selectedCard.reward.name === 'Draw' && player.deck.length < selectedCard.reward.amount) 
+    if (selectedCard.reward.name === 'Draw' && player.deck.length < selectedCard.reward.amount)
         return `Not enough cards in deck, in deck ${player.deck.length} amount to draw: ${selectedCard.reward.amount}`;
 
     cardToDiscard.forEach(card => {
@@ -281,7 +295,7 @@ const addCardToDeck = (game: Game, selectedCard: GameCard) => {
 
     const player = game.players[game.playerIndex];
 
-    if(player.deck.filter(card => card.name === selectedCard.name).length === 3)
+    if (player.deck.filter(card => card.name === selectedCard.name).length === 3)
         return `Can not add more copies of ${selectedCard.name}`;
 
     player.deck.push(selectedCard);

@@ -185,6 +185,9 @@ export const checkBlockingObjects = (board: (GameCard | null)[][], sourceLocatio
 }
 
 export const championAction = (game: Game, actionCard: ActionCard, sourceLocation: BoardLocation, targetLocation: BoardLocation, isAttachedAction: boolean): string => {
+    if(game.playingPlayerIndex !== game.playerIndex) 
+        return `Player ${game.playerIndex + 1} can not play on other player (${game.playingPlayerIndex + 1}) turn`;
+    
     const sourceChampion = game.board[sourceLocation.rowIndex][sourceLocation.columnIndex];
 
     if (sourceChampion === null) return 'Entity was not found';

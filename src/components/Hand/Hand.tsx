@@ -21,9 +21,12 @@ const Hand: FC = () => {
 
   const [discardCards, setDiscardCards] = useState([] as GameCard[]);
 
-  const handleAction = (actionName: string) => {
+  const handleAction = (actionName: string, hideHand: boolean = false) => {
     const newSelectedActionData = createSelectedData(null, actionName, GameStoreActionTypes.PlayerAction);
     dispatch(playerActions({ selectedActionData: newSelectedActionData }));
+
+    if(hideHand)
+      dispatch(setShowHand(false));
   };
 
   const handleDiscardAction = (card: GameCard) => {
@@ -60,7 +63,7 @@ const Hand: FC = () => {
         <div className={styles.ButtonsContainer}>
           <h3> Used Cards: {playerUsedCards.length}</h3>
           <Button onClick={() => handleAction(PlayerActionsName.InitialDraw)} variant="outlined">Deck: {playerDeck.length}</Button>
-          <Button onClick={() => handleAction(PlayerActionsName.EndTurn)} variant="outlined">{PlayerActionsName.EndTurn}</Button>
+          <Button onClick={() => handleAction(PlayerActionsName.EndTurn, true)} variant="outlined">{PlayerActionsName.EndTurn}</Button>
           <Button onClick={() => handleAction(PlayerActionsName.Surrender)} variant="outlined">{PlayerActionsName.Surrender}</Button>
         </div>
         {playerHand.map((card, index) => <div className={discardCards.some(x => x.guid === card.guid) ? styles.DiscardCard : ''} key={index}>

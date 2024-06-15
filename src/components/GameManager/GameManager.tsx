@@ -6,7 +6,7 @@ import { GameStatus } from '../../logic/enums';
 import { Game } from '../../logic/game';
 import { gameSubscriber, getGameAsync, addGameAsync, updateGameAsync } from '../../firebase/firebase';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { setGame, setPartialGame } from '../../redux/store';
+import { setPartialGame, setJoinedGame, setCreatedGame } from '../../redux/store';
 import Board from '../Board/Board';
 import GameDetails from '../GameDetails/GameDetails';
 import Hand from '../Hand/Hand';
@@ -47,11 +47,7 @@ const GameJoinCreate: FC<GameJoinCreateProps> = () => {
       return;
     };
 
-    const playerTwo = { ...game.players[0], name: 'Player Two' };
-    const joinedGame = { ...game, players: [gameFromDb.players[0], playerTwo], playerIndex: 1, code: gameCode, status: GameStatus.started };
-    
-    dispatch(setGame(joinedGame));
-    await updateGameAsync(gameCode, joinedGame);
+    dispatch(setJoinedGame(gameFromDb));
     gameUpdatesSubscriber(1);
   }
 
@@ -63,9 +59,7 @@ const GameJoinCreate: FC<GameJoinCreateProps> = () => {
       return;
     };
 
-    const createdGame = { ...game, status: GameStatus.started, code: gameCode };
-    dispatch(setGame(createdGame));
-    await addGameAsync(gameCode, createdGame);
+    dispatch(setCreatedGame(gameCode));
     gameUpdatesSubscriber(0);
   }
 

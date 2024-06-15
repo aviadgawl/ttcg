@@ -4,11 +4,20 @@ import { ActionType, Stats, ActionDirections, GameStatus, GearCategory, MathModi
 import { getImage } from '../helpers/image-helper';
 import cardsListJson from '../assets/cards/cards-list.json';
 
+const createGuid = (): string => {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
+    .replace(/[xy]/g, function (c) {
+        const r = Math.random() * 16 | 0, 
+            v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
 export const cardsList = cardsListJson.map(x => {
     switch (x.type) {
         case 'Champion':
             return {
-                guid: x.guid, name: x.name, image: getImage(x.name), playerIndex: 0,
+                guid: createGuid(), name: x.name, image: getImage(x.name), playerIndex: 0,
                 isBlocking: x.isBlocking, hp: x.hp, currentHp: x.hp,
                 armor: x.str, str: x.str, calStr: x.str,
                 dex: x.dex, calDex: x.dex,
@@ -19,14 +28,14 @@ export const cardsList = cardsListJson.map(x => {
             } as ChampionCard;
         case 'Class':
             return {
-                guid: x.guid, name: x.name, class: x.class,
+                guid: createGuid(), name: x.name, class: x.class,
                 str: x.str, dex: x.dex, int: x.int, hp: x.hp, learnedAction: x.action,
                 requiredClassName: x.requiredClass, currentHp: 0,
                 image: getImage(x.name), playerIndex: 0, isBlocking: x.isBlocking
             } as ClassCard
         case 'Gear':
             return {
-                guid: x.guid, name: x.name, str: x.str,
+                guid: createGuid(), name: x.name, str: x.str,
                 dex: x.dex, int: x.int, hp: x.hp, currentHp: x.hp, bodyPart: x.bodyPart,
                 image: getImage(x.name), playerIndex: 0, isBlocking: x.isBlocking,
                 category: GearCategory[x.category as keyof typeof GearCategory]
@@ -34,7 +43,7 @@ export const cardsList = cardsListJson.map(x => {
         case 'Action':
             return {
                 playerIndex: 0,
-                guid: x.guid,
+                guid: createGuid(),
                 name: x.name,
                 image: getImage(x.name),
                 actionType: ActionType[x.actionType as keyof typeof ActionType],
@@ -59,7 +68,7 @@ export const cardsList = cardsListJson.map(x => {
         case 'Order':
             return {
                 playerIndex: 0,
-                guid: x.guid,
+                guid: createGuid(),
                 name: x.name,
                 image: getImage(x.name),
                 duration: x.duration,
@@ -92,7 +101,7 @@ export const createGame = (): Game => {
         else board[index] = [null, null, null, null, null, null, null, null];
     }
 
-    return { board: board, players: [mockPlayerOne, mockPlayerOne], status: GameStatus.started, playerIndex: 1, playingPlayerIndex: 1, loser: null, code: '' };
+    return { board: board, players: [mockPlayerOne], status: GameStatus.over, playerIndex: 0, playingPlayerIndex: 0, loser: null, code: '' };
 }
 
 const mockOrder: OrderCard = cardsList[6] as OrderCard;

@@ -2,10 +2,11 @@ import { configureStore, createSlice } from '@reduxjs/toolkit';
 import { createGame, Game } from '../logic/game';
 import { ActionCard, GameCard, isAction, isOrder, OrderCard, AllowedBoardLocationResponse, BoardLocation, AllowedHandCardSelectResponse } from '../logic/game-card';
 import { championAction, getChampionsActionsAllowedBoardLocations } from '../logic/champion';
+import { GameStatus } from '../logic/enums';
 import { playerAction, getPlayerActionsAllowedBoardLocations, getPlayerAllowedHandCardSelect } from '../logic/player';
 import { playSoundByPlayerActionName, playSoundByCardActionName } from '../helpers/audio-helper';
 import { GameStoreActionTypes } from './types';
-import { updateGameAsync } from '../firebase/firebase';
+import { updateGameAsync, addGameAsync } from '../firebase/firebase';
 
 export interface GameDialog {
     title: string;
@@ -82,7 +83,7 @@ const gameSlice = createSlice({
                 playSoundByCardActionName(selectedData.card.actionType);
                 state.selectedActionData = initialState.selectedActionData;
                 if (state.game.code !== '')
-                    updateGameAsync(state.game.code, state.game).catch(console.error);
+                    updateGameAsync(state.game).catch(console.error);
             }
         },
         playerActions(state, action) {
@@ -95,7 +96,7 @@ const gameSlice = createSlice({
                 playSoundByPlayerActionName(actionName);
                 state.selectedActionData = initialState.selectedActionData;
                 if (state.game.code !== '')
-                    updateGameAsync(state.game.code, state.game).catch(console.error);
+                    updateGameAsync(state.game).catch(console.error);
             }
         },
         setPlayer(state, action) {
@@ -134,6 +135,28 @@ const gameSlice = createSlice({
         setGame(state, action) {
             state.game = action.payload;
         },
+        setJoinedGame(state, action) {
+            const gameFromDb: Game = action.payload;
+
+            const localPlayer = state.game.players[0];
+            const playerTwoDeck = localPlayer.deck.map(card => {
+                return { ...card, playerIndex: 1 }
+            });
+            const playerTwo = { ...localPlayer, name: 'Player Two', deck: playerTwoDeck };
+            const joinedGame = { ...state.game, players: [gameFromDb.players[0], playerTwo], playerIndex: 1, code: gameFromDb.code, status: GameStatus.started };
+
+            state.game = joinedGame;
+
+            updateGameAsync(joinedGame).catch(console.error);
+        },
+        setCreatedGame(state, action) {
+            const gameCode: string = action.payload;
+            const createdGame: Game = { ...state.game, status: GameStatus.started, code: gameCode };
+
+            state.game = createdGame;
+
+            addGameAsync(createdGame).catch(console.error);
+        },
         setPartialGame(state, action) {
             const updatedGame = {
                 ...state.game,
@@ -161,6 +184,8 @@ export const {
     setPlayer,
     setGame,
     setPartialGame,
+    setJoinedGame,
+    setCreatedGame
 } = gameSlice.actions;
 
 export type AppDispatch = typeof store.dispatch;
