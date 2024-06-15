@@ -114,7 +114,7 @@ const actionCardDaggerThrow: ActionCard = cardsList[5] as ActionCard;
 const mockClass: ClassCard = cardsList[1] as ClassCard;
 const gearSword: GearCard = cardsList[2] as GearCard;
 const gearDagger: GearCard = cardsList[10] as GearCard;
-const mockPlayerOne: Player = { name: 'Player One', hand: [actionStep, mockChampion1, actionBasicHit], deck: [], usedCards: [], didDraw: false, summonsLeft: 1 };
+const mockPlayerOne: Player = { name: 'Player One', hand: [], deck: [actionStep, actionBasicHit], usedCards: [], didDraw: false, summonsLeft: 1 };
 const mockCrystalOne: CrystalCard = { image: 'https://img.freepik.com/premium-photo/magical-crystal-with-swirling-colors-digital-art-style-illustration_812426-6398.jpg',
  hp: 20, currentHp: 20, name: 'Warrior Spirit', guid: '5', effect: null, playerIndex: 0, isBlocking: true, calHp: 20 }
 const mockCrystalTwo: CrystalCard = { image: 'https://img.freepik.com/premium-photo/magical-crystal-with-swirling-colors-digital-art-style-illustration_812426-6466.jpg?w=740',

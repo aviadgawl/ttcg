@@ -132,9 +132,6 @@ const gameSlice = createSlice({
         setDialog(state, action) {
             state.dialog = action.payload;
         },
-        setGame(state, action) {
-            state.game = action.payload;
-        },
         setJoinedGame(state, action) {
             const gameFromDb: Game = action.payload;
 
@@ -182,7 +179,6 @@ export const {
     setSelectedActionData,
     setDialog,
     setPlayer,
-    setGame,
     setPartialGame,
     setJoinedGame,
     setCreatedGame

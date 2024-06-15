@@ -2,11 +2,12 @@ import { FC, useState, useRef } from 'react';
 import styles from './GameManager.module.css';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import { GameStatus } from '../../logic/enums';
+import { GameStatus, PlayerActionsName } from '../../logic/enums';
 import { Game } from '../../logic/game';
-import { gameSubscriber, getGameAsync, addGameAsync, updateGameAsync } from '../../firebase/firebase';
+import { gameSubscriber, getGameAsync } from '../../firebase/firebase';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { setPartialGame, setJoinedGame, setCreatedGame } from '../../redux/store';
+import { setPartialGame, setJoinedGame, setCreatedGame, createSelectedData, playerActions } from '../../redux/store';
+import { GameStoreActionTypes } from '../../redux/types';
 import Board from '../Board/Board';
 import GameDetails from '../GameDetails/GameDetails';
 import Hand from '../Hand/Hand';
@@ -48,6 +49,8 @@ const GameJoinCreate: FC<GameJoinCreateProps> = () => {
     };
 
     dispatch(setJoinedGame(gameFromDb));
+    const newSelectedActionData = createSelectedData(null, PlayerActionsName.Draw, GameStoreActionTypes.PlayerAction);
+    dispatch(playerActions({ selectedActionData: newSelectedActionData, data: 5}));
     gameUpdatesSubscriber(1);
   }
 
@@ -60,6 +63,8 @@ const GameJoinCreate: FC<GameJoinCreateProps> = () => {
     };
 
     dispatch(setCreatedGame(gameCode));
+    const newSelectedActionData = createSelectedData(null, PlayerActionsName.Draw, GameStoreActionTypes.PlayerAction);
+    dispatch(playerActions({ selectedActionData: newSelectedActionData, data: 5}));
     gameUpdatesSubscriber(0);
   }
 
