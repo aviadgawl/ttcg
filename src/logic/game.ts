@@ -6,79 +6,92 @@ import cardsListJson from '../assets/cards/cards-list.json';
 
 const createGuid = (): string => {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
-    .replace(/[xy]/g, function (c) {
-        const r = Math.random() * 16 | 0, 
-            v = c == 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-    });
+        .replace(/[xy]/g, function (c) {
+            const r = Math.random() * 16 | 0,
+                v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
 }
 
-export const cardsList = cardsListJson.map(x => {
-    switch (x.type) {
-        case 'Champion':
-            return {
-                guid: createGuid(), name: x.name, image: getImage(x.name), playerIndex: 0,
-                isBlocking: x.isBlocking, hp: x.hp, currentHp: x.hp,
-                armor: x.str, str: x.str, calStr: x.str,
-                dex: x.dex, calDex: x.dex,
-                int: x.int, calInt: x.int, mental: x.int,
-                stm: 2, learnedActions: x.actionsName, learnedActionsCards: [], attachedActionsCards: [], buffs: [], statusEffects: [],
-                body: null, rightHand: null, leftHand: null,
-                class: x.class, calClass: x.class, upgrade: null, calHp: x.hp
-            } as ChampionCard;
-        case 'Class':
-            return {
-                guid: createGuid(), name: x.name, class: x.class,
-                str: x.str, dex: x.dex, int: x.int, hp: x.hp, learnedAction: x.action,
-                requiredClassName: x.requiredClass, currentHp: 0,
-                image: getImage(x.name), playerIndex: 0, isBlocking: x.isBlocking
-            } as ClassCard
-        case 'Gear':
-            return {
-                guid: createGuid(), name: x.name, str: x.str,
-                dex: x.dex, int: x.int, hp: x.hp, currentHp: x.hp, bodyPart: x.bodyPart,
-                image: getImage(x.name), playerIndex: 0, isBlocking: x.isBlocking,
-                category: GearCategory[x.category as keyof typeof GearCategory]
-            } as GearCard
-        case 'Action':
-            return {
-                playerIndex: 0,
-                guid: createGuid(),
-                name: x.name,
-                image: getImage(x.name),
-                actionType: ActionType[x.actionType as keyof typeof ActionType],
-                duration: x.duration,
-                calDuration: x.duration,
-                distance: x.distance,
-                direction: ActionDirections[(x.direction ?? '') as keyof typeof ActionDirections],
-                dmgStat: Stats[(x.dmgStat ?? '') as keyof typeof Stats],
-                dmgModifier: MathModifier[(x.dmgModifier ?? '') as keyof typeof MathModifier],
-                dmgModifierValue: x.dmgModifierValue,
-                requiredClassName: x.requiredClassName,
-                requiredStat: Stats[(x.requiredStat ?? '') as keyof typeof Stats],
-                requiredStatValue: x.requiredStatValue,
-                requiredGearCategory: x.requiredGearCategory,
-                isFreeTargeting: x.isFreeTargeting,
-                targetEffects: x.targetEffects?.map(effect => {return {
-                    name: EffectStatus[(effect.name ?? '') as keyof typeof EffectStatus],
-                    duration: effect.duration,
-                    stat: effect.stat === null ? null : Stats[(effect.stat) as keyof typeof Stats],
-                    value: effect.value}})
-            } as ActionCard
-        case 'Order':
-            return {
-                playerIndex: 0,
-                guid: createGuid(),
-                name: x.name,
-                image: getImage(x.name),
-                duration: x.duration,
-                info: x.info,
-                requirement: x.requirement,
-                reward: x.reward
-            } as OrderCard
-        default:
-            return null;
+export const cardsList = cardsListJson.flatMap(x => {
+    const newCardsArray: GameCard[] = [];
+
+    for (let index = 0; index < 3; index++) {
+        switch (x.type) {
+            case 'Champion':
+                newCardsArray.push({
+                    guid: createGuid(), name: x.name, image: getImage(x.name), playerIndex: 0,
+                    isBlocking: x.isBlocking, hp: x.hp, currentHp: x.hp,
+                    armor: x.str, str: x.str, calStr: x.str,
+                    dex: x.dex, calDex: x.dex,
+                    int: x.int, calInt: x.int, mental: x.int,
+                    stm: 2, learnedActions: x.actionsName, learnedActionsCards: [], attachedActionsCards: [], buffs: [], statusEffects: [],
+                    body: null, rightHand: null, leftHand: null,
+                    class: x.class, calClass: x.class, upgrade: null, calHp: x.hp
+                } as ChampionCard);
+                break;
+            case 'Class':
+                newCardsArray.push({
+                    guid: createGuid(), name: x.name, class: x.class,
+                    str: x.str, dex: x.dex, int: x.int, hp: x.hp, learnedAction: x.action,
+                    requiredClassName: x.requiredClass, currentHp: 0,
+                    image: getImage(x.name), playerIndex: 0, isBlocking: x.isBlocking
+                } as ClassCard);
+                break;
+            case 'Gear':
+                newCardsArray.push({
+                    guid: createGuid(), name: x.name, str: x.str,
+                    dex: x.dex, int: x.int, hp: x.hp, currentHp: x.hp, bodyPart: x.bodyPart,
+                    image: getImage(x.name), playerIndex: 0, isBlocking: x.isBlocking,
+                    category: GearCategory[x.category as keyof typeof GearCategory]
+                } as GearCard);
+                break;
+            case 'Action':
+                newCardsArray.push({
+                    playerIndex: 0,
+                    guid: createGuid(),
+                    name: x.name,
+                    image: getImage(x.name),
+                    actionType: ActionType[x.actionType as keyof typeof ActionType],
+                    duration: x.duration,
+                    calDuration: x.duration,
+                    distance: x.distance,
+                    direction: ActionDirections[(x.direction ?? '') as keyof typeof ActionDirections],
+                    dmgStat: Stats[(x.dmgStat ?? '') as keyof typeof Stats],
+                    dmgModifier: MathModifier[(x.dmgModifier ?? '') as keyof typeof MathModifier],
+                    dmgModifierValue: x.dmgModifierValue,
+                    requiredClassName: x.requiredClassName,
+                    requiredStat: Stats[(x.requiredStat ?? '') as keyof typeof Stats],
+                    requiredStatValue: x.requiredStatValue,
+                    requiredGearCategory: x.requiredGearCategory,
+                    isFreeTargeting: x.isFreeTargeting,
+                    targetEffects: x.targetEffects?.map(effect => {
+                        return {
+                            name: EffectStatus[(effect.name ?? '') as keyof typeof EffectStatus],
+                            duration: effect.duration,
+                            stat: effect.stat === null ? null : Stats[(effect.stat) as keyof typeof Stats],
+                            value: effect.value
+                        }
+                    })
+                } as ActionCard);
+                break;
+            case 'Order':
+                newCardsArray.push({
+                    playerIndex: 0,
+                    guid: createGuid(),
+                    name: x.name,
+                    image: getImage(x.name),
+                    duration: x.duration,
+                    info: x.info,
+                    requirement: x.requirement,
+                    reward: x.reward
+                } as OrderCard);
+                break;
+            default:
+                break;
+        }
     }
+    return newCardsArray;
 });
 
 export interface Game {
@@ -115,7 +128,11 @@ const mockClass: ClassCard = cardsList[1] as ClassCard;
 const gearSword: GearCard = cardsList[2] as GearCard;
 const gearDagger: GearCard = cardsList[10] as GearCard;
 const mockPlayerOne: Player = { name: 'Player One', hand: [], deck: [], usedCards: [], didDraw: false, summonsLeft: 1 };
-const mockCrystalOne: CrystalCard = { image: 'https://img.freepik.com/premium-photo/magical-crystal-with-swirling-colors-digital-art-style-illustration_812426-6398.jpg',
- hp: 20, currentHp: 20, name: 'Warrior Spirit', guid: '5', effect: null, playerIndex: 0, isBlocking: true, calHp: 20 }
-const mockCrystalTwo: CrystalCard = { image: 'https://img.freepik.com/premium-photo/magical-crystal-with-swirling-colors-digital-art-style-illustration_812426-6466.jpg?w=740',
- hp: 20, currentHp: 20, name: 'Warrior Spirit', guid: '5', effect: null, playerIndex: 1, isBlocking: true, calHp: 20 }
+const mockCrystalOne: CrystalCard = {
+    image: 'https://img.freepik.com/premium-photo/magical-crystal-with-swirling-colors-digital-art-style-illustration_812426-6398.jpg',
+    hp: 20, currentHp: 20, name: 'Warrior Spirit', guid: '5', effect: null, playerIndex: 0, isBlocking: true, calHp: 20
+}
+const mockCrystalTwo: CrystalCard = {
+    image: 'https://img.freepik.com/premium-photo/magical-crystal-with-swirling-colors-digital-art-style-illustration_812426-6466.jpg?w=740',
+    hp: 20, currentHp: 20, name: 'Warrior Spirit', guid: '5', effect: null, playerIndex: 1, isBlocking: true, calHp: 20
+}
