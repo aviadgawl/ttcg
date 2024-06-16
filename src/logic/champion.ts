@@ -29,17 +29,15 @@ export const applyPhysicalDamage = (sourceChampion: ChampionCard, actionCard: Ac
     let calDamage = calculateDamageWithModifier(pureDmg, actionCard);
 
     if (isChampion(target)) {
-        const dmg = pureDmg - target.armor;
+        const dmg = (pureDmg + calDamage) - target.armor;
 
         if (dmg > 0) {
             target.armor = 0;
-            calDamage -= dmg;
+            target.currentHp -= dmg;
         }
         else if (dmg < 0) target.armor -= Math.abs(dmg);
         else if (dmg === 0) return;
     }
-
-    target.currentHp -= calDamage;
 }
 
 const calculateDamageWithModifier = (baseDamage: number, actionCard: ActionCard): number => {

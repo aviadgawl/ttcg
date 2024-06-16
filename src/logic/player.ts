@@ -97,7 +97,7 @@ const getValidChampionsBoardLocations = (game: Game, selectedCard: GameCard | nu
 export const playerAction = (action: string | null, cardsList: GameCard[] ,game: Game, data: any) => {
     if (action === null) return 'Action can not be null';
 
-    if(game.playingPlayerIndex !== game.playerIndex) 
+    if(game.playingPlayerIndex !== game.playerIndex && action !== PlayerActionsName.Draw ) 
         return `Player ${game.playerIndex + 1} can not play on other player (${game.playingPlayerIndex + 1}) turn`;
 
     const player = game.players[game.playerIndex];

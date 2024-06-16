@@ -1,6 +1,5 @@
 [
     {
-        "guid": "1",
         "type": "Champion",
         "name": "Eduard",
         "hp": 2,
@@ -16,7 +15,6 @@
         "isBlocking": false
     },
     {
-        "guid": "2",
         "type": "Class",
         "name": "High Knight",
         "class": "Knight",
@@ -29,7 +27,6 @@
         "isBlocking": false
     },
     {
-        "guid": "3",
         "type": "Gear",
         "name": "Simple Sword",
         "category": "Swords",
@@ -41,7 +38,6 @@
         "isBlocking": false
     },
     {
-        "guid": "4",
         "type": "Action",
         "actionType": "Attack",
         "name": "Basic Hit",
@@ -62,7 +58,6 @@
         "targetEffects": []
     },
     {
-        "guid": "5",
         "type": "Action",
         "actionType": "Movement",
         "name": "Step",
@@ -83,7 +78,6 @@
         "targetEffects": []
     },
     {
-        "guid": "6",
         "type": "Action",
         "actionType": "Attack",
         "name": "Dagger Throw",
@@ -104,7 +98,6 @@
         "targetEffects": []
     },
     {
-        "guid": "7",
         "type": "Order",
         "name": "Give Me More!",
         "duration": 0,
@@ -122,7 +115,6 @@
         "info": "Discard one card and draw two cards"
     },
     {
-        "guid": "8",
         "type": "Champion",
         "name": "Robin",
         "hp": 9,
@@ -138,7 +130,6 @@
         "isBlocking": false
     },
     {
-        "guid": "9",
         "type": "Action",
         "actionType": "Buff",
         "name": "Enrage",
@@ -166,7 +157,6 @@
         ]
     },
     {
-        "guid": "10",
         "type": "Action",
         "actionType": "Attack",
         "name": "Dagger Slash",
@@ -187,7 +177,6 @@
         "targetEffects": []
     },
     {
-        "guid": "11",
         "type": "Gear",
         "name": "Simple Dagger",
         "category": "Daggers",
@@ -199,7 +188,6 @@
         "isBlocking": false
     },
     {
-        "guid": "12",
         "type": "Action",
         "actionType": "Attack",
         "name": "Mighty Blow",
@@ -220,7 +208,6 @@
         "targetEffects": []
     },
     {
-        "guid": "13",
         "type": "Action",
         "actionType": "Buff",
         "name": "Ultimate Defense",
@@ -254,7 +241,6 @@
         ]
     },
     {
-        "guid": "14",
         "type": "Action",
         "actionType": "Buff",
         "name": "Ultimate Defense",
@@ -288,7 +274,6 @@
         ]
     },
     {
-        "guid": "15",
         "type": "Action",
         "actionType": "Buff",
         "name": "Ultimate Defense",
