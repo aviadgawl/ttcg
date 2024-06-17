@@ -94,10 +94,10 @@ const getValidChampionsBoardLocations = (game: Game, selectedCard: GameCard | nu
     return { message: 'success', locations: locations };
 }
 
-export const playerAction = (action: string | null, cardsList: GameCard[] ,game: Game, data: any) => {
+export const playerAction = (action: string | null, cardsList: GameCard[], game: Game, data: any) => {
     if (action === null) return 'Action can not be null';
 
-    if(game.playingPlayerIndex !== game.playerIndex && action !== PlayerActionsName.Draw ) 
+    if (game.playingPlayerIndex !== game.playerIndex && action !== PlayerActionsName.Draw)
         return `Player ${game.playerIndex + 1} can not play on other player (${game.playingPlayerIndex + 1}) turn`;
 
     const player = game.players[game.playerIndex];
@@ -119,12 +119,14 @@ export const playerAction = (action: string | null, cardsList: GameCard[] ,game:
             return upgrade(game, data.selectedCard as ClassCard, data.extendedData as BoardLocation);
         case PlayerActionsName.AddCardToDeck:
             return addCardToDeck(game, cardsList, data.selectedCard as GameCard);
-        case PlayerActionsName.removeCardFromDeck:
+        case PlayerActionsName.RemoveCardFromDeck:
             return removeCardFromDeck(game, cardsList, data.selectedCard as GameCard);
         case PlayerActionsName.Attach:
             return attachAction(game, data.selectedCard as ActionCard, data.extendedData as BoardLocation);
         case PlayerActionsName.PlayOrder:
             return playOrder(game, data.selectedCard as OrderCard, data.extendedData as GameCard[]);
+        case PlayerActionsName.ClearDeck:
+            return clearDeck(game, cardsList);
         default:
             return `Player action ${action} is not implemented yet`;
     }
@@ -344,7 +346,18 @@ const removeCardFromDeck = (game: Game, cardsList: GameCard[], selectedCard: Gam
     return 'success';
 }
 
-const removeCard = (cards: GameCard[], selectedCard: GameCard): GameCard[]|null => {
+const clearDeck = (game: Game, cardsList: GameCard[]) => {
+    const player: Player = game.players[game.playerIndex];
+    const deckCopy = [...player.deck];
+
+    deckCopy.forEach(card => {
+        removeCardFromDeck(game, cardsList, card);
+    });
+
+    return 'success';
+}
+
+const removeCard = (cards: GameCard[], selectedCard: GameCard): GameCard[] | null => {
     const cardIndexToRemove = cards.findIndex(card => card.guid === selectedCard.guid);
 
     if (cardIndexToRemove === -1) return null;

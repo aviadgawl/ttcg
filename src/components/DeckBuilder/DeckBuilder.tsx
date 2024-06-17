@@ -31,7 +31,7 @@ const DeckBuilder: FC = () => {
   const handleImport = () => {
     const deckString = prompt('Please deck string', '');
 
-    if(!deckString) return;
+    if (!deckString) return;
 
     deckString?.slice(1).split(',').forEach(cardData => {
       const [cardName, cardAmount] = cardData.split(':');
@@ -43,12 +43,16 @@ const DeckBuilder: FC = () => {
     });
   }
 
+  const handleClear = () => {
+    dispatch(playerActions({ selectedActionData: { actionName: PlayerActionsName.ClearDeck } }))
+  }
+
   const addCardToDeck = (card: GameCard) => {
     dispatch(playerActions({ selectedActionData: { card: card, actionName: PlayerActionsName.AddCardToDeck } }))
   }
 
   const removeCardFromDeck = (card: GameCard) => {
-    dispatch(playerActions({ selectedActionData: { card: card, actionName: PlayerActionsName.removeCardFromDeck } }))
+    dispatch(playerActions({ selectedActionData: { card: card, actionName: PlayerActionsName.RemoveCardFromDeck } }))
   }
 
   return <div className={styles.DeckBuilder}>
@@ -56,6 +60,7 @@ const DeckBuilder: FC = () => {
       <div>
         <Button onClick={handleExport}>Export</Button>
         <Button onClick={handleImport}>Import</Button>
+        <Button onClick={handleClear}>Clear</Button>
         <h2>Total: {playerDeck.length}</h2>
       </div>
       <hr />

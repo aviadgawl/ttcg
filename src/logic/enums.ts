@@ -40,9 +40,10 @@ export enum PlayerActionsName {
     Equip = 'Equip',
     Upgrade = 'Upgrade',
     AddCardToDeck = 'Add Card To Deck',
-    removeCardFromDeck = 'Remove Card From Deck',
+    RemoveCardFromDeck = 'Remove Card From Deck',
     Attach = 'Attach',
-    PlayOrder = 'Play Order'
+    PlayOrder = 'Play Order',
+    ClearDeck = 'Clear Deck'
 }
 
 export enum MathModifier {
