@@ -2,3 +2,7 @@
 
 1) gcloud emulators firestore start --host-port=127.0.0.1:8080
 2) npm run start:test
+
+# create component
+
+npx generate-react-cli component MyComponent

@@ -1,1 +1,4 @@
-.GameDetails {}
+.GameDetails {
+    display: flex;
+    flex-direction: column;
+}

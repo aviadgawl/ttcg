@@ -1,1 +1,6 @@
 .GameManager {}
+
+.GameAndDetails {
+    display: flex;
+    justify-content: space-between;
+}

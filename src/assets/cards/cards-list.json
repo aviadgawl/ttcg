@@ -15,6 +15,21 @@
         "isBlocking": false
     },
     {
+        "type": "Champion",
+        "name": "Chiron",
+        "hp": 9,
+        "str": 2,
+        "dex": 1,
+        "int": 1,
+        "stm": 2,
+        "actionsName": [
+            "Step",
+            "Basic Hit"
+        ],
+        "class": "Acolyte",
+        "isBlocking": false
+    },
+    {
         "type": "Class",
         "name": "High Knight",
         "class": "Knight",
