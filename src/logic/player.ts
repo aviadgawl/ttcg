@@ -80,13 +80,13 @@ const getSummonBoardLocations = (game: Game): AllowedBoardLocationResponse => {
 
 const getValidChampionsBoardLocations = (game: Game, selectedCard: GameCard | null, predicate: Function): AllowedBoardLocationResponse => {
     const locations: BoardLocation[] = [];
-
+  
     if (selectedCard !== null)
         for (let rowIndex = 0; rowIndex < game.board.length; rowIndex++) {
             for (let columnIndex = 0; columnIndex < game.board[rowIndex].length; columnIndex++) {
                 const boardCell = game.board[rowIndex][columnIndex];
 
-                if (isChampion(boardCell) && predicate(boardCell, selectedCard).isValid)
+                if (isChampion(boardCell) && boardCell.playerIndex === game.playerIndex && predicate(boardCell, selectedCard).isValid)
                     locations.push({ rowIndex: rowIndex, columnIndex: columnIndex });
             }
         }

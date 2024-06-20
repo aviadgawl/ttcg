@@ -11,6 +11,7 @@ import HandCard, { HandCardMode } from '../HandCard/HandCard';
 
 const Hand: FC = () => {
   const playerIndex = useAppSelector((state) => state.gameActions.game.playerIndex);
+  const playingPlayerIndex = useAppSelector((state) => state.gameActions.game.playingPlayerIndex);
   const playerHand = useAppSelector((state) => state.gameActions.game.players[playerIndex].hand);
   const playerDeck = useAppSelector((state) => state.gameActions.game.players[playerIndex].deck);
   const playerUsedCards = useAppSelector((state) => state.gameActions.game.players[playerIndex].usedCards);
@@ -62,12 +63,12 @@ const Hand: FC = () => {
       <div className={styles.CardContainer}>
         <div className={styles.ButtonsContainer}>
           <h3> Used Cards: {playerUsedCards.length}</h3>
-          <Button onClick={() => handleAction(PlayerActionsName.InitialDraw)} variant="outlined">Deck: {playerDeck.length}</Button>
-          <Button onClick={() => handleAction(PlayerActionsName.EndTurn, true)} variant="outlined">{PlayerActionsName.EndTurn}</Button>
-          <Button onClick={() => handleAction(PlayerActionsName.Surrender)} variant="outlined">{PlayerActionsName.Surrender}</Button>
+          <Button disabled={playerIndex !== playingPlayerIndex} onClick={() => handleAction(PlayerActionsName.InitialDraw)} variant="outlined">Deck: {playerDeck.length}</Button>
+          <Button disabled={playerIndex !== playingPlayerIndex} onClick={() => handleAction(PlayerActionsName.EndTurn, true)} variant="outlined">{PlayerActionsName.EndTurn}</Button>
+          <Button disabled={playerIndex !== playingPlayerIndex} onClick={() => handleAction(PlayerActionsName.Surrender)} variant="outlined">{PlayerActionsName.Surrender}</Button>
         </div>
         {playerHand.map((card, index) => <div className={discardCards.some(x => x.guid === card.guid) ? styles.DiscardCard : ''} key={index}>
-          <HandCard mode={HandCardMode.Hand} card={card} />
+          <HandCard disabled={playerIndex !== playingPlayerIndex} mode={HandCardMode.Hand} card={card} />
           {selectedActionData?.allowedHandCardSelect?.some(x => x.guid === card.guid) && <Button onClick={() => handleDiscardAction(card)}>Select</Button>}
         </div>)}
       </div>

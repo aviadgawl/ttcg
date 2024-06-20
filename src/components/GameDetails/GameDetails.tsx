@@ -18,8 +18,10 @@ const GameDetails: FC<GameDetailsProps> = () => {
     <h2>Player Number: {playerIndex + 1} | Playing Player: {playingPlayer + 1}</h2>
     <table>
       <thead>
-        <th>Name</th>
-        <th>Description</th>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+        </tr>
       </thead>
       <tbody>
         <tr>

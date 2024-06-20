@@ -16,6 +16,7 @@ export enum HandCardMode {
 interface CardProps {
   card: GameCard,
   mode: HandCardMode,
+  disabled?:boolean
 }
 
 const HandCard: FC<CardProps> = (props) => {
@@ -34,19 +35,19 @@ const HandCard: FC<CardProps> = (props) => {
   return <div>
     <GameCardDraw className={styles.CardDraw} zoom={true} card={props.card} />
     {props.mode === HandCardMode.Hand && <div>
-      {isClass(props.card) && <Button variant="outlined" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Upgrade)}>
+      {isClass(props.card) && <Button disabled={props.disabled} variant="outlined" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Upgrade)}>
         {PlayerActionsName.Upgrade} </Button>}
 
-      {isGear(props.card) && <Button variant="outlined" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Equip)}>
+      {isGear(props.card) && <Button disabled={props.disabled} variant="outlined" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Equip)}>
         {PlayerActionsName.Equip} </Button>}
 
-      {isChampion(props.card) && <Button variant="outlined" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Summon)}>
+      {isChampion(props.card) && <Button disabled={props.disabled} variant="outlined" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Summon)}>
         {PlayerActionsName.Summon} </Button>}
 
-      {isAction(props.card) && <Button variant="outlined" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Attach)}>
+      {isAction(props.card) && <Button disabled={props.disabled} variant="outlined" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Attach)}>
         {PlayerActionsName.Attach} </Button>}
 
-      {isOrder(props.card) && <Button variant="outlined" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.PlayOrder)}>
+      {isOrder(props.card) && <Button disabled={props.disabled} variant="outlined" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.PlayOrder)}>
         {PlayerActionsName.PlayOrder} </Button>}
     </div>}
   </div>;
