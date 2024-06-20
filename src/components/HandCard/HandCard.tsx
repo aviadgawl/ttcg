@@ -6,6 +6,7 @@ import { setSelectedActionData, setShowHand, createSelectedData } from '../../re
 import { GameStoreActionTypes } from '../../redux/types';
 import Button from '@mui/material/Button';
 import GameCardDraw from '../GameCardDraw/GameCardDraw';
+import styles from './HandCard.module.css';
 
 export enum HandCardMode {
   DeckBuilding = 1,
@@ -31,7 +32,7 @@ const HandCard: FC<CardProps> = (props) => {
   }
 
   return <div>
-    <GameCardDraw zoom={true} card={props.card} />
+    <GameCardDraw className={styles.CardDraw} zoom={true} card={props.card} />
     {props.mode === HandCardMode.Hand && <div>
       {isClass(props.card) && <Button variant="outlined" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Upgrade)}>
         {PlayerActionsName.Upgrade} </Button>}

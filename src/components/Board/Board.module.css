@@ -15,3 +15,18 @@
 .PlayerOneBase {
     background-color: rgb(133, 173, 133, 0.5);
 }
+
+.BoardPanel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.BoardChampion {
+    width: 100%;
+}
+
+.TargetButton {
+    position: absolute!important;
+}

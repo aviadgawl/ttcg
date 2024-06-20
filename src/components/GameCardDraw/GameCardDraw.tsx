@@ -11,7 +11,8 @@ interface CardProps {
   card: GameCard,
   children?: React.ReactNode,
   zoom?: boolean,
-  showChampionStats?:boolean
+  showChampionStats?:boolean,
+  className?: string
 }
 
 const GameCardDraw: FC<CardProps> = (props) => {
@@ -21,11 +22,11 @@ const GameCardDraw: FC<CardProps> = (props) => {
     if(props.zoom && event.target.type !== 'button') setShowDialog(!showDialog);
   }
 
-  return <div>
+  return <div className={props.className}>
     <Card onClick={handleShowDialog} 
-      className={`${styles.Card} App-text-color`} style={{ backgroundImage: `url(${props.card.image})` }} sx={{ maxWidth: 345 }}>
+      className={`${styles.Card} App-text-color`} sx={{ maxWidth: 345 }}>
 
-    <CardContent className={styles.CardContent}>
+    <CardContent style={{ backgroundImage: `url(${props.card.image})` }} className={styles.CardContent}>
       {props.showChampionStats && isChampion(props.card) && <div className={styles.CardStats}>
         <div>HP: {props.card.currentHp} / {props.card.calHp}</div>
         <div>Armor: {props.card.armor} / {props.card.calStr}</div>
@@ -38,9 +39,9 @@ const GameCardDraw: FC<CardProps> = (props) => {
       </div>}
 
     </CardContent>
-    <CardActions>
+    {props.children && <CardActions>
       {props.children}
-    </CardActions>
+    </CardActions>}
   </Card>
 
   <Dialog

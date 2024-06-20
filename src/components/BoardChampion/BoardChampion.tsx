@@ -17,6 +17,7 @@ interface BoardChampionProps {
   y: number;
   isSelected: boolean;
   rotate: boolean;
+  className: string;
 }
 
 const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
@@ -51,7 +52,7 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
     setAnchorEl(null);
   };
 
-  return (<div className={`App-text-color ${styles.Container} ${props.isSelected ? styles.Selected : styles.NotSelected} ${props.rotate ? 'App-rotate' : ''}`}>
+  return (<div className={`App-text-color ${props.className} ${styles.Container} ${props.isSelected ? styles.Selected : styles.NotSelected} ${props.rotate ? 'App-rotate' : ''}`}>
     <div style={{ backgroundImage: `url(${props.champion.image})` }}
       className={styles.Panel}
       onClick={handlePanelClick}>
@@ -62,7 +63,7 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
       className={styles.Dialog}
       onClose={handleClose}>
       <DialogContent className={styles.DialogContent}>
-        <GameCardDraw showChampionStats={true} card={props.champion}>
+        <GameCardDraw className={styles.ChampionCardDraw} showChampionStats={true} card={props.champion}>
           <div>
             {props.champion.learnedActionsCards.map((card, actionIndex) =>
               <Button disabled={props.champion.stm <= 0} size="small" variant="contained" className="App-button" key={actionIndex}

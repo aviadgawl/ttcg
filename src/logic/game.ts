@@ -114,20 +114,11 @@ export const createGame = (): Game => {
         else board[index] = [null, null, null, null, null, null, null, null];
     }
 
-    return { board: board, players: [mockPlayerOne], status: GameStatus.over, playerIndex: 0, playingPlayerIndex: 0, loser: null, code: '' };
+    return { board: board, players: [mockPlayerOne, mockPlayerTwo], status: GameStatus.over, playerIndex: 0, playingPlayerIndex: 0, loser: null, code: '' };
 }
 
-const mockOrder: OrderCard = cardsList[6] as OrderCard;
-const mockChampion1: ChampionCard = cardsList[0] as ChampionCard;
-//const mockChampion2: ChampionCard = cardsList[7] as ChampionCard;
-const actionBasicHit: ActionCard = cardsList[3] as ActionCard;
-const actionStep: ActionCard = cardsList[4] as ActionCard;
-const actionEnrage: ActionCard = cardsList[8] as ActionCard;
-const actionCardDaggerThrow: ActionCard = cardsList[5] as ActionCard;
-const mockClass: ClassCard = cardsList[1] as ClassCard;
-const gearSword: GearCard = cardsList[2] as GearCard;
-const gearDagger: GearCard = cardsList[10] as GearCard;
-const mockPlayerOne: Player = { name: 'Player One', hand: [], deck: [], usedCards: [], didDraw: false, summonsLeft: 1 };
+const mockPlayerOne: Player = { name: 'Player One', hand: [], deck: [cardsList[25], cardsList[35], cardsList[12], cardsList[16], cardsList[15], cardsList[17]], usedCards: [], didDraw: false, summonsLeft: 1 };
+const mockPlayerTwo: Player = { name: 'Player Two', hand: [], deck: [cardsList[25], cardsList[35], cardsList[12], cardsList[16], cardsList[15], cardsList[17]], usedCards: [], didDraw: false, summonsLeft: 1 };
 const mockCrystalOne: CrystalCard = {
     image: 'https://img.freepik.com/premium-photo/magical-crystal-with-swirling-colors-digital-art-style-illustration_812426-6398.jpg',
     hp: 20, currentHp: 20, name: 'Warrior Spirit', guid: '5', effect: null, playerIndex: 0, isBlocking: true, calHp: 20
