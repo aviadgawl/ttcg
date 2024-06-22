@@ -43,6 +43,11 @@ const Board: FC = () => {
     return;
   };
 
+  const getObjectPlayerColorClassName = (cardPlayerIndex:number) => {
+    if(cardPlayerIndex === 0) return styles.PlayerOneObject;
+    return styles.PlayerTwoObject;
+  }
+
   const isAllowedLocation = (rowIndex: number, columnIndex: number): boolean => {
     if (selectedActionData.allowedBoardLocations.length === 0) return false;
 
@@ -55,17 +60,18 @@ const Board: FC = () => {
         {boardState.map((row, rowIndex) => {
           return <tr key={`${rowIndex}`}>
             {row.map((card, columnIndex) => {
-              return <td className={`${playerBaseClassName(rowIndex)}`} key={`${rowIndex}-${columnIndex}`}>
+              return <td key={`${rowIndex}-${columnIndex}`}>
+                <div className={`${styles.PlayerBase} ${playerBaseClassName(rowIndex)}`} />
                 <div className={styles.BoardPanel}>
                   {isAllowedLocation(rowIndex, columnIndex) &&
                     <Button className={styles.TargetButton} size="small" variant="contained" onClick={() => handleAction(rowIndex, columnIndex)}>
                       <FaBullseye />
                     </Button>}
-                  {isChampion(card) && <BoardChampion className={styles.BoardChampion} rotate={shouldRotate} champion={card}
+                  {isChampion(card) && <BoardChampion className={`${getObjectPlayerColorClassName(card.playerIndex)} ${styles.BoardObject}`} rotate={shouldRotate} champion={card}
                     x={rowIndex}
                     y={columnIndex}
                     isSelected={selectedActionData.sourceLocation?.rowIndex === rowIndex && selectedActionData.sourceLocation?.columnIndex === columnIndex} />}
-                  {isCrystal(card) && <BoardCrystal rotate={shouldRotate} crystal={card as unknown as CrystalCard} />}
+                  {isCrystal(card) && <BoardCrystal className={`${getObjectPlayerColorClassName(card.playerIndex)} ${styles.BoardObject}`} rotate={shouldRotate} crystal={card as unknown as CrystalCard} />}
                 </div>
               </td>
             })}

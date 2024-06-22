@@ -4,11 +4,12 @@ import styles from './BoardCrystal.module.css';
 
 interface BoardCrystalProps {
     crystal: CrystalCard,
-    rotate: boolean
+    rotate: boolean,
+    className?:string
 }
 
 const BoardCrystal: FC<BoardCrystalProps> = (props: BoardCrystalProps) => (
-  <div className={`App-text-color ${styles.BoardCrystal} ${props.rotate ? 'App-rotate' : ''}`} style={{ backgroundImage: `url(${props.crystal.image})` }}>
+  <div className={`${props.className} App-text-color ${styles.BoardCrystal} ${props.rotate ? 'App-rotate' : ''}`} style={{ backgroundImage: `url(${props.crystal.image})` }}>
     <h2>{props.crystal.currentHp} / {props.crystal.hp}</h2>
   </div>
 );

@@ -8,12 +8,20 @@
     border: 1px solid black;
 }
 
+.PlayerBase {
+    width: 8%;
+    height: 17%;
+    position: absolute;
+    opacity: 0.3;
+    z-index: 1;
+}
+
 .PlayerTwoBase {
-    background-color: rgb(165, 112, 112, 0.5);
+    background-color: var(--player-two-color);
 }
 
 .PlayerOneBase {
-    background-color: rgb(133, 173, 133, 0.5);
+    background-color: var(--player-one-color);
 }
 
 .BoardPanel {
@@ -23,11 +31,20 @@
     height: 100%;
 }
 
-.BoardChampion {
+.BoardObject {
     width: 100%;
+    z-index: 2;
 }
 
 .TargetButton {
     position: absolute!important;
     z-index: 9;
+}
+
+.PlayerOneObject {
+    border: solid 2px var(--player-one-color);
+}
+
+.PlayerTwoObject {
+    border: solid 2px var(--player-two-color);
 }
