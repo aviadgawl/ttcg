@@ -15,14 +15,15 @@
 
 .CardStats {
     background-color: rgba(0,0,0,.5);
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
+    font-size: large;
+    font-weight: 400;
 }
 
 .CardStats div {
-    padding: 3px;
     color: white;
+    border: 1px solid white;
+    padding: 4px;
+    display: inline-block;
 }
 
 .CardName {

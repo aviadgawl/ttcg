@@ -26,8 +26,9 @@ span {
 
 .DialogContent {
     padding: 0px!important;
+    width: 290px;
 }
 
 .ChampionCardDraw {
-    height: 500px;
+    height: 460px;
 }

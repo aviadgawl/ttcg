@@ -29,13 +29,13 @@ const GameCardDraw: FC<CardProps> = (props) => {
     <CardContent style={{ backgroundImage: `url(${props.card.image})` }} className={styles.CardContent}>
       {props.showChampionStats && isChampion(props.card) && <div className={styles.CardStats}>
         <div>HP: {props.card.currentHp} / {props.card.calHp}</div>
-        <div>Armor: {props.card.armor} / {props.card.calStr}</div>
-        <div>Mental: {props.card.mental} / {props.card.calInt}</div>
         <div>STR: {props.card.calStr}</div>
         <div>DEX: {props.card.calDex}</div>
         <div>INT: {props.card.calInt}</div>
+        <div>Armor: {props.card.armor} / {props.card.calStr}</div>
+        <div>Mental: {props.card.mental} / {props.card.calInt}</div>
         <div>Class: {props.card.calClass}</div>
-        <div className={styles.ChampionStatusEffect}>{props.card.statusEffects.map(effect => <span> {effect.name} </span>)}</div>
+        {props.card.statusEffects.length > 0 && <div className={styles.ChampionStatusEffect}>{props.card.statusEffects.map(effect => <span> {effect.name} </span>)}</div>}
       </div>}
 
     </CardContent>

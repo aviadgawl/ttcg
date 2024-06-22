@@ -67,7 +67,9 @@ const Board: FC = () => {
                     <Button className={styles.TargetButton} size="small" variant="contained" onClick={() => handleAction(rowIndex, columnIndex)}>
                       <FaBullseye />
                     </Button>}
-                  {isChampion(card) && <BoardChampion className={`${getObjectPlayerColorClassName(card.playerIndex)} ${styles.BoardObject}`} rotate={shouldRotate} champion={card}
+                  {isChampion(card) && <BoardChampion className={`${getObjectPlayerColorClassName(card.playerIndex)} ${styles.BoardObject}`} 
+                    rotate={shouldRotate} 
+                    champion={card}
                     x={rowIndex}
                     y={columnIndex}
                     isSelected={selectedActionData.sourceLocation?.rowIndex === rowIndex && selectedActionData.sourceLocation?.columnIndex === columnIndex} />}

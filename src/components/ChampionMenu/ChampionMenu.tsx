@@ -23,10 +23,10 @@ const ChampionMenu: FC<ChampionMenuProps> = (props) => (
     }}
     className={styles.ChampionMenuList}
   >
-    {props.championCard.upgrade && <MenuItem><GameCardDraw card={props.championCard.upgrade}/></MenuItem>}
-    {props.championCard.body && <MenuItem><GameCardDraw card={props.championCard.body}/></MenuItem>}
-    {props.championCard.leftHand && <MenuItem><GameCardDraw card={props.championCard.leftHand}/></MenuItem>}
-    {props.championCard.rightHand && <MenuItem><GameCardDraw card={props.championCard.rightHand}/></MenuItem>}
+    {props.championCard.upgrade && <MenuItem><GameCardDraw className='App-card' card={props.championCard.upgrade}/></MenuItem>}
+    {props.championCard.body && <MenuItem><GameCardDraw className='App-card' card={props.championCard.body}/></MenuItem>}
+    {props.championCard.leftHand && <MenuItem><GameCardDraw className='App-card' card={props.championCard.leftHand}/></MenuItem>}
+    {props.championCard.rightHand && <MenuItem><GameCardDraw className='App-card' card={props.championCard.rightHand}/></MenuItem>}
   </Menu>
 );
 
