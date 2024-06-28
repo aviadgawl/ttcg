@@ -52,6 +52,12 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
     setAnchorEl(null);
   };
 
+  const isActionCardDisabled = (sourceChampion: ChampionCard, actionCard: ActionCard): boolean => {
+    if(actionCard.isRepeatable && actionCard.repeatableActivationLeft !== null && actionCard.repeatableActivationLeft === 0) return true;
+    
+    return sourceChampion.stm <= 0;
+  }
+
   return (<div className={`App-text-color ${props.className} ${styles.Container} ${props.isSelected ? styles.Selected : styles.NotSelected} ${props.rotate ? 'App-rotate' : ''}`}>
     <div style={{ backgroundImage: `url(${props.champion.image})` }}
       className={styles.Panel}
@@ -66,8 +72,8 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
         <GameCardDraw className={styles.ChampionCardDraw} showChampionStats={true} card={props.champion}>
           <div>
             {props.champion.learnedActionsCards.map((card, actionIndex) =>
-              <Button disabled={props.champion.stm <= 0} size="small" variant="contained" className="App-button" key={actionIndex}
-                onClick={() => handleAction(card, false)}>{card.name}
+              <Button disabled={isActionCardDisabled(props.champion, card)} size="small" variant="contained" className="App-button" key={actionIndex}
+                onClick={() => handleAction(card, false)}>{card.name} {card.isRepeatable && `(${card.repeatableActivationLeft})`}
               </Button>
             )}
             {props.champion.attachedActionsCards.map((card, actionIndex) =>

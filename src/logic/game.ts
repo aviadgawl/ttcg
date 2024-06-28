@@ -72,7 +72,11 @@ export const cardsList = cardsListJson.flatMap(x => {
                             stat: effect.stat === null ? null : Stats[(effect.stat) as keyof typeof Stats],
                             value: effect.value
                         }
-                    })
+                    }),
+                    isRepeatable: x.isRepeatable,
+                    repeatableStat: x.repeatableStat === null ? null : Stats[(x.repeatableStat) as keyof typeof Stats],
+                    repeatableActivationLeft: null,
+                    wasPlayed: false
                 } as ActionCard);
                 break;
             case 'Order':
@@ -102,6 +106,7 @@ export interface Game {
     loser: Player | null,
     board: (GameCard | null)[][];
     status: GameStatus;
+    gameActionLog: string[]; 
 }
 
 export const createGame = (): Game => {
@@ -114,7 +119,7 @@ export const createGame = (): Game => {
         else board[index] = [null, null, null, null, null, null, null, null];
     }
 
-    return { board: board, players: [mockPlayerOne], status: GameStatus.over, playerIndex: 0, playingPlayerIndex: 0, loser: null, code: '' };
+    return { board: board, players: [mockPlayerOne], status: GameStatus.over, playerIndex: 0, playingPlayerIndex: 0, loser: null, code: '', gameActionLog: [] };
 }
 
 const mockPlayerOne: Player = { name: 'Player One', hand: [], deck: [], usedCards: [], didDraw: false, summonsLeft: 1 };

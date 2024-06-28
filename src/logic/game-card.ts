@@ -93,7 +93,11 @@ export interface ActionCard extends GameCard {
     requiredStatValue: number|null;
     requiredGearCategory: GearCategory|null;
     isFreeTargeting: boolean;
-    targetEffects: StatusEffect[]
+    targetEffects: StatusEffect[];
+    isRepeatable: boolean;
+    repeatableStat: Stats|null;
+    repeatableActivationLeft: number|null;
+    wasPlayed: boolean;
 }
 
 export interface ClassCard extends GameCard {

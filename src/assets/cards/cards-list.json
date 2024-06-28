@@ -2,10 +2,10 @@
     {
         "type": "Champion",
         "name": "Eduard",
-        "hp": 2,
+        "hp": 12,
         "str": 2,
-        "dex": 2,
-        "int": 2,
+        "dex": 1,
+        "int": 1,
         "stm": 2,
         "actionsName": [
             "Step",
@@ -70,7 +70,9 @@
         "requiredStatValue": null,
         "requiredGearCategory": null,
         "isFreeTargeting": true,
-        "targetEffects": []
+        "targetEffects": [],
+        "isRepeatable": false,
+        "repeatableStat": null
     },
     {
         "type": "Action",
@@ -82,7 +84,7 @@
             -1
         ],
         "direction": "Straight",
-        "dmgStat": "Str",
+        "dmgStat": null,
         "dmgModifier": null,
         "dmgModifierValue": null,
         "requiredClassName": null,
@@ -90,7 +92,9 @@
         "requiredStatValue": null,
         "requiredGearCategory": null,
         "isFreeTargeting": false,
-        "targetEffects": []
+        "targetEffects": [],
+        "isRepeatable": true,
+        "repeatableStat": "Dex"
     },
     {
         "type": "Action",
@@ -110,7 +114,8 @@
         "requiredStatValue": null,
         "requiredGearCategory": null,
         "isFreeTargeting": true,
-        "targetEffects": []
+        "targetEffects": [],
+        "isRepeatable": false
     },
     {
         "type": "Order",
@@ -169,7 +174,9 @@
                 "stat": null,
                 "value": null
             }
-        ]
+        ],
+        "isRepeatable": false,
+        "repeatableStat": null
     },
     {
         "type": "Action",
@@ -189,7 +196,9 @@
         "requiredStatValue": null,
         "requiredGearCategory": "Daggers",
         "isFreeTargeting": true,
-        "targetEffects": []
+        "targetEffects": [],
+        "isRepeatable": false,
+        "repeatableStat": null
     },
     {
         "type": "Gear",
@@ -220,7 +229,9 @@
         "requiredStatValue": 3,
         "requiredGearCategory": null,
         "isFreeTargeting": true,
-        "targetEffects": []
+        "targetEffects": [],
+        "isRepeatable": false,
+        "repeatableStat": null
     },
     {
         "type": "Action",
@@ -253,6 +264,8 @@
                 "stat": null,
                 "value": null
             }
-        ]
+        ],
+        "isRepeatable": false,
+        "repeatableStat": null
     }
 ]

@@ -1,8 +1,18 @@
 import {
-    GameCard, GearCard, ClassCard, ChampionCard, isChampion, ActionCard, OrderCard, ValidationResult, BoardLocation, AllowedBoardLocationResponse,
-    AllowedHandCardSelectResponse, OrderCardRequirement
+    GameCard,
+    GearCard,
+    ClassCard,
+    ChampionCard,
+    isChampion,
+    ActionCard,
+    OrderCard,
+    ValidationResult,
+    BoardLocation,
+    AllowedBoardLocationResponse,
+    AllowedHandCardSelectResponse,
+    OrderCardRequirement
 } from './game-card';
-import { calculateStats } from './champion';
+import { calculateStats, getChampionStatValueByStat } from './champion';
 import { Stats, GameStatus, PlayerActionsName } from './enums';
 
 import { Game, } from './game';
@@ -28,26 +38,6 @@ const getValidCardsForDiscard = (cards: GameCard[], orderCard: OrderCard): { car
     }
 
     return { cardToDiscard: cardAllowedToDiscard, amountToDiscard: orderCardRequirements?.amount };
-}
-
-export const getPlayerAllowedHandCardSelect = (game: Game, selectedCard: OrderCard): AllowedHandCardSelectResponse => {
-    const { cardToDiscard } = getValidCardsForDiscard(game.players[game.playerIndex].hand, selectedCard);
-    return { message: 'success', handCards: cardToDiscard };
-}
-
-export const getPlayerActionsAllowedBoardLocations = (game: Game, actionName: string, selectedCard: GameCard | null): AllowedBoardLocationResponse => {
-    switch (actionName) {
-        case PlayerActionsName.Summon:
-            return getSummonBoardLocations(game);
-        case PlayerActionsName.Upgrade:
-            return getValidChampionsBoardLocations(game, selectedCard, isValidForUpgrade);
-        case PlayerActionsName.Equip:
-            return getValidChampionsBoardLocations(game, selectedCard, isValidForEquip);
-        case PlayerActionsName.Attach:
-            return getValidChampionsBoardLocations(game, selectedCard, isValidForAttach);
-        default:
-            return { message: `Player allowed board locations ${actionName} is not implemented yet`, locations: [] };
-    }
 }
 
 const getSummonBoardLocation = (game: Game, startingRow: number, endRow: number): BoardLocation[] => {
@@ -92,44 +82,6 @@ const getValidChampionsBoardLocations = (game: Game, selectedCard: GameCard | nu
         }
 
     return { message: 'success', locations: locations };
-}
-
-export const playerAction = (action: string | null, cardsList: GameCard[], game: Game, data: any) => {
-    if (action === null) return 'Action can not be null';
-
-    if (game.playingPlayerIndex !== game.playerIndex && action !== PlayerActionsName.Draw)
-        return `Player ${game.playerIndex + 1} can not play on other player (${game.playingPlayerIndex + 1}) turn`;
-
-    const player = game.players[game.playerIndex];
-
-    switch (action) {
-        case PlayerActionsName.InitialDraw:
-            return initialDraw(player);
-        case PlayerActionsName.Draw:
-            return draw(player, data.extendedData as number);
-        case PlayerActionsName.Surrender:
-            return surrender(game);
-        case PlayerActionsName.Summon:
-            return summon(game, data.selectedCard as ChampionCard, data.extendedData as BoardLocation);
-        case PlayerActionsName.EndTurn:
-            return endTurn(game);
-        case PlayerActionsName.Equip:
-            return equip(game, data.selectedCard as GearCard, data.extendedData as BoardLocation);
-        case PlayerActionsName.Upgrade:
-            return upgrade(game, data.selectedCard as ClassCard, data.extendedData as BoardLocation);
-        case PlayerActionsName.AddCardToDeck:
-            return addCardToDeck(game, cardsList, data.selectedCard as GameCard);
-        case PlayerActionsName.RemoveCardFromDeck:
-            return removeCardFromDeck(game, cardsList, data.selectedCard as GameCard);
-        case PlayerActionsName.Attach:
-            return attachAction(game, data.selectedCard as ActionCard, data.extendedData as BoardLocation);
-        case PlayerActionsName.PlayOrder:
-            return playOrder(game, data.selectedCard as OrderCard, data.extendedData as GameCard[]);
-        case PlayerActionsName.ClearDeck:
-            return clearDeck(game, cardsList);
-        default:
-            return `Player action ${action} is not implemented yet`;
-    }
 }
 
 const playOrder = (game: Game, selectedCard: OrderCard, cardsPayment: GameCard[] | undefined): string => {
@@ -188,9 +140,20 @@ const draw = (player: Player, amount: number | undefined): string => {
     return 'success';
 };
 
-const surrender = (game: Game) => {
+const surrender = (game: Game): string => {
     game.status = GameStatus.over;
+    return 'success'
 };
+
+const setRepeatableActionActivations = (actionCard: ActionCard, sourceChampion: ChampionCard): boolean => {
+    if (!actionCard.isRepeatable) return false;
+    if (actionCard.repeatableActivationLeft !== null) return false;
+
+    const statValue = getChampionStatValueByStat(sourceChampion, actionCard.repeatableStat);
+    actionCard.repeatableActivationLeft = statValue;
+
+    return true;
+}
 
 const summon = (game: Game, selectedCard: ChampionCard, targetLocation: BoardLocation | undefined): string => {
     if (targetLocation === undefined) return 'targetLocation can not be undefined';
@@ -214,13 +177,14 @@ const summon = (game: Game, selectedCard: ChampionCard, targetLocation: BoardLoc
 
     if (selectedCard.learnedActions.length !== 2) return 'Champion can no have less or more than two learned actions';
 
-    const firstActionCard = getAndRemoveActionCard(game, selectedCard.learnedActions[0]);
+    selectedCard.learnedActions.forEach(action => {
+        const actionCard = getAndRemoveActionCard(game, action);
 
-    if (firstActionCard !== null) selectedCard.learnedActionsCards.push(firstActionCard);
-
-    const secondActionCard = getAndRemoveActionCard(game, selectedCard.learnedActions[1]);
-
-    if (secondActionCard !== null) selectedCard.learnedActionsCards.push(secondActionCard);
+        if (actionCard !== null) { 
+            setRepeatableActionActivations(actionCard, selectedCard);
+            selectedCard.learnedActionsCards.push(actionCard);
+        }
+    });
 
     return 'success';
 }
@@ -308,10 +272,10 @@ const addCardToDeck = (game: Game, cardsList: GameCard[], selectedCard: GameCard
     return 'success';
 }
 
-const attachAction = (game: Game, selectedCard: ActionCard, targetLocation: BoardLocation | undefined) => {
+const attachAction = (game: Game, actionCard: ActionCard, targetLocation: BoardLocation | undefined) => {
     if (targetLocation === undefined) return 'targetLocation can not be undefined';
 
-    if (selectedCard === null)
+    if (actionCard === null)
         return 'Action card can not be null';
 
     var targetChampion = game.board[targetLocation.rowIndex][targetLocation.columnIndex] as ChampionCard;
@@ -319,17 +283,18 @@ const attachAction = (game: Game, selectedCard: ActionCard, targetLocation: Boar
     if (targetChampion === null)
         return 'Champion was not found';
 
-    const isChampionValidForAttachAction = isValidForAttach(targetChampion, selectedCard);
+    const isChampionValidForAttachAction = isValidForAttach(targetChampion, actionCard);
 
     if (!isChampionValidForAttachAction.isValid) {
         return isChampionValidForAttachAction.message;
     }
 
-    targetChampion.attachedActionsCards.push(selectedCard);
+    setRepeatableActionActivations(actionCard, targetChampion);
+    targetChampion.attachedActionsCards.push(actionCard);
 
     calculateStats(targetChampion);
 
-    removeCardFromHand(game, selectedCard);
+    removeCardFromHand(game, actionCard);
 
     return 'success';
 }
@@ -469,4 +434,81 @@ const isValidForAttach = (championCard: ChampionCard, actionCard: ActionCard): V
     }
 
     return { message: 'success', isValid: true };
+}
+
+export const playerAction = (action: string | null, cardsList: GameCard[], game: Game, data: any) => {
+    if (action === null) return 'Action can not be null';
+
+    if (game.playingPlayerIndex !== game.playerIndex && action !== PlayerActionsName.Draw)
+        return `Player ${game.playerIndex + 1} can not play on other player (${game.playingPlayerIndex + 1}) turn`;
+
+    const player = game.players[game.playerIndex];
+
+    let result: string;
+
+    switch (action) {
+        case PlayerActionsName.InitialDraw:
+            result = initialDraw(player);
+            break;
+        case PlayerActionsName.Draw:
+            result = draw(player, data.extendedData as number);
+            break;
+        case PlayerActionsName.Surrender:
+            result = surrender(game);
+            break;
+        case PlayerActionsName.Summon:
+            result = summon(game, data.selectedCard as ChampionCard, data.extendedData as BoardLocation);
+            break;
+        case PlayerActionsName.EndTurn:
+            result = endTurn(game);
+            break;
+        case PlayerActionsName.Equip:
+            result = equip(game, data.selectedCard as GearCard, data.extendedData as BoardLocation);
+            break;
+        case PlayerActionsName.Upgrade:
+            result = upgrade(game, data.selectedCard as ClassCard, data.extendedData as BoardLocation);
+            break;
+        case PlayerActionsName.AddCardToDeck:
+            result = addCardToDeck(game, cardsList, data.selectedCard as GameCard);
+            break;
+        case PlayerActionsName.RemoveCardFromDeck:
+            result = removeCardFromDeck(game, cardsList, data.selectedCard as GameCard);
+            break;
+        case PlayerActionsName.Attach:
+            result = attachAction(game, data.selectedCard as ActionCard, data.extendedData as BoardLocation);
+            break;
+        case PlayerActionsName.PlayOrder:
+            result = playOrder(game, data.selectedCard as OrderCard, data.extendedData as GameCard[]);
+            break;
+        case PlayerActionsName.ClearDeck:
+            result = clearDeck(game, cardsList);
+            break;
+        default:
+            return `Player action ${action} is not implemented yet`;
+    }
+
+    if(result === 'success')
+        game.gameActionLog.push(action);
+    
+    return result;
+}
+
+export const getPlayerAllowedHandCardSelect = (game: Game, selectedCard: OrderCard): AllowedHandCardSelectResponse => {
+    const { cardToDiscard } = getValidCardsForDiscard(game.players[game.playerIndex].hand, selectedCard);
+    return { message: 'success', handCards: cardToDiscard };
+}
+
+export const getPlayerActionsAllowedBoardLocations = (game: Game, actionName: string, selectedCard: GameCard | null): AllowedBoardLocationResponse => {
+    switch (actionName) {
+        case PlayerActionsName.Summon:
+            return getSummonBoardLocations(game);
+        case PlayerActionsName.Upgrade:
+            return getValidChampionsBoardLocations(game, selectedCard, isValidForUpgrade);
+        case PlayerActionsName.Equip:
+            return getValidChampionsBoardLocations(game, selectedCard, isValidForEquip);
+        case PlayerActionsName.Attach:
+            return getValidChampionsBoardLocations(game, selectedCard, isValidForAttach);
+        default:
+            return { message: `Player allowed board locations ${actionName} is not implemented yet`, locations: [] };
+    }
 }
