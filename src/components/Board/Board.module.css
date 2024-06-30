@@ -5,12 +5,12 @@
 .Board td {
     width: 120px;
     height: 120px;
-    border: 1px solid black;
+    position: relative;
 }
 
 .PlayerBase {
-    width: 8%;
-    height: 17%;
+    width: 100%;
+    height: 100%;
     position: absolute;
     opacity: 0.3;
     z-index: 1;
@@ -39,12 +39,4 @@
 .TargetButton {
     position: absolute!important;
     z-index: 9;
-}
-
-.PlayerOneObject {
-    border: solid 2px var(--player-one-color);
-}
-
-.PlayerTwoObject {
-    border: solid 2px var(--player-two-color);
 }

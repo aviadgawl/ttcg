@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { championActions, playerActions, setSelectedActionData, initialState } from '../../redux/store';
 import { GameStoreActionTypes } from '../../redux/types';
@@ -18,10 +18,6 @@ const Board: FC = () => {
 
   const shouldRotate = playerIndex === 1;
 
-  useEffect(() => {
-
-  }, [selectedActionData]);
-
   const handleAction = (targetX: number, targetY: number) => {
 
     if (selectedActionData.actionType === GameStoreActionTypes.PlayerAction) {
@@ -39,17 +35,11 @@ const Board: FC = () => {
   const playerBaseClassName = (rowIndex: number) => {
     if (rowIndex >= 11) return styles.PlayerOneBase;
     if (rowIndex <= 1) return styles.PlayerTwoBase;
-
-    return;
   };
 
-  const getObjectPlayerColorClassName = (cardPlayerIndex:number) => {
-    if(cardPlayerIndex === 0) return styles.PlayerOneObject;
-    return styles.PlayerTwoObject;
-  }
-
   const isAllowedLocation = (rowIndex: number, columnIndex: number): boolean => {
-    if (selectedActionData.allowedBoardLocations.length === 0) return false;
+    if (selectedActionData.allowedBoardLocations.length === 0) 
+      return false;
 
     return selectedActionData.allowedBoardLocations.some(loc => loc.rowIndex === rowIndex && loc.columnIndex === columnIndex);
   }
@@ -67,13 +57,13 @@ const Board: FC = () => {
                     <Button className={styles.TargetButton} size="small" variant="contained" onClick={() => handleAction(rowIndex, columnIndex)}>
                       <FaBullseye />
                     </Button>}
-                  {isChampion(card) && <BoardChampion className={`${getObjectPlayerColorClassName(card.playerIndex)} ${styles.BoardObject}`} 
-                    rotate={shouldRotate} 
+                  {isChampion(card) && <BoardChampion className={styles.BoardObject}
+                    rotate={shouldRotate}
                     champion={card}
                     x={rowIndex}
                     y={columnIndex}
                     isSelected={selectedActionData.sourceLocation?.rowIndex === rowIndex && selectedActionData.sourceLocation?.columnIndex === columnIndex} />}
-                  {isCrystal(card) && <BoardCrystal className={`${getObjectPlayerColorClassName(card.playerIndex)} ${styles.BoardObject}`} rotate={shouldRotate} crystal={card as unknown as CrystalCard} />}
+                  {isCrystal(card) && <BoardCrystal className={styles.BoardObject} rotate={shouldRotate} crystal={card as unknown as CrystalCard} />}
                 </div>
               </td>
             })}

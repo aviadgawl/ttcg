@@ -239,6 +239,10 @@ const getActionCardFromChampion = (sourceChampion: ChampionCard, actionCardGuid:
     return actionCard ?? null;
 }
 
+const getLastPlayedActionGuid = (game: Game): string => {
+    return game.gameActionLog[game.gameActionLog.length - 1];
+}
+
 export const setRepeatableActionActivations = (actionCard: ActionCard, sourceChampion: ChampionCard) => {
     if (!actionCard.isRepeatable) return false;
 
@@ -300,16 +304,15 @@ export const championAction = (game: Game, actionCardData: ActionCard, sourceLoc
     }
 
     if (result.status === 'success') {
+        const lastPlayedActionGuid = getLastPlayedActionGuid(game);
+
         if (isAttachedAction)
             checkAndRemoveFromAttachedActions(game.players[game.playerIndex], sourceChampion, actionCard);
-        else if (actionCard.wasPlayed || !actionCard.isRepeatable)
+        else if (lastPlayedActionGuid !== actionCard.guid || !actionCard.isRepeatable)
             sourceChampion.stm--;
 
         if (actionCard.isRepeatable && actionCard.repeatableActivationLeft !== null)
             actionCard.repeatableActivationLeft--;
-
-        if (!actionCard.wasPlayed)
-            actionCard.wasPlayed = true;
 
         if (result.targetedCard !== null && isCrystal(result.targetedCard) && result.targetedCard.currentHp < 0) {
             const loosingPlayer = game.players[result.targetedCard.playerIndex];

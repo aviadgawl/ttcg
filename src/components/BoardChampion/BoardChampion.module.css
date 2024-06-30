@@ -32,3 +32,11 @@ span {
 .ChampionCardDraw {
     height: 460px;
 }
+
+.PlayerOneObject {
+    color: var(--player-one-color);
+}
+
+.PlayerTwoObject {
+    color: var(--player-two-color);
+}

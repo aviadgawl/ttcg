@@ -22,9 +22,7 @@ interface BoardChampionProps {
 
 const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
   const dispatch = useAppDispatch();
-
   const [showDialog, setShowDialog] = useState(false);
-
   const showInfoButton = props?.champion?.body || props?.champion?.rightHand || props?.champion?.leftHand || props?.champion?.upgrade;
 
   const handlePanelClick = () => {
@@ -58,11 +56,18 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
     return sourceChampion.stm <= 0;
   }
 
+  const getPlayerClassName = () => {
+    if(props.champion.playerIndex === 0)
+      return styles.PlayerOneObject;
+    else if (props.champion.playerIndex === 1)
+      return styles.PlayerTwoObject;
+  }
+
   return (<div className={`App-text-color ${props.className} ${styles.Container} ${props.isSelected ? styles.Selected : styles.NotSelected} ${props.rotate ? 'App-rotate' : ''}`}>
     <div style={{ backgroundImage: `url(${props.champion.image})` }}
       className={styles.Panel}
       onClick={handlePanelClick}>
-      <h2>{props.champion.currentHp} / {props.champion.calHp}</h2>
+      <h2 className={getPlayerClassName()}>{props.champion.currentHp} / {props.champion.calHp}</h2>
     </div>
     <Dialog
       open={showDialog}

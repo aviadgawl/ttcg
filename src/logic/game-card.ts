@@ -97,7 +97,6 @@ export interface ActionCard extends GameCard {
     isRepeatable: boolean;
     repeatableStat: Stats|null;
     repeatableActivationLeft: number|null;
-    wasPlayed: boolean;
 }
 
 export interface ClassCard extends GameCard {

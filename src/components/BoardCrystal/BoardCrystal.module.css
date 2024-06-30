@@ -8,3 +8,11 @@
     justify-content: center;
     align-items: center;
 }
+
+.PlayerOneObject {
+    color: var(--player-one-color);
+}
+
+.PlayerTwoObject {
+    color: var(--player-two-color);
+}
