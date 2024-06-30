@@ -80,8 +80,8 @@
         "name": "Step",
         "duration": 0,
         "distance": [
-            -1,
-            -1
+            1,
+            1
         ],
         "direction": "Straight",
         "dmgStat": null,

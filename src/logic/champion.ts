@@ -58,19 +58,6 @@ const calculateDamageWithModifier = (baseDamage: number, actionCard: ActionCard)
     }
 }
 
-export const getChampionStatValueByStat = (champion: ChampionCard, damageStat: Stats | null): number => {
-    switch (damageStat) {
-        case Stats.Str:
-            return champion.calStr;
-        case Stats.Dex:
-            return champion.calDex;
-        case Stats.Int:
-            return champion.calInt;
-        default:
-            return 0;
-    }
-}
-
 const moveChampion = (board: (GameCard | null)[][], entityToMove: ChampionCard, sourceLocation: BoardLocation, targetLocation: BoardLocation): ChampionActionResult => {
     const targetCell = board[targetLocation.rowIndex][targetLocation.columnIndex] as unknown as SummoningCard;
     if (targetCell !== null) return { status: 'Target location isn\'t empty', targetedCard: null };
@@ -172,18 +159,13 @@ const checkBlockingObjects = (board: (GameCard | null)[][], sourceLocation: Boar
 }
 
 const getBoardLocationInStraightPath = (board: (GameCard | null)[][],
-    initialLocation: BoardLocation, sourceChampion: ChampionCard, actionCard: ActionCard): BoardLocation[] => {
+    initialLocation: BoardLocation, actionCard: ActionCard): BoardLocation[] => {
 
-    const isMovementCard = actionCard.actionType === ActionType.Movement;
-
-    const distance = isMovementCard ? sourceChampion.calDex : actionCard.distance[1];
+    const distance = actionCard.distance[1];
 
     if (distance === 0) return [initialLocation];
 
     const allowedLocations: BoardLocation[] = [];
-
-    if (isMovementCard && sourceChampion.statusEffects.some(x => x.name === EffectStatus.Immobilize))
-        return allowedLocations;
 
     const stopOnBlockers = !actionCard.isFreeTargeting;
     const initialRowIndex = initialLocation.rowIndex;
@@ -202,7 +184,7 @@ const getBoardLocationInStraightPath = (board: (GameCard | null)[][],
 
     const minRowIndex: number = initialRowIndex - distance;
 
-    for (let i = initialRowIndex - 1; i > 0 && i >= minRowIndex; i--) {
+    for (let i = initialRowIndex - 1; i >= 0 && i >= minRowIndex; i--) {
 
         const currentLocation = board[i][initialColumnIndex];
 
@@ -224,7 +206,7 @@ const getBoardLocationInStraightPath = (board: (GameCard | null)[][],
 
     const minColumnIndex: number = initialColumnIndex - distance;
 
-    for (let i = initialColumnIndex - 1; i > 0 && i >= minColumnIndex; i--) {
+    for (let i = initialColumnIndex - 1; i >= 0 && i >= minColumnIndex; i--) {
 
         const currentLocation = board[initialRowIndex][i];
 
@@ -255,6 +237,28 @@ const getActionCardFromChampion = (sourceChampion: ChampionCard, actionCardGuid:
         actionCard = sourceChampion.attachedActionsCards.find(card => card.guid === actionCardGuid);
 
     return actionCard ?? null;
+}
+
+export const setRepeatableActionActivations = (actionCard: ActionCard, sourceChampion: ChampionCard) => {
+    if (!actionCard.isRepeatable) return false;
+
+    const statValue = getChampionStatValueByStat(sourceChampion, actionCard.repeatableStat);
+    actionCard.repeatableActivationLeft = statValue;
+
+    return true;
+}
+
+export const getChampionStatValueByStat = (champion: ChampionCard, damageStat: Stats | null): number => {
+    switch (damageStat) {
+        case Stats.Str:
+            return champion.calStr;
+        case Stats.Dex:
+            return champion.calDex;
+        case Stats.Int:
+            return champion.calInt;
+        default:
+            return 0;
+    }
 }
 
 export const championAction = (game: Game, actionCardData: ActionCard, sourceLocation: BoardLocation, targetLocation: BoardLocation, isAttachedAction: boolean): string => {
@@ -333,6 +337,10 @@ export const calculateStats = (champion: ChampionCard) => {
     const hpDiff = newCalHp - champion.calHp;
     champion.calHp = newCalHp;
     champion.currentHp += hpDiff;
+
+    champion.learnedActionsCards.forEach(actionCard => {
+        setRepeatableActionActivations(actionCard, champion);
+    });
 }
 
 export const getChampionsActionsAllowedBoardLocations = (game: Game, actionCard: ActionCard, sourceBoardLocation: BoardLocation | null): AllowedBoardLocationResponse => {
@@ -345,9 +353,14 @@ export const getChampionsActionsAllowedBoardLocations = (game: Game, actionCard:
     if (sourceChampion === null || !isChampion(sourceChampion))
         return { message: 'Champion was not found', locations: resultLocations };
 
+    const isMovementCard = actionCard.actionType === ActionType.Movement;
+
+    if (isMovementCard && sourceChampion.statusEffects.some(x => x.name === EffectStatus.Immobilize))
+        return { message: `Champion is under the effect of ${EffectStatus.Immobilize} and can not move`, locations: resultLocations };
+
     switch (actionCard.direction) {
         case ActionDirections.Straight:
-            resultLocations = getBoardLocationInStraightPath(game.board, sourceBoardLocation, sourceChampion, actionCard);
+            resultLocations = getBoardLocationInStraightPath(game.board, sourceBoardLocation, actionCard);
             break;
         default:
             return { message: `Champion allowed board locations ${actionCard.name} is not implemented yet`, locations: resultLocations };

@@ -12,7 +12,7 @@ import {
     AllowedHandCardSelectResponse,
     OrderCardRequirement
 } from './game-card';
-import { calculateStats, getChampionStatValueByStat } from './champion';
+import { calculateStats, setRepeatableActionActivations } from './champion';
 import { Stats, GameStatus, PlayerActionsName } from './enums';
 
 import { Game, } from './game';
@@ -144,16 +144,6 @@ const surrender = (game: Game): string => {
     game.status = GameStatus.over;
     return 'success'
 };
-
-const setRepeatableActionActivations = (actionCard: ActionCard, sourceChampion: ChampionCard): boolean => {
-    if (!actionCard.isRepeatable) return false;
-    if (actionCard.repeatableActivationLeft !== null) return false;
-
-    const statValue = getChampionStatValueByStat(sourceChampion, actionCard.repeatableStat);
-    actionCard.repeatableActivationLeft = statValue;
-
-    return true;
-}
 
 const summon = (game: Game, selectedCard: ChampionCard, targetLocation: BoardLocation | undefined): string => {
     if (targetLocation === undefined) return 'targetLocation can not be undefined';
@@ -289,11 +279,11 @@ const attachAction = (game: Game, actionCard: ActionCard, targetLocation: BoardL
         return isChampionValidForAttachAction.message;
     }
 
-    setRepeatableActionActivations(actionCard, targetChampion);
+    if (actionCard.isRepeatable && actionCard.repeatableActivationLeft === null)
+        setRepeatableActionActivations(actionCard, targetChampion);
+
     targetChampion.attachedActionsCards.push(actionCard);
-
     calculateStats(targetChampion);
-
     removeCardFromHand(game, actionCard);
 
     return 'success';
