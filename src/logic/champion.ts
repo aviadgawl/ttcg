@@ -1,5 +1,5 @@
 import { GameCard, isCrystal, SummoningCard, ChampionCard, isChampion, ActionCard, AllowedBoardLocationResponse, BoardLocation } from './game-card';
-import { ActionDirections, GameStatus, ActionType, Stats, EffectStatus, MathModifier } from './enums';
+import { ActionDirections, GameStatus, ActionType, Stats, EffectStatus, MathModifier, ChampionDirection } from './enums';
 import { Game } from './game';
 import { Player } from './player';
 
@@ -58,8 +58,18 @@ const calculateDamageWithModifier = (baseDamage: number, actionCard: ActionCard)
     }
 }
 
+const getChampionDirection = (sourceLocation: BoardLocation, targetLocation: BoardLocation): ChampionDirection | null => {
+    if (sourceLocation.rowIndex < targetLocation.rowIndex) return ChampionDirection.Down;
+    if (sourceLocation.rowIndex > targetLocation.rowIndex) return ChampionDirection.Up;
+    if (sourceLocation.columnIndex < targetLocation.columnIndex) return ChampionDirection.Right;
+    if (sourceLocation.columnIndex > targetLocation.columnIndex) return ChampionDirection.Left;
+
+    return null;
+}
+
 const moveChampion = (board: (GameCard | null)[][], entityToMove: ChampionCard, sourceLocation: BoardLocation, targetLocation: BoardLocation): ChampionActionResult => {
     const targetCell = board[targetLocation.rowIndex][targetLocation.columnIndex] as unknown as SummoningCard;
+
     if (targetCell !== null) return { status: 'Target location isn\'t empty', targetedCard: null };
 
     if (entityToMove.calDex <= 0) return { status: 'Dex must be higher than zero', targetedCard: null };
@@ -67,8 +77,18 @@ const moveChampion = (board: (GameCard | null)[][], entityToMove: ChampionCard, 
     if (entityToMove.statusEffects.length > 0 && entityToMove.statusEffects.filter(x => x.name === EffectStatus.Immobilize))
         return { status: `Champion is under the effect of ${EffectStatus.Immobilize}`, targetedCard: null };
 
+    if (sourceLocation.rowIndex !== targetLocation.rowIndex && sourceLocation.columnIndex !== targetLocation.columnIndex)
+        return { status: 'Champion must move in one direction', targetedCard: null };
+
     const distance = calculateDistance(sourceLocation, targetLocation);
     if (distance > entityToMove.calDex) return { status: 'Location to far', targetedCard: null };
+
+    const championDirection = getChampionDirection(sourceLocation, targetLocation);
+
+    if (championDirection === null)
+        return { status: 'Could not find movement direction', targetedCard: null };
+
+    entityToMove.direction = championDirection;
 
     board[targetLocation.rowIndex][targetLocation.columnIndex] = entityToMove;
     board[sourceLocation.rowIndex][sourceLocation.columnIndex] = null;

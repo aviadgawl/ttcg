@@ -38,10 +38,14 @@ const Board: FC = () => {
   };
 
   const isAllowedLocation = (rowIndex: number, columnIndex: number): boolean => {
-    if (selectedActionData.allowedBoardLocations.length === 0) 
+    if (selectedActionData.allowedBoardLocations.length === 0)
       return false;
 
     return selectedActionData.allowedBoardLocations.some(loc => loc.rowIndex === rowIndex && loc.columnIndex === columnIndex);
+  }
+
+  const isSelectedChampion = (rowIndex: number, columnIndex: number) => {
+    return selectedActionData.sourceLocation?.rowIndex === rowIndex && selectedActionData.sourceLocation?.columnIndex === columnIndex;
   }
 
   return (
@@ -53,17 +57,27 @@ const Board: FC = () => {
               return <td key={`${rowIndex}-${columnIndex}`}>
                 <div className={`${styles.PlayerBase} ${playerBaseClassName(rowIndex)}`} />
                 <div className={styles.BoardPanel}>
+
                   {isAllowedLocation(rowIndex, columnIndex) &&
-                    <Button className={styles.TargetButton} size="small" variant="contained" onClick={() => handleAction(rowIndex, columnIndex)}>
+                    <Button className={styles.TargetButton}
+                      size="small" variant="contained"
+                      onClick={() => handleAction(rowIndex, columnIndex)}>
                       <FaBullseye />
                     </Button>}
-                  {isChampion(card) && <BoardChampion className={styles.BoardObject}
-                    rotate={shouldRotate}
-                    champion={card}
-                    x={rowIndex}
-                    y={columnIndex}
-                    isSelected={selectedActionData.sourceLocation?.rowIndex === rowIndex && selectedActionData.sourceLocation?.columnIndex === columnIndex} />}
-                  {isCrystal(card) && <BoardCrystal className={styles.BoardObject} rotate={shouldRotate} crystal={card as unknown as CrystalCard} />}
+
+                  {isChampion(card) &&
+                    <BoardChampion className={styles.BoardObject}
+                      rotate={shouldRotate}
+                      champion={card}
+                      x={rowIndex}
+                      y={columnIndex}
+                      isSelected={isSelectedChampion(rowIndex, columnIndex)} />}
+
+                  {isCrystal(card) &&
+                    <BoardCrystal className={styles.BoardObject}
+                      rotate={shouldRotate}
+                      crystal={card as unknown as CrystalCard} />}
+
                 </div>
               </td>
             })}

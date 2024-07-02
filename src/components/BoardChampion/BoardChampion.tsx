@@ -1,5 +1,6 @@
-import { FC, useState } from 'react';
+import { FC, ReactElement, useState } from 'react';
 import { ActionCard, ChampionCard } from '../../logic/game-card';
+import { ChampionDirection } from '../../logic/enums';
 import { useAppDispatch } from '../../redux/hooks';
 import { setSelectedActionData, createSelectedData } from '../../redux/store';
 import { GameStoreActionTypes } from '../../redux/types';
@@ -8,8 +9,15 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import GameCardDraw from '../GameCardDraw/GameCardDraw';
 import ChampionMenu from '../ChampionMenu/ChampionMenu';
-import { FaCircleInfo } from "react-icons/fa6";
+import { FaCircleInfo, FaArrowRight, FaArrowLeft, FaArrowUp, FaArrowDown } from "react-icons/fa6";
 import styles from './BoardChampion.module.css';
+
+const directionIconMap: ReactElement[] = [
+  <FaArrowUp />,
+  <FaArrowDown />,
+  <FaArrowLeft/>,
+  <FaArrowRight />
+];
 
 interface BoardChampionProps {
   champion: ChampionCard;
@@ -67,6 +75,7 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
     <div style={{ backgroundImage: `url(${props.champion.image})` }}
       className={styles.Panel}
       onClick={handlePanelClick}>
+        {directionIconMap[props.champion.direction]}
       <h2 className={getPlayerClassName()}>{props.champion.currentHp} / {props.champion.calHp}</h2>
     </div>
     <Dialog

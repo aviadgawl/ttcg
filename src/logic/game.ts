@@ -1,6 +1,6 @@
 import { Player } from './player';
 import { GameCard, GearCard, CrystalCard, ChampionCard, ClassCard, ActionCard, OrderCard } from './game-card';
-import { ActionType, Stats, ActionDirections, GameStatus, GearCategory, MathModifier, EffectStatus } from './enums';
+import { ActionType, Stats, ActionDirections, GameStatus, GearCategory, MathModifier, EffectStatus, ChampionDirection } from './enums';
 import { getImage } from '../helpers/image-helper';
 import cardsListJson from '../assets/cards/cards-list.json';
 
@@ -27,7 +27,8 @@ export const cardsList = cardsListJson.flatMap(x => {
                     int: x.int, calInt: x.int, mental: x.int,
                     stm: 2, learnedActions: x.actionsName, learnedActionsCards: [], attachedActionsCards: [], buffs: [], statusEffects: [],
                     body: null, rightHand: null, leftHand: null,
-                    class: x.class, calClass: x.class, upgrade: null, calHp: x.hp
+                    class: x.class, calClass: x.class, upgrade: null, calHp: x.hp,
+                    direction: ChampionDirection.Up
                 } as ChampionCard);
                 break;
             case 'Class':

@@ -1,4 +1,4 @@
-import { ActionDirections, Stats, ActionType, GearCategory, MathModifier, EffectStatus, CardType } from './enums';
+import { ActionDirections, Stats, ActionType, GearCategory, MathModifier, EffectStatus, CardType, ChampionDirection } from './enums';
 
 export interface ValidationResult {
     message: string;
@@ -135,6 +135,7 @@ export interface ChampionCard extends SummoningCard {
     upgrade: ClassCard | null;
 
     statusEffects: StatusEffect[];
+    direction: ChampionDirection;
 }
 
 export const isCrystal = (value: any): value is CrystalCard => !!value?.effect || value?.effect === null;

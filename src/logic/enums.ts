@@ -61,3 +61,10 @@ export enum EffectStatus {
 export enum CardType {
     OrderCard = 'OrderCard'
 }
+
+export enum ChampionDirection {
+    Up = 0,
+    Down,
+    Left,
+    Right
+}
