@@ -26,7 +26,7 @@ const Hand: FC = () => {
     const newSelectedActionData = createSelectedData(null, actionName, GameStoreActionTypes.PlayerAction);
     dispatch(playerActions({ selectedActionData: newSelectedActionData }));
 
-    if(hideHand)
+    if (hideHand)
       dispatch(setShowHand(false));
   };
 
@@ -54,7 +54,9 @@ const Hand: FC = () => {
   }
 
   return <div className={styles.Hand}>
-    <Button className={styles.HandButton} onClick={() => dispatch(setShowHand(true))}>Show Hand</Button>
+    <div className={styles.HandButton}>
+      <Button onClick={() => dispatch(setShowHand(true))}>Show Hand</Button>
+    </div>
     <Drawer variant="persistent" anchor="bottom" open={showHand} onClose={() => dispatch(setShowHand(false))}>
       <Button onClick={() => dispatch(setShowHand(false))}>Hand</Button>
       <div className={styles.CardContainer}>
