@@ -58,3 +58,7 @@
 .CardImage {
     height: 500px;
 }
+
+.CardActions {
+    width: 100%;
+}

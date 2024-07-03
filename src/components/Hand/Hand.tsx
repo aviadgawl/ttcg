@@ -54,12 +54,9 @@ const Hand: FC = () => {
   }
 
   return <div className={styles.Hand}>
-    <Button onClick={() => dispatch(setShowHand(true))}>Hand</Button>
-
-    <Drawer anchor="bottom" open={showHand} onClose={() => dispatch(setShowHand(false))}>
-
+    <Button className={styles.HandButton} onClick={() => dispatch(setShowHand(true))}>Show Hand</Button>
+    <Drawer variant="persistent" anchor="bottom" open={showHand} onClose={() => dispatch(setShowHand(false))}>
       <Button onClick={() => dispatch(setShowHand(false))}>Hand</Button>
-
       <div className={styles.CardContainer}>
         <div className={styles.ButtonsContainer}>
           <h3> Used Cards: {playerUsedCards.length}</h3>

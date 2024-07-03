@@ -84,7 +84,7 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
       onClose={handleClose}>
       <DialogContent className={styles.DialogContent}>
         <GameCardDraw className={styles.ChampionCardDraw} showChampionStats={true} card={props.champion}>
-          <div>
+          <div className={styles.ChampionCardActions}>
             {props.champion.learnedActionsCards.map((card, actionIndex) =>
               <Button disabled={isActionCardDisabled(props.champion, card)} size="small" variant="contained" className="App-button" key={actionIndex}
                 onClick={() => handleAction(card, false)}>{card.name} {card.isRepeatable && `(${card.repeatableActivationLeft})`}
@@ -95,7 +95,7 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
                 onClick={() => handleAction(card, true)}>{card.name}
               </Button>
             )}
-            {showInfoButton && <Button size="small" variant="outlined" onClick={handleChampionCardClick}><FaCircleInfo /></Button>}
+            {showInfoButton && <button onClick={handleChampionCardClick}><FaCircleInfo /></button>}
           </div>
         </GameCardDraw>
         <ChampionMenu anchorEl={anchorEl} open={open} onClose={handleCloseMenu} championCard={props.champion} />

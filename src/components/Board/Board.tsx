@@ -3,10 +3,9 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { championActions, playerActions, setSelectedActionData, initialState } from '../../redux/store';
 import { GameStoreActionTypes } from '../../redux/types';
 import { isCrystal, CrystalCard, isChampion, BoardLocation } from '../../logic/game-card';
-import Button from '@mui/material/Button';
 import BoardChampion from '../BoardChampion/BoardChampion';
 import BoardCrystal from '../BoardCrystal/BoardCrystal';
-import { FaBullseye } from "react-icons/fa";
+import { FaHandPointer } from "react-icons/fa";
 import styles from './Board.module.css';
 import BackGroundImage from '../../assets/images/background.jpg';
 
@@ -59,11 +58,10 @@ const Board: FC = () => {
                 <div className={styles.BoardPanel}>
 
                   {isAllowedLocation(rowIndex, columnIndex) &&
-                    <Button className={styles.TargetButton}
-                      size="small" variant="contained"
+                    <button className={styles.TargetButton}
                       onClick={() => handleAction(rowIndex, columnIndex)}>
-                      <FaBullseye />
-                    </Button>}
+                      <FaHandPointer />
+                    </button>}
 
                   {isChampion(card) &&
                     <BoardChampion className={styles.BoardObject}

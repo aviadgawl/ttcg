@@ -40,3 +40,9 @@ span {
 .PlayerTwoObject {
     color: var(--player-two-color);
 }
+
+.ChampionCardActions {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+ }
