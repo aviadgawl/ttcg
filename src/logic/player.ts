@@ -10,7 +10,8 @@ import {
     BoardLocation,
     AllowedBoardLocationResponse,
     AllowedHandCardSelectResponse,
-    OrderCardRequirement
+    OrderCardRequirement,
+    PlayerActionLogRecord
 } from './game-card';
 import { calculateStats, setRepeatableActionActivations } from './champion';
 import { Stats, GameStatus, PlayerActionsName, ChampionDirection } from './enums';
@@ -24,6 +25,7 @@ export interface Player {
     usedCards: GameCard[];
     didDraw: boolean;
     summonsLeft: number;
+    actionsLog: PlayerActionLogRecord[];
 }
 
 const getValidCardsForDiscard = (cards: GameCard[], orderCard: OrderCard): { cardToDiscard: GameCard[], amountToDiscard: number | undefined } => {
@@ -488,7 +490,7 @@ export const playerAction = (action: string | null, cardsList: GameCard[], game:
     }
 
     if(result === 'success')
-        game.gameActionLog.push(action);
+        player.actionsLog.push({name: action, guid: data?.selectedCard?.guid});
     
     return result;
 }

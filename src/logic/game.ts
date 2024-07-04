@@ -107,7 +107,6 @@ export interface Game {
     loser: Player | null,
     board: (GameCard | null)[][];
     status: GameStatus;
-    gameActionLog: string[]; 
 }
 
 export const createGame = (): Game => {
@@ -120,11 +119,11 @@ export const createGame = (): Game => {
         else board[index] = [null, null, null, null, null, null, null, null];
     }
 
-    return { board: board, players: [mockPlayerOne], status: GameStatus.over, playerIndex: 0, playingPlayerIndex: 0, loser: null, code: '', gameActionLog: [] };
+    return { board: board, players: [mockPlayerOne], status: GameStatus.over, playerIndex: 0, playingPlayerIndex: 0, loser: null, code: '' };
 }
 
-const mockPlayerOne: Player = { name: 'Player One', hand: [], deck: [], usedCards: [], didDraw: false, summonsLeft: 1 };
-const mockPlayerTwo: Player = { name: 'Player Two', hand: [], deck: [cardsList[25], cardsList[35], cardsList[12], cardsList[16], cardsList[15], cardsList[17]], usedCards: [], didDraw: false, summonsLeft: 1 };
+const mockPlayerOne: Player = { name: 'Player One', hand: [], deck: [], usedCards: [], didDraw: false, summonsLeft: 1, actionsLog: []};
+const mockPlayerTwo: Player = { name: 'Player Two', hand: [], deck: [cardsList[25], cardsList[35], cardsList[12], cardsList[16], cardsList[15], cardsList[17]], usedCards: [], didDraw: false, summonsLeft: 1, actionsLog: [] };
 const mockCrystalOne: CrystalCard = {
     image: 'https://img.freepik.com/premium-photo/magical-crystal-with-swirling-colors-digital-art-style-illustration_812426-6398.jpg',
     hp: 20, currentHp: 20, name: 'Warrior Spirit', guid: '5', effect: null, playerIndex: 0, isBlocking: true, calHp: 20

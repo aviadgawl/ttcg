@@ -59,9 +59,14 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
   };
 
   const isActionCardDisabled = (sourceChampion: ChampionCard, actionCard: ActionCard): boolean => {
-    const repeatableValid = actionCard.isRepeatable && actionCard.repeatableActivationLeft !== null && actionCard.repeatableActivationLeft === 0;
-    const staminaDepleted = sourceChampion.stm <= 0;
-    return repeatableValid || staminaDepleted;
+
+    if(actionCard.wasPlayed && !actionCard.isRepeatable) return true;
+    
+    if(actionCard.isRepeatable && (actionCard.repeatableActivationLeft === null || actionCard.repeatableActivationLeft <= 0)) return true;
+
+    if(sourceChampion.stm <= 0) return true;
+
+    return false;
   }
 
   const getPlayerClassName = () => {

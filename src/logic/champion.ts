@@ -1,4 +1,4 @@
-import { GameCard, isCrystal, SummoningCard, ChampionCard, isChampion, ActionCard, AllowedBoardLocationResponse, BoardLocation } from './game-card';
+import { GameCard, isCrystal, SummoningCard, ChampionCard, isChampion, ActionCard, AllowedBoardLocationResponse, BoardLocation, PlayerActionLogRecord } from './game-card';
 import { ActionDirections, GameStatus, ActionType, Stats, EffectStatus, MathModifier, ChampionDirection } from './enums';
 import { Game } from './game';
 import { Player } from './player';
@@ -269,8 +269,8 @@ const getActionCardFromChampion = (sourceChampion: ChampionCard, actionCardGuid:
     return actionCard ?? null;
 }
 
-const getLastPlayedActionGuid = (game: Game): string => {
-    return game.gameActionLog[game.gameActionLog.length - 1];
+const getLastPlayedActionGuid = (player: Player): PlayerActionLogRecord => {
+    return player.actionsLog[player.actionsLog.length - 1];
 }
 
 export const setRepeatableActionActivations = (actionCard: ActionCard, sourceChampion: ChampionCard) => {
@@ -312,7 +312,8 @@ export const championAction = (game: Game, actionCardData: ActionCard, sourceLoc
 
     const validRepeatable = checkRepeatableAction(actionCard);
 
-    if (actionCard.isRepeatable && !validRepeatable) return `Repeatable action depleted`;
+    if(actionCard.wasPlayed && !actionCard.isRepeatable) return 'Card was played once';
+    else if (actionCard.isRepeatable && !validRepeatable) return `Repeatable action depleted`;
     else if (sourceChampion.stm <= 0 && !isAttachedAction) return `Champion is not allowed to make action, 
             stamina: ${sourceChampion.stm}, is attached action ${isAttachedAction}`;
 
@@ -331,12 +332,16 @@ export const championAction = (game: Game, actionCardData: ActionCard, sourceLoc
             break;
     }
 
+    const player = game.players[game.playerIndex];
+
     if (result.status === 'success') {
-        const lastPlayedActionGuid = getLastPlayedActionGuid(game);
+        if(!actionCard.wasPlayed) actionCard.wasPlayed = true;
+
+        const lastPlayedActionRecord = getLastPlayedActionGuid(player);
 
         if (isAttachedAction)
             checkAndRemoveFromAttachedActions(game.players[game.playerIndex], sourceChampion, actionCard);
-        else if (lastPlayedActionGuid !== actionCard.guid || !actionCard.isRepeatable)
+        else if (lastPlayedActionRecord.guid !== actionCard.guid || !actionCard.isRepeatable)
             sourceChampion.stm--;
 
         if (actionCard.isRepeatable && actionCard.repeatableActivationLeft !== null)
@@ -347,8 +352,8 @@ export const championAction = (game: Game, actionCardData: ActionCard, sourceLoc
             game.loser = loosingPlayer;
             game.status = GameStatus.over;
         }
-
-        game.gameActionLog.push(actionCard.guid);
+        
+        player.actionsLog.push({name: actionCard.name, guid: actionCard.guid});
     }
 
     return result.status;

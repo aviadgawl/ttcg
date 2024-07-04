@@ -41,8 +41,8 @@ export interface GameEffect {
 export interface StatusEffect {
     name: EffectStatus,
     duration: number,
-    stat: Stats|null,
-    value: number|null
+    stat: Stats | null,
+    value: number | null
 }
 
 export interface GameCard {
@@ -60,7 +60,7 @@ export interface SummoningCard extends GameCard {
 }
 
 export interface CrystalCard extends SummoningCard {
-    effect: GameEffect|null
+    effect: GameEffect | null
 }
 
 export interface GearCard extends GameCard {
@@ -85,18 +85,19 @@ export interface ActionCard extends GameCard {
     direction: ActionDirections;
     duration: Number;
     calDuration: Number;
-    dmgStat: Stats|null;
-    dmgModifier: MathModifier|null;
-    dmgModifierValue: number|null;
-    requiredClassName: string|null;
-    requiredStat: Stats|null;
-    requiredStatValue: number|null;
-    requiredGearCategory: GearCategory|null;
+    dmgStat: Stats | null;
+    dmgModifier: MathModifier | null;
+    dmgModifierValue: number | null;
+    requiredClassName: string | null;
+    requiredStat: Stats | null;
+    requiredStatValue: number | null;
+    requiredGearCategory: GearCategory | null;
     isFreeTargeting: boolean;
     targetEffects: StatusEffect[];
     isRepeatable: boolean;
-    repeatableStat: Stats|null;
-    repeatableActivationLeft: number|null;
+    repeatableStat: Stats | null;
+    repeatableActivationLeft: number | null;
+    wasPlayed: boolean;
 }
 
 export interface ClassCard extends GameCard {
@@ -136,6 +137,11 @@ export interface ChampionCard extends SummoningCard {
 
     statusEffects: StatusEffect[];
     direction: ChampionDirection;
+}
+
+export interface PlayerActionLogRecord {
+    name: string;
+    guid: string|null;
 }
 
 export const isCrystal = (value: any): value is CrystalCard => !!value?.effect || value?.effect === null;
