@@ -58,22 +58,21 @@ const Board: FC = () => {
                 <div className={styles.BoardPanel}>
 
                   {isAllowedLocation(rowIndex, columnIndex) &&
-                    <button className={styles.TargetButton}
+                    <button className={`${styles.TargetButton} ${shouldRotate && 'App-rotate'}`}
                       onClick={() => handleAction(rowIndex, columnIndex)}>
                       <FaHandPointer />
                     </button>}
 
                   {isChampion(card) &&
-                    <BoardChampion className={styles.BoardObject}
-                      rotate={shouldRotate}
+                    <BoardChampion className={`${styles.BoardObject} ${shouldRotate && 'App-rotate'}`}
                       champion={card}
                       x={rowIndex}
                       y={columnIndex}
+                      shouldRotate={shouldRotate}
                       isSelected={isSelectedChampion(rowIndex, columnIndex)} />}
 
                   {isCrystal(card) &&
-                    <BoardCrystal className={styles.BoardObject}
-                      rotate={shouldRotate}
+                    <BoardCrystal className={`${styles.BoardObject} ${shouldRotate && 'App-rotate'}`}
                       crystal={card as unknown as CrystalCard} />}
 
                 </div>

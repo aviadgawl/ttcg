@@ -67,6 +67,16 @@ const getChampionDirection = (sourceLocation: BoardLocation, targetLocation: Boa
     return null;
 }
 
+const removeChampionFromBoard = (game: Game, targetLocation:BoardLocation) => {
+    const championCardToRemove = game.board[targetLocation.rowIndex][targetLocation.columnIndex];
+
+    if(championCardToRemove === null) return;
+
+    game.players[championCardToRemove.playerIndex].usedCards.push(championCardToRemove);
+
+    game.board[targetLocation.rowIndex][targetLocation.columnIndex] = null;
+}
+
 const moveChampion = (board: (GameCard | null)[][], entityToMove: ChampionCard, sourceLocation: BoardLocation, targetLocation: BoardLocation): ChampionActionResult => {
     const targetCell = board[targetLocation.rowIndex][targetLocation.columnIndex] as unknown as SummoningCard;
 
@@ -96,10 +106,10 @@ const moveChampion = (board: (GameCard | null)[][], entityToMove: ChampionCard, 
     return { status: 'success', targetedCard: null };
 }
 
-const attack = (board: (GameCard | null)[][], attackingChampion: ChampionCard,
+const attack = (game: Game, attackingChampion: ChampionCard,
     actionCard: ActionCard, sourceLocation: BoardLocation, targetLocation: BoardLocation): ChampionActionResult => {
 
-    const target = board[targetLocation.rowIndex][targetLocation.columnIndex] as unknown as SummoningCard;;
+    const target = game.board[targetLocation.rowIndex][targetLocation.columnIndex] as unknown as SummoningCard;;
 
     if (target === null) return { status: 'Target is not found', targetedCard: null };
 
@@ -115,7 +125,7 @@ const attack = (board: (GameCard | null)[][], attackingChampion: ChampionCard,
     const validDirection = checkAllowedDirection(actionCard.direction, sourceLocation, targetLocation);
     if (!validDirection) return { status: `Not a valid direction for direction: ${ActionDirections.Straight}`, targetedCard: null };
 
-    const isPathBlocked = checkBlockingObjects(board, sourceLocation, targetLocation);
+    const isPathBlocked = checkBlockingObjects(game.board, sourceLocation, targetLocation);
     if (isPathBlocked) return { status: 'Hit path is blocked', targetedCard: null };
 
     if (actionCard.dmgStat !== null)
@@ -126,7 +136,7 @@ const attack = (board: (GameCard | null)[][], attackingChampion: ChampionCard,
         calculateStats(target);
     }
 
-    if (target.currentHp <= 0) board[targetLocation.rowIndex][targetLocation.columnIndex] = null;
+    if (target.currentHp <= 0) removeChampionFromBoard(game, targetLocation);
 
     return { status: 'success', targetedCard: target };
 }
@@ -264,12 +274,10 @@ const getLastPlayedActionGuid = (game: Game): string => {
 }
 
 export const setRepeatableActionActivations = (actionCard: ActionCard, sourceChampion: ChampionCard) => {
-    if (!actionCard.isRepeatable) return false;
+    if (!actionCard.isRepeatable) return;
 
     const statValue = getChampionStatValueByStat(sourceChampion, actionCard.repeatableStat);
     actionCard.repeatableActivationLeft = statValue;
-
-    return true;
 }
 
 export const getChampionStatValueByStat = (champion: ChampionCard, damageStat: Stats | null): number => {
@@ -316,7 +324,7 @@ export const championAction = (game: Game, actionCardData: ActionCard, sourceLoc
             break;
         case ActionType.Attack:
         case ActionType.Buff:
-            result = attack(game.board, sourceChampion, actionCard, sourceLocation, targetLocation);
+            result = attack(game, sourceChampion, actionCard, sourceLocation, targetLocation);
             break;
         default:
             result = { status: `Action ${actionCard.actionType} is not implemented yet`, targetedCard: null };

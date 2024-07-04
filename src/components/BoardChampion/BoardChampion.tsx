@@ -1,7 +1,6 @@
 import { FC, ReactElement, useState } from 'react';
 import { ActionCard, ChampionCard } from '../../logic/game-card';
-import { ChampionDirection } from '../../logic/enums';
-import { useAppDispatch } from '../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { setSelectedActionData, createSelectedData } from '../../redux/store';
 import { GameStoreActionTypes } from '../../redux/types';
 import Button from '@mui/material/Button';
@@ -15,7 +14,7 @@ import styles from './BoardChampion.module.css';
 const directionIconMap: ReactElement[] = [
   <FaArrowUp />,
   <FaArrowDown />,
-  <FaArrowLeft/>,
+  <FaArrowLeft />,
   <FaArrowRight />
 ];
 
@@ -24,12 +23,13 @@ interface BoardChampionProps {
   x: number;
   y: number;
   isSelected: boolean;
-  rotate: boolean;
+  shouldRotate?: boolean;
   className: string;
 }
 
 const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
   const dispatch = useAppDispatch();
+  const playerIndex = useAppSelector((state) => state.gameActions.game.playerIndex);
   const [showDialog, setShowDialog] = useState(false);
   const showInfoButton = props?.champion?.body || props?.champion?.rightHand || props?.champion?.leftHand || props?.champion?.upgrade;
 
@@ -59,32 +59,37 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
   };
 
   const isActionCardDisabled = (sourceChampion: ChampionCard, actionCard: ActionCard): boolean => {
-    if(actionCard.isRepeatable && actionCard.repeatableActivationLeft !== null && actionCard.repeatableActivationLeft === 0) return true;
-    
-    return sourceChampion.stm <= 0;
+    const repeatableValid = actionCard.isRepeatable && actionCard.repeatableActivationLeft !== null && actionCard.repeatableActivationLeft === 0;
+    const staminaDepleted = sourceChampion.stm <= 0;
+    return repeatableValid || staminaDepleted;
   }
 
   const getPlayerClassName = () => {
-    if(props.champion.playerIndex === 0)
+    if (props.champion.playerIndex === 0)
       return styles.PlayerOneObject;
     else if (props.champion.playerIndex === 1)
       return styles.PlayerTwoObject;
   }
 
-  return (<div className={`App-text-color ${props.className} ${styles.Container} ${props.isSelected ? styles.Selected : styles.NotSelected} ${props.rotate ? 'App-rotate' : ''}`}>
+  return (<div className={`App-text-color ${props.className} ${styles.Container} ${props.isSelected ? styles.Selected : styles.NotSelected}`}>
+
     <div style={{ backgroundImage: `url(${props.champion.image})` }}
       className={styles.Panel}
       onClick={handlePanelClick}>
+      <div className={`${props.shouldRotate && 'App-rotate'}`}>
         {directionIconMap[props.champion.direction]}
+      </div>
       <h2 className={getPlayerClassName()}>{props.champion.currentHp} / {props.champion.calHp}</h2>
     </div>
+
     <Dialog
       open={showDialog}
       className={styles.Dialog}
       onClose={handleClose}>
       <DialogContent className={styles.DialogContent}>
+
         <GameCardDraw className={styles.ChampionCardDraw} showChampionStats={true} card={props.champion}>
-          <div className={styles.ChampionCardActions}>
+          {props.champion.playerIndex === playerIndex && <div className={styles.ChampionCardActions}>
             {props.champion.learnedActionsCards.map((card, actionIndex) =>
               <Button disabled={isActionCardDisabled(props.champion, card)} size="small" variant="contained" className="App-button" key={actionIndex}
                 onClick={() => handleAction(card, false)}>{card.name} {card.isRepeatable && `(${card.repeatableActivationLeft})`}
@@ -96,8 +101,9 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
               </Button>
             )}
             {showInfoButton && <button onClick={handleChampionCardClick}><FaCircleInfo /></button>}
-          </div>
+          </div>}
         </GameCardDraw>
+
         <ChampionMenu anchorEl={anchorEl} open={open} onClose={handleCloseMenu} championCard={props.champion} />
       </DialogContent>
     </Dialog>

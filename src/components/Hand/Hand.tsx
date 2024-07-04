@@ -12,9 +12,7 @@ import HandCard, { HandCardMode } from '../HandCard/HandCard';
 const Hand: FC = () => {
   const playerIndex = useAppSelector((state) => state.gameActions.game.playerIndex);
   const playingPlayerIndex = useAppSelector((state) => state.gameActions.game.playingPlayerIndex);
-  const playerHand = useAppSelector((state) => state.gameActions.game.players[playerIndex].hand);
-  const playerDeck = useAppSelector((state) => state.gameActions.game.players[playerIndex].deck);
-  const playerUsedCards = useAppSelector((state) => state.gameActions.game.players[playerIndex].usedCards);
+  const player = useAppSelector((state) => state.gameActions.game.players[playerIndex]);
   const showHand = useAppSelector((state) => state.gameActions.showHand);
   const selectedActionData = useAppSelector((state) => state.gameActions.selectedActionData);
 
@@ -58,15 +56,15 @@ const Hand: FC = () => {
       <Button onClick={() => dispatch(setShowHand(true))}>Show Hand</Button>
     </div>
     <Drawer variant="persistent" anchor="bottom" open={showHand} onClose={() => dispatch(setShowHand(false))}>
-      <Button onClick={() => dispatch(setShowHand(false))}>Hand</Button>
+      <Button onClick={() => dispatch(setShowHand(false))}>Hide Hand</Button>
       <div className={styles.CardContainer}>
         <div className={styles.ButtonsContainer}>
-          <h3> Used Cards: {playerUsedCards.length}</h3>
-          <Button disabled={playerIndex !== playingPlayerIndex} onClick={() => handleAction(PlayerActionsName.InitialDraw)} variant="outlined">Deck: {playerDeck.length}</Button>
+          <h3> Used Cards: {player.usedCards.length}</h3>
+          <Button disabled={playerIndex !== playingPlayerIndex || player.didDraw} onClick={() => handleAction(PlayerActionsName.InitialDraw)} variant="outlined">Deck: {player.deck.length}</Button>
           <Button disabled={playerIndex !== playingPlayerIndex} onClick={() => handleAction(PlayerActionsName.EndTurn, true)} variant="outlined">{PlayerActionsName.EndTurn}</Button>
           <Button disabled={playerIndex !== playingPlayerIndex} onClick={() => handleAction(PlayerActionsName.Surrender)} variant="outlined">{PlayerActionsName.Surrender}</Button>
         </div>
-        {playerHand.map((card, index) => <div className={discardCards.some(x => x.guid === card.guid) ? styles.DiscardCard : ''} key={index}>
+        {player.hand.map((card, index) => <div className={discardCards.some(x => x.guid === card.guid) ? styles.DiscardCard : ''} key={index}>
           <HandCard disabled={playerIndex !== playingPlayerIndex} mode={HandCardMode.Hand} card={card} />
           {selectedActionData?.allowedHandCardSelect?.some(x => x.guid === card.guid) && <Button onClick={() => handleDiscardAction(card)}>Select</Button>}
         </div>)}

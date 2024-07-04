@@ -4,7 +4,6 @@ import styles from './BoardCrystal.module.css';
 
 interface BoardCrystalProps {
     crystal: CrystalCard,
-    rotate: boolean,
     className?:string
 }
 
@@ -17,7 +16,7 @@ const BoardCrystal: FC<BoardCrystalProps> = (props: BoardCrystalProps) => {
       return styles.PlayerTwoObject;
   }
 
-  return <div className={`${props.className} App-text-color ${styles.BoardCrystal} ${props.rotate ? 'App-rotate' : ''}`} style={{ backgroundImage: `url(${props.crystal.image})` }}>
+  return <div className={`${props.className} App-text-color ${styles.BoardCrystal}`} style={{ backgroundImage: `url(${props.crystal.image})` }}>
     <h2 className={getPlayerClassName()}>{props.crystal.currentHp} / {props.crystal.hp}</h2>
   </div>
 };

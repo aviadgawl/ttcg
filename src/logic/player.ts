@@ -13,7 +13,7 @@ import {
     OrderCardRequirement
 } from './game-card';
 import { calculateStats, setRepeatableActionActivations } from './champion';
-import { Stats, GameStatus, PlayerActionsName } from './enums';
+import { Stats, GameStatus, PlayerActionsName, ChampionDirection } from './enums';
 
 import { Game, } from './game';
 
@@ -57,6 +57,10 @@ const getSummonBoardLocation = (game: Game, startingRow: number, endRow: number)
 
 const getSummonBoardLocations = (game: Game): AllowedBoardLocationResponse => {
     let locations: BoardLocation[] = [];
+
+    const player = game.players[game.playerIndex];
+    
+    if (player.summonsLeft === 0) return { message: 'Player used his all his summons', locations: locations };
 
     if (game.playerIndex === 0)
         locations = getSummonBoardLocation(game, game.board.length - 2, game.board.length);
@@ -165,6 +169,8 @@ const summon = (game: Game, selectedCard: ChampionCard, targetLocation: BoardLoc
 
     player.summonsLeft--;
 
+    selectedCard.direction = selectedCard.playerIndex === 0 ? ChampionDirection.Down : ChampionDirection.Up;
+
     if (selectedCard.learnedActions.length !== 2) return 'Champion can no have less or more than two learned actions';
 
     selectedCard.learnedActions.forEach(action => {
@@ -189,7 +195,7 @@ const endTurn = (game: Game): string => {
 
     game.playingPlayerIndex = nextPlayerIndex;
 
-    refreshResources(game, nextPlayerIndex)
+    refreshResources(game, nextPlayerIndex);
 
     return 'success';
 }
@@ -331,7 +337,11 @@ const refreshResources = (game: Game, playerIndex: number) => {
         for (let columnIndex = 0; columnIndex < board[rowIndex].length; columnIndex++) {
             const card = board[rowIndex][columnIndex];
 
-            if (isChampion(card) && card.playerIndex === playerIndex) card.stm = 2;
+            if (isChampion(card) && card.playerIndex === playerIndex) {
+                card.stm = 2;
+                card.learnedActionsCards.forEach(learnedActionCard => setRepeatableActionActivations(learnedActionCard, card));
+                calculateStats(card);
+            };
         }
     }
 }
