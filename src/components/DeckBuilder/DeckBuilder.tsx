@@ -61,6 +61,7 @@ const DeckBuilder: FC = () => {
         <Button onClick={handleExport}>Export</Button>
         <Button onClick={handleImport}>Import</Button>
         <Button onClick={handleClear}>Clear</Button>
+        <hr />
         <h2>Total: {playerDeck.length}</h2>
       </div>
       <hr />

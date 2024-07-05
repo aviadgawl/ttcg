@@ -30,6 +30,7 @@ interface BoardChampionProps {
 const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
   const dispatch = useAppDispatch();
   const playerIndex = useAppSelector((state) => state.gameActions.game.playerIndex);
+  const playingPlayerIndex = useAppSelector((state) => state.gameActions.game.playingPlayerIndex);
   const [showDialog, setShowDialog] = useState(false);
   const showInfoButton = props?.champion?.body || props?.champion?.rightHand || props?.champion?.leftHand || props?.champion?.upgrade;
 
@@ -59,12 +60,15 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
   };
 
   const isActionCardDisabled = (sourceChampion: ChampionCard, actionCard: ActionCard): boolean => {
+    if(playerIndex !== playingPlayerIndex) return true;
 
-    if(actionCard.wasPlayed && !actionCard.isRepeatable) return true;
-    
-    if(actionCard.isRepeatable && (actionCard.repeatableActivationLeft === null || actionCard.repeatableActivationLeft <= 0)) return true;
-
-    if(sourceChampion.stm <= 0) return true;
+    if(actionCard.isRepeatable) {
+      if(actionCard.repeatableActivationLeft === null || actionCard.repeatableActivationLeft <= 0) return true;
+    }
+    else {
+      if(actionCard.wasPlayed) return true;
+      if(sourceChampion.stm <= 0) return true;
+    }
 
     return false;
   }
@@ -81,7 +85,7 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
     <div style={{ backgroundImage: `url(${props.champion.image})` }}
       className={styles.Panel}
       onClick={handlePanelClick}>
-      <div className={`${props.shouldRotate && 'App-rotate'}`}>
+      <div className={`${styles.DirectionIcon} ${props.shouldRotate && 'App-rotate'}`}>
         {directionIconMap[props.champion.direction]}
       </div>
       <h2 className={getPlayerClassName()}>{props.champion.currentHp} / {props.champion.calHp}</h2>
@@ -102,7 +106,7 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
             )}
             {props.champion.attachedActionsCards.map((card, actionIndex) =>
               <Button size="small" variant="contained" className="App-button" key={actionIndex}
-                onClick={() => handleAction(card, true)}>{card.name}
+                onClick={() => handleAction(card, true)}>{card.name} {card.isRepeatable && `(${card.repeatableActivationLeft})`}
               </Button>
             )}
             {showInfoButton && <button onClick={handleChampionCardClick}><FaCircleInfo /></button>}

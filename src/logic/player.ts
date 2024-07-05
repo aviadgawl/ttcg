@@ -13,7 +13,7 @@ import {
     OrderCardRequirement,
     PlayerActionLogRecord
 } from './game-card';
-import { calculateStats, setRepeatableActionActivations } from './champion';
+import { calculateStats, setRepeatableActionActivations, getPlayer } from './champion';
 import { Stats, GameStatus, PlayerActionsName, ChampionDirection } from './enums';
 
 import { Game, } from './game';
@@ -60,7 +60,7 @@ const getSummonBoardLocation = (game: Game, startingRow: number, endRow: number)
 const getSummonBoardLocations = (game: Game): AllowedBoardLocationResponse => {
     let locations: BoardLocation[] = [];
 
-    const player = game.players[game.playerIndex];
+    const player = getPlayer(game);
     
     if (player.summonsLeft === 0) return { message: 'Player used his all his summons', locations: locations };
 
@@ -101,7 +101,7 @@ const playOrder = (game: Game, selectedCard: OrderCard, cardsPayment: GameCard[]
     if (cardToDiscard.length !== amountToDiscard)
         return `Valid cards to discard (${cardToDiscard.length}) is not equal to the requirement ${amountToDiscard}`;
 
-    const player = game.players[game.playerIndex];
+    const player = getPlayer(game);
 
     if (selectedCard.reward.name === 'Draw' && player.deck.length < selectedCard.reward.amount)
         return `Not enough cards in deck, in deck ${player.deck.length} amount to draw: ${selectedCard.reward.amount}`;
@@ -154,7 +154,7 @@ const surrender = (game: Game): string => {
 const summon = (game: Game, selectedCard: ChampionCard, targetLocation: BoardLocation | undefined): string => {
     if (targetLocation === undefined) return 'targetLocation can not be undefined';
 
-    const player = game.players[game.playerIndex];
+    const player = getPlayer(game);
 
     if (player.summonsLeft === 0) return 'Player used his all his summons';
 
@@ -171,7 +171,7 @@ const summon = (game: Game, selectedCard: ChampionCard, targetLocation: BoardLoc
 
     player.summonsLeft--;
 
-    selectedCard.direction = selectedCard.playerIndex === 0 ? ChampionDirection.Down : ChampionDirection.Up;
+    selectedCard.direction = selectedCard.playerIndex === 0 ? ChampionDirection.Up : ChampionDirection.Down;
 
     if (selectedCard.learnedActions.length !== 2) return 'Champion can no have less or more than two learned actions';
 
@@ -257,7 +257,7 @@ const upgrade = (game: Game, selectedCard: ClassCard, targetLocation: BoardLocat
 const addCardToDeck = (game: Game, cardsList: GameCard[], selectedCard: GameCard) => {
     if (selectedCard === null) return 'Card can not be null';
 
-    const player = game.players[game.playerIndex];
+    const player = getPlayer(game);
 
     if (player.deck.filter(card => card.name === selectedCard.name).length === 3)
         return `Can not add more copies of ${selectedCard.name}`;
@@ -300,7 +300,7 @@ const attachAction = (game: Game, actionCard: ActionCard, targetLocation: BoardL
 const removeCardFromDeck = (game: Game, cardsList: GameCard[], selectedCard: GameCard) => {
     if (selectedCard === null) return 'Card can not be null';
 
-    const player = game.players[game.playerIndex];
+    const player = getPlayer(game);
     const deletedCards = removeCard(player.deck, selectedCard);
 
     if (deletedCards === null) return 'Error removing card from deck';
@@ -349,13 +349,13 @@ const refreshResources = (game: Game, playerIndex: number) => {
 }
 
 const removeCardFromHand = (game: Game, selectedCard: GameCard) => {
-    const player = game.players[game.playerIndex];
+    const player = getPlayer(game);
     const cardIndex = player.hand.findIndex((x) => x.guid === selectedCard.guid);
     player.hand.splice(cardIndex, 1);
 }
 
 const getAndRemoveActionCard = (game: Game, actionCardName: string): ActionCard | null => {
-    const player = game.players[game.playerIndex];
+    const player = getPlayer(game);
 
     let actionCard = findCard(player.usedCards, actionCardName);
 
@@ -444,7 +444,7 @@ export const playerAction = (action: string | null, cardsList: GameCard[], game:
     if (game.playingPlayerIndex !== game.playerIndex && action !== PlayerActionsName.Draw)
         return `Player ${game.playerIndex + 1} can not play on other player (${game.playingPlayerIndex + 1}) turn`;
 
-    const player = game.players[game.playerIndex];
+    const player = getPlayer(game);
 
     let result: string;
 

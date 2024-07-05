@@ -273,6 +273,36 @@ const getLastPlayedActionGuid = (player: Player): PlayerActionLogRecord => {
     return player.actionsLog[player.actionsLog.length - 1];
 }
 
+const successfulAttackGameUpdate = (game: Game, player: Player, sourceChampion: ChampionCard, actionCard: ActionCard,
+     isAttachedAction: boolean, result :ChampionActionResult) => {
+
+    if(!actionCard.wasPlayed) actionCard.wasPlayed = true;
+
+    if (actionCard.isRepeatable && actionCard.repeatableActivationLeft !== null)
+    actionCard.repeatableActivationLeft--;
+
+    const lastPlayedActionRecord = getLastPlayedActionGuid(player);
+
+    const validRepeatable = checkRepeatableAction(actionCard);
+
+    if (isAttachedAction && !validRepeatable)
+        checkAndRemoveFromAttachedActions(game.players[game.playerIndex], sourceChampion, actionCard);
+    else if (lastPlayedActionRecord.guid !== actionCard.guid || !actionCard.isRepeatable)
+        sourceChampion.stm--;
+
+    if (result.targetedCard !== null && isCrystal(result.targetedCard) && result.targetedCard.currentHp < 0) {
+        const loosingPlayer = game.players[result.targetedCard.playerIndex];
+        game.loser = loosingPlayer;
+        game.status = GameStatus.over;
+    }
+    
+    player.actionsLog.push({name: actionCard.name, guid: actionCard.guid});
+}
+
+export const getPlayer = (game: Game): Player => {
+    return game.players[game.playerIndex];
+}
+
 export const setRepeatableActionActivations = (actionCard: ActionCard, sourceChampion: ChampionCard) => {
     if (!actionCard.isRepeatable) return;
 
@@ -310,12 +340,17 @@ export const championAction = (game: Game, actionCardData: ActionCard, sourceLoc
 
     if (actionCard === null) return `Action ${actionCardData.name} card was not found on champion`;
 
-    const validRepeatable = checkRepeatableAction(actionCard);
+    if(actionCard.isRepeatable) {
+        const validRepeatable = checkRepeatableAction(actionCard);
 
-    if(actionCard.wasPlayed && !actionCard.isRepeatable) return 'Card was played once';
-    else if (actionCard.isRepeatable && !validRepeatable) return `Repeatable action depleted`;
-    else if (sourceChampion.stm <= 0 && !isAttachedAction) return `Champion is not allowed to make action, 
-            stamina: ${sourceChampion.stm}, is attached action ${isAttachedAction}`;
+        if (!validRepeatable) return `Repeatable action depleted`;
+    }
+    else {
+        if(actionCard.wasPlayed) return 'Card was played once this turn';
+
+        if (sourceChampion.stm <= 0 && !isAttachedAction) return `Champion is not allowed to make action, 
+                stamina: ${sourceChampion.stm}, is attached action ${isAttachedAction}`;
+    }
 
     let result: ChampionActionResult | null = null;
 
@@ -332,30 +367,11 @@ export const championAction = (game: Game, actionCardData: ActionCard, sourceLoc
             break;
     }
 
-    const player = game.players[game.playerIndex];
+    const player = getPlayer(game);
 
-    if (result.status === 'success') {
-        if(!actionCard.wasPlayed) actionCard.wasPlayed = true;
-
-        const lastPlayedActionRecord = getLastPlayedActionGuid(player);
-
-        if (isAttachedAction)
-            checkAndRemoveFromAttachedActions(game.players[game.playerIndex], sourceChampion, actionCard);
-        else if (lastPlayedActionRecord.guid !== actionCard.guid || !actionCard.isRepeatable)
-            sourceChampion.stm--;
-
-        if (actionCard.isRepeatable && actionCard.repeatableActivationLeft !== null)
-            actionCard.repeatableActivationLeft--;
-
-        if (result.targetedCard !== null && isCrystal(result.targetedCard) && result.targetedCard.currentHp < 0) {
-            const loosingPlayer = game.players[result.targetedCard.playerIndex];
-            game.loser = loosingPlayer;
-            game.status = GameStatus.over;
-        }
-        
-        player.actionsLog.push({name: actionCard.name, guid: actionCard.guid});
-    }
-
+    if (result.status === 'success') 
+        successfulAttackGameUpdate(game, player, sourceChampion, actionCard, isAttachedAction, result);  
+    
     return result.status;
 }
 
