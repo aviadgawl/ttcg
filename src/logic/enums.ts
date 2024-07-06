@@ -70,3 +70,9 @@ export enum ChampionDirection {
     Left,
     Right
 }
+
+export enum BodyPart {
+    Hand = 'Hand',
+    Hands = 'Hands',
+    Body = 'Body'
+}

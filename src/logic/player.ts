@@ -14,7 +14,7 @@ import {
     PlayerActionLogRecord
 } from './game-card';
 import { calculateStats, setRepeatableActionActivations, getPlayer } from './champion';
-import { Stats, GameStatus, PlayerActionsName, ChampionDirection } from './enums';
+import { Stats, GameStatus, PlayerActionsName, ChampionDirection, BodyPart } from './enums';
 
 import { Game, } from './game';
 
@@ -209,13 +209,17 @@ const equip = (game: Game, selectedCard: GearCard, targetLocation: BoardLocation
 
     if (targetChampion === null) return 'Champion was not found';
 
-    if (selectedCard.bodyPart === 'Hand') {
+    if (selectedCard.bodyPart === BodyPart.Hand) {
         if (targetChampion.rightHand === null) targetChampion.rightHand = selectedCard;
-        else if (targetChampion.leftHand === null) targetChampion.leftHand = selectedCard;
+        else if (targetChampion.leftHand === null && targetChampion.rightHand.bodyPart !== BodyPart.Hands) targetChampion.leftHand = selectedCard;
         else targetChampion.rightHand = selectedCard;
     }
-    else if (selectedCard.bodyPart === 'Body')
+    else if (selectedCard.bodyPart === BodyPart.Body)
         targetChampion.body = selectedCard;
+    else if (selectedCard.bodyPart === BodyPart.Hands) {
+        targetChampion.rightHand = selectedCard;
+        targetChampion.leftHand = null;
+    }
 
     calculateStats(targetChampion);
 
