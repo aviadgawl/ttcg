@@ -10,5 +10,3 @@
 npx generate-react-cli component MyComponent
 
 # bugs
-
-* When equipping repeatable activations is rest

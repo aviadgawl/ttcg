@@ -391,7 +391,8 @@ export const calculateStats = (champion: ChampionCard) => {
     champion.currentHp += hpDiff;
 
     champion.learnedActionsCards.forEach(actionCard => {
-        setRepeatableActionActivations(actionCard, champion);
+        if(!actionCard.wasPlayed)
+            setRepeatableActionActivations(actionCard, champion);
     });
 }
 

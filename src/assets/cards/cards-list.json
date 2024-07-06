@@ -2,6 +2,7 @@
     {
         "type": "Champion",
         "name": "Eduard",
+        "race": "Human",
         "hp": 12,
         "str": 2,
         "dex": 1,
@@ -16,7 +17,120 @@
     },
     {
         "type": "Champion",
+        "name": "Robin",
+        "race": "Human",
+        "hp": 9,
+        "str": 1,
+        "dex": 2,
+        "int": 1,
+        "stm": 2,
+        "actionsName": [
+            "Step",
+            "Dagger Throw"
+        ],
+        "class": "Rouge",
+        "isBlocking": false
+    },
+    {
+        "type": "Champion",
+        "name": "David",
+        "race": "Human",
+        "hp": 9,
+        "str": 1,
+        "dex": 1,
+        "int": 2,
+        "stm": 2,
+        "actionsName": [
+            "Step",
+            "Basic Hit"
+        ],
+        "class": "Acolyte",
+        "isBlocking": false
+    },
+    {
+        "type": "Champion",
+        "name": "Aron",
+        "race": "Human",
+        "hp": 9,
+        "str": 0,
+        "dex": 1,
+        "int": 3,
+        "stm": 2,
+        "actionsName": [
+            "Step",
+            "Energy Ball"
+        ],
+        "class": "Apprentice",
+        "isBlocking": false
+    },
+    {
+        "type": "Champion",
+        "name": "Tafrandir",
+        "race": "Elf",
+        "hp": 9,
+        "str": 2,
+        "dex": 2,
+        "int": 1,
+        "stm": 2,
+        "actionsName": [
+            "Step",
+            "Basic Hit"
+        ],
+        "class": "Fighter",
+        "isBlocking": false
+    },
+    {
+        "type": "Champion",
+        "name": "Taeriel",
+        "race": "Elf",
+        "hp": 9,
+        "str": 0,
+        "dex": 3,
+        "int": 1,
+        "stm": 2,
+        "actionsName": [
+            "Step",
+            "Dagger Throw"
+        ],
+        "class": "Rouge",
+        "isBlocking": false
+    },
+    {
+        "type": "Champion",
+        "name": "Valindra",
+        "race": "Elf",
+        "hp": 9,
+        "str": 0,
+        "dex": 2,
+        "int": 2,
+        "stm": 2,
+        "actionsName": [
+            "Step",
+            "Energy Ball"
+        ],
+        "class": "Apprentice",
+        "isBlocking": false
+    },
+    {
+        "type": "Champion",
+        "name": "Firsha",
+        "race": "Elf",
+        "hp": 9,
+        "str": 1,
+        "dex": 2,
+        "int": 1,
+        "stm": 2,
+        "actionsName": [
+            "Step",
+            "Basic Hit"
+        ],
+        "class": "Acolyte",
+        "isBlocking": false
+    },
+    {
+        "type": "Champion",
         "name": "Chiron",
+        "race": "Orc",
         "hp": 9,
         "str": 2,
         "dex": 1,
@@ -27,6 +141,54 @@
             "Basic Hit"
         ],
         "class": "Acolyte",
+        "isBlocking": false
+    },
+    {
+        "type": "Champion",
+        "name": "Gurak",
+        "race": "Orc",
+        "hp": 12,
+        "str": 3,
+        "dex": 1,
+        "int": 0,
+        "stm": 2,
+        "actionsName": [
+            "Step",
+            "Basic Hit"
+        ],
+        "class": "Fighter",
+        "isBlocking": false
+    },
+    {
+        "type": "Champion",
+        "name": "Karina",
+        "race": "Orc",
+        "hp": 9,
+        "str": 1,
+        "dex": 1,
+        "int": 2,
+        "stm": 2,
+        "actionsName": [
+            "Step",
+            "Energy Ball"
+        ],
+        "class": "Apprentice",
+        "isBlocking": false
+    },
+    {
+        "type": "Champion",
+        "name": "Seth",
+        "race": "Orc",
+        "hp": 9,
+        "str": 2,
+        "dex": 2,
+        "int": 0,
+        "stm": 2,
+        "actionsName": [
+            "Step",
+            "Dagger Throw"
+        ],
+        "class": "Rouge",
         "isBlocking": false
     },
     {
@@ -50,6 +212,105 @@
         "int": 0,
         "hp": 0,
         "bodyPart": "Hand",
+        "isBlocking": false
+    },
+    {
+        "type": "Gear",
+        "name": "Simple Dagger",
+        "category": "Daggers",
+        "str": 0,
+        "dex": 2,
+        "int": 0,
+        "hp": 0,
+        "bodyPart": "Hand",
+        "isBlocking": false
+    },
+    {
+        "type": "Gear",
+        "name": "Great Staff",
+        "category": "Staffs",
+        "str": 0,
+        "dex": 0,
+        "int": 2,
+        "hp": 0,
+        "bodyPart": "Hands",
+        "isBlocking": false
+    },
+    {
+        "type": "Gear",
+        "name": "Shield",
+        "category": "Shields",
+        "str": 0,
+        "dex": 0,
+        "int": 0,
+        "hp": 6,
+        "bodyPart": "Hand",
+        "isBlocking": false
+    },
+    {
+        "type": "Gear",
+        "name": "Leather Armor",
+        "category": "Armors",
+        "str": 0,
+        "dex": 1,
+        "int": 0,
+        "hp": 0,
+        "bodyPart": "Body",
+        "isBlocking": false
+    },
+    {
+        "type": "Gear",
+        "name": "Plate Armor",
+        "category": "Armors",
+        "str": 1,
+        "dex": 0,
+        "int": 0,
+        "hp": 0,
+        "bodyPart": "Body",
+        "isBlocking": false
+    },
+    {
+        "type": "Gear",
+        "name": "Robe Armor",
+        "category": "Armors",
+        "str": 0,
+        "dex": 0,
+        "int": 1,
+        "hp": 0,
+        "bodyPart": "Body",
+        "isBlocking": false
+    },
+    {
+        "type": "Gear",
+        "name": "Simple Wand",
+        "category": "Armors",
+        "str": 0,
+        "dex": 0,
+        "int": 1,
+        "hp": 0,
+        "bodyPart": "Hand",
+        "isBlocking": false
+    },
+    {
+        "type": "Gear",
+        "name": "Great Bow",
+        "category": "Bows",
+        "str": 0,
+        "dex": 2,
+        "int": 0,
+        "hp": 0,
+        "bodyPart": "Hands",
+        "isBlocking": false
+    },
+    {
+        "type": "Gear",
+        "name": "Great Axe",
+        "category": "Axes",
+        "str": 2,
+        "dex": 0,
+        "int": 0,
+        "hp": 0,
+        "bodyPart": "Hands",
         "isBlocking": false
     },
     {
@@ -135,21 +396,6 @@
         "info": "Discard one card and draw two cards"
     },
     {
-        "type": "Champion",
-        "name": "Robin",
-        "hp": 9,
-        "str": 1,
-        "dex": 2,
-        "int": 1,
-        "stm": 2,
-        "actionsName": [
-            "Step",
-            "Dagger Throw"
-        ],
-        "class": "Rouge",
-        "isBlocking": false
-    },
-    {
         "type": "Action",
         "actionType": "Buff",
         "name": "Enrage",
@@ -199,17 +445,6 @@
         "targetEffects": [],
         "isRepeatable": false,
         "repeatableStat": null
-    },
-    {
-        "type": "Gear",
-        "name": "Simple Dagger",
-        "category": "Daggers",
-        "str": 0,
-        "dex": 2,
-        "int": 0,
-        "hp": 0,
-        "bodyPart": "Hand",
-        "isBlocking": false
     },
     {
         "type": "Action",

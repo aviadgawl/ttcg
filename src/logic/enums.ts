@@ -28,7 +28,9 @@ export enum GameStatus {
 export enum GearCategory {
     Swords = 'Swords',
     Axes = 'Axes',
-    Daggers = 'Daggers'
+    Daggers = 'Daggers',
+    Armors = 'Armors',
+    Bows = 'Bows'
 }
 
 export enum PlayerActionsName {

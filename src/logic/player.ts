@@ -224,7 +224,9 @@ const equip = (game: Game, selectedCard: GearCard, targetLocation: BoardLocation
     return 'success';
 }
 
-const upgrade = (game: Game, selectedCard: ClassCard, targetLocation: BoardLocation | undefined): string => {
+const upgrade = (game: Game, player: Player, selectedCard: ClassCard, targetLocation: BoardLocation | undefined): string => {
+    if(player.summonsLeft <= 0) return 'Player has used all his summons';
+
     if (targetLocation === undefined) return 'targetLocation can not be undefined';
 
     if (selectedCard === null) return 'Upgrade card can not be null';
@@ -328,8 +330,8 @@ const removeCard = (cards: GameCard[], selectedCard: GameCard): GameCard[] | nul
     return cards.splice(cardIndexToRemove, 1);
 }
 
-const refreshResources = (game: Game, playerIndex: number) => {
-    const player = game.players[playerIndex];
+const refreshResources = (game: Game, nextPlayerIndex: number) => {
+    const player = game.players[nextPlayerIndex];
     player.didDraw = false;
     player.summonsLeft = 1;
 
@@ -339,9 +341,12 @@ const refreshResources = (game: Game, playerIndex: number) => {
         for (let columnIndex = 0; columnIndex < board[rowIndex].length; columnIndex++) {
             const card = board[rowIndex][columnIndex];
 
-            if (isChampion(card) && card.playerIndex === playerIndex) {
+            if (isChampion(card) && card.playerIndex === nextPlayerIndex) {
                 card.stm = 2;
-                card.learnedActionsCards.forEach(learnedActionCard => setRepeatableActionActivations(learnedActionCard, card));
+                card.learnedActionsCards.forEach(learnedActionCard => {
+                    setRepeatableActionActivations(learnedActionCard, card);
+                    learnedActionCard.wasPlayed = false;
+                });
                 calculateStats(card);
             };
         }
@@ -468,7 +473,7 @@ export const playerAction = (action: string | null, cardsList: GameCard[], game:
             result = equip(game, data.selectedCard as GearCard, data.extendedData as BoardLocation);
             break;
         case PlayerActionsName.Upgrade:
-            result = upgrade(game, data.selectedCard as ClassCard, data.extendedData as BoardLocation);
+            result = upgrade(game, player, data.selectedCard as ClassCard, data.extendedData as BoardLocation);
             break;
         case PlayerActionsName.AddCardToDeck:
             result = addCardToDeck(game, cardsList, data.selectedCard as GameCard);

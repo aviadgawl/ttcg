@@ -60,6 +60,8 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
   };
 
   const isActionCardDisabled = (sourceChampion: ChampionCard, actionCard: ActionCard): boolean => {
+    if(props.champion.playerIndex === playerIndex) return true;
+    
     if(playerIndex !== playingPlayerIndex) return true;
 
     if(actionCard.isRepeatable) {
@@ -98,7 +100,7 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
       <DialogContent className={styles.DialogContent}>
 
         <GameCardDraw className={styles.ChampionCardDraw} showChampionStats={true} card={props.champion}>
-          {props.champion.playerIndex === playerIndex && <div className={styles.ChampionCardActions}>
+          <div className={styles.ChampionCardActions}>
             {props.champion.learnedActionsCards.map((card, actionIndex) =>
               <Button disabled={isActionCardDisabled(props.champion, card)} size="small" variant="contained" className="App-button" key={actionIndex}
                 onClick={() => handleAction(card, false)}>{card.name} {card.isRepeatable && `(${card.repeatableActivationLeft})`}
@@ -110,7 +112,7 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
               </Button>
             )}
             {showInfoButton && <button onClick={handleChampionCardClick}><FaCircleInfo /></button>}
-          </div>}
+          </div>
         </GameCardDraw>
 
         <ChampionMenu anchorEl={anchorEl} open={open} onClose={handleCloseMenu} championCard={props.champion} />
