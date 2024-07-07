@@ -2,7 +2,7 @@
     {
         "type": "Champion",
         "name": "Eduard",
-        "race": "Human",
+        "race": "Humanss",
         "hp": 12,
         "str": 2,
         "dex": 1,
@@ -18,7 +18,7 @@
     {
         "type": "Champion",
         "name": "Robin",
-        "race": "Human",
+        "race": "Humans",
         "hp": 9,
         "str": 1,
         "dex": 2,
@@ -34,7 +34,7 @@
     {
         "type": "Champion",
         "name": "David",
-        "race": "Human",
+        "race": "Humans",
         "hp": 9,
         "str": 1,
         "dex": 1,
@@ -50,7 +50,7 @@
     {
         "type": "Champion",
         "name": "Aron",
-        "race": "Human",
+        "race": "Humans",
         "hp": 9,
         "str": 0,
         "dex": 1,
@@ -66,7 +66,7 @@
     {
         "type": "Champion",
         "name": "Tafrandir",
-        "race": "Elf",
+        "race": "Elfs",
         "hp": 9,
         "str": 2,
         "dex": 2,
@@ -82,7 +82,7 @@
     {
         "type": "Champion",
         "name": "Taeriel",
-        "race": "Elf",
+        "race": "Elfs",
         "hp": 9,
         "str": 0,
         "dex": 3,
@@ -98,7 +98,7 @@
     {
         "type": "Champion",
         "name": "Valindra",
-        "race": "Elf",
+        "race": "Elfs",
         "hp": 9,
         "str": 0,
         "dex": 2,
@@ -114,7 +114,7 @@
     {
         "type": "Champion",
         "name": "Firsha",
-        "race": "Elf",
+        "race": "Elfs",
         "hp": 9,
         "str": 1,
         "dex": 2,
@@ -130,7 +130,7 @@
     {
         "type": "Champion",
         "name": "Chiron",
-        "race": "Orc",
+        "race": "Orcs",
         "hp": 9,
         "str": 2,
         "dex": 1,
@@ -146,7 +146,7 @@
     {
         "type": "Champion",
         "name": "Gurak",
-        "race": "Orc",
+        "race": "Orcs",
         "hp": 12,
         "str": 3,
         "dex": 1,
@@ -162,7 +162,7 @@
     {
         "type": "Champion",
         "name": "Karina",
-        "race": "Orc",
+        "race": "Orcs",
         "hp": 9,
         "str": 1,
         "dex": 1,
@@ -178,7 +178,7 @@
     {
         "type": "Champion",
         "name": "Seth",
-        "race": "Orc",
+        "race": "Orcs",
         "hp": 9,
         "str": 2,
         "dex": 2,

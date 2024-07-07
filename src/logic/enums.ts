@@ -76,3 +76,9 @@ export enum BodyPart {
     Hands = 'Hands',
     Body = 'Body'
 }
+
+export enum Race {
+    Humans = 'Humans',
+    Orcs = 'Orcs',
+    Elfs = 'Elfs'
+}

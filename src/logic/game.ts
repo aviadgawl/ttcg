@@ -1,6 +1,6 @@
 import { Player } from './player';
 import { GameCard, GearCard, CrystalCard, ChampionCard, ClassCard, ActionCard, OrderCard } from './game-card';
-import { ActionType, Stats, ActionDirections, GameStatus, GearCategory, MathModifier, EffectStatus, ChampionDirection } from './enums';
+import { ActionType, Stats, ActionDirections, GameStatus, GearCategory, MathModifier, EffectStatus, ChampionDirection, Race } from './enums';
 import { getImage } from '../helpers/image-helper';
 import cardsListJson from '../assets/cards/cards-list.json';
 
@@ -8,7 +8,7 @@ const createGuid = (): string => {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
         .replace(/[xy]/g, function (c) {
             const r = Math.random() * 16 | 0,
-                v = c == 'x' ? r : (r & 0x3 | 0x8);
+                v = c === 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);
         });
 }
@@ -28,7 +28,8 @@ export const cardsList = cardsListJson.flatMap(x => {
                     stm: 2, learnedActions: x.actionsName, learnedActionsCards: [], attachedActionsCards: [], buffs: [], statusEffects: [],
                     body: null, rightHand: null, leftHand: null,
                     class: x.class, calClass: x.class, upgrade: null, calHp: x.hp,
-                    direction: ChampionDirection.Up
+                    direction: ChampionDirection.Up,
+                    race: Race[x.race as keyof typeof Race]
                 } as ChampionCard);
                 break;
             case 'Class':

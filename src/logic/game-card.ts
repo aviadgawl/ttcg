@@ -1,4 +1,4 @@
-import { ActionDirections, Stats, ActionType, GearCategory, MathModifier, EffectStatus, CardType, ChampionDirection } from './enums';
+import { ActionDirections, Stats, ActionType, GearCategory, MathModifier, EffectStatus, CardType, ChampionDirection, Race } from './enums';
 
 export interface ValidationResult {
     message: string;
@@ -134,6 +134,8 @@ export interface ChampionCard extends SummoningCard {
     class: string;
     calClass: string;
     upgrade: ClassCard | null;
+    
+    race: Race;
 
     statusEffects: StatusEffect[];
     direction: ChampionDirection;
