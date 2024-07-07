@@ -11,7 +11,8 @@ import {
     AllowedBoardLocationResponse,
     AllowedHandCardSelectResponse,
     OrderCardRequirement,
-    PlayerActionLogRecord
+    PlayerActionLogRecord,
+    StatusEffect
 } from './game-card';
 import { calculateStats, setRepeatableActionActivations, getPlayer } from './champion';
 import { Stats, GameStatus, PlayerActionsName, ChampionDirection, BodyPart } from './enums';
@@ -334,6 +335,26 @@ const removeCard = (cards: GameCard[], selectedCard: GameCard): GameCard[] | nul
     return cards.splice(cardIndexToRemove, 1);
 }
 
+const updateStatusEffects = (championCard: ChampionCard) => {
+    const updatedStatusEffects: StatusEffect[] = []; 
+    
+    championCard.statusEffects.forEach((statusEffect) => {
+        if(statusEffect.duration > 1){
+            statusEffect.duration--;
+            updatedStatusEffects.push(statusEffect);
+        }
+    });
+
+    championCard.statusEffects = updatedStatusEffects;
+}
+
+const updateLearnedActions = (championCard: ChampionCard) => {
+    championCard.learnedActionsCards.forEach(learnedActionCard => {
+        setRepeatableActionActivations(learnedActionCard, championCard);
+        learnedActionCard.wasPlayed = false;
+    });
+}
+
 const refreshResources = (game: Game, nextPlayerIndex: number) => {
     const player = game.players[nextPlayerIndex];
     player.didDraw = false;
@@ -347,10 +368,8 @@ const refreshResources = (game: Game, nextPlayerIndex: number) => {
 
             if (isChampion(card) && card.playerIndex === nextPlayerIndex) {
                 card.stm = 2;
-                card.learnedActionsCards.forEach(learnedActionCard => {
-                    setRepeatableActionActivations(learnedActionCard, card);
-                    learnedActionCard.wasPlayed = false;
-                });
+                updateLearnedActions(card);
+                updateStatusEffects(card);
                 calculateStats(card);
             };
         }

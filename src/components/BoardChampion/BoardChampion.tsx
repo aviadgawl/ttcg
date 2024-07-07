@@ -60,7 +60,7 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
   };
 
   const isActionCardDisabled = (sourceChampion: ChampionCard, actionCard: ActionCard): boolean => {
-    if(props.champion.playerIndex === playerIndex) return true;
+    if(props.champion.playerIndex !== playerIndex) return true;
     
     if(playerIndex !== playingPlayerIndex) return true;
 

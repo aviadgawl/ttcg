@@ -12,7 +12,14 @@ import Chiron from '../assets/images/Chiron.png';
 import Karina from '../assets/images/Karina.png';
 import Seth from '../assets/images/Seth.png';
 // Upgrades
-import HighKnightImage from '../assets/images/HighKnight.png';
+import HighKnight from '../assets/images/HighKnight.png';
+import Barbarian from '../assets/images/Barbarian.png';
+import BattlePriest from '../assets/images/BattlePriest.png';
+import Hawkeye from '../assets/images/Hawkeye.png';
+import HighMage from '../assets/images/HighMage.png';
+import HighPriest from '../assets/images/HighPriest.png';
+import Shadow from '../assets/images/Shadow.png';
+import WarMage from '../assets/images/WarMage.png';
 // Gear
 import SimpleSword from '../assets/images/SimpleSword.png';
 import SimpleDagger from '../assets/images/SimpleDagger.png';
@@ -64,7 +71,21 @@ export const getImage = (id: string): string => {
             return Seth;
         // Upgrades
         case 'High Knight':
-            return HighKnightImage;
+            return HighKnight;
+        case 'Barbarian':
+            return Barbarian;
+        case 'Battle Priest':
+            return BattlePriest;
+        case 'Hawkeye':
+            return Hawkeye;
+        case 'High Mage':
+            return HighMage;
+        case 'High Priest':
+            return HighPriest;
+        case 'Shadow':
+            return Shadow;
+        case 'War Mage':
+            return WarMage;
         // Gear
         case 'Simple Sword':
             return SimpleSword;
