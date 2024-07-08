@@ -90,6 +90,7 @@ const gameSlice = createSlice({
         playerActions(state, action) {
             const { data } = action.payload;
             const { card, actionName } = action.payload.selectedActionData ?? state.selectedActionData;
+            
             const result = playerAction(actionName, state.cardsList, state.game, { selectedCard: card, extendedData: data });
 
             if (result !== 'success') alert(result);

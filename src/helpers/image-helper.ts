@@ -41,6 +41,7 @@ import Enrage from '../assets/images/Enrage.png';
 import UltimateDefense from '../assets/images/UltimateDefense.png';
 // Orders
 import GiveMeMore from '../assets/images/GiveMeMore.png';
+import Regroup from '../assets/images/Regroup.png';
 
 export const getImage = (id: string): string => {
     switch (id) {
@@ -125,6 +126,8 @@ export const getImage = (id: string): string => {
         // Orders
         case 'Give Me More!':
             return GiveMeMore;
+        case 'Regroup!':
+            return Regroup;
         default:
             return '';
     }

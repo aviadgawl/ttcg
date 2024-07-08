@@ -480,6 +480,23 @@
         "info": "Discard one card and draw two cards"
     },
     {
+        "type": "Order",
+        "name": "Regroup!",
+        "duration": 0,
+        "requirement": [
+            {
+                "name": "discard",
+                "amount": -1,
+                "cardType": null
+            }
+        ],
+        "reward": {
+            "name": "Draw",
+            "amount": 5
+        },
+        "info": "Discard your hand and draw 5 cards"
+    },
+    {
         "type": "Action",
         "actionType": "Buff",
         "name": "Enrage",

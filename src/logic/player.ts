@@ -29,11 +29,16 @@ export interface Player {
     actionsLog: PlayerActionLogRecord[];
 }
 
-const getValidCardsForDiscard = (cards: GameCard[], orderCard: OrderCard): { cardToDiscard: GameCard[], amountToDiscard: number | undefined } => {
+const getValidCardsForDiscard = (player: Player, cards: GameCard[], orderCard: OrderCard): { cardToDiscard: GameCard[], amountToDiscard: number | undefined } => {
+    const orderCardRequirements: OrderCardRequirement | undefined = orderCard.requirement.find(x => x.name === 'discard');
+    
+    if(cards.length === 0 && orderCardRequirements?.amount === -1) {
+        cards = player.hand;
+    }
+    
     let cardAllowedToDiscard: GameCard[] = [];
 
-    const orderCardRequirements: OrderCardRequirement | undefined = orderCard.requirement.find(x => x.name === 'discard');
-
+    
     if (orderCardRequirements !== undefined) {
         const newCardAllowedToDiscard =
             cards.filter(card => (orderCardRequirements.cardType === null || (typeof card) === orderCardRequirements.cardType?.toString()) && card.guid !== orderCard.guid);
@@ -62,7 +67,7 @@ const getSummonBoardLocations = (game: Game): AllowedBoardLocationResponse => {
     let locations: BoardLocation[] = [];
 
     const player = getPlayer(game);
-    
+
     if (player.summonsLeft === 0) return { message: 'Player used his all his summons', locations: locations };
 
     if (game.playerIndex === 0)
@@ -77,7 +82,7 @@ const getSummonBoardLocations = (game: Game): AllowedBoardLocationResponse => {
 
 const getValidChampionsBoardLocations = (game: Game, selectedCard: GameCard | null, predicate: Function): AllowedBoardLocationResponse => {
     const locations: BoardLocation[] = [];
-  
+
     if (selectedCard !== null)
         for (let rowIndex = 0; rowIndex < game.board.length; rowIndex++) {
             for (let columnIndex = 0; columnIndex < game.board[rowIndex].length; columnIndex++) {
@@ -94,15 +99,20 @@ const getValidChampionsBoardLocations = (game: Game, selectedCard: GameCard | nu
 const playOrder = (game: Game, selectedCard: OrderCard, cardsPayment: GameCard[] | undefined): string => {
     if (cardsPayment === undefined) return 'cardsPayment can not be undefined';
 
-    const { cardToDiscard, amountToDiscard } = getValidCardsForDiscard(cardsPayment, selectedCard);
+    const player = getPlayer(game);
+
+    const { cardToDiscard, amountToDiscard } = getValidCardsForDiscard(player, cardsPayment, selectedCard);
 
     if (cardToDiscard.some(x => x.guid === selectedCard.guid))
         return 'You cant not discard the played order card as payment';
 
-    if (cardToDiscard.length !== amountToDiscard)
-        return `Valid cards to discard (${cardToDiscard.length}) is not equal to the requirement ${amountToDiscard}`;
-
-    const player = getPlayer(game);
+    if (amountToDiscard === -1) {
+        if (cardToDiscard.length !== player.hand.length - 1) return 'Player must discard his entire hand';
+    }
+    else {
+        if (cardToDiscard.length !== amountToDiscard)
+            return `Valid cards to discard (${cardToDiscard.length}) is not equal to the requirement ${amountToDiscard}`;
+    }
 
     if (selectedCard.reward.name === 'Draw' && player.deck.length < selectedCard.reward.amount)
         return `Not enough cards in deck, in deck ${player.deck.length} amount to draw: ${selectedCard.reward.amount}`;
@@ -179,7 +189,7 @@ const summon = (game: Game, selectedCard: ChampionCard, targetLocation: BoardLoc
     selectedCard.learnedActions.forEach(action => {
         const actionCard = getAndRemoveActionCard(game, action);
 
-        if (actionCard !== null) { 
+        if (actionCard !== null) {
             setRepeatableActionActivations(actionCard, selectedCard);
             selectedCard.learnedActionsCards.push(actionCard);
         }
@@ -230,7 +240,7 @@ const equip = (game: Game, selectedCard: GearCard, targetLocation: BoardLocation
 }
 
 const upgrade = (game: Game, player: Player, selectedCard: ClassCard, targetLocation: BoardLocation | undefined): string => {
-    if(player.summonsLeft <= 0) return 'Player has used all his summons';
+    if (player.summonsLeft <= 0) return 'Player has used all his summons';
 
     if (targetLocation === undefined) return 'targetLocation can not be undefined';
 
@@ -336,10 +346,10 @@ const removeCard = (cards: GameCard[], selectedCard: GameCard): GameCard[] | nul
 }
 
 const updateStatusEffects = (championCard: ChampionCard) => {
-    const updatedStatusEffects: StatusEffect[] = []; 
-    
+    const updatedStatusEffects: StatusEffect[] = [];
+
     championCard.statusEffects.forEach((statusEffect) => {
-        if(statusEffect.duration > 1){
+        if (statusEffect.duration > 1) {
             statusEffect.duration--;
             updatedStatusEffects.push(statusEffect);
         }
@@ -517,14 +527,15 @@ export const playerAction = (action: string | null, cardsList: GameCard[], game:
             return `Player action ${action} is not implemented yet`;
     }
 
-    if(result === 'success')
-        player.actionsLog.push({name: action, guid: data?.selectedCard?.guid});
-    
+    if (result === 'success')
+        player.actionsLog.push({ name: action, guid: data?.selectedCard?.guid });
+
     return result;
 }
 
 export const getPlayerAllowedHandCardSelect = (game: Game, selectedCard: OrderCard): AllowedHandCardSelectResponse => {
-    const { cardToDiscard } = getValidCardsForDiscard(game.players[game.playerIndex].hand, selectedCard);
+    const player = getPlayer(game);
+    const { cardToDiscard } = getValidCardsForDiscard(player, player.hand, selectedCard);
     return { message: 'success', handCards: cardToDiscard };
 }
 
