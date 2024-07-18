@@ -475,7 +475,8 @@
         ],
         "reward": {
             "name": "Draw",
-            "amount": 2
+            "amount": 2,
+            "condition": null
         },
         "info": "Discard one card and draw two cards"
     },
@@ -492,9 +493,28 @@
         ],
         "reward": {
             "name": "Draw",
-            "amount": 5
+            "amount": 5,
+            "condition": null
         },
         "info": "Discard your hand and draw 5 cards"
+    },
+    {
+        "type": "Order",
+        "name": "Get Ready!",
+        "duration": 0,
+        "requirement": [
+            {
+                "name": "discard",
+                "amount": 1,
+                "cardType": "OrderCard"
+            }
+        ],
+        "reward": {
+            "name": "ConditionedDraw",
+            "amount": -1,
+            "condition": "SummonedChampions"
+        },
+        "info": "Discard an order card and draw a card for each summoned champion"
     },
     {
         "type": "Action",

@@ -42,6 +42,7 @@ import UltimateDefense from '../assets/images/UltimateDefense.png';
 // Orders
 import GiveMeMore from '../assets/images/GiveMeMore.png';
 import Regroup from '../assets/images/Regroup.png';
+import GetReady from '../assets/images/GetReady.png';
 
 export const getImage = (id: string): string => {
     switch (id) {
@@ -128,6 +129,8 @@ export const getImage = (id: string): string => {
             return GiveMeMore;
         case 'Regroup!':
             return Regroup;
+        case 'Get Ready!':
+            return GetReady;
         default:
             return '';
     }

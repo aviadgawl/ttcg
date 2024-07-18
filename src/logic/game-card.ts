@@ -22,7 +22,8 @@ export interface AllowedHandCardSelectResponse {
 
 export interface OrderCardReward {
     name: string,
-    amount: number
+    amount: number,
+    condition: string|null
 }
 
 export interface OrderCardRequirement {
