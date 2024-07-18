@@ -1,4 +1,4 @@
-import { ActionDirections, Stats, ActionType, GearCategory, MathModifier, EffectStatus, CardType, ChampionDirection, Race } from './enums';
+import { ActionDirections, Stats, ActionType, GearCategory, MathModifier, EffectStatus, CardType, ChampionDirection, Race, RewardType } from './enums';
 
 export interface ValidationResult {
     message: string;
@@ -21,8 +21,9 @@ export interface AllowedHandCardSelectResponse {
 }
 
 export interface OrderCardReward {
-    name: string,
+    name: RewardType,
     amount: number,
+    cardType: CardType|null,
     condition: string|null
 }
 

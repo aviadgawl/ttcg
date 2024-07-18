@@ -45,6 +45,11 @@ const HandCard: FC<CardProps> = (props) => {
       return;
     }
 
+    if (props.card.requirement.length === 0) {
+      dispatch(playerActions({ selectedActionData: selectedData, data: [] }));
+      return;
+    }
+
     dispatch(setSelectedActionData(selectedData));
 
     if (props.card.requirement.length === 0)

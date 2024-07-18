@@ -43,6 +43,7 @@ import UltimateDefense from '../assets/images/UltimateDefense.png';
 import GiveMeMore from '../assets/images/GiveMeMore.png';
 import Regroup from '../assets/images/Regroup.png';
 import GetReady from '../assets/images/GetReady.png';
+import FixIt from '../assets/images/FixIt.png';
 
 export const getImage = (id: string): string => {
     switch (id) {
@@ -131,6 +132,8 @@ export const getImage = (id: string): string => {
             return Regroup;
         case 'Get Ready!':
             return GetReady;
+        case 'Fix It!':
+            return FixIt;
         default:
             return '';
     }

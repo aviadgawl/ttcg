@@ -476,6 +476,7 @@
         "reward": {
             "name": "Draw",
             "amount": 2,
+            "cardType": null,
             "condition": null
         },
         "info": "Discard one card and draw two cards"
@@ -494,6 +495,7 @@
         "reward": {
             "name": "Draw",
             "amount": 5,
+            "cardType": null,
             "condition": null
         },
         "info": "Discard your hand and draw 5 cards"
@@ -512,9 +514,23 @@
         "reward": {
             "name": "ConditionedDraw",
             "amount": -1,
+            "cardType": null,
             "condition": "SummonedChampions"
         },
         "info": "Discard an order card and draw a card for each summoned champion"
+    },
+    {
+        "type": "Order",
+        "name": "Fix It!",
+        "duration": 0,
+        "requirement": [],
+        "reward": {
+            "name": "ReturnUsedCard",
+            "amount": 1,
+            "cardType": "GearCard",
+            "condition": null
+        },
+        "info": "Return one random gear from the discard pile to your hand"
     },
     {
         "type": "Action",

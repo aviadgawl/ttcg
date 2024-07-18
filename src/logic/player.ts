@@ -13,10 +13,11 @@ import {
     OrderCardRequirement,
     PlayerActionLogRecord,
     StatusEffect,
-    isOrder
+    isOrder,
+    isGear
 } from './game-card';
 import { calculateStats, setRepeatableActionActivations, getPlayer } from './champion';
-import { Stats, GameStatus, PlayerActionsName, ChampionDirection, BodyPart, CardType } from './enums';
+import { Stats, GameStatus, PlayerActionsName, ChampionDirection, BodyPart, CardType, RewardType } from './enums';
 
 import { Game, } from './game';
 
@@ -30,33 +31,43 @@ export interface Player {
     actionsLog: PlayerActionLogRecord[];
 }
 
-const isCardRequirementsValid = (orderCard: OrderCard, orderCardRequirements: OrderCardRequirement, card: GameCard): boolean => {
-    if(card.guid === orderCard.guid) return false;
-
-    switch (orderCardRequirements.cardType) {
+const checkCardType = (card: GameCard, cardType: CardType) => {
+    switch (cardType) {
         case CardType.OrderCard:
             return isOrder(card);
+        case CardType.GearCard:
+            return isGear(card);
         default:
             return false
     }
 }
 
+const isCardRequirementsValid = (orderCard: OrderCard, orderCardRequirements: OrderCardRequirement, card: GameCard): boolean => {
+    if (card.guid === orderCard.guid) return false;
+    if(orderCardRequirements.cardType === null) return true;
+
+    return checkCardType(card, orderCardRequirements.cardType);
+}
+
 const getValidCardsForDiscard = (player: Player, cards: GameCard[], orderCard: OrderCard): { cardToDiscard: GameCard[], amountToDiscard: number | undefined } => {
-    const orderCardRequirements: OrderCardRequirement | undefined = orderCard.requirement.find(x => x.name === 'discard');
-    
-    if(cards.length === 0 && orderCardRequirements?.amount === -1) {
+    const orderCardDiscardRequirement: OrderCardRequirement | undefined = orderCard.requirement.find(x => x.name === 'discard');
+
+    if(orderCardDiscardRequirement === undefined) 
+        return { cardToDiscard: [], amountToDiscard: 0 };
+
+    if (cards.length === 0 && orderCardDiscardRequirement?.amount === -1) {
         cards = player.hand;
     }
-    
+
     let cardAllowedToDiscard: GameCard[] = [];
-    
-    if (orderCardRequirements !== undefined) {
+
+    if (orderCardDiscardRequirement !== undefined) {
         const newCardAllowedToDiscard =
-            cards.filter(card => isCardRequirementsValid(orderCard, orderCardRequirements, card));
+            cards.filter(card => isCardRequirementsValid(orderCard, orderCardDiscardRequirement, card));
         cardAllowedToDiscard = [...cardAllowedToDiscard, ...newCardAllowedToDiscard];
     }
 
-    return { cardToDiscard: cardAllowedToDiscard, amountToDiscard: orderCardRequirements?.amount };
+    return { cardToDiscard: cardAllowedToDiscard, amountToDiscard: orderCardDiscardRequirement?.amount };
 }
 
 const getSummonBoardLocation = (game: Game, startingRow: number, endRow: number): BoardLocation[] => {
@@ -107,14 +118,14 @@ const getValidChampionsBoardLocations = (game: Game, selectedCard: GameCard | nu
     return { message: 'success', locations: locations };
 }
 
-const getAmountToDraw = (game: Game, condition: string|null): number => {
+const getAmountToDraw = (game: Game, condition: string | null): number => {
     let amountToDraw: number = 0;
-    
+
     switch (condition) {
         case 'SummonedChampions':
             game.board.forEach(row => {
                 row.forEach(col => {
-                    if(isChampion(col) && col.playerIndex === game.playerIndex)
+                    if (isChampion(col) && col.playerIndex === game.playerIndex)
                         amountToDraw++;
                 });
             });
@@ -131,6 +142,9 @@ const playOrder = (game: Game, selectedCard: OrderCard, cardsPayment: GameCard[]
 
     const player = getPlayer(game);
 
+    if (selectedCard.reward.name === RewardType.Draw && player.deck.length < selectedCard.reward.amount)
+    return `Not enough cards in deck, in deck ${player.deck.length} amount to draw: ${selectedCard.reward.amount}`;
+
     const { cardToDiscard, amountToDiscard } = getValidCardsForDiscard(player, cardsPayment, selectedCard);
 
     if (cardToDiscard.some(x => x.guid === selectedCard.guid))
@@ -144,20 +158,24 @@ const playOrder = (game: Game, selectedCard: OrderCard, cardsPayment: GameCard[]
             return `Valid cards to discard (${cardToDiscard.length}) is not equal to the requirement ${amountToDiscard}`;
     }
 
-    if (selectedCard.reward.name === 'Draw' && player.deck.length < selectedCard.reward.amount)
-        return `Not enough cards in deck, in deck ${player.deck.length} amount to draw: ${selectedCard.reward.amount}`;
-
     cardToDiscard.forEach(card => {
         removeCardFromHand(game, card);
         player.usedCards.push(card);
     });
 
-    if (selectedCard.reward.name === 'Draw')
-        draw(player, selectedCard.reward.amount);
+    if (selectedCard.reward.name === RewardType.Draw)
+        drawFrom(player.deck, player.hand, selectedCard.reward.amount);
 
-    if(selectedCard.reward.name === 'ConditionedDraw'){
+    if (selectedCard.reward.name === RewardType.ConditionedDraw) {
         const amountToDraw = getAmountToDraw(game, selectedCard.reward.condition);
-        draw(player, amountToDraw);
+        drawFrom(player.deck, player.hand, amountToDraw);
+    }
+
+    if(selectedCard.reward.name === RewardType.ReturnUsedCard) {
+        if(selectedCard.reward.cardType === null)
+            drawFrom(player.usedCards, player.hand, selectedCard.reward.amount);
+        else
+            drawCardTypeFrom(player.usedCards, player.hand, selectedCard.reward.amount, selectedCard.reward.cardType);
     }
 
     removeCardFromHand(game, selectedCard);
@@ -169,24 +187,29 @@ const playOrder = (game: Game, selectedCard: OrderCard, cardsPayment: GameCard[]
 const initialDraw = (player: Player): string => {
     if (player.didDraw) return 'Player already draw this turn';
 
-    const result = draw(player, 1);
+    const result = drawFrom(player.deck, player.hand, 1);
 
     if (result === 'success') player.didDraw = true;
 
     return result;
 }
 
-const draw = (player: Player, amount: number | undefined): string => {
+const drawCardTypeFrom = (drawFromPool: GameCard[], drawTo: GameCard[], amount: number | undefined, cardType: CardType): string => {
+    const drawFromTypeFiltered = drawFromPool.filter(card => checkCardType(card, cardType));
+    return drawFrom(drawFromTypeFiltered, drawTo, amount);
+};
+
+const drawFrom = (drawFromPool: GameCard[], drawTo: GameCard[], amount: number | undefined): string => {
     if (amount === undefined) return 'Amount can not be undefined';
 
-    if (player?.deck && player.deck.length < amount) return 'Not enough cards in deck';
+    if (drawFromPool.length < amount) return 'Not enough cards in card pool';
 
     for (let index = 0; index < amount; index++) {
-        const cardToAdd = player.deck.pop();
+        const cardToAdd = drawFromPool.pop();
 
         if (!cardToAdd) return `the card ${index} is null`;
 
-        player.hand.push(cardToAdd);
+        drawTo.push(cardToAdd);
     }
 
     return 'success';
@@ -197,19 +220,26 @@ const surrender = (game: Game): string => {
     return 'success'
 };
 
+const canSummon = (player: Player, game: Game, targetLocation: BoardLocation): ValidationResult => {
+    if (player.summonsLeft === 0) return { message: 'Player used his all his summons', isValid: false };
+
+    if ((game.playerIndex === 0 && targetLocation.rowIndex < 11) || (game.playerIndex === 1 && targetLocation.rowIndex > 2))
+        return { message: `Player ${game.playerIndex + 1} can not summon here ${targetLocation.rowIndex}-${targetLocation.columnIndex}`, isValid: false };
+
+    const boardLocation = game.board[targetLocation.rowIndex][targetLocation.columnIndex];
+
+    if (boardLocation !== null) return { message: 'Location is not empty', isValid: false }
+
+    return { isValid: true, message: '' };
+}
+
 const summon = (game: Game, selectedCard: ChampionCard, targetLocation: BoardLocation | undefined): string => {
     if (targetLocation === undefined) return 'targetLocation can not be undefined';
 
     const player = getPlayer(game);
 
-    if (player.summonsLeft === 0) return 'Player used his all his summons';
-
-    if ((game.playerIndex === 0 && targetLocation.rowIndex < 11) || (game.playerIndex === 1 && targetLocation.rowIndex > 2))
-        return `Player ${game.playerIndex + 1} can not summon here ${targetLocation.rowIndex}-${targetLocation.columnIndex}`;
-
-    const boardLocation = game.board[targetLocation.rowIndex][targetLocation.columnIndex];
-
-    if (boardLocation !== null) return 'Location is not empty';
+    const validationResult = canSummon(player, game, targetLocation);
+    if (!validationResult.isValid) return validationResult.message;
 
     game.board[targetLocation.rowIndex][targetLocation.columnIndex] = selectedCard;
 
@@ -219,7 +249,7 @@ const summon = (game: Game, selectedCard: ChampionCard, targetLocation: BoardLoc
 
     selectedCard.direction = selectedCard.playerIndex === 0 ? ChampionDirection.Up : ChampionDirection.Down;
 
-    if (selectedCard.learnedActions.length !== 2) return 'Champion can no have less or more than two learned actions';
+    if (selectedCard.learnedActions.length !== 2) return 'Champion can have no less or more than two learned actions';
 
     selectedCard.learnedActions.forEach(action => {
         const actionCard = getAndRemoveActionCard(game, action);
@@ -526,7 +556,7 @@ export const playerAction = (action: string | null, cardsList: GameCard[], game:
             result = initialDraw(player);
             break;
         case PlayerActionsName.Draw:
-            result = draw(player, data.extendedData as number);
+            result = drawFrom(player.deck, player.hand, data.extendedData as number);
             break;
         case PlayerActionsName.Surrender:
             result = surrender(game);
