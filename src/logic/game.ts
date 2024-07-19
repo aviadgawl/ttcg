@@ -1,6 +1,6 @@
 import { Player } from './player';
 import { GameCard, GearCard, CrystalCard, ChampionCard, ClassCard, ActionCard, OrderCard } from './game-card';
-import { ActionType, Stats, ActionDirections, GameStatus, GearCategory, MathModifier, EffectStatus, ChampionDirection, Race } from './enums';
+import { ActionType, Stats, ActionDirections, GameStatus, GearCategory, MathModifier, EffectStatus, ChampionDirection, Race, CardType } from './enums';
 import { getImage } from '../helpers/image-helper';
 import cardsListJson from '../assets/cards/cards-list.json';
 
@@ -18,7 +18,7 @@ export const cardsList = cardsListJson.flatMap(x => {
 
     for (let index = 0; index < 3; index++) {
         switch (x.type) {
-            case 'Champion':
+            case CardType.ChampionCard:
                 newCardsArray.push({
                     guid: createGuid(), name: x.name, image: getImage(x.name), playerIndex: 0,
                     isBlocking: x.isBlocking, hp: x.hp, currentHp: x.hp,
@@ -40,7 +40,7 @@ export const cardsList = cardsListJson.flatMap(x => {
                     image: getImage(x.name), playerIndex: 0, isBlocking: x.isBlocking
                 } as ClassCard);
                 break;
-            case 'Gear':
+            case CardType.GearCard:
                 newCardsArray.push({
                     guid: createGuid(), name: x.name, str: x.str,
                     dex: x.dex, int: x.int, hp: x.hp, currentHp: x.hp, bodyPart: x.bodyPart,
@@ -48,7 +48,7 @@ export const cardsList = cardsListJson.flatMap(x => {
                     category: GearCategory[x.category as keyof typeof GearCategory]
                 } as GearCard);
                 break;
-            case 'Action':
+            case CardType.ActionCard:
                 newCardsArray.push({
                     playerIndex: 0,
                     guid: createGuid(),
@@ -81,7 +81,7 @@ export const cardsList = cardsListJson.flatMap(x => {
                     wasPlayed: false
                 } as ActionCard);
                 break;
-            case 'Order':
+            case CardType.OrderCard:
                 newCardsArray.push({
                     playerIndex: 0,
                     guid: createGuid(),

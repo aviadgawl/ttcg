@@ -62,7 +62,9 @@ export enum EffectStatus {
 
 export enum CardType {
     OrderCard = 'OrderCard',
-    GearCard = 'GearCard'
+    GearCard = 'GearCard',
+    ActionCard = 'ActionCard',
+    ChampionCard = 'ChampionCard'
 }
 
 export enum RewardType {

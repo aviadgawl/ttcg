@@ -44,6 +44,7 @@ import GiveMeMore from '../assets/images/GiveMeMore.png';
 import Regroup from '../assets/images/Regroup.png';
 import GetReady from '../assets/images/GetReady.png';
 import FixIt from '../assets/images/FixIt.png';
+import KeepMoving from '../assets/images/KeepMoving.png';
 
 export const getImage = (id: string): string => {
     switch (id) {
@@ -134,6 +135,8 @@ export const getImage = (id: string): string => {
             return GetReady;
         case 'Fix It!':
             return FixIt;
+        case 'Keep Moving!':
+            return KeepMoving;
         default:
             return '';
     }

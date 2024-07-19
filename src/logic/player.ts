@@ -14,7 +14,8 @@ import {
     PlayerActionLogRecord,
     StatusEffect,
     isOrder,
-    isGear
+    isGear,
+    isAction
 } from './game-card';
 import { calculateStats, setRepeatableActionActivations, getPlayer } from './champion';
 import { Stats, GameStatus, PlayerActionsName, ChampionDirection, BodyPart, CardType, RewardType } from './enums';
@@ -37,6 +38,10 @@ const checkCardType = (card: GameCard, cardType: CardType) => {
             return isOrder(card);
         case CardType.GearCard:
             return isGear(card);
+        case CardType.ActionCard:
+            return isAction(card);
+        case CardType.ChampionCard:
+            return isChampion(card);
         default:
             return false
     }
@@ -44,7 +49,7 @@ const checkCardType = (card: GameCard, cardType: CardType) => {
 
 const isCardRequirementsValid = (orderCard: OrderCard, orderCardRequirements: OrderCardRequirement, card: GameCard): boolean => {
     if (card.guid === orderCard.guid) return false;
-    if(orderCardRequirements.cardType === null) return true;
+    if (orderCardRequirements.cardType === null) return true;
 
     return checkCardType(card, orderCardRequirements.cardType);
 }
@@ -52,7 +57,7 @@ const isCardRequirementsValid = (orderCard: OrderCard, orderCardRequirements: Or
 const getValidCardsForDiscard = (player: Player, cards: GameCard[], orderCard: OrderCard): { cardToDiscard: GameCard[], amountToDiscard: number | undefined } => {
     const orderCardDiscardRequirement: OrderCardRequirement | undefined = orderCard.requirement.find(x => x.name === 'discard');
 
-    if(orderCardDiscardRequirement === undefined) 
+    if (orderCardDiscardRequirement === undefined)
         return { cardToDiscard: [], amountToDiscard: 0 };
 
     if (cards.length === 0 && orderCardDiscardRequirement?.amount === -1) {
@@ -143,7 +148,7 @@ const playOrder = (game: Game, selectedCard: OrderCard, cardsPayment: GameCard[]
     const player = getPlayer(game);
 
     if (selectedCard.reward.name === RewardType.Draw && player.deck.length < selectedCard.reward.amount)
-    return `Not enough cards in deck, in deck ${player.deck.length} amount to draw: ${selectedCard.reward.amount}`;
+        return `Not enough cards in deck, in deck ${player.deck.length} amount to draw: ${selectedCard.reward.amount}`;
 
     const { cardToDiscard, amountToDiscard } = getValidCardsForDiscard(player, cardsPayment, selectedCard);
 
@@ -159,26 +164,23 @@ const playOrder = (game: Game, selectedCard: OrderCard, cardsPayment: GameCard[]
     }
 
     cardToDiscard.forEach(card => {
-        removeCardFromHand(game, card);
+        removeCard(player.hand, card);
         player.usedCards.push(card);
     });
 
     if (selectedCard.reward.name === RewardType.Draw)
-        drawFrom(player.deck, player.hand, selectedCard.reward.amount);
+        drawFrom(player.deck, player.hand, selectedCard.reward.amount, selectedCard.reward.cardType, selectedCard.reward.cardNameContains);
 
     if (selectedCard.reward.name === RewardType.ConditionedDraw) {
         const amountToDraw = getAmountToDraw(game, selectedCard.reward.condition);
-        drawFrom(player.deck, player.hand, amountToDraw);
+        drawFrom(player.deck, player.hand, amountToDraw, selectedCard.reward.cardType, selectedCard.reward.cardNameContains);
     }
 
-    if(selectedCard.reward.name === RewardType.ReturnUsedCard) {
-        if(selectedCard.reward.cardType === null)
-            drawFrom(player.usedCards, player.hand, selectedCard.reward.amount);
-        else
-            drawCardTypeFrom(player.usedCards, player.hand, selectedCard.reward.amount, selectedCard.reward.cardType);
+    if (selectedCard.reward.name === RewardType.ReturnUsedCard) {
+        drawFrom(player.usedCards, player.hand, selectedCard.reward.amount, selectedCard.reward.cardType, selectedCard.reward.cardNameContains);
     }
 
-    removeCardFromHand(game, selectedCard);
+    removeCard(player.hand, selectedCard);
     player.usedCards.push(selectedCard);
 
     return 'success';
@@ -187,29 +189,33 @@ const playOrder = (game: Game, selectedCard: OrderCard, cardsPayment: GameCard[]
 const initialDraw = (player: Player): string => {
     if (player.didDraw) return 'Player already draw this turn';
 
-    const result = drawFrom(player.deck, player.hand, 1);
+    const result = drawFrom(player.deck, player.hand, 1, null, null);
 
     if (result === 'success') player.didDraw = true;
 
     return result;
 }
 
-const drawCardTypeFrom = (drawFromPool: GameCard[], drawTo: GameCard[], amount: number | undefined, cardType: CardType): string => {
-    const drawFromTypeFiltered = drawFromPool.filter(card => checkCardType(card, cardType));
-    return drawFrom(drawFromTypeFiltered, drawTo, amount);
-};
-
-const drawFrom = (drawFromPool: GameCard[], drawTo: GameCard[], amount: number | undefined): string => {
+const drawFrom = (drawFromPool: GameCard[], drawTo: GameCard[], amount: number | undefined, filterByCardType: CardType | null, filterByCardName: string | null): string => {
     if (amount === undefined) return 'Amount can not be undefined';
 
     if (drawFromPool.length < amount) return 'Not enough cards in card pool';
 
+    let filteredCards: GameCard[] = drawFromPool;
+
+    if (filterByCardType !== null)
+        filteredCards = filteredCards.filter(card => checkCardType(card, filterByCardType));
+
+    if (filterByCardName !== null)
+        filteredCards = filteredCards.filter(card => card.name.includes(filterByCardName));
+
     for (let index = 0; index < amount; index++) {
-        const cardToAdd = drawFromPool.pop();
+        const cardToAdd = filteredCards.pop();
 
         if (!cardToAdd) return `the card ${index} is null`;
 
         drawTo.push(cardToAdd);
+        removeCard(drawFromPool, cardToAdd);
     }
 
     return 'success';
@@ -243,8 +249,7 @@ const summon = (game: Game, selectedCard: ChampionCard, targetLocation: BoardLoc
 
     game.board[targetLocation.rowIndex][targetLocation.columnIndex] = selectedCard;
 
-    removeCardFromHand(game, selectedCard);
-
+    removeCard(player.hand, selectedCard);
     player.summonsLeft--;
 
     selectedCard.direction = selectedCard.playerIndex === 0 ? ChampionDirection.Up : ChampionDirection.Down;
@@ -278,7 +283,7 @@ const endTurn = (game: Game): string => {
     return 'success';
 }
 
-const equip = (game: Game, selectedCard: GearCard, targetLocation: BoardLocation | undefined): string => {
+const equip = (game: Game, player: Player, selectedCard: GearCard, targetLocation: BoardLocation | undefined): string => {
     if (targetLocation === undefined) return 'targetLocation can not be undefined';
 
     var targetChampion = game.board[targetLocation.rowIndex][targetLocation.columnIndex] as ChampionCard;
@@ -299,7 +304,7 @@ const equip = (game: Game, selectedCard: GearCard, targetLocation: BoardLocation
 
     calculateStats(targetChampion);
 
-    removeCardFromHand(game, selectedCard);
+    removeCard(player.hand, selectedCard);
 
     return 'success';
 }
@@ -331,7 +336,7 @@ const upgrade = (game: Game, player: Player, selectedCard: ClassCard, targetLoca
 
     calculateStats(targetChampion);
 
-    removeCardFromHand(game, selectedCard);
+    removeCard(player.hand, selectedCard);
 
     return 'success';
 }
@@ -352,7 +357,7 @@ const addCardToDeck = (game: Game, cardsList: GameCard[], selectedCard: GameCard
     return 'success';
 }
 
-const attachAction = (game: Game, actionCard: ActionCard, targetLocation: BoardLocation | undefined) => {
+const attachAction = (game: Game, player: Player, actionCard: ActionCard, targetLocation: BoardLocation | undefined) => {
     if (targetLocation === undefined) return 'targetLocation can not be undefined';
 
     if (actionCard === null)
@@ -374,7 +379,7 @@ const attachAction = (game: Game, actionCard: ActionCard, targetLocation: BoardL
 
     targetChampion.attachedActionsCards.push(actionCard);
     calculateStats(targetChampion);
-    removeCardFromHand(game, actionCard);
+    removeCard(player.hand, actionCard);
 
     return 'success';
 }
@@ -449,12 +454,6 @@ const refreshResources = (game: Game, nextPlayerIndex: number) => {
             };
         }
     }
-}
-
-const removeCardFromHand = (game: Game, selectedCard: GameCard) => {
-    const player = getPlayer(game);
-    const cardIndex = player.hand.findIndex((x) => x.guid === selectedCard.guid);
-    player.hand.splice(cardIndex, 1);
 }
 
 const getAndRemoveActionCard = (game: Game, actionCardName: string): ActionCard | null => {
@@ -556,7 +555,7 @@ export const playerAction = (action: string | null, cardsList: GameCard[], game:
             result = initialDraw(player);
             break;
         case PlayerActionsName.Draw:
-            result = drawFrom(player.deck, player.hand, data.extendedData as number);
+            result = drawFrom(player.deck, player.hand, data.extendedData as number, null, null);
             break;
         case PlayerActionsName.Surrender:
             result = surrender(game);
@@ -568,7 +567,7 @@ export const playerAction = (action: string | null, cardsList: GameCard[], game:
             result = endTurn(game);
             break;
         case PlayerActionsName.Equip:
-            result = equip(game, data.selectedCard as GearCard, data.extendedData as BoardLocation);
+            result = equip(game, player, data.selectedCard as GearCard, data.extendedData as BoardLocation);
             break;
         case PlayerActionsName.Upgrade:
             result = upgrade(game, player, data.selectedCard as ClassCard, data.extendedData as BoardLocation);
@@ -580,7 +579,7 @@ export const playerAction = (action: string | null, cardsList: GameCard[], game:
             result = removeCardFromDeck(game, cardsList, data.selectedCard as GameCard);
             break;
         case PlayerActionsName.Attach:
-            result = attachAction(game, data.selectedCard as ActionCard, data.extendedData as BoardLocation);
+            result = attachAction(game, player, data.selectedCard as ActionCard, data.extendedData as BoardLocation);
             break;
         case PlayerActionsName.PlayOrder:
             result = playOrder(game, data.selectedCard as OrderCard, data.extendedData as GameCard[]);

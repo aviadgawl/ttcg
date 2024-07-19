@@ -1,6 +1,6 @@
 [
     {
-        "type": "Champion",
+        "type": "ChampionCard",
         "name": "Eduard",
         "race": "Humanss",
         "hp": 12,
@@ -16,7 +16,7 @@
         "isBlocking": false
     },
     {
-        "type": "Champion",
+        "type": "ChampionCard",
         "name": "Robin",
         "race": "Humans",
         "hp": 9,
@@ -32,7 +32,7 @@
         "isBlocking": false
     },
     {
-        "type": "Champion",
+        "type": "ChampionCard",
         "name": "David",
         "race": "Humans",
         "hp": 9,
@@ -48,7 +48,7 @@
         "isBlocking": false
     },
     {
-        "type": "Champion",
+        "type": "ChampionCard",
         "name": "Aron",
         "race": "Humans",
         "hp": 9,
@@ -64,7 +64,7 @@
         "isBlocking": false
     },
     {
-        "type": "Champion",
+        "type": "ChampionCard",
         "name": "Tafrandir",
         "race": "Elfs",
         "hp": 9,
@@ -80,7 +80,7 @@
         "isBlocking": false
     },
     {
-        "type": "Champion",
+        "type": "ChampionCard",
         "name": "Taeriel",
         "race": "Elfs",
         "hp": 9,
@@ -96,7 +96,7 @@
         "isBlocking": false
     },
     {
-        "type": "Champion",
+        "type": "ChampionCard",
         "name": "Valindra",
         "race": "Elfs",
         "hp": 9,
@@ -112,7 +112,7 @@
         "isBlocking": false
     },
     {
-        "type": "Champion",
+        "type": "ChampionCard",
         "name": "Firsha",
         "race": "Elfs",
         "hp": 9,
@@ -128,7 +128,7 @@
         "isBlocking": false
     },
     {
-        "type": "Champion",
+        "type": "ChampionCard",
         "name": "Chiron",
         "race": "Orcs",
         "hp": 9,
@@ -144,7 +144,7 @@
         "isBlocking": false
     },
     {
-        "type": "Champion",
+        "type": "ChampionCard",
         "name": "Gurak",
         "race": "Orcs",
         "hp": 12,
@@ -160,7 +160,7 @@
         "isBlocking": false
     },
     {
-        "type": "Champion",
+        "type": "ChampionCard",
         "name": "Karina",
         "race": "Orcs",
         "hp": 9,
@@ -176,7 +176,7 @@
         "isBlocking": false
     },
     {
-        "type": "Champion",
+        "type": "ChampionCard",
         "name": "Seth",
         "race": "Orcs",
         "hp": 9,
@@ -288,7 +288,7 @@
         "isBlocking": false
     },
     {
-        "type": "Gear",
+        "type": "GearCard",
         "name": "Simple Sword",
         "category": "Swords",
         "str": 2,
@@ -299,7 +299,7 @@
         "isBlocking": false
     },
     {
-        "type": "Gear",
+        "type": "GearCard",
         "name": "Simple Dagger",
         "category": "Daggers",
         "str": 0,
@@ -310,7 +310,7 @@
         "isBlocking": false
     },
     {
-        "type": "Gear",
+        "type": "GearCard",
         "name": "Great Staff",
         "category": "Staffs",
         "str": 0,
@@ -321,7 +321,7 @@
         "isBlocking": false
     },
     {
-        "type": "Gear",
+        "type": "GearCard",
         "name": "Shield",
         "category": "Shields",
         "str": 0,
@@ -332,7 +332,7 @@
         "isBlocking": false
     },
     {
-        "type": "Gear",
+        "type": "GearCard",
         "name": "Leather Armor",
         "category": "Armors",
         "str": 0,
@@ -343,7 +343,7 @@
         "isBlocking": false
     },
     {
-        "type": "Gear",
+        "type": "GearCard",
         "name": "Plate Armor",
         "category": "Armors",
         "str": 1,
@@ -354,7 +354,7 @@
         "isBlocking": false
     },
     {
-        "type": "Gear",
+        "type": "GearCard",
         "name": "Robe Armor",
         "category": "Armors",
         "str": 0,
@@ -365,7 +365,7 @@
         "isBlocking": false
     },
     {
-        "type": "Gear",
+        "type": "GearCard",
         "name": "Simple Wand",
         "category": "Armors",
         "str": 0,
@@ -376,7 +376,7 @@
         "isBlocking": false
     },
     {
-        "type": "Gear",
+        "type": "GearCard",
         "name": "Great Bow",
         "category": "Bows",
         "str": 0,
@@ -387,7 +387,7 @@
         "isBlocking": false
     },
     {
-        "type": "Gear",
+        "type": "GearCard",
         "name": "Great Axe",
         "category": "Axes",
         "str": 2,
@@ -398,72 +398,7 @@
         "isBlocking": false
     },
     {
-        "type": "Action",
-        "actionType": "Attack",
-        "name": "Basic Hit",
-        "duration": 0,
-        "distance": [
-            1,
-            1
-        ],
-        "direction": "Straight",
-        "dmgStat": "Str",
-        "dmgModifier": null,
-        "dmgModifierValue": null,
-        "requiredClass": null,
-        "requiredStat": null,
-        "requiredStatValue": null,
-        "requiredGearCategory": null,
-        "isFreeTargeting": true,
-        "targetEffects": [],
-        "isRepeatable": false,
-        "repeatableStat": null
-    },
-    {
-        "type": "Action",
-        "actionType": "Movement",
-        "name": "Step",
-        "duration": 0,
-        "distance": [
-            1,
-            1
-        ],
-        "direction": "Straight",
-        "dmgStat": null,
-        "dmgModifier": null,
-        "dmgModifierValue": null,
-        "requiredClassName": null,
-        "requiredStat": null,
-        "requiredStatValue": null,
-        "requiredGearCategory": null,
-        "isFreeTargeting": false,
-        "targetEffects": [],
-        "isRepeatable": true,
-        "repeatableStat": "Dex"
-    },
-    {
-        "type": "Action",
-        "actionType": "Attack",
-        "name": "Dagger Throw",
-        "duration": 0,
-        "distance": [
-            0,
-            3
-        ],
-        "direction": "Straight",
-        "dmgStat": "Dex",
-        "dmgModifier": null,
-        "dmgModifierValue": null,
-        "requiredClassName": null,
-        "requiredStat": null,
-        "requiredStatValue": null,
-        "requiredGearCategory": null,
-        "isFreeTargeting": true,
-        "targetEffects": [],
-        "isRepeatable": false
-    },
-    {
-        "type": "Order",
+        "type": "OrderCard",
         "name": "Give Me More!",
         "duration": 0,
         "requirement": [
@@ -477,12 +412,13 @@
             "name": "Draw",
             "amount": 2,
             "cardType": null,
+            "cardNameContains": null,
             "condition": null
         },
         "info": "Discard one card and draw two cards"
     },
     {
-        "type": "Order",
+        "type": "OrderCard",
         "name": "Regroup!",
         "duration": 0,
         "requirement": [
@@ -496,12 +432,13 @@
             "name": "Draw",
             "amount": 5,
             "cardType": null,
+            "cardNameContains": null,
             "condition": null
         },
         "info": "Discard your hand and draw 5 cards"
     },
     {
-        "type": "Order",
+        "type": "OrderCard",
         "name": "Get Ready!",
         "duration": 0,
         "requirement": [
@@ -515,12 +452,13 @@
             "name": "ConditionedDraw",
             "amount": -1,
             "cardType": null,
+            "cardNameContains": null,
             "condition": "SummonedChampions"
         },
         "info": "Discard an order card and draw a card for each summoned champion"
     },
     {
-        "type": "Order",
+        "type": "OrderCard",
         "name": "Fix It!",
         "duration": 0,
         "requirement": [],
@@ -528,12 +466,27 @@
             "name": "ReturnUsedCard",
             "amount": 1,
             "cardType": "GearCard",
+            "cardNameContains": null,
             "condition": null
         },
         "info": "Return one random gear from the discard pile to your hand"
     },
     {
-        "type": "Action",
+        "type": "OrderCard",
+        "name": "Keep Moving!",
+        "duration": 0,
+        "requirement": [],
+        "reward": {
+            "name": "Draw",
+            "amount": 2,
+            "cardType": "ActionCard",
+            "cardNameContains": "Step",
+            "condition": null
+        },
+        "info": "Look for two action cards that include the word \"Step\" in your deck, show them to your opponent and add them to your hand. shuffle your deck"
+    },
+    {
+        "type": "ActionCard",
         "actionType": "Buff",
         "name": "Enrage",
         "duration": 0,
@@ -562,7 +515,7 @@
         "repeatableStat": null
     },
     {
-        "type": "Action",
+        "type": "ActionCard",
         "actionType": "Attack",
         "name": "Dagger Slash",
         "duration": 0,
@@ -584,7 +537,7 @@
         "repeatableStat": null
     },
     {
-        "type": "Action",
+        "type": "ActionCard",
         "actionType": "Attack",
         "name": "Mighty Blow",
         "duration": 0,
@@ -606,7 +559,7 @@
         "repeatableStat": null
     },
     {
-        "type": "Action",
+        "type": "ActionCard",
         "actionType": "Buff",
         "name": "Ultimate Defense",
         "duration": 0,
@@ -639,5 +592,70 @@
         ],
         "isRepeatable": false,
         "repeatableStat": null
+    },
+    {
+        "type": "ActionCard",
+        "actionType": "Attack",
+        "name": "Basic Hit",
+        "duration": 0,
+        "distance": [
+            1,
+            1
+        ],
+        "direction": "Straight",
+        "dmgStat": "Str",
+        "dmgModifier": null,
+        "dmgModifierValue": null,
+        "requiredClass": null,
+        "requiredStat": null,
+        "requiredStatValue": null,
+        "requiredGearCategory": null,
+        "isFreeTargeting": true,
+        "targetEffects": [],
+        "isRepeatable": false,
+        "repeatableStat": null
+    },
+    {
+        "type": "ActionCard",
+        "actionType": "Movement",
+        "name": "Step",
+        "duration": 0,
+        "distance": [
+            1,
+            1
+        ],
+        "direction": "Straight",
+        "dmgStat": null,
+        "dmgModifier": null,
+        "dmgModifierValue": null,
+        "requiredClassName": null,
+        "requiredStat": null,
+        "requiredStatValue": null,
+        "requiredGearCategory": null,
+        "isFreeTargeting": false,
+        "targetEffects": [],
+        "isRepeatable": true,
+        "repeatableStat": "Dex"
+    },
+    {
+        "type": "ActionCard",
+        "actionType": "Attack",
+        "name": "Dagger Throw",
+        "duration": 0,
+        "distance": [
+            0,
+            3
+        ],
+        "direction": "Straight",
+        "dmgStat": "Dex",
+        "dmgModifier": null,
+        "dmgModifierValue": null,
+        "requiredClassName": null,
+        "requiredStat": null,
+        "requiredStatValue": null,
+        "requiredGearCategory": null,
+        "isFreeTargeting": true,
+        "targetEffects": [],
+        "isRepeatable": false
     }
 ]

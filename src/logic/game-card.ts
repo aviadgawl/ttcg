@@ -24,6 +24,7 @@ export interface OrderCardReward {
     name: RewardType,
     amount: number,
     cardType: CardType|null,
+    cardNameContains: string|null,
     condition: string|null
 }
 
