@@ -6,6 +6,7 @@ import styles from './DeckBuilder.module.css';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { playerActions } from '../../redux/store';
 import { GameCard } from '../../logic/game-card';
+import CardsDisplay from '../CardsDisplay/CardsDisplay';
 
 const groupBy = <T, K extends keyof any>(arr: T[], key: (i: T) => K) =>
   arr.reduce((groups, item) => {
@@ -76,16 +77,7 @@ const DeckBuilder: FC = () => {
       </div>
     </div>
 
-    <div className={styles.CardsCollection}>
-      {cardsList.map(card => {
-        if (card !== null)
-          return <div key={card.guid}>
-            <HandCard mode={HandCardMode.DeckBuilding} card={card} />
-            <Button onClick={() => addCardToDeck(card as GameCard)}>Add to deck</Button>
-          </div>
-        else return <></>;
-      })}
-    </div>
+    <CardsDisplay cards={cardsList} onSelectCard={(card) => addCardToDeck(card)} buttonName="Add to deck" />
   </div>
 };
 

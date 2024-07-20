@@ -1,0 +1,7 @@
+.CardsDisplay {
+    display: flex;
+    justify-content: space-around;
+    flex: auto;
+    flex-wrap: wrap;
+    height: fit-content;
+}
