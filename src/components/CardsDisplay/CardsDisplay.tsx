@@ -11,7 +11,7 @@ interface CardsDisplayProps {
 }
 
 const CardsDisplay: FC<CardsDisplayProps> = (props) => {
-  
+
   const handleClick = (card: GameCard) => {
     if(props.onSelectCard !== undefined)
       props.onSelectCard(card);
@@ -19,7 +19,7 @@ const CardsDisplay: FC<CardsDisplayProps> = (props) => {
 
   return <div className={styles.CardsDisplay}>
     {props.cards.map(card => {
-      return <div key={card.guid}>
+      return <div className={styles.Card} key={card.guid}>
         <HandCard mode={HandCardMode.DeckBuilding} card={card} />
         {props.onSelectCard && <Button onClick={() => handleClick(card)}>{props.buttonName ?? 'Select'}</Button>}
       </div>

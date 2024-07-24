@@ -47,7 +47,6 @@ const GameCardDraw: FC<CardProps> = (props) => {
 
   <Dialog
     open={showDialog}
-    className={styles.Dialog}
     onClose={() => setShowDialog(false)}>
     <DialogContent className={styles.DialogContent}>
       <img alt="card visual" className={styles.CardImage} src={props.card.image} />

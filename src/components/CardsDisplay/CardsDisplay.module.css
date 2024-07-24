@@ -5,3 +5,7 @@
     flex-wrap: wrap;
     height: fit-content;
 }
+
+.Card {
+    padding: 5px;
+}
