@@ -11,9 +11,6 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import HandCard, { HandCardMode } from '../HandCard/HandCard';
 import CardsDisplay from '../CardsDisplay/CardsDisplay';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { useTheme } from '@mui/material/styles';
-
 
 const Hand: FC = () => {
   const playerIndex = useAppSelector((state) => state.gameActions.game.playerIndex);
@@ -26,9 +23,6 @@ const Hand: FC = () => {
 
   const [showDialog, setShowDialog] = useState(true);
   const [discardCards, setDiscardCards] = useState([] as GameCard[]);
-
-  const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
   const handleAction = (actionName: string, hideHand: boolean = false) => {
     const newSelectedActionData = createSelectedData(null, actionName, GameStoreActionTypes.PlayerAction);
@@ -81,7 +75,6 @@ const Hand: FC = () => {
       </div>
     </Drawer>
     <Dialog
-      fullScreen={fullScreen}
       open={showDialog && player.usedCards.length > 0}
       onClose={() => setShowDialog(false)}>
       <DialogContent className={styles.DialogContent}>
