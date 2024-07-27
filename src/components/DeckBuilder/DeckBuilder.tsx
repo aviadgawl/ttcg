@@ -36,11 +36,12 @@ const DeckBuilder: FC = () => {
 
     deckString?.slice(1).split(',').forEach(cardData => {
       const [cardName, cardAmount] = cardData.split(':');
-      const cardToAdd = cardsList.find(card => card?.name === cardName);
+      const cardAmountAsNumber: number = parseInt(cardAmount);
 
-      for (let index = 0; index < parseInt(cardAmount); index++) {
-        if (cardToAdd) addCardToDeck(cardToAdd);
-      }
+      const cardsToAdd = cardsList.filter(card => card?.name === cardName).slice(0, cardAmountAsNumber);
+
+      if (cardsToAdd && cardsToAdd.length > 0)
+        cardsToAdd.forEach(cardToAdd => addCardToDeck(cardToAdd));
     });
   }
 
