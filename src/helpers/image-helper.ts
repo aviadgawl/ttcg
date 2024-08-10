@@ -45,6 +45,7 @@ import Regroup from '../assets/images/Regroup.png';
 import GetReady from '../assets/images/GetReady.png';
 import FixIt from '../assets/images/FixIt.png';
 import KeepMoving from '../assets/images/KeepMoving.png';
+import DoItAgain from '../assets/images/DoItAgain.png';
 
 export const getImage = (id: string): string => {
     switch (id) {
@@ -137,6 +138,8 @@ export const getImage = (id: string): string => {
             return FixIt;
         case 'Keep Moving!':
             return KeepMoving;
+        case 'Do It Again!':
+            return DoItAgain;
         default:
             return '';
     }

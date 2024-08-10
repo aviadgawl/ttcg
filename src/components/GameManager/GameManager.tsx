@@ -68,12 +68,19 @@ const GameJoinCreate: FC<GameJoinCreateProps> = () => {
     gameUpdatesSubscriber(0);
   }
 
+  const handleGameWithBot = async () => {
+    dispatch(setCreatedGame("Bot"));
+    const newSelectedActionData = createSelectedData(null, PlayerActionsName.Draw, GameStoreActionTypes.PlayerAction);
+    dispatch(playerActions({ selectedActionData: newSelectedActionData, data: 5 }));
+  }
+
   return <div className={styles.GameJoinCreate}>
     {game.status === GameStatus.over && <div>
       <TextField onChange={(input) => setGameCode(input.target.value)} placeholder='Code' helperText="Enter Game Code"></TextField>
       <div>
         <Button onClick={handleJoinGame}>Join</Button>
         <Button onClick={handleCreateGame}>Create</Button>
+        <Button onClick={handleGameWithBot}>Bot</Button>
       </div>
     </div>}
     {game.status === GameStatus.started && <>

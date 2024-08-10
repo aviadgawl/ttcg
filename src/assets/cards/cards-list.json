@@ -2,7 +2,7 @@
     {
         "type": "ChampionCard",
         "name": "Eduard",
-        "race": "Humanss",
+        "race": "Humans",
         "hp": 12,
         "str": 2,
         "dex": 1,
@@ -484,6 +484,20 @@
             "condition": null
         },
         "info": "Look for two action cards that include the word \"Step\" in your deck, show them to your opponent and add them to your hand. shuffle your deck"
+    },
+    {
+        "type": "OrderCard",
+        "name": "Do It Again!",
+        "duration": 0,
+        "requirement": [],
+        "reward": {
+            "name": "ReturnUsedCard",
+            "amount": 1,
+            "cardType": "ActionCard",
+            "cardNameContains": null,
+            "condition": "LastOne"
+        },
+        "info": "Discard an action card and draw the last used action."
     },
     {
         "type": "ActionCard",

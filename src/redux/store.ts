@@ -101,9 +101,6 @@ const gameSlice = createSlice({
                     updateGameAsync(state.game).catch(console.error);
             }
         },
-        setPlayer(state, action) {
-            state.playerIndex = action.payload;
-        },
         setShowHand(state, action) {
             state.showHand = action.payload;
         },
@@ -154,7 +151,8 @@ const gameSlice = createSlice({
 
             state.game = createdGame;
 
-            addGameAsync(createdGame).catch(console.error);
+            if(gameCode !== 'Bot')
+                addGameAsync(createdGame).catch(console.error);
         },
         setPartialGame(state, action) {
             const updatedGame = {
@@ -180,7 +178,6 @@ export const {
     setShowHand,
     setSelectedActionData,
     setDialog,
-    setPlayer,
     setPartialGame,
     setJoinedGame,
     setCreatedGame

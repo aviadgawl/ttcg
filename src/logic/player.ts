@@ -169,15 +169,15 @@ const playOrder = (game: Game, selectedCard: OrderCard, cardsPayment: GameCard[]
     });
 
     if (selectedCard.reward.name === RewardType.Draw)
-        drawFrom(player.deck, player.hand, selectedCard.reward.amount, selectedCard.reward.cardType, selectedCard.reward.cardNameContains);
+        drawFrom(player.deck, player.hand, selectedCard.reward.amount, selectedCard.reward.cardType, selectedCard.reward.cardNameContains, selectedCard.reward.condition);
 
     if (selectedCard.reward.name === RewardType.ConditionedDraw) {
         const amountToDraw = getAmountToDraw(game, selectedCard.reward.condition);
-        drawFrom(player.deck, player.hand, amountToDraw, selectedCard.reward.cardType, selectedCard.reward.cardNameContains);
+        drawFrom(player.deck, player.hand, amountToDraw, selectedCard.reward.cardType, selectedCard.reward.cardNameContains, null);
     }
 
     if (selectedCard.reward.name === RewardType.ReturnUsedCard) {
-        drawFrom(player.usedCards, player.hand, selectedCard.reward.amount, selectedCard.reward.cardType, selectedCard.reward.cardNameContains);
+        drawFrom(player.usedCards, player.hand, selectedCard.reward.amount, selectedCard.reward.cardType, selectedCard.reward.cardNameContains, selectedCard.reward.condition);
     }
 
     removeCard(player.hand, selectedCard);
@@ -189,14 +189,18 @@ const playOrder = (game: Game, selectedCard: OrderCard, cardsPayment: GameCard[]
 const initialDraw = (player: Player): string => {
     if (player.didDraw) return 'Player already draw this turn';
 
-    const result = drawFrom(player.deck, player.hand, 1, null, null);
+    const result = drawFrom(player.deck, player.hand, 1, null, null, null);
 
     if (result === 'success') player.didDraw = true;
 
     return result;
 }
 
-const drawFrom = (drawFromPool: GameCard[], drawTo: GameCard[], amount: number | undefined, filterByCardType: CardType | null, filterByCardName: string | null): string => {
+const drawFrom = (drawFromPool: GameCard[],
+    drawTo: GameCard[],
+    amount: number | undefined,
+    filterByCardType: CardType | null, filterByCardName: string | null, condition: string | null): string => {
+
     if (amount === undefined) return 'Amount can not be undefined';
 
     if (drawFromPool.length < amount) return 'Not enough cards in card pool';
@@ -210,11 +214,24 @@ const drawFrom = (drawFromPool: GameCard[], drawTo: GameCard[], amount: number |
         filteredCards = filteredCards.filter(card => card.name.includes(filterByCardName));
 
     for (let index = 0; index < amount; index++) {
-        const cardToAdd = filteredCards.pop();
 
-        if (!cardToAdd) return `the card ${index} is null`;
+        let cardToAdd = null;
+
+        switch (condition) {
+            case "LastOne":
+                cardToAdd = filteredCards.pop();
+                break;
+            default:
+                const maxIndex = filteredCards.length === 0 ? 0 : filteredCards.length - 1;
+                const randomIndex = Math.floor(Math.random() * maxIndex);
+                cardToAdd = filteredCards[randomIndex];
+                break;
+        }
+
+        if (!cardToAdd) return `the card ${index}/${amount} is null`;
 
         drawTo.push(cardToAdd);
+        removeCard(filteredCards, cardToAdd);
         removeCard(drawFromPool, cardToAdd);
     }
 
@@ -555,7 +572,7 @@ export const playerAction = (action: string | null, cardsList: GameCard[], game:
             result = initialDraw(player);
             break;
         case PlayerActionsName.Draw:
-            result = drawFrom(player.deck, player.hand, data.extendedData as number, null, null);
+            result = drawFrom(player.deck, player.hand, data.extendedData as number, null, null, null);
             break;
         case PlayerActionsName.Surrender:
             result = surrender(game);
