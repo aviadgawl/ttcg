@@ -142,17 +142,17 @@ const getAmountToDraw = (game: Game, condition: string | null): number => {
     return amountToDraw;
 }
 
-const playOrder = (game: Game, selectedCard: OrderCard, cardsPayment: GameCard[] | undefined): string => {
+const playOrder = (game: Game, playedOrderCard: OrderCard, cardsPayment: GameCard[] | undefined, selectedCard: GameCard | undefined): string => {
     if (cardsPayment === undefined) return 'cardsPayment can not be undefined';
 
     const player = getPlayer(game);
 
-    if (selectedCard.reward.name === RewardType.Draw && player.deck.length < selectedCard.reward.amount)
-        return `Not enough cards in deck, in deck ${player.deck.length} amount to draw: ${selectedCard.reward.amount}`;
+    if (playedOrderCard.reward.name === RewardType.Draw && player.deck.length < playedOrderCard.reward.amount)
+        return `Not enough cards in deck, in deck ${player.deck.length} amount to draw: ${playedOrderCard.reward.amount}`;
 
-    const { cardToDiscard, amountToDiscard } = getValidCardsForDiscard(player, cardsPayment, selectedCard);
+    const { cardToDiscard, amountToDiscard } = getValidCardsForDiscard(player, cardsPayment, playedOrderCard);
 
-    if (cardToDiscard.some(x => x.guid === selectedCard.guid))
+    if (cardToDiscard.some(x => x.guid === playedOrderCard.guid))
         return 'You cant not discard the played order card as payment';
 
     if (amountToDiscard === -1) {
@@ -168,20 +168,27 @@ const playOrder = (game: Game, selectedCard: OrderCard, cardsPayment: GameCard[]
         player.usedCards.push(card);
     });
 
-    if (selectedCard.reward.name === RewardType.Draw)
-        drawFrom(player.deck, player.hand, selectedCard.reward.amount, selectedCard.reward.cardType, selectedCard.reward.cardNameContains, selectedCard.reward.condition);
+    if (playedOrderCard.reward.name === RewardType.Draw)
+        drawFrom(player.deck, player.hand, playedOrderCard.reward.amount, playedOrderCard.reward.cardType, playedOrderCard.reward.cardNameContains, playedOrderCard.reward.condition);
 
-    if (selectedCard.reward.name === RewardType.ConditionedDraw) {
-        const amountToDraw = getAmountToDraw(game, selectedCard.reward.condition);
-        drawFrom(player.deck, player.hand, amountToDraw, selectedCard.reward.cardType, selectedCard.reward.cardNameContains, null);
+    if (playedOrderCard.reward.name === RewardType.ConditionedDraw) {
+        const amountToDraw = getAmountToDraw(game, playedOrderCard.reward.condition);
+        drawFrom(player.deck, player.hand, amountToDraw, playedOrderCard.reward.cardType, playedOrderCard.reward.cardNameContains, null);
     }
 
-    if (selectedCard.reward.name === RewardType.ReturnUsedCard) {
-        drawFrom(player.usedCards, player.hand, selectedCard.reward.amount, selectedCard.reward.cardType, selectedCard.reward.cardNameContains, selectedCard.reward.condition);
+    if (playedOrderCard.reward.name === RewardType.ReturnUsedCard) {
+        drawFrom(player.usedCards, player.hand, playedOrderCard.reward.amount, playedOrderCard.reward.cardType, playedOrderCard.reward.cardNameContains, playedOrderCard.reward.condition);
     }
 
-    removeCard(player.hand, selectedCard);
-    player.usedCards.push(selectedCard);
+    if (playedOrderCard.reward.name === RewardType.SpecificDraw) {
+
+        if(selectedCard === undefined || selectedCard === null) return 'Must select a card from deck';
+
+        drawSpecificCard(player.deck, player.hand, selectedCard, playedOrderCard.reward.cardType);
+    }
+
+    removeCard(player.hand, playedOrderCard);
+    player.usedCards.push(playedOrderCard);
 
     return 'success';
 }
@@ -196,10 +203,27 @@ const initialDraw = (player: Player): string => {
     return result;
 }
 
+const drawSpecificCard = (drawFromPool: GameCard[],
+    drawTo: GameCard[],
+    cardToDraw: GameCard,
+    requiredCardType: CardType | null) => {
+
+    if (drawFromPool.length < 1) 
+        return 'Must be at least one card in pool';
+
+    if (requiredCardType && !checkCardType(cardToDraw, requiredCardType))
+        return `Selected Card: ${cardToDraw.name}, do not much the required type ${requiredCardType}`;
+
+    drawTo.push(cardToDraw);
+    removeCard(drawFromPool, cardToDraw);
+}
+
 const drawFrom = (drawFromPool: GameCard[],
     drawTo: GameCard[],
     amount: number | undefined,
-    filterByCardType: CardType | null, filterByCardName: string | null, condition: string | null): string => {
+    filterByCardType: CardType | null,
+    filterByCardName: string | null,
+    condition: string | null): string => {
 
     if (amount === undefined) return 'Amount can not be undefined';
 
@@ -228,7 +252,7 @@ const drawFrom = (drawFromPool: GameCard[],
                 break;
         }
 
-        if (!cardToAdd) return `the card ${index}/${amount} is null`;
+        if (!cardToAdd) return `The card ${index}/${amount} is null`;
 
         drawTo.push(cardToAdd);
         removeCard(filteredCards, cardToAdd);
@@ -599,7 +623,7 @@ export const playerAction = (action: string | null, cardsList: GameCard[], game:
             result = attachAction(game, player, data.selectedCard as ActionCard, data.extendedData as BoardLocation);
             break;
         case PlayerActionsName.PlayOrder:
-            result = playOrder(game, data.selectedCard as OrderCard, data.extendedData as GameCard[]);
+            result = playOrder(game, data.selectedCard as OrderCard, data.extendedData as GameCard[], data.extendedData as GameCard);
             break;
         case PlayerActionsName.ClearDeck:
             result = clearDeck(game, cardsList);

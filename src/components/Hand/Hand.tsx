@@ -1,16 +1,16 @@
 import { FC, useState } from 'react';
 import styles from './Hand.module.css';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { playerActions, setShowHand, createSelectedData } from '../../redux/store';
+import { playerActions, setShowHand, createSelectedData, setShowCardsInDeck } from '../../redux/store';
 import { GameStoreActionTypes } from '../../redux/types';
 import { PlayerActionsName } from '../../logic/enums';
 import { GameCard, isOrder } from '../../logic/game-card';
+import HandCard, { HandCardMode } from '../HandCard/HandCard';
+import CardsDisplay from '../CardsDisplay/CardsDisplay';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
-import HandCard, { HandCardMode } from '../HandCard/HandCard';
-import CardsDisplay from '../CardsDisplay/CardsDisplay';
 
 const Hand: FC = () => {
   const playerIndex = useAppSelector((state) => state.gameActions.game.playerIndex);
@@ -18,10 +18,11 @@ const Hand: FC = () => {
   const player = useAppSelector((state) => state.gameActions.game.players[playerIndex]);
   const showHand = useAppSelector((state) => state.gameActions.showHand);
   const selectedActionData = useAppSelector((state) => state.gameActions.selectedActionData);
+  const showCardsInDeck = useAppSelector((state) => state.gameActions.showCardsInDeck);
 
   const dispatch = useAppDispatch();
 
-  const [showDialog, setShowDialog] = useState(true);
+  const [showUsedCardsDialog, setShowUsedCardsDialog] = useState(true);
   const [discardCards, setDiscardCards] = useState([] as GameCard[]);
 
   const handleAction = (actionName: string, hideHand: boolean = false) => {
@@ -55,6 +56,10 @@ const Hand: FC = () => {
       setDiscardCards(newDiscardCards);
   }
 
+  const handleDeckSelectedCard = (card: GameCard) => {
+    console.log(JSON.stringify(card));
+  }
+
   return <div className={styles.Hand}>
     <div className={styles.HandButton}>
       <Button onClick={() => dispatch(setShowHand(true))}>Show Hand</Button>
@@ -63,7 +68,7 @@ const Hand: FC = () => {
       <Button onClick={() => dispatch(setShowHand(false))}>Hide Hand</Button>
       <div className={styles.CardContainer}>
         <div className={styles.ButtonsContainer}>
-          <h3 onClick={() => setShowDialog(true)}> Used Cards: {player.usedCards.length}</h3>
+          <h3 onClick={() => setShowUsedCardsDialog(true)}> Used Cards: {player.usedCards.length}</h3>
           <Button disabled={playerIndex !== playingPlayerIndex || player.didDraw} onClick={() => handleAction(PlayerActionsName.InitialDraw)} variant="outlined">Deck: {player.deck.length}</Button>
           <Button disabled={playerIndex !== playingPlayerIndex} onClick={() => handleAction(PlayerActionsName.EndTurn, true)} variant="outlined">{PlayerActionsName.EndTurn}</Button>
           <Button disabled={playerIndex !== playingPlayerIndex} onClick={() => handleAction(PlayerActionsName.Surrender)} variant="outlined">{PlayerActionsName.Surrender}</Button>
@@ -75,10 +80,17 @@ const Hand: FC = () => {
       </div>
     </Drawer>
     <Dialog
-      open={showDialog && player.usedCards.length > 0}
-      onClose={() => setShowDialog(false)}>
+      open={showUsedCardsDialog && player.usedCards.length > 0}
+      onClose={() => setShowUsedCardsDialog(false)}>
       <DialogContent className={styles.DialogContent}>
         <CardsDisplay cards={player.usedCards} />
+      </DialogContent>
+    </Dialog>
+    <Dialog
+      open={showCardsInDeck && player.deck.length > 0}
+      onClose={() => dispatch(setShowCardsInDeck(false))}>
+      <DialogContent className={styles.DialogContent}>
+        <CardsDisplay onSelectCard={handleDeckSelectedCard} cards={player.deck} />
       </DialogContent>
     </Dialog>
   </div>

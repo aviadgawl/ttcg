@@ -8,12 +8,6 @@ import { playSoundByPlayerActionName, playSoundByCardActionName } from '../helpe
 import { GameStoreActionTypes } from './types';
 import { updateGameAsync, addGameAsync } from '../firebase/firebase';
 
-export interface GameDialog {
-    title: string;
-    content: string;
-    showButtons: boolean;
-}
-
 export interface SelectedData {
     card: GameCard | null,
     actionName: string,
@@ -21,11 +15,12 @@ export interface SelectedData {
     sourceLocation: BoardLocation | null,
     allowedBoardLocations: BoardLocation[],
     isAttachedAction: boolean,
-    allowedHandCardSelect: GameCard[]
+    allowedHandCardSelect: GameCard[],
+    cardToDraw: GameCard | null
 }
 
 export const createSelectedData = (card: GameCard | null,
-    actionName: string, actionType: GameStoreActionTypes | null, sourceLocation: BoardLocation | null = null, isAttachedAction = false): SelectedData => {
+    actionName: string, actionType: GameStoreActionTypes | null, sourceLocation: BoardLocation | null = null, isAttachedAction = false, cardToDraw: GameCard | null = null): SelectedData => {
     return {
         card: card,
         actionName: actionName,
@@ -33,7 +28,8 @@ export const createSelectedData = (card: GameCard | null,
         sourceLocation: sourceLocation,
         allowedBoardLocations: [],
         isAttachedAction: isAttachedAction,
-        allowedHandCardSelect: []
+        allowedHandCardSelect: [],
+        cardToDraw: cardToDraw
     };
 }
 
@@ -47,10 +43,11 @@ export const initialState = {
         sourceLocation: null,
         allowedBoardLocations: [],
         isAttachedAction: false,
-        allowedHandCardSelect: []
+        allowedHandCardSelect: [],
+        cardToDraw: null
     } as SelectedData,
     showHand: false as boolean,
-    dialog: null as unknown as GameDialog,
+    showCardsInDeck: false as boolean,
     cardsList: cardsList as GameCard[]
 }
 
@@ -104,6 +101,17 @@ const gameSlice = createSlice({
         setShowHand(state, action) {
             state.showHand = action.payload;
         },
+        setShowCardsInDeck(state, action) {
+            state.showCardsInDeck = action.payload;
+        },
+        setSelectedActionDataCardToDraw(state, action) {
+            if (action.payload === null) {
+                alert('Card to draw not be null');
+                return;
+            }
+
+            state.selectedActionData.cardToDraw = action.payload;
+        },
         setSelectedActionData(state, action) {
             let selectedData = action.payload as SelectedData;
             let allowedHandCardSelectResult: AllowedHandCardSelectResponse = { message: 'success', handCards: [] };
@@ -127,9 +135,6 @@ const gameSlice = createSlice({
             else console.log(allowedHandCardSelectResult.message);
 
             state.selectedActionData = selectedData;
-        },
-        setDialog(state, action) {
-            state.dialog = action.payload;
         },
         setJoinedGame(state, action) {
             const gameFromDb: Game = action.payload;
@@ -176,8 +181,8 @@ export const {
     championActions,
     playerActions,
     setShowHand,
+    setShowCardsInDeck,
     setSelectedActionData,
-    setDialog,
     setPartialGame,
     setJoinedGame,
     setCreatedGame

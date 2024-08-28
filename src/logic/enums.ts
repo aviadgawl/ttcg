@@ -70,7 +70,8 @@ export enum CardType {
 export enum RewardType {
     Draw = 'Draw',
     ConditionedDraw = 'ConditionedDraw',
-    ReturnUsedCard = 'ReturnUsedCard'
+    ReturnUsedCard = 'ReturnUsedCard',
+    SpecificDraw = 'SpecificDraw'
 }
 
 export enum ChampionDirection {

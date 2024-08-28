@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import { GameCard, isGear, isChampion, isClass, isAction, isOrder, OrderCard } from '../../logic/game-card';
-import { PlayerActionsName } from '../../logic/enums';
+import { PlayerActionsName, RewardType } from '../../logic/enums';
 import { useAppDispatch } from '../../redux/hooks';
-import { setSelectedActionData, setShowHand, createSelectedData, playerActions } from '../../redux/store';
+import { setSelectedActionData, setShowHand, createSelectedData, playerActions, setShowCardsInDeck } from '../../redux/store';
 import { GameStoreActionTypes } from '../../redux/types';
 import Button from '@mui/material/Button';
 import GameCardDraw from '../GameCardDraw/GameCardDraw';
@@ -22,8 +22,18 @@ interface CardProps {
 const HandCard: FC<CardProps> = (props) => {
   const dispatch = useAppDispatch();
 
-  const isDiscardAllHandOrderCard = (orderCard: OrderCard): boolean => {
-    return orderCard.requirement.length === 1 && orderCard.requirement[0].amount === -1;
+  const isOneStepOrderCard = (orderCard: OrderCard): boolean => {
+
+    const isDiscardAllHandOrderCard = orderCard.requirement.length === 1 && orderCard.requirement[0].amount === -1;
+    if (isDiscardAllHandOrderCard)
+      return isDiscardAllHandOrderCard;
+
+    const isNoRequirements = orderCard.requirement.length === 0;
+    return isNoRequirements
+  }
+
+  const shouldOpenDeckCardSelect = (orderCard: OrderCard): boolean => {
+    return orderCard.reward.name === RewardType.SpecificDraw;
   }
 
   const handleCardActionOnTarget = (cardAction: string) => {
@@ -32,28 +42,27 @@ const HandCard: FC<CardProps> = (props) => {
     dispatch(setShowHand(false));
   }
 
-  const handleOrderCardAction = (cardAction: string) => {
+  const handleOrderCardAction = () => {
+
     if (!isOrder(props.card)) {
       alert("Play order card must be invoked on order card");
       return;
     }
 
-    const selectedData = createSelectedData(props.card, cardAction, GameStoreActionTypes.PlayerAction);
+    const selectedData = createSelectedData(props.card, PlayerActionsName.PlayOrder, GameStoreActionTypes.PlayerAction);
 
-    if (isDiscardAllHandOrderCard(props.card)) {
+    const oneStepOrderCard = isOneStepOrderCard(props.card);
+    if (oneStepOrderCard) {
       dispatch(playerActions({ selectedActionData: selectedData, data: [] }));
+      dispatch(setShowHand(false));
       return;
     }
 
-    if (props.card.requirement.length === 0) {
-      dispatch(playerActions({ selectedActionData: selectedData, data: [] }));
-      return;
-    }
+    const openDeckCardSelect = shouldOpenDeckCardSelect(props.card);
+    if(openDeckCardSelect)
+      dispatch(setShowCardsInDeck(true));
 
     dispatch(setSelectedActionData(selectedData));
-
-    if (props.card.requirement.length === 0)
-      dispatch(setShowHand(false));
   }
 
   return <div>
@@ -71,7 +80,7 @@ const HandCard: FC<CardProps> = (props) => {
       {isAction(props.card) && <Button disabled={props.disabled} variant="outlined" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Attach)}>
         {PlayerActionsName.Attach} </Button>}
 
-      {isOrder(props.card) && <Button disabled={props.disabled} variant="outlined" size="small" onClick={() => handleOrderCardAction(PlayerActionsName.PlayOrder)}>
+      {isOrder(props.card) && <Button disabled={props.disabled} variant="outlined" size="small" onClick={handleOrderCardAction}>
         {PlayerActionsName.PlayOrder} </Button>}
     </div>}
   </div>;

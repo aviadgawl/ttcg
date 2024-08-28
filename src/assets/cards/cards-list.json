@@ -497,7 +497,27 @@
             "cardNameContains": null,
             "condition": "LastOne"
         },
-        "info": "Discard an action card and draw the last used action."
+        "info": "Discard an action card and draw the last used action"
+    },
+    {
+        "type": "OrderCard",
+        "name": "Find Him!",
+        "duration": 0,
+        "requirement": [
+            {
+                "name": "discard",
+                "amount": 1,
+                "cardType": null
+            }
+        ],
+        "reward": {
+            "name": "SpecificDraw",
+            "amount": 1,
+            "cardType": "ChampionCard",
+            "cardNameContains": null,
+            "condition": null
+        },
+        "info": "Discard one card, Look for a champion card in your deck take it and then show it to the opponent and shuffle your deck"
     },
     {
         "type": "ActionCard",
