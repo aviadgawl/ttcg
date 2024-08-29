@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { GameCard, isGear, isChampion, isClass, isAction, isOrder, OrderCard } from '../../logic/game-card';
 import { PlayerActionsName, RewardType } from '../../logic/enums';
 import { useAppDispatch } from '../../redux/hooks';
-import { setSelectedActionData, setShowHand, createSelectedData, playerActions, setShowCardsInDeck } from '../../redux/store';
+import { setSelectedActionData, setShowHand, createSelectedData, playerActions, setShowCardsInDeck, createShowCardsInDeck } from '../../redux/store';
 import { GameStoreActionTypes } from '../../redux/types';
 import Button from '@mui/material/Button';
 import GameCardDraw from '../GameCardDraw/GameCardDraw';
@@ -60,7 +60,7 @@ const HandCard: FC<CardProps> = (props) => {
 
     const openDeckCardSelect = shouldOpenDeckCardSelect(props.card);
     if(openDeckCardSelect)
-      dispatch(setShowCardsInDeck(true));
+      dispatch(setShowCardsInDeck(createShowCardsInDeck(true, props.card.reward.cardType ?? undefined )));
 
     dispatch(setSelectedActionData(selectedData));
   }

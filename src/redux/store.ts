@@ -2,7 +2,7 @@ import { configureStore, createSlice } from '@reduxjs/toolkit';
 import { createGame, Game, cardsList } from '../logic/game';
 import { ActionCard, GameCard, isAction, isOrder, OrderCard, AllowedBoardLocationResponse, BoardLocation, AllowedHandCardSelectResponse } from '../logic/game-card';
 import { championAction, getChampionsActionsAllowedBoardLocations } from '../logic/champion';
-import { GameStatus } from '../logic/enums';
+import { GameStatus, CardType } from '../logic/enums';
 import { playerAction, getPlayerActionsAllowedBoardLocations, getPlayerAllowedHandCardSelect } from '../logic/player';
 import { playSoundByPlayerActionName, playSoundByCardActionName } from '../helpers/audio-helper';
 import { GameStoreActionTypes } from './types';
@@ -17,6 +17,15 @@ export interface SelectedData {
     isAttachedAction: boolean,
     allowedHandCardSelect: GameCard[],
     cardToDraw: GameCard | null
+}
+
+interface ShowCardsInDeck {
+    show: boolean,
+    byType: CardType | null
+}
+
+export const createShowCardsInDeck = (show: boolean, byType: CardType | null = null) : ShowCardsInDeck => {
+    return {show: show, byType: byType} as ShowCardsInDeck;
 }
 
 export const createSelectedData = (card: GameCard | null,
@@ -47,7 +56,7 @@ export const initialState = {
         cardToDraw: null
     } as SelectedData,
     showHand: false as boolean,
-    showCardsInDeck: false as boolean,
+    showCardsInDeck: { show: false } as ShowCardsInDeck,
     cardsList: cardsList as GameCard[]
 }
 
@@ -86,9 +95,9 @@ const gameSlice = createSlice({
         },
         playerActions(state, action) {
             const { data } = action.payload;
-            const { card, actionName } = action.payload.selectedActionData ?? state.selectedActionData;
+            const { card, cardToDraw, actionName } = action.payload.selectedActionData ?? state.selectedActionData;
             
-            const result = playerAction(actionName, state.cardsList, state.game, { selectedCard: card, extendedData: data });
+            const result = playerAction(actionName, state.cardsList, state.game, { selectedCard: card, cardToDraw: cardToDraw, extendedData: data });
 
             if (result !== 'success') alert(result);
             else {
@@ -185,7 +194,8 @@ export const {
     setSelectedActionData,
     setPartialGame,
     setJoinedGame,
-    setCreatedGame
+    setCreatedGame,
+    setSelectedActionDataCardToDraw
 } = gameSlice.actions;
 
 export type AppDispatch = typeof store.dispatch;

@@ -1,5 +1,5 @@
 import { Player } from './player';
-import { GameCard, GearCard, CrystalCard, ChampionCard, ClassCard, ActionCard, OrderCard } from './game-card';
+import { GameCard, GearCard, CrystalCard, ChampionCard, ClassCard, ActionCard, OrderCard, OrderCardReward } from './game-card';
 import { ActionType, Stats, ActionDirections, GameStatus, GearCategory, MathModifier, EffectStatus, ChampionDirection, Race, CardType } from './enums';
 import { getImage } from '../helpers/image-helper';
 import cardsListJson from '../assets/cards/cards-list.json';
@@ -90,7 +90,7 @@ export const cardsList = cardsListJson.flatMap(x => {
                     duration: x.duration,
                     info: x.info,
                     requirement: x.requirement,
-                    reward: x.reward
+                    reward: x.reward as OrderCardReward
                 } as OrderCard);
                 break;
             default:

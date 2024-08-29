@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import styles from './Hand.module.css';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { playerActions, setShowHand, createSelectedData, setShowCardsInDeck } from '../../redux/store';
+import { playerActions, setShowHand, createSelectedData, setShowCardsInDeck, setSelectedActionDataCardToDraw, createShowCardsInDeck } from '../../redux/store';
 import { GameStoreActionTypes } from '../../redux/types';
 import { PlayerActionsName } from '../../logic/enums';
 import { GameCard, isOrder } from '../../logic/game-card';
@@ -57,7 +57,8 @@ const Hand: FC = () => {
   }
 
   const handleDeckSelectedCard = (card: GameCard) => {
-    console.log(JSON.stringify(card));
+    dispatch(setSelectedActionDataCardToDraw(card));
+    dispatch(setShowCardsInDeck(createShowCardsInDeck(false)));
   }
 
   return <div className={styles.Hand}>
@@ -87,10 +88,10 @@ const Hand: FC = () => {
       </DialogContent>
     </Dialog>
     <Dialog
-      open={showCardsInDeck && player.deck.length > 0}
+      open={showCardsInDeck?.show && player.deck.length > 0}
       onClose={() => dispatch(setShowCardsInDeck(false))}>
       <DialogContent className={styles.DialogContent}>
-        <CardsDisplay onSelectCard={handleDeckSelectedCard} cards={player.deck} />
+        <CardsDisplay onSelectCard={handleDeckSelectedCard} cardType={showCardsInDeck?.byType} cards={player.deck} />
       </DialogContent>
     </Dialog>
   </div>
