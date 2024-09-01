@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { championActions, playerActions, setSelectedActionData, initialState } from '../../redux/store';
+import { useAppDispatch, useAppSelector, usePlayerAction } from '../../redux/hooks';
+import { championActions, setSelectedActionData, initialState } from '../../redux/store';
 import { GameStoreActionTypes } from '../../redux/types';
 import { isCrystal, CrystalCard, isChampion, BoardLocation } from '../../logic/game-card';
 import BoardChampion from '../BoardChampion/BoardChampion';
@@ -13,6 +13,7 @@ const Board: FC = () => {
   const boardState = useAppSelector((state) => state.gameActions.game.board);
   const playerIndex = useAppSelector((state) => state.gameActions.game.playerIndex);
   const selectedActionData = useAppSelector((state) => state.gameActions.selectedActionData);
+  const playerActions = usePlayerAction();
   const dispatch = useAppDispatch();
 
   const shouldRotate = playerIndex === 1;
@@ -20,7 +21,8 @@ const Board: FC = () => {
   const handleAction = (targetX: number, targetY: number) => {
 
     if (selectedActionData.actionType === GameStoreActionTypes.PlayerAction) {
-      dispatch(playerActions({ data: { rowIndex: targetX, columnIndex: targetY } as BoardLocation }))
+      const extendedData = { rowIndex: targetX, columnIndex: targetY } as BoardLocation;
+      playerActions(null, extendedData);
     }
     else if (selectedActionData.actionType === GameStoreActionTypes.ChampionAction) {
       dispatch(championActions({

@@ -163,11 +163,6 @@ const playOrder = (game: Game, playedOrderCard: OrderCard, cardsPayment: GameCar
             return `Valid cards to discard (${cardToDiscard.length}) is not equal to the requirement ${amountToDiscard}`;
     }
 
-    cardToDiscard.forEach(card => {
-        removeCard(player.hand, card);
-        player.usedCards.push(card);
-    });
-
     if (playedOrderCard.reward.name === RewardType.Draw)
         drawFrom(player.deck, player.hand, playedOrderCard.reward.amount, playedOrderCard.reward.cardType, playedOrderCard.reward.cardNameContains, playedOrderCard.reward.condition);
 
@@ -186,6 +181,11 @@ const playOrder = (game: Game, playedOrderCard: OrderCard, cardsPayment: GameCar
 
         drawSpecificCard(player.deck, player.hand, cardToDraw, playedOrderCard.reward.cardType);
     }
+
+    cardToDiscard.forEach(card => {
+        removeCard(player.hand, card);
+        player.usedCards.push(card);
+    });
 
     removeCard(player.hand, playedOrderCard);
     player.usedCards.push(playedOrderCard);

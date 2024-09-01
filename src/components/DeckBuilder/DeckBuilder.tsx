@@ -3,10 +3,10 @@ import { PlayerActionsName } from '../../logic/enums';
 import HandCard, { HandCardMode } from '../HandCard/HandCard';
 import Button from '@mui/material/Button';
 import styles from './DeckBuilder.module.css';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { playerActions } from '../../redux/store';
+import { useAppDispatch, useAppSelector, usePlayerAction } from '../../redux/hooks';
 import { GameCard } from '../../logic/game-card';
 import CardsDisplay from '../CardsDisplay/CardsDisplay';
+import { createSelectedData, SelectedData } from '../../redux/store';
 
 const groupBy = <T, K extends keyof any>(arr: T[], key: (i: T) => K) =>
   arr.reduce((groups, item) => {
@@ -19,6 +19,7 @@ const DeckBuilder: FC = () => {
   const playerDeck = useAppSelector((state) => state.gameActions.game.players[playerIndex].deck);
   const cardsList = useAppSelector((state) => state.gameActions.cardsList);
   const dispatch = useAppDispatch();
+  const playerAction = usePlayerAction();
 
   const cardsInDeckGroupedByName = groupBy(playerDeck, card => card.name);
 
@@ -46,15 +47,18 @@ const DeckBuilder: FC = () => {
   }
 
   const handleClear = () => {
-    dispatch(playerActions({ selectedActionData: { actionName: PlayerActionsName.ClearDeck } }))
+    const selectedData = { actionName: PlayerActionsName.ClearDeck } as SelectedData;
+    playerAction(selectedData);
   }
 
   const addCardToDeck = (card: GameCard) => {
-    dispatch(playerActions({ selectedActionData: { card: card, actionName: PlayerActionsName.AddCardToDeck } }))
+    const selectedData = { card: card, actionName: PlayerActionsName.AddCardToDeck } as SelectedData;
+    playerAction(selectedData);
   }
 
   const removeCardFromDeck = (card: GameCard) => {
-    dispatch(playerActions({ selectedActionData: { card: card, actionName: PlayerActionsName.RemoveCardFromDeck } }))
+    const selectedData = { card: card, actionName: PlayerActionsName.RemoveCardFromDeck } as SelectedData;
+    playerAction(selectedData);
   }
 
   return <div className={styles.DeckBuilder}>

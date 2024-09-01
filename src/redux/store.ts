@@ -176,6 +176,15 @@ const gameSlice = createSlice({
                 playingPlayerIndex: action.payload.playingPlayerIndex,
             };
             state.game = updatedGame;
+        },
+        setGame(state, action) {
+            state.game = action.payload;
+        },
+        setCardsList(state, action) {
+            state.cardsList = action.payload;
+        },
+        resetSelectedData(state) {
+            state.selectedActionData = initialState.selectedActionData;
         }
     }
 });
@@ -195,7 +204,10 @@ export const {
     setPartialGame,
     setJoinedGame,
     setCreatedGame,
-    setSelectedActionDataCardToDraw
+    setSelectedActionDataCardToDraw,
+    setGame,
+    setCardsList,
+    resetSelectedData
 } = gameSlice.actions;
 
 export type AppDispatch = typeof store.dispatch;
