@@ -1,23 +1,30 @@
 import { useCallback } from 'react';
-import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+import { TypedUseSelectorHook, useDispatch, useSelector, useStore } from 'react-redux';
 import { RootState, AppDispatch, SelectedData, setGame, resetSelectedData, setCardsList } from './store';
-import { playSoundByPlayerActionName } from '../helpers/audio-helper';
+import { playSoundByPlayerActionName, playSoundByCardActionName } from '../helpers/audio-helper';
 import { playerAction } from '../logic/player';
-import { updateGameAsync } from '../firebase/firebase';
+import { championAction } from '../logic/champion';
+import { updateGameAsync, addGameAsync } from '../firebase/firebase';
+import { BoardLocation, isAction, ActionCard } from '../logic/game-card';
+import { Game } from '../logic/game';
+import { GameStatus } from '../logic/enums';
 
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 export const usePlayerAction = () => {
-    const state = useAppSelector((state) => state.gameActions);
+    const store = useStore();
     const dispatch = useAppDispatch();
 
-    return useCallback((selectedActionData: SelectedData | null, additionalData: any = null) => {
-        const { card, cardToDraw, actionName } = selectedActionData ?? structuredClone(state.selectedActionData);
-        
+    return useCallback((newSelectedActionData: SelectedData | null, additionalData: any = null) => {
+        const state = store.getState() as any;
+
+        const { game, selectedActionData, cardsList } = state.gameActions;
+        const { card, cardToDraw, actionName } = newSelectedActionData ?? structuredClone(selectedActionData);
+
         const data = { selectedCard: card, cardToDraw: cardToDraw, extendedData: additionalData };
-        const gameToUpdate = structuredClone(state.game);
-        const cardsListToUpdate = [ ...state.cardsList ];
+        const gameToUpdate = structuredClone(game);
+        const cardsListToUpdate = [...cardsList];
 
         const result = playerAction(actionName, cardsListToUpdate, gameToUpdate, data);
 
@@ -28,34 +35,61 @@ export const usePlayerAction = () => {
             if (gameToUpdate.code !== '')
                 updateGameAsync(gameToUpdate).catch(console.error);
         }
-        
+
         dispatch(setGame(gameToUpdate));
         dispatch(setCardsList(cardsListToUpdate));
-    }, [dispatch, state]);
+    }, []);
 }
 
 export const useChampionAction = () => {
-    const state = useAppSelector((state) => state.gameActions);
+    const store = useStore();
     const dispatch = useAppDispatch();
 
-    return useCallback((selectedActionData: SelectedData | null, additionalData: any = null) => {
-        const { card, cardToDraw, actionName } = selectedActionData ?? structuredClone(state.selectedActionData);
-        
-        const data = { selectedCard: card, cardToDraw: cardToDraw, extendedData: additionalData };
-        const gameToUpdate = structuredClone(state.game);
-        const cardsListToUpdate = [ ...state.cardsList ];
+    return useCallback((targetLocation: BoardLocation) => {
+        const state = store.getState() as any;
+        const { selectedActionData } = state.gameActions;
 
-        const result = playerAction(actionName, cardsListToUpdate, gameToUpdate, data);
+        if (selectedActionData.card === null) {
+            alert('SelectedData card can not be null');
+            return;
+        }
+
+        if (selectedActionData.sourceLocation === null) {
+            alert('No source location');
+            return;
+        };
+
+        if (!isAction(selectedActionData.card)) {
+            alert('SelectedData is not action card');
+            return;
+        };
+
+        const gameToUpdate = structuredClone(state.game);
+        const result = championAction(gameToUpdate, selectedActionData.card as ActionCard, selectedActionData.sourceLocation, targetLocation, selectedActionData.isAttachedAction);
 
         if (result !== 'success') alert(result);
         else {
-            playSoundByPlayerActionName(actionName);
+            playSoundByCardActionName(selectedActionData.card.actionType);
             dispatch(resetSelectedData());
-            if (gameToUpdate.code !== '')
-                updateGameAsync(gameToUpdate).catch(console.error);
+            if (state.game.code !== '')
+                updateGameAsync(state.game).catch(console.error);
         }
-        
+
         dispatch(setGame(gameToUpdate));
-        dispatch(setCardsList(cardsListToUpdate));
-    }, [dispatch, state]);
+    }, []);
+}
+
+export const useCreateGame = () => {
+    const store = useStore();
+    const dispatch = useAppDispatch();
+
+    return useCallback((gameCode: string) => {
+        const state = store.getState() as any;
+        const createdGame: Game = { ...state.gameActions.game, status: GameStatus.started, code: gameCode };
+
+        if (gameCode !== 'Bot')
+            addGameAsync(createdGame).catch(console.error);
+
+        dispatch(setGame(createdGame));
+    }, [])
 }

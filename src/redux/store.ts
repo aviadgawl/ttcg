@@ -1,10 +1,9 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 import { createGame, Game, cardsList } from '../logic/game';
-import { ActionCard, GameCard, isAction, isOrder, OrderCard, AllowedBoardLocationResponse, BoardLocation, AllowedHandCardSelectResponse } from '../logic/game-card';
-import { championAction, getChampionsActionsAllowedBoardLocations } from '../logic/champion';
+import { GameCard, isAction, isOrder, OrderCard, AllowedBoardLocationResponse, BoardLocation, AllowedHandCardSelectResponse } from '../logic/game-card';
+import { getChampionsActionsAllowedBoardLocations } from '../logic/champion';
 import { GameStatus, CardType } from '../logic/enums';
 import { getPlayerActionsAllowedBoardLocations, getPlayerAllowedHandCardSelect } from '../logic/player';
-import { playSoundByCardActionName } from '../helpers/audio-helper';
 import { GameStoreActionTypes } from './types';
 import { updateGameAsync, addGameAsync } from '../firebase/firebase';
 
@@ -64,35 +63,6 @@ const gameSlice = createSlice({
     name: 'game',
     initialState,
     reducers: {
-        championActions(state, action) {
-            const { targetLocation } = action.payload;
-            const selectedData = state.selectedActionData as SelectedData;
-
-            if (selectedData.card === null) {
-                alert('SelectedData card can not be null');
-                return;
-            }
-
-            if (selectedData.sourceLocation === null) {
-                alert('No source location');
-                return;
-            };
-
-            if (!isAction(selectedData.card)) {
-                alert('SelectedData is not action card');
-                return;
-            };
-
-            const result = championAction(state.game, selectedData.card as ActionCard, selectedData.sourceLocation, targetLocation, selectedData.isAttachedAction);
-
-            if (result !== 'success') alert(result);
-            else {
-                playSoundByCardActionName(selectedData.card.actionType);
-                state.selectedActionData = initialState.selectedActionData;
-                if (state.game.code !== '')
-                    updateGameAsync(state.game).catch(console.error);
-            }
-        },
         setShowHand(state, action) {
             state.showHand = action.payload;
         },
@@ -145,15 +115,6 @@ const gameSlice = createSlice({
 
             updateGameAsync(joinedGame).catch(console.error);
         },
-        setCreatedGame(state, action) {
-            const gameCode: string = action.payload;
-            const createdGame: Game = { ...state.game, status: GameStatus.started, code: gameCode };
-
-            state.game = createdGame;
-
-            if(gameCode !== 'Bot')
-                addGameAsync(createdGame).catch(console.error);
-        },
         setPartialGame(state, action) {
             const updatedGame = {
                 ...state.game,
@@ -182,13 +143,11 @@ const store = configureStore({
 })
 
 export const {
-    championActions,
     setShowHand,
     setShowCardsInDeck,
     setSelectedActionData,
     setPartialGame,
     setJoinedGame,
-    setCreatedGame,
     setSelectedActionDataCardToDraw,
     setGame,
     setCardsList,

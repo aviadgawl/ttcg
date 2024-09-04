@@ -5,8 +5,8 @@ import TextField from '@mui/material/TextField';
 import { GameStatus, PlayerActionsName } from '../../logic/enums';
 import { Game } from '../../logic/game';
 import { gameSubscriber, getGameAsync } from '../../firebase/firebase';
-import { useAppDispatch, useAppSelector, usePlayerAction } from '../../redux/hooks';
-import { setPartialGame, setJoinedGame, setCreatedGame, createSelectedData } from '../../redux/store';
+import { useAppDispatch, useAppSelector, usePlayerAction, useCreateGame } from '../../redux/hooks';
+import { setPartialGame, setJoinedGame, createSelectedData } from '../../redux/store';
 import { GameStoreActionTypes } from '../../redux/types';
 import Board from '../Board/Board';
 import GameDetails from '../GameDetails/GameDetails';
@@ -21,6 +21,7 @@ const GameJoinCreate: FC<GameJoinCreateProps> = () => {
   const winner = useAppSelector((state) => state.gameActions.game.loser);
   const game = useAppSelector((state) => state.gameActions.game);
   const playerAction = usePlayerAction();
+  const createGame = useCreateGame();
 
   const gameSubRef = useRef(null as any);
 
@@ -65,14 +66,14 @@ const GameJoinCreate: FC<GameJoinCreateProps> = () => {
 
     const newSelectedActionData = createSelectedData(null, PlayerActionsName.Draw, GameStoreActionTypes.PlayerAction);
     playerAction(newSelectedActionData, 5);
-    dispatch(setCreatedGame(gameCode));
+    createGame(gameCode);
     gameUpdatesSubscriber(0);
   }
 
   const handleGameWithBot = async () => {
     const newSelectedActionData = createSelectedData(null, PlayerActionsName.Draw, GameStoreActionTypes.PlayerAction);
     playerAction(newSelectedActionData, 5);
-    dispatch(setCreatedGame("Bot"));
+    createGame('Bot');
   }
 
   return <div className={styles.GameJoinCreate}>
