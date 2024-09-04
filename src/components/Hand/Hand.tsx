@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import styles from './Hand.module.css';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { playerActions, setShowHand, createSelectedData, setShowCardsInDeck, setSelectedActionDataCardToDraw, createShowCardsInDeck } from '../../redux/store';
+import { useAppDispatch, useAppSelector, usePlayerAction } from '../../redux/hooks';
+import { setShowHand, createSelectedData, setShowCardsInDeck, setSelectedActionDataCardToDraw, createShowCardsInDeck } from '../../redux/store';
 import { GameStoreActionTypes } from '../../redux/types';
 import { PlayerActionsName } from '../../logic/enums';
 import { GameCard, isOrder } from '../../logic/game-card';
@@ -19,6 +19,7 @@ const Hand: FC = () => {
   const showHand = useAppSelector((state) => state.gameActions.showHand);
   const selectedActionData = useAppSelector((state) => state.gameActions.selectedActionData);
   const showCardsInDeck = useAppSelector((state) => state.gameActions.showCardsInDeck);
+  const playerAction = usePlayerAction();
 
   const dispatch = useAppDispatch();
 
@@ -27,8 +28,7 @@ const Hand: FC = () => {
 
   const handleAction = (actionName: string, hideHand: boolean = false) => {
     const newSelectedActionData = createSelectedData(null, actionName, GameStoreActionTypes.PlayerAction);
-    dispatch(playerActions({ selectedActionData: newSelectedActionData }));
-
+    playerAction(newSelectedActionData);
     if (hideHand)
       dispatch(setShowHand(false));
   };
@@ -51,7 +51,7 @@ const Hand: FC = () => {
     const newDiscardCards = [...discardCards, card];
 
     if (discardRequirement.amount === newDiscardCards.length)
-      dispatch(playerActions({ data: newDiscardCards }));
+      playerAction(null, newDiscardCards);
     else
       setDiscardCards(newDiscardCards);
   }

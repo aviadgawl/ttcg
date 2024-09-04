@@ -5,8 +5,8 @@ import TextField from '@mui/material/TextField';
 import { GameStatus, PlayerActionsName } from '../../logic/enums';
 import { Game } from '../../logic/game';
 import { gameSubscriber, getGameAsync } from '../../firebase/firebase';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { setPartialGame, setJoinedGame, setCreatedGame, createSelectedData, playerActions } from '../../redux/store';
+import { useAppDispatch, useAppSelector, usePlayerAction } from '../../redux/hooks';
+import { setPartialGame, setJoinedGame, setCreatedGame, createSelectedData } from '../../redux/store';
 import { GameStoreActionTypes } from '../../redux/types';
 import Board from '../Board/Board';
 import GameDetails from '../GameDetails/GameDetails';
@@ -20,6 +20,7 @@ const GameJoinCreate: FC<GameJoinCreateProps> = () => {
   const dispatch = useAppDispatch();
   const winner = useAppSelector((state) => state.gameActions.game.loser);
   const game = useAppSelector((state) => state.gameActions.game);
+  const playerAction = usePlayerAction();
 
   const gameSubRef = useRef(null as any);
 
@@ -48,9 +49,9 @@ const GameJoinCreate: FC<GameJoinCreateProps> = () => {
       return;
     };
 
-    dispatch(setJoinedGame(gameFromDb));
     const newSelectedActionData = createSelectedData(null, PlayerActionsName.Draw, GameStoreActionTypes.PlayerAction);
-    dispatch(playerActions({ selectedActionData: newSelectedActionData, data: 5 }));
+    playerAction(newSelectedActionData, 5);
+    dispatch(setJoinedGame(gameFromDb));
     gameUpdatesSubscriber(1);
   }
 
@@ -62,16 +63,16 @@ const GameJoinCreate: FC<GameJoinCreateProps> = () => {
       return;
     };
 
-    dispatch(setCreatedGame(gameCode));
     const newSelectedActionData = createSelectedData(null, PlayerActionsName.Draw, GameStoreActionTypes.PlayerAction);
-    dispatch(playerActions({ selectedActionData: newSelectedActionData, data: 5 }));
+    playerAction(newSelectedActionData, 5);
+    dispatch(setCreatedGame(gameCode));
     gameUpdatesSubscriber(0);
   }
 
   const handleGameWithBot = async () => {
-    dispatch(setCreatedGame("Bot"));
     const newSelectedActionData = createSelectedData(null, PlayerActionsName.Draw, GameStoreActionTypes.PlayerAction);
-    dispatch(playerActions({ selectedActionData: newSelectedActionData, data: 5 }));
+    playerAction(newSelectedActionData, 5);
+    dispatch(setCreatedGame("Bot"));
   }
 
   return <div className={styles.GameJoinCreate}>

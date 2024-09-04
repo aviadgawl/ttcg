@@ -3,8 +3,8 @@ import { createGame, Game, cardsList } from '../logic/game';
 import { ActionCard, GameCard, isAction, isOrder, OrderCard, AllowedBoardLocationResponse, BoardLocation, AllowedHandCardSelectResponse } from '../logic/game-card';
 import { championAction, getChampionsActionsAllowedBoardLocations } from '../logic/champion';
 import { GameStatus, CardType } from '../logic/enums';
-import { playerAction, getPlayerActionsAllowedBoardLocations, getPlayerAllowedHandCardSelect } from '../logic/player';
-import { playSoundByPlayerActionName, playSoundByCardActionName } from '../helpers/audio-helper';
+import { getPlayerActionsAllowedBoardLocations, getPlayerAllowedHandCardSelect } from '../logic/player';
+import { playSoundByCardActionName } from '../helpers/audio-helper';
 import { GameStoreActionTypes } from './types';
 import { updateGameAsync, addGameAsync } from '../firebase/firebase';
 
@@ -88,20 +88,6 @@ const gameSlice = createSlice({
             if (result !== 'success') alert(result);
             else {
                 playSoundByCardActionName(selectedData.card.actionType);
-                state.selectedActionData = initialState.selectedActionData;
-                if (state.game.code !== '')
-                    updateGameAsync(state.game).catch(console.error);
-            }
-        },
-        playerActions(state, action) {
-            const { data } = action.payload;
-            const { card, cardToDraw, actionName } = action.payload.selectedActionData ?? state.selectedActionData;
-            
-            const result = playerAction(actionName, state.cardsList, state.game, { selectedCard: card, cardToDraw: cardToDraw, extendedData: data });
-
-            if (result !== 'success') alert(result);
-            else {
-                playSoundByPlayerActionName(actionName);
                 state.selectedActionData = initialState.selectedActionData;
                 if (state.game.code !== '')
                     updateGameAsync(state.game).catch(console.error);
@@ -197,7 +183,6 @@ const store = configureStore({
 
 export const {
     championActions,
-    playerActions,
     setShowHand,
     setShowCardsInDeck,
     setSelectedActionData,

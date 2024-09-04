@@ -13,7 +13,6 @@ export const usePlayerAction = () => {
     const dispatch = useAppDispatch();
 
     return useCallback((selectedActionData: SelectedData | null, additionalData: any = null) => {
-        
         const { card, cardToDraw, actionName } = selectedActionData ?? structuredClone(state.selectedActionData);
         
         const data = { selectedCard: card, cardToDraw: cardToDraw, extendedData: additionalData };
@@ -29,8 +28,34 @@ export const usePlayerAction = () => {
             if (gameToUpdate.code !== '')
                 updateGameAsync(gameToUpdate).catch(console.error);
         }
-
+        
         dispatch(setGame(gameToUpdate));
         dispatch(setCardsList(cardsListToUpdate));
-    }, [dispatch, state.game, state.cardsList, state.selectedActionData]);
+    }, [dispatch, state]);
+}
+
+export const useChampionAction = () => {
+    const state = useAppSelector((state) => state.gameActions);
+    const dispatch = useAppDispatch();
+
+    return useCallback((selectedActionData: SelectedData | null, additionalData: any = null) => {
+        const { card, cardToDraw, actionName } = selectedActionData ?? structuredClone(state.selectedActionData);
+        
+        const data = { selectedCard: card, cardToDraw: cardToDraw, extendedData: additionalData };
+        const gameToUpdate = structuredClone(state.game);
+        const cardsListToUpdate = [ ...state.cardsList ];
+
+        const result = playerAction(actionName, cardsListToUpdate, gameToUpdate, data);
+
+        if (result !== 'success') alert(result);
+        else {
+            playSoundByPlayerActionName(actionName);
+            dispatch(resetSelectedData());
+            if (gameToUpdate.code !== '')
+                updateGameAsync(gameToUpdate).catch(console.error);
+        }
+        
+        dispatch(setGame(gameToUpdate));
+        dispatch(setCardsList(cardsListToUpdate));
+    }, [dispatch, state]);
 }

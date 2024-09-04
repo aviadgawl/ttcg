@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import { GameCard, isGear, isChampion, isClass, isAction, isOrder, OrderCard } from '../../logic/game-card';
 import { PlayerActionsName, RewardType } from '../../logic/enums';
-import { useAppDispatch } from '../../redux/hooks';
-import { setSelectedActionData, setShowHand, createSelectedData, playerActions, setShowCardsInDeck, createShowCardsInDeck } from '../../redux/store';
+import { useAppDispatch, usePlayerAction } from '../../redux/hooks';
+import { setSelectedActionData, setShowHand, createSelectedData, setShowCardsInDeck, createShowCardsInDeck } from '../../redux/store';
 import { GameStoreActionTypes } from '../../redux/types';
 import Button from '@mui/material/Button';
 import GameCardDraw from '../GameCardDraw/GameCardDraw';
@@ -21,6 +21,7 @@ interface CardProps {
 
 const HandCard: FC<CardProps> = (props) => {
   const dispatch = useAppDispatch();
+  const playerAction = usePlayerAction();
 
   const isOneStepOrderCard = (orderCard: OrderCard): boolean => {
 
@@ -53,7 +54,7 @@ const HandCard: FC<CardProps> = (props) => {
 
     const oneStepOrderCard = isOneStepOrderCard(props.card);
     if (oneStepOrderCard) {
-      dispatch(playerActions({ selectedActionData: selectedData, data: [] }));
+      playerAction(selectedData, []);
       dispatch(setShowHand(false));
       return;
     }
