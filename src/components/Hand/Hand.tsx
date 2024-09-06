@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import styles from './Hand.module.css';
 import { useAppDispatch, useAppSelector, usePlayerAction } from '../../redux/hooks';
-import { setShowHand, createSelectedData, setShowCardsInDeck, setSelectedActionDataCardToDraw, createShowCardsInDeck } from '../../redux/store';
+import { setShowHand, createSelectedData, setShowCardsInDeck, setSelectedActionDataCardsToDraw, createShowCardsInDeck, SelectedData } from '../../redux/store';
 import { GameStoreActionTypes } from '../../redux/types';
 import { PlayerActionsName } from '../../logic/enums';
 import { GameCard, isOrder } from '../../logic/game-card';
@@ -17,7 +17,7 @@ const Hand: FC = () => {
   const playingPlayerIndex = useAppSelector((state) => state.gameActions.game.playingPlayerIndex);
   const player = useAppSelector((state) => state.gameActions.game.players[playerIndex]);
   const showHand = useAppSelector((state) => state.gameActions.showHand);
-  const selectedActionData = useAppSelector((state) => state.gameActions.selectedActionData);
+  const selectedActionData: SelectedData = useAppSelector((state) => state.gameActions.selectedActionData);
   const showCardsInDeck = useAppSelector((state) => state.gameActions.showCardsInDeck);
   const playerAction = usePlayerAction();
 
@@ -57,8 +57,25 @@ const Hand: FC = () => {
   }
 
   const handleDeckSelectedCard = (card: GameCard) => {
-    dispatch(setSelectedActionDataCardToDraw(card));
-    dispatch(setShowCardsInDeck(createShowCardsInDeck(false)));
+    const playedOrderCard = selectedActionData.card;
+
+    if (!isOrder(playedOrderCard)) {
+      alert("Selected card is not an order card");
+      return;
+    };
+
+    const amountToSelect = playedOrderCard.reward.amount;
+
+    if(selectedActionData.cardsToDraw?.length === amountToSelect){
+      alert("Selected cards to draw are already chosen");
+      return;
+    };
+
+    const newCardsToDraw = [...selectedActionData.cardsToDraw, card];
+    dispatch(setSelectedActionDataCardsToDraw(newCardsToDraw));
+
+    if(selectedActionData.cardsToDraw?.length === (amountToSelect + 1))
+      dispatch(setShowCardsInDeck(createShowCardsInDeck(false)));
   }
 
   return <div className={styles.Hand}>

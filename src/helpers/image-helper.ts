@@ -47,6 +47,7 @@ import FixIt from '../assets/images/FixIt.png';
 import KeepMoving from '../assets/images/KeepMoving.png';
 import DoItAgain from '../assets/images/DoItAgain.png';
 import FindHim from '../assets/images/FindHim.png';
+import INeedSomeGear from '../assets/images/INeedSomeGear.png';
 
 export const getImage = (id: string): string => {
     switch (id) {
@@ -143,6 +144,8 @@ export const getImage = (id: string): string => {
             return DoItAgain;
         case 'Find Him!':
             return FindHim;
+        case 'I Need Some Gear!':
+            return INeedSomeGear;
         default:
             return '';
     }

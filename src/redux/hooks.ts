@@ -38,8 +38,8 @@ export const usePlayerAction = () => {
 
         dispatch(setGame(gameToUpdate));
         dispatch(setCardsList(cardsListToUpdate));
-    }, []);
-}
+    }, [dispatch, store]);
+};
 
 export const useChampionAction = () => {
     const store = useStore();
@@ -76,8 +76,8 @@ export const useChampionAction = () => {
         }
 
         dispatch(setGame(gameToUpdate));
-    }, []);
-}
+    }, [dispatch, store]);
+};
 
 export const useCreateGame = () => {
     const store = useStore();
@@ -91,5 +91,28 @@ export const useCreateGame = () => {
             addGameAsync(createdGame).catch(console.error);
 
         dispatch(setGame(createdGame));
-    }, [])
-}
+    }, [dispatch, store])
+};
+
+export const useJoinGame = () => {
+    const store = useStore();
+    const dispatch = useAppDispatch();
+
+    return useCallback((gameFromDb: Game) => {
+        const state = store.getState() as any;
+        const game: Game = state.gameActions.game;
+
+        const localPlayer = game.players[0];
+
+        const playerTwoDeck = localPlayer.deck.map(card => {
+            return { ...card, playerIndex: 1 }
+        });
+
+        const playerTwo = { ...localPlayer, name: 'Player Two', deck: playerTwoDeck };
+        const joinedGame = { ...game, players: [gameFromDb.players[0], playerTwo], playerIndex: 1, code: gameFromDb.code, status: GameStatus.started };
+    
+        updateGameAsync(joinedGame).catch(console.error);
+
+        dispatch(setGame(joinedGame));
+    }, [dispatch, store]);
+};

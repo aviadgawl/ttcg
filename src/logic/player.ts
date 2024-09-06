@@ -142,7 +142,7 @@ const getAmountToDraw = (game: Game, condition: string | null): number => {
     return amountToDraw;
 }
 
-const playOrder = (game: Game, playedOrderCard: OrderCard, cardsPayment: GameCard[] | undefined, cardToDraw: GameCard | undefined): string => {
+const playOrder = (game: Game, playedOrderCard: OrderCard, cardsPayment: GameCard[] | undefined, cardsToDraw: GameCard[] | undefined): string => {
     if (cardsPayment === undefined) return 'cardsPayment can not be undefined';
 
     const player = getPlayer(game);
@@ -177,9 +177,11 @@ const playOrder = (game: Game, playedOrderCard: OrderCard, cardsPayment: GameCar
 
     if (playedOrderCard.reward.name === RewardType.SpecificDraw) {
 
-        if(cardToDraw === undefined || cardToDraw === null) return 'Must select a card from deck';
+        if(cardsToDraw === undefined || cardsToDraw === null || cardsToDraw.length <= 0) return 'Must select a card from deck';
 
-        drawSpecificCard(player.deck, player.hand, cardToDraw, playedOrderCard.reward.cardType);
+        cardsToDraw.forEach(card => {
+            drawSpecificCard(player.deck, player.hand, card, playedOrderCard.reward.cardType);
+        });
     }
 
     cardToDiscard.forEach(card => {
@@ -623,7 +625,7 @@ export const playerAction = (action: string | null, cardsList: GameCard[], game:
             result = attachAction(game, player, data.selectedCard as ActionCard, data.extendedData as BoardLocation);
             break;
         case PlayerActionsName.PlayOrder:
-            result = playOrder(game, data.selectedCard as OrderCard, data.extendedData as GameCard[], data.cardToDraw as GameCard);
+            result = playOrder(game, data.selectedCard as OrderCard, data.extendedData as GameCard[], data.cardsToDraw as GameCard[]);
             break;
         case PlayerActionsName.ClearDeck:
             result = clearDeck(game, cardsList);

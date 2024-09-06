@@ -2,10 +2,9 @@ import { configureStore, createSlice } from '@reduxjs/toolkit';
 import { createGame, Game, cardsList } from '../logic/game';
 import { GameCard, isAction, isOrder, OrderCard, AllowedBoardLocationResponse, BoardLocation, AllowedHandCardSelectResponse } from '../logic/game-card';
 import { getChampionsActionsAllowedBoardLocations } from '../logic/champion';
-import { GameStatus, CardType } from '../logic/enums';
+import { CardType } from '../logic/enums';
 import { getPlayerActionsAllowedBoardLocations, getPlayerAllowedHandCardSelect } from '../logic/player';
 import { GameStoreActionTypes } from './types';
-import { updateGameAsync, addGameAsync } from '../firebase/firebase';
 
 export interface SelectedData {
     card: GameCard | null,
@@ -15,7 +14,7 @@ export interface SelectedData {
     allowedBoardLocations: BoardLocation[],
     isAttachedAction: boolean,
     allowedHandCardSelect: GameCard[],
-    cardToDraw: GameCard | null
+    cardsToDraw: GameCard[]
 }
 
 interface ShowCardsInDeck {
@@ -28,7 +27,7 @@ export const createShowCardsInDeck = (show: boolean, byType: CardType | null = n
 }
 
 export const createSelectedData = (card: GameCard | null,
-    actionName: string, actionType: GameStoreActionTypes | null, sourceLocation: BoardLocation | null = null, isAttachedAction = false, cardToDraw: GameCard | null = null): SelectedData => {
+    actionName: string, actionType: GameStoreActionTypes | null, sourceLocation: BoardLocation | null = null, isAttachedAction = false, cardsToDraw: GameCard[] = []): SelectedData => {
     return {
         card: card,
         actionName: actionName,
@@ -37,7 +36,7 @@ export const createSelectedData = (card: GameCard | null,
         allowedBoardLocations: [],
         isAttachedAction: isAttachedAction,
         allowedHandCardSelect: [],
-        cardToDraw: cardToDraw
+        cardsToDraw: cardsToDraw
     };
 }
 
@@ -52,7 +51,7 @@ export const initialState = {
         allowedBoardLocations: [],
         isAttachedAction: false,
         allowedHandCardSelect: [],
-        cardToDraw: null
+        cardsToDraw: []
     } as SelectedData,
     showHand: false as boolean,
     showCardsInDeck: { show: false } as ShowCardsInDeck,
@@ -69,13 +68,13 @@ const gameSlice = createSlice({
         setShowCardsInDeck(state, action) {
             state.showCardsInDeck = action.payload;
         },
-        setSelectedActionDataCardToDraw(state, action) {
+        setSelectedActionDataCardsToDraw(state, action) {
             if (action.payload === null) {
                 alert('Card to draw not be null');
                 return;
             }
 
-            state.selectedActionData.cardToDraw = action.payload;
+            state.selectedActionData.cardsToDraw = action.payload;
         },
         setSelectedActionData(state, action) {
             let selectedData = action.payload as SelectedData;
@@ -100,20 +99,6 @@ const gameSlice = createSlice({
             else console.log(allowedHandCardSelectResult.message);
 
             state.selectedActionData = selectedData;
-        },
-        setJoinedGame(state, action) {
-            const gameFromDb: Game = action.payload;
-
-            const localPlayer = state.game.players[0];
-            const playerTwoDeck = localPlayer.deck.map(card => {
-                return { ...card, playerIndex: 1 }
-            });
-            const playerTwo = { ...localPlayer, name: 'Player Two', deck: playerTwoDeck };
-            const joinedGame = { ...state.game, players: [gameFromDb.players[0], playerTwo], playerIndex: 1, code: gameFromDb.code, status: GameStatus.started };
-
-            state.game = joinedGame;
-
-            updateGameAsync(joinedGame).catch(console.error);
         },
         setPartialGame(state, action) {
             const updatedGame = {
@@ -147,8 +132,7 @@ export const {
     setShowCardsInDeck,
     setSelectedActionData,
     setPartialGame,
-    setJoinedGame,
-    setSelectedActionDataCardToDraw,
+    setSelectedActionDataCardsToDraw,
     setGame,
     setCardsList,
     resetSelectedData

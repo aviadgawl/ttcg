@@ -477,7 +477,7 @@
         "duration": 0,
         "requirement": [],
         "reward": {
-            "name": "Draw",
+            "name": "SpecificDraw",
             "amount": 2,
             "cardType": "ActionCard",
             "cardNameContains": "Step",
@@ -518,6 +518,26 @@
             "condition": null
         },
         "info": "Discard one card, Look for a champion card in your deck take it and then show it to the opponent and shuffle your deck"
+    },
+    {
+        "type": "OrderCard",
+        "name": "I Need Some Gear!",
+        "duration": 0,
+        "requirement": [
+            {
+                "name": "discard",
+                "amount": 1,
+                "cardType": null
+            }
+        ],
+        "reward": {
+            "name": "SpecificDraw",
+            "amount": 1,
+            "cardType": "GearCard",
+            "cardNameContains": null,
+            "condition": null
+        },
+        "info": "Discard one card, look for a gear card in your deck show it to the opponent and add it to your hand. shuffle your deck"
     },
     {
         "type": "ActionCard",
