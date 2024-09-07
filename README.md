@@ -10,5 +10,5 @@
 npx generate-react-cli component MyComponent
 
 # bugs
-Changed the spesific draw to work with more than one selected card, need to test it and fix the display card component to don't how selected cards.
+Changed the specific draw to work with more than one selected card, need to test it and fix the display card component to don't how selected cards.
 test "keep moving card!"

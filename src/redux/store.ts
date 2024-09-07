@@ -19,11 +19,12 @@ export interface SelectedData {
 
 interface ShowCardsInDeck {
     show: boolean,
-    byType: CardType | null
+    byType: CardType | null,
+    byName: string | null
 }
 
-export const createShowCardsInDeck = (show: boolean, byType: CardType | null = null) : ShowCardsInDeck => {
-    return {show: show, byType: byType} as ShowCardsInDeck;
+export const createShowCardsInDeck = (show: boolean, byType: CardType | null = null, byName: string | null = null) : ShowCardsInDeck => {
+    return {show: show, byType: byType, byName: byName} as ShowCardsInDeck;
 }
 
 export const createSelectedData = (card: GameCard | null,

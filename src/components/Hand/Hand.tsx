@@ -66,7 +66,7 @@ const Hand: FC = () => {
 
     const amountToSelect = playedOrderCard.reward.amount;
 
-    if(selectedActionData.cardsToDraw?.length === amountToSelect){
+    if (selectedActionData.cardsToDraw?.length === amountToSelect) {
       alert("Selected cards to draw are already chosen");
       return;
     };
@@ -74,7 +74,7 @@ const Hand: FC = () => {
     const newCardsToDraw = [...selectedActionData.cardsToDraw, card];
     dispatch(setSelectedActionDataCardsToDraw(newCardsToDraw));
 
-    if(selectedActionData.cardsToDraw?.length === (amountToSelect + 1))
+    if (selectedActionData.cardsToDraw?.length === (amountToSelect - 1))
       dispatch(setShowCardsInDeck(createShowCardsInDeck(false)));
   }
 
@@ -108,7 +108,11 @@ const Hand: FC = () => {
       open={showCardsInDeck?.show && player.deck.length > 0}
       onClose={() => dispatch(setShowCardsInDeck(false))}>
       <DialogContent className={styles.DialogContent}>
-        <CardsDisplay onSelectCard={handleDeckSelectedCard} cardType={showCardsInDeck?.byType} cards={player.deck} />
+        <CardsDisplay onSelectCard={handleDeckSelectedCard}
+          cardType={showCardsInDeck?.byType}
+          nameContains={showCardsInDeck?.byName}
+          cards={player.deck}
+          excludedCards={selectedActionData.cardsToDraw} />
       </DialogContent>
     </Dialog>
   </div>

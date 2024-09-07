@@ -475,7 +475,13 @@
         "type": "OrderCard",
         "name": "Keep Moving!",
         "duration": 0,
-        "requirement": [],
+        "requirement": [
+            {
+                "name": "discard",
+                "amount": 1,
+                "cardType": null
+            }
+        ],
         "reward": {
             "name": "SpecificDraw",
             "amount": 2,

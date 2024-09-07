@@ -26,11 +26,14 @@ const HandCard: FC<CardProps> = (props) => {
   const isOneStepOrderCard = (orderCard: OrderCard): boolean => {
 
     const isDiscardAllHandOrderCard = orderCard.requirement.length === 1 && orderCard.requirement[0].amount === -1;
+
     if (isDiscardAllHandOrderCard)
-      return isDiscardAllHandOrderCard;
+      return true;
 
     const isNoRequirements = orderCard.requirement.length === 0;
-    return isNoRequirements
+    const isNoSelectCardFromDeck = orderCard.reward.name === RewardType.SpecificDraw;
+
+    return isNoRequirements && !isNoSelectCardFromDeck;
   }
 
   const shouldOpenDeckCardSelect = (orderCard: OrderCard): boolean => {
@@ -60,8 +63,8 @@ const HandCard: FC<CardProps> = (props) => {
     }
 
     const openDeckCardSelect = shouldOpenDeckCardSelect(props.card);
-    if(openDeckCardSelect)
-      dispatch(setShowCardsInDeck(createShowCardsInDeck(true, props.card.reward.cardType ?? undefined )));
+    if (openDeckCardSelect)
+      dispatch(setShowCardsInDeck(createShowCardsInDeck(true, props.card.reward.cardType, props.card.reward.cardNameContains)));
 
     dispatch(setSelectedActionData(selectedData));
   }

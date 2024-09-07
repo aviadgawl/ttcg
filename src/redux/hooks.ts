@@ -20,9 +20,9 @@ export const usePlayerAction = () => {
         const state = store.getState() as any;
 
         const { game, selectedActionData, cardsList } = state.gameActions;
-        const { card, cardToDraw, actionName } = newSelectedActionData ?? structuredClone(selectedActionData);
+        const { card, cardsToDraw, actionName } = newSelectedActionData ?? structuredClone(selectedActionData);
 
-        const data = { selectedCard: card, cardToDraw: cardToDraw, extendedData: additionalData };
+        const data = { selectedCard: card, cardsToDraw: cardsToDraw, extendedData: additionalData };
         const gameToUpdate = structuredClone(game);
         const cardsListToUpdate = [...cardsList];
 
