@@ -163,6 +163,15 @@ const playOrder = (game: Game, playedOrderCard: OrderCard, cardsPayment: GameCar
             return `Valid cards to discard (${cardToDiscard.length}) is not equal to the requirement ${amountToDiscard}`;
     }
 
+    if (playedOrderCard.reward.name === RewardType.ReturnUsedCardToDeck) {
+        drawFrom(player.usedCards,
+            player.deck,
+            playedOrderCard.reward.amount,
+            playedOrderCard.reward.cardType,
+            playedOrderCard.reward.cardNameContains,
+            playedOrderCard.reward.condition);
+    }
+
     if (playedOrderCard.reward.name === RewardType.Draw)
         drawFrom(player.deck, player.hand, playedOrderCard.reward.amount, playedOrderCard.reward.cardType, playedOrderCard.reward.cardNameContains, playedOrderCard.reward.condition);
 
@@ -177,7 +186,7 @@ const playOrder = (game: Game, playedOrderCard: OrderCard, cardsPayment: GameCar
 
     if (playedOrderCard.reward.name === RewardType.SpecificDraw) {
 
-        if(cardsToDraw === undefined || cardsToDraw === null || cardsToDraw.length <= 0) return 'Must select a card from deck';
+        if (cardsToDraw === undefined || cardsToDraw === null || cardsToDraw.length <= 0) return 'Must select a card from deck';
 
         cardsToDraw.forEach(card => {
             drawSpecificCard(player.deck, player.hand, card, playedOrderCard.reward.cardType);
@@ -210,7 +219,7 @@ const drawSpecificCard = (drawFromPool: GameCard[],
     cardToDraw: GameCard,
     requiredCardType: CardType | null) => {
 
-    if (drawFromPool.length < 1) 
+    if (drawFromPool.length < 1)
         return 'Must be at least one card in pool';
 
     if (requiredCardType && !checkCardType(cardToDraw, requiredCardType))

@@ -489,7 +489,7 @@
             "cardNameContains": "Step",
             "condition": null
         },
-        "info": "Look for two action cards that include the word \"Step\" in your deck, show them to your opponent and add them to your hand. shuffle your deck"
+        "info": "Discard one card, Look for two action cards that include the word \"Step\" in your deck, show them to your opponent and add them to your hand. shuffle your deck"
     },
     {
         "type": "OrderCard",
@@ -544,6 +544,20 @@
             "condition": null
         },
         "info": "Discard one card, look for a gear card in your deck show it to the opponent and add it to your hand. shuffle your deck"
+    },
+    {
+        "type": "OrderCard",
+        "name": "Refresh Me!",
+        "duration": 0,
+        "requirement":[],
+        "reward": {
+            "name": "ReturnUsedCardToDeck",
+            "amount": 5,
+            "cardType": null,
+            "cardNameContains": null,
+            "condition": "LastOne"
+        },
+        "info": "Add the top 5 cards in your discard pile to your deck, shuffle your deck"
     },
     {
         "type": "ActionCard",

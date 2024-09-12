@@ -24,7 +24,6 @@ const HandCard: FC<CardProps> = (props) => {
   const playerAction = usePlayerAction();
 
   const isOneStepOrderCard = (orderCard: OrderCard): boolean => {
-
     const isDiscardAllHandOrderCard = orderCard.requirement.length === 1 && orderCard.requirement[0].amount === -1;
 
     if (isDiscardAllHandOrderCard)
