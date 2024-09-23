@@ -41,6 +41,11 @@ export interface GameEffect {
     duration: number
 }
 
+export interface PlayerEffect {
+    type: RewardType,
+    duration: number
+}
+
 export interface StatusEffect {
     name: EffectStatus,
     duration: number,

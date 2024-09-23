@@ -15,7 +15,8 @@ import {
     StatusEffect,
     isOrder,
     isGear,
-    isAction
+    isAction,
+    PlayerEffect
 } from './game-card';
 import { calculateStats, setRepeatableActionActivations, getPlayer } from './champion';
 import { Stats, GameStatus, PlayerActionsName, ChampionDirection, BodyPart, CardType, RewardType } from './enums';
@@ -30,6 +31,7 @@ export interface Player {
     didDraw: boolean;
     summonsLeft: number;
     actionsLog: PlayerActionLogRecord[];
+    effects: PlayerEffect[];
 }
 
 export const checkCardType = (card: GameCard, cardType: CardType) => {
@@ -52,6 +54,13 @@ const isCardRequirementsValid = (orderCard: OrderCard, orderCardRequirements: Or
     if (orderCardRequirements.cardType === null) return true;
 
     return checkCardType(card, orderCardRequirements.cardType);
+}
+
+const removeFromArray = <T>(array: T[], predicate: (item: T) => boolean) => {
+    const index = array.findIndex(predicate);
+    if (index === -1) return;
+
+    array.splice(index, 1);
 }
 
 const getValidCardsForDiscard = (player: Player, cards: GameCard[], orderCard: OrderCard): { cardToDiscard: GameCard[], amountToDiscard: number | undefined } => {
@@ -163,6 +172,10 @@ const playOrder = (game: Game, playedOrderCard: OrderCard, cardsPayment: GameCar
             return `Valid cards to discard (${cardToDiscard.length}) is not equal to the requirement ${amountToDiscard}`;
     }
 
+    if (playedOrderCard.reward.name === RewardType.PlayExtraClassUpgrade) {
+        player.effects.push({ type: RewardType.PlayExtraClassUpgrade, duration: playedOrderCard.duration });
+    }
+
     if (playedOrderCard.reward.name === RewardType.ReturnUsedCardToDeck) {
         drawFrom(player.usedCards,
             player.deck,
@@ -173,7 +186,11 @@ const playOrder = (game: Game, playedOrderCard: OrderCard, cardsPayment: GameCar
     }
 
     if (playedOrderCard.reward.name === RewardType.Draw)
-        drawFrom(player.deck, player.hand, playedOrderCard.reward.amount, playedOrderCard.reward.cardType, playedOrderCard.reward.cardNameContains, playedOrderCard.reward.condition);
+        drawFrom(player.deck, player.hand,
+            playedOrderCard.reward.amount,
+            playedOrderCard.reward.cardType,
+            playedOrderCard.reward.cardNameContains,
+            playedOrderCard.reward.condition);
 
     if (playedOrderCard.reward.name === RewardType.ConditionedDraw) {
         const amountToDraw = getAmountToDraw(game, playedOrderCard.reward.condition);
@@ -362,11 +379,12 @@ const equip = (game: Game, player: Player, selectedCard: GearCard, targetLocatio
 }
 
 const upgrade = (game: Game, player: Player, selectedCard: ClassCard, targetLocation: BoardLocation | undefined): string => {
-    if (player.summonsLeft <= 0) return 'Player has used all his summons';
-
     if (targetLocation === undefined) return 'targetLocation can not be undefined';
 
     if (selectedCard === null) return 'Upgrade card can not be null';
+
+    const extraUpgrade = player.effects.some(effect => effect.type === RewardType.PlayExtraClassUpgrade);
+    if (player.summonsLeft <= 0 && !extraUpgrade) return 'Player has used all his summons';
 
     const targetChampion = game.board[targetLocation.rowIndex][targetLocation.columnIndex] as ChampionCard;
 
@@ -389,6 +407,11 @@ const upgrade = (game: Game, player: Player, selectedCard: ClassCard, targetLoca
     calculateStats(targetChampion);
 
     removeCard(player.hand, selectedCard);
+
+    if (extraUpgrade)
+        removeFromArray<PlayerEffect>(player.effects, effect => effect.type === RewardType.PlayExtraClassUpgrade);
+    else
+        player.summonsLeft--;
 
     return 'success';
 }
@@ -467,7 +490,7 @@ const removeCard = (cards: GameCard[], selectedCard: GameCard): GameCard[] | nul
     return cards.splice(cardIndexToRemove, 1);
 }
 
-const updateStatusEffects = (championCard: ChampionCard) => {
+const updateChampionStatusEffects = (championCard: ChampionCard) => {
     const updatedStatusEffects: StatusEffect[] = [];
 
     championCard.statusEffects.forEach((statusEffect) => {
@@ -491,6 +514,7 @@ const refreshResources = (game: Game, nextPlayerIndex: number) => {
     const player = game.players[nextPlayerIndex];
     player.didDraw = false;
     player.summonsLeft = 1;
+    player.effects.forEach(effect => effect.duration--);
 
     const board = game.board;
 
@@ -501,7 +525,7 @@ const refreshResources = (game: Game, nextPlayerIndex: number) => {
             if (isChampion(card) && card.playerIndex === nextPlayerIndex) {
                 card.stm = 2;
                 updateLearnedActions(card);
-                updateStatusEffects(card);
+                updateChampionStatusEffects(card);
                 calculateStats(card);
             };
         }

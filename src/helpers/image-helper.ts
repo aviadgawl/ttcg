@@ -49,6 +49,7 @@ import DoItAgain from '../assets/images/DoItAgain.png';
 import FindHim from '../assets/images/FindHim.png';
 import INeedSomeGear from '../assets/images/INeedSomeGear.png';
 import RefreshMe from '../assets/images/RefreshMe.png';
+import LearnQuick from '../assets/images/LearnQuick.png';
 
 export const getImage = (id: string): string => {
     switch (id) {
@@ -149,6 +150,8 @@ export const getImage = (id: string): string => {
             return INeedSomeGear;
         case 'Refresh Me!':
             return RefreshMe;
+        case 'Learn Quick!':
+            return LearnQuick;
         default:
             return '';
     }
