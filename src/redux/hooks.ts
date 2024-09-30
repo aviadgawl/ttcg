@@ -47,35 +47,39 @@ export const useChampionAction = () => {
 
     return useCallback((targetLocation: BoardLocation) => {
         const state = store.getState() as any;
-        const { selectedActionData } = state.gameActions;
+        const selectedActionDataClone = structuredClone(state.gameActions.selectedActionData);
 
-        if (selectedActionData.card === null) {
+        if (selectedActionDataClone.card === null) {
             alert('SelectedData card can not be null');
             return;
         }
 
-        if (selectedActionData.sourceLocation === null) {
+        if (selectedActionDataClone.sourceLocation === null) {
             alert('No source location');
             return;
         };
 
-        if (!isAction(selectedActionData.card)) {
+        if (!isAction(selectedActionDataClone.card)) {
             alert('SelectedData is not action card');
             return;
         };
 
-        const gameToUpdate = structuredClone(state.game);
-        const result = championAction(gameToUpdate, selectedActionData.card as ActionCard, selectedActionData.sourceLocation, targetLocation, selectedActionData.isAttachedAction);
+        const gameClone = structuredClone(state.gameActions.game);
+        const result = championAction(gameClone,
+            selectedActionDataClone.card as ActionCard,
+            selectedActionDataClone.sourceLocation,
+            targetLocation,
+            selectedActionDataClone.isAttachedAction);
 
         if (result !== 'success') alert(result);
         else {
-            playSoundByCardActionName(selectedActionData.card.actionType);
+            playSoundByCardActionName(selectedActionDataClone.card.actionType);
             dispatch(resetSelectedData());
-            if (state.game.code !== '')
-                updateGameAsync(state.game).catch(console.error);
+            if (gameClone.code !== '')
+                updateGameAsync(gameClone).catch(console.error);
         }
 
-        dispatch(setGame(gameToUpdate));
+        dispatch(setGame(gameClone));
     }, [dispatch, store]);
 };
 
@@ -110,7 +114,7 @@ export const useJoinGame = () => {
 
         const playerTwo = { ...localPlayer, name: 'Player Two', deck: playerTwoDeck };
         const joinedGame = { ...game, players: [gameFromDb.players[0], playerTwo], playerIndex: 1, code: gameFromDb.code, status: GameStatus.started };
-    
+
         updateGameAsync(joinedGame).catch(console.error);
 
         dispatch(setGame(joinedGame));

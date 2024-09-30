@@ -39,6 +39,7 @@ import DaggerSlash from '../assets/images/DaggerSlash.png';
 import DaggerThrow from '../assets/images/DaggerThrow.png';
 import Enrage from '../assets/images/Enrage.png';
 import UltimateDefense from '../assets/images/UltimateDefense.png';
+import JumpStep from '../assets/images/JumpStep.png';
 // Orders
 import GiveMeMore from '../assets/images/GiveMeMore.png';
 import Regroup from '../assets/images/Regroup.png';
@@ -131,6 +132,8 @@ export const getImage = (id: string): string => {
             return Enrage;
         case 'Ultimate Defense':
             return UltimateDefense;
+        case 'Jump Step':
+            return JumpStep;
         // Orders
         case 'Give Me More!':
             return GiveMeMore;
