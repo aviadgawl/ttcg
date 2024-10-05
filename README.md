@@ -10,3 +10,4 @@
 npx generate-react-cli component MyComponent
 
 # bugs
+Jump Step isn't working properly

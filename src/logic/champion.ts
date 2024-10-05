@@ -77,7 +77,7 @@ const removeChampionFromBoard = (game: Game, targetLocation:BoardLocation) => {
     game.board[targetLocation.rowIndex][targetLocation.columnIndex] = null;
 }
 
-const moveChampion = (board: (GameCard | null)[][], entityToMove: ChampionCard, sourceLocation: BoardLocation, targetLocation: BoardLocation): ChampionActionResult => {
+const moveChampion = (board: (GameCard | null)[][], entityToMove: ChampionCard, actionCard: ActionCard, sourceLocation: BoardLocation, targetLocation: BoardLocation): ChampionActionResult => {
     const targetCell = board[targetLocation.rowIndex][targetLocation.columnIndex] as unknown as SummoningCard;
 
     if (targetCell !== null) return { status: 'Target location isn\'t empty', targetedCard: null };
@@ -91,7 +91,7 @@ const moveChampion = (board: (GameCard | null)[][], entityToMove: ChampionCard, 
         return { status: 'Champion must move in one direction', targetedCard: null };
 
     const distance = calculateDistance(sourceLocation, targetLocation);
-    if (distance > entityToMove.calDex) return { status: 'Location to far', targetedCard: null };
+    if (distance > actionCard.distance[1]) return { status: 'Location to far', targetedCard: null };
 
     const championDirection = getChampionDirection(sourceLocation, targetLocation);
 
@@ -191,9 +191,10 @@ const checkBlockingObjects = (board: (GameCard | null)[][], sourceLocation: Boar
 const getBoardLocationInStraightPath = (board: (GameCard | null)[][],
     initialLocation: BoardLocation, actionCard: ActionCard): BoardLocation[] => {
 
-    const distance = actionCard.distance[1];
+    const minDistance = actionCard.distance[0];
+    const maxDistance = actionCard.distance[1];
 
-    if (distance === 0) return [initialLocation];
+    if (maxDistance === 0) return [initialLocation];
 
     const allowedLocations: BoardLocation[] = [];
 
@@ -201,20 +202,9 @@ const getBoardLocationInStraightPath = (board: (GameCard | null)[][],
     const initialRowIndex = initialLocation.rowIndex;
     const initialColumnIndex = initialLocation.columnIndex;
 
-    const maxRowIndex: number = initialRowIndex + distance;
-
-    for (let i = initialRowIndex + 1; i < board.length && i <= maxRowIndex; i++) {
-
-        const currentLocation = board[i][initialColumnIndex];
-
-        if (stopOnBlockers && currentLocation !== null) break;
-
-        allowedLocations.push({ rowIndex: i, columnIndex: initialColumnIndex })
-    }
-
-    const minRowIndex: number = initialRowIndex - distance;
-
-    for (let i = initialRowIndex - 1; i >= 0 && i >= minRowIndex; i--) {
+    const maxRowIndex: number = initialRowIndex + maxDistance;
+    
+    for (let i = initialRowIndex + minDistance; i < board.length && i <= maxRowIndex; i++) {
 
         const currentLocation = board[i][initialColumnIndex];
 
@@ -223,9 +213,20 @@ const getBoardLocationInStraightPath = (board: (GameCard | null)[][],
         allowedLocations.push({ rowIndex: i, columnIndex: initialColumnIndex })
     }
 
-    const maxColumnIndex: number = initialColumnIndex + distance;
+    const minRowIndex: number = initialRowIndex - maxDistance;
 
-    for (let i = initialColumnIndex + 1; i < board[initialRowIndex].length && i <= maxColumnIndex; i++) {
+    for (let i = initialRowIndex - minDistance; i >= 0 && i >= minRowIndex; i--) {
+
+        const currentLocation = board[i][initialColumnIndex];
+
+        if (stopOnBlockers && currentLocation !== null) break;
+
+        allowedLocations.push({ rowIndex: i, columnIndex: initialColumnIndex })
+    }
+
+    const maxColumnIndex: number = initialColumnIndex + maxDistance;
+
+    for (let i = initialColumnIndex + minDistance; i < board[initialRowIndex].length && i <= maxColumnIndex; i++) {
 
         const currentLocation = board[initialRowIndex][i];
 
@@ -234,9 +235,9 @@ const getBoardLocationInStraightPath = (board: (GameCard | null)[][],
         allowedLocations.push({ rowIndex: initialRowIndex, columnIndex: i })
     }
 
-    const minColumnIndex: number = initialColumnIndex - distance;
+    const minColumnIndex: number = initialColumnIndex - maxDistance;
 
-    for (let i = initialColumnIndex - 1; i >= 0 && i >= minColumnIndex; i--) {
+    for (let i = initialColumnIndex - minDistance; i >= 0 && i >= minColumnIndex; i--) {
 
         const currentLocation = board[initialRowIndex][i];
 
@@ -356,7 +357,7 @@ export const championAction = (game: Game, actionCardData: ActionCard, sourceLoc
 
     switch (actionCard.actionType) {
         case ActionType.Movement:
-            result = moveChampion(game.board, sourceChampion, sourceLocation, targetLocation);
+            result = moveChampion(game.board, sourceChampion, actionCard, sourceLocation, targetLocation);
             break;
         case ActionType.Attack:
         case ActionType.Buff:

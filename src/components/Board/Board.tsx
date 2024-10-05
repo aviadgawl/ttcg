@@ -55,7 +55,7 @@ const Board: FC = () => {
         {boardState.map((row, rowIndex) => {
           return <tr key={`${rowIndex}`}>
             {row.map((card, columnIndex) => {
-              return <td key={`${rowIndex}-${columnIndex}`}>
+              return <td key={`${rowIndex}-${columnIndex}`}> {`${rowIndex}-${columnIndex}`}
                 <div className={`${styles.PlayerBase} ${playerBaseClassName(rowIndex)}`} />
                 <div className={styles.BoardPanel}>
 
