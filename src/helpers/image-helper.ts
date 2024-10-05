@@ -42,6 +42,8 @@ import UltimateDefense from '../assets/images/UltimateDefense.png';
 import JumpStep from '../assets/images/JumpStep.png';
 import RushStep from '../assets/images/RushStep.png';
 import BasicStep from '../assets/images/BasicStep.png';
+import SwordSlash from '../assets/images/SwordSlash.png';
+import AxeSlash from '../assets/images/AxeSlash.png';
 // Orders
 import GiveMeMore from '../assets/images/GiveMeMore.png';
 import Regroup from '../assets/images/Regroup.png';
@@ -140,6 +142,10 @@ export const getImage = (id: string): string => {
             return RushStep;
         case 'Basic Step':
             return BasicStep;
+        case 'Sword Slash':
+            return SwordSlash;
+        case 'Axe Slash':
+            return AxeSlash;
         // Orders
         case 'Give Me More!':
             return GiveMeMore;

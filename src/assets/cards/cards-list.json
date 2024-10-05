@@ -627,6 +627,50 @@
     {
         "type": "ActionCard",
         "actionType": "Attack",
+        "name": "Sword Slash",
+        "duration": 0,
+        "distance": [
+            1,
+            1
+        ],
+        "direction": "Straight",
+        "dmgStat": "Str",
+        "dmgModifier": "Plus",
+        "dmgModifierValue": 1,
+        "requiredClassName": null,
+        "requiredStat": null,
+        "requiredStatValue": null,
+        "requiredGearCategory": "Swords",
+        "isFreeTargeting": true,
+        "targetEffects": [],
+        "isRepeatable": false,
+        "repeatableStat": null
+    },
+    {
+        "type": "ActionCard",
+        "actionType": "Attack",
+        "name": "Axe Slash",
+        "duration": 0,
+        "distance": [
+            1,
+            1
+        ],
+        "direction": "Straight",
+        "dmgStat": "Str",
+        "dmgModifier": "Plus",
+        "dmgModifierValue": 1,
+        "requiredClassName": null,
+        "requiredStat": null,
+        "requiredStatValue": null,
+        "requiredGearCategory": "Axes",
+        "isFreeTargeting": true,
+        "targetEffects": [],
+        "isRepeatable": false,
+        "repeatableStat": null
+    },
+    {
+        "type": "ActionCard",
+        "actionType": "Attack",
         "name": "Mighty Blow",
         "duration": 0,
         "distance": [
