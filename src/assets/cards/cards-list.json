@@ -728,7 +728,50 @@
     {
         "type": "ActionCard",
         "actionType": "Movement",
+        "name": "Basic Step",
+        "duration": 0,
+        "distance": [
+            1,
+            1
+        ],
+        "direction": "Straight",
+        "dmgStat": null,
+        "dmgModifier": null,
+        "dmgModifierValue": null,
+        "requiredClassName": null,
+        "requiredStat": null,
+        "requiredStatValue": null,
+        "requiredGearCategory": null,
+        "isFreeTargeting": false,
+        "targetEffects": [],
+        "isRepeatable": false,
+        "repeatableStat": null
+    },
+    {
+        "type": "ActionCard",
+        "actionType": "Movement",
         "name": "Jump Step",
+        "duration": 0,
+        "distance": [
+            2,
+            2
+        ],
+        "direction": "Straight",
+        "dmgStat": null,
+        "dmgModifier": null,
+        "dmgModifierValue": null,
+        "requiredClassName": null,
+        "requiredStat": null,
+        "requiredStatValue": null,
+        "requiredGearCategory": null,
+        "isFreeTargeting": false,
+        "targetEffects": [],
+        "isRepeatable": false
+    },
+    {
+        "type": "ActionCard",
+        "actionType": "Movement",
+        "name": "Rush Step",
         "duration": 0,
         "distance": [
             2,

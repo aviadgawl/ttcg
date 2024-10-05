@@ -40,6 +40,8 @@ import DaggerThrow from '../assets/images/DaggerThrow.png';
 import Enrage from '../assets/images/Enrage.png';
 import UltimateDefense from '../assets/images/UltimateDefense.png';
 import JumpStep from '../assets/images/JumpStep.png';
+import RushStep from '../assets/images/RushStep.png';
+import BasicStep from '../assets/images/BasicStep.png';
 // Orders
 import GiveMeMore from '../assets/images/GiveMeMore.png';
 import Regroup from '../assets/images/Regroup.png';
@@ -134,6 +136,10 @@ export const getImage = (id: string): string => {
             return UltimateDefense;
         case 'Jump Step':
             return JumpStep;
+        case 'Rush Step':
+            return RushStep;
+        case 'Basic Step':
+            return BasicStep;
         // Orders
         case 'Give Me More!':
             return GiveMeMore;
