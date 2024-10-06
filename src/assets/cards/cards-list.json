@@ -839,7 +839,7 @@
         "name": "Dagger Throw",
         "duration": 0,
         "distance": [
-            0,
+            1,
             3
         ],
         "direction": "Straight",
@@ -850,6 +850,27 @@
         "requiredStat": null,
         "requiredStatValue": null,
         "requiredGearCategory": null,
+        "isFreeTargeting": true,
+        "targetEffects": [],
+        "isRepeatable": false
+    },
+    {
+        "type": "ActionCard",
+        "actionType": "Attack",
+        "name": "Arrow Shot",
+        "duration": 0,
+        "distance": [
+            1,
+            4
+        ],
+        "direction": "Straight",
+        "dmgStat": "Dex",
+        "dmgModifier": null,
+        "dmgModifierValue": null,
+        "requiredClassName": null,
+        "requiredStat": null,
+        "requiredStatValue": null,
+        "requiredGearCategory": "Bows",
         "isFreeTargeting": true,
         "targetEffects": [],
         "isRepeatable": false
