@@ -67,10 +67,10 @@ const getChampionDirection = (sourceLocation: BoardLocation, targetLocation: Boa
     return null;
 }
 
-const removeChampionFromBoard = (game: Game, targetLocation:BoardLocation) => {
+const removeChampionFromBoard = (game: Game, targetLocation: BoardLocation) => {
     const championCardToRemove = game.board[targetLocation.rowIndex][targetLocation.columnIndex];
 
-    if(championCardToRemove === null) return;
+    if (championCardToRemove === null) return;
 
     game.players[championCardToRemove.playerIndex].usedCards.push(championCardToRemove);
 
@@ -84,7 +84,7 @@ const moveChampion = (board: (GameCard | null)[][], entityToMove: ChampionCard, 
 
     if (entityToMove.calDex <= 0) return { status: 'Dex must be higher than zero', targetedCard: null };
 
-    if (entityToMove.statusEffects.length > 0 && entityToMove.statusEffects.filter(x => x.name === EffectStatus.Immobilize))
+    if (entityToMove.statusEffects.some(x => x.name === EffectStatus.Immobilize))
         return { status: `Champion is under the effect of ${EffectStatus.Immobilize}`, targetedCard: null };
 
     if (sourceLocation.rowIndex !== targetLocation.rowIndex && sourceLocation.columnIndex !== targetLocation.columnIndex)
@@ -110,6 +110,9 @@ const attack = (game: Game, attackingChampion: ChampionCard,
     actionCard: ActionCard, sourceLocation: BoardLocation, targetLocation: BoardLocation): ChampionActionResult => {
 
     const target = game.board[targetLocation.rowIndex][targetLocation.columnIndex] as unknown as SummoningCard;;
+
+    if (attackingChampion.statusEffects.some(x => x.name === EffectStatus.Silence))
+        return { status: `Champion is under the effect of ${EffectStatus.Silence}`, targetedCard: null };
 
     if (target === null) return { status: 'Target is not found', targetedCard: null };
 
@@ -203,7 +206,7 @@ const getBoardLocationInStraightPath = (board: (GameCard | null)[][],
     const initialColumnIndex = initialLocation.columnIndex;
 
     const maxRowIndex: number = initialRowIndex + maxDistance;
-    
+
     for (let i = initialRowIndex + minDistance; i < board.length && i <= maxRowIndex; i++) {
 
         const currentLocation = board[i][initialColumnIndex];
@@ -275,12 +278,12 @@ const getLastPlayedActionGuid = (player: Player): PlayerActionLogRecord => {
 }
 
 const successfulAttackGameUpdate = (game: Game, player: Player, sourceChampion: ChampionCard, actionCard: ActionCard,
-     isAttachedAction: boolean, result :ChampionActionResult) => {
+    isAttachedAction: boolean, result: ChampionActionResult) => {
 
-    if(!actionCard.wasPlayed) actionCard.wasPlayed = true;
+    if (!actionCard.wasPlayed) actionCard.wasPlayed = true;
 
     if (actionCard.isRepeatable && actionCard.repeatableActivationLeft !== null)
-    actionCard.repeatableActivationLeft--;
+        actionCard.repeatableActivationLeft--;
 
     const lastPlayedActionRecord = getLastPlayedActionGuid(player);
 
@@ -296,8 +299,8 @@ const successfulAttackGameUpdate = (game: Game, player: Player, sourceChampion: 
         game.loser = loosingPlayer;
         game.status = GameStatus.over;
     }
-    
-    player.actionsLog.push({name: actionCard.name, guid: actionCard.guid});
+
+    player.actionsLog.push({ name: actionCard.name, guid: actionCard.guid });
 }
 
 export const getPlayer = (game: Game): Player => {
@@ -341,13 +344,13 @@ export const championAction = (game: Game, actionCardData: ActionCard, sourceLoc
 
     if (actionCard === null) return `Action ${actionCardData.name} card was not found on champion`;
 
-    if(actionCard.isRepeatable) {
+    if (actionCard.isRepeatable) {
         const validRepeatable = checkRepeatableAction(actionCard);
 
         if (!validRepeatable) return `Repeatable action depleted`;
     }
     else {
-        if(actionCard.wasPlayed) return 'Card was played once this turn';
+        if (actionCard.wasPlayed) return 'Card was played once this turn';
 
         if (sourceChampion.stm <= 0 && !isAttachedAction) return `Champion is not allowed to make action, 
                 stamina: ${sourceChampion.stm}, is attached action ${isAttachedAction}`;
@@ -370,9 +373,9 @@ export const championAction = (game: Game, actionCardData: ActionCard, sourceLoc
 
     const player = getPlayer(game);
 
-    if (result.status === 'success') 
-        successfulAttackGameUpdate(game, player, sourceChampion, actionCard, isAttachedAction, result);  
-    
+    if (result.status === 'success')
+        successfulAttackGameUpdate(game, player, sourceChampion, actionCard, isAttachedAction, result);
+
     return result.status;
 }
 
@@ -392,7 +395,7 @@ export const calculateStats = (champion: ChampionCard) => {
     champion.currentHp += hpDiff;
 
     champion.learnedActionsCards.forEach(actionCard => {
-        if(!actionCard.wasPlayed)
+        if (!actionCard.wasPlayed)
             setRepeatableActionActivations(actionCard, champion);
     });
 }
@@ -408,6 +411,15 @@ export const getChampionsActionsAllowedBoardLocations = (game: Game, actionCard:
         return { message: 'Champion was not found', locations: resultLocations };
 
     const isMovementCard = actionCard.actionType === ActionType.Movement;
+
+    if (isMovementCard) {
+        if (sourceChampion.statusEffects.some(x => x.name === EffectStatus.Immobilize))
+            return { message: `Champion is under the effect of ${EffectStatus.Immobilize} and can not move`, locations: resultLocations };
+    }
+    else {
+        if (sourceChampion.statusEffects.some(x => x.name === EffectStatus.Silence))
+            return { message: `Champion is under the effect of ${EffectStatus.Silence} and can not attack`, locations: resultLocations };
+    }
 
     if (isMovementCard && sourceChampion.statusEffects.some(x => x.name === EffectStatus.Immobilize))
         return { message: `Champion is under the effect of ${EffectStatus.Immobilize} and can not move`, locations: resultLocations };
