@@ -46,6 +46,8 @@ import SwordSlash from '../assets/images/SwordSlash.png';
 import AxeSlash from '../assets/images/AxeSlash.png';
 import ArrowShot from '../assets/images/ArrowShot.png';
 import Haste from '../assets/images/Haste.png';
+import Precision from '../assets/images/Precision.png';
+import CripplingShot from '../assets/images/CripplingShot.png';
 // Orders
 import GiveMeMore from '../assets/images/GiveMeMore.png';
 import Regroup from '../assets/images/Regroup.png';
@@ -152,6 +154,10 @@ export const getImage = (id: string): string => {
             return ArrowShot;
         case 'Haste':
             return Haste;
+        case 'Precision':
+            return Precision;
+        case 'Crippling Shot':
+            return CripplingShot;
         // Orders
         case 'Give Me More!':
             return GiveMeMore;

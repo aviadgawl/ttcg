@@ -180,10 +180,13 @@ const checkBlockingObjects = (board: (GameCard | null)[][], sourceLocation: Boar
 
     for (let index = 0, rowIndex = sourceLocation.rowIndex, columnIndex = sourceLocation.columnIndex; index < distance; index++) {
 
-        rowIndex += rowDirection === 'up' ? -1 : 1;
-        columnIndex += columnDirection === 'left' ? -1 : 1;
+        if (rowDirection !== 'none')
+            rowIndex += rowDirection === 'up' ? -1 : 1;
+            
+        if (columnDirection !== 'none')
+            columnIndex += columnDirection === 'left' ? -1 : 1;
 
-        const targetCell = board[rowIndex][columnIndex] as unknown as SummoningCard;;
+        const targetCell = board[rowIndex][columnIndex] as unknown as SummoningCard;
 
         return targetCell !== undefined && targetCell !== null && targetCell.isBlocking;
     }

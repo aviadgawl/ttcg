@@ -915,5 +915,62 @@
         ],
         "isRepeatable": false,
         "repeatableStat": null
+    },
+    {
+        "type": "ActionCard",
+        "actionType": "Buff",
+        "name": "Precision",
+        "duration": 0,
+        "distance": [
+            0,
+            0
+        ],
+        "direction": "Straight",
+        "dmgStat": null,
+        "dmgModifier": null,
+        "dmgModifierValue": null,
+        "requiredClassName": "Rouge",
+        "requiredStat": null,
+        "requiredStatValue": null,
+        "requiredGearCategory": null,
+        "isFreeTargeting": true,
+        "targetEffects": [
+            {
+                "name": "DexBoost",
+                "duration": 1,
+                "stat": "Dex",
+                "value": 1
+            }
+        ],
+        "isRepeatable": false,
+        "repeatableStat": null
+    },
+    {
+        "type": "ActionCard",
+        "actionType": "Attack",
+        "name": "Crippling Shot",
+        "duration": 0,
+        "distance": [
+            1,
+            4
+        ],
+        "direction": "Straight",
+        "dmgStat": "Dex",
+        "dmgModifier": null,
+        "dmgModifierValue": null,
+        "requiredClassName": "Archer",
+        "requiredStat": null,
+        "requiredStatValue": null,
+        "requiredGearCategory": "Bows",
+        "isFreeTargeting": true,
+        "targetEffects": [
+            {
+                "name": "DexRedaction",
+                "duration": 2,
+                "stat": "Dex",
+                "value": -2
+            }
+        ],
+        "isRepeatable": false
     }
 ]

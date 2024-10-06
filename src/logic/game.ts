@@ -110,12 +110,15 @@ export interface Game {
     status: GameStatus;
 };
 
+const mockChamp = cardsList[0];
+mockChamp.playerIndex = 1;
+
 export const createGame = (): Game => {
 
     const board = new Array(new Array<GameCard | null>(7))
 
     for (let index = 0; index < 13; index++) {
-        if (index === 12) board[index] = [null, null, null, mockCrystalOne, null, null, null, null];
+        if (index === 12) board[index] = [null, null, mockChamp, mockCrystalOne, null, null, null, null];
         else if (index === 0) board[index] = [null, null, null, mockCrystalTwo, null, null, null, null];
         else board[index] = [null, null, null, null, null, null, null, null];
     }
