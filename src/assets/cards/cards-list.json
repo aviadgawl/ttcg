@@ -549,7 +549,7 @@
         "type": "OrderCard",
         "name": "Refresh Me!",
         "duration": 0,
-        "requirement":[],
+        "requirement": [],
         "reward": {
             "name": "ReturnUsedCardToDeck",
             "amount": 5,
@@ -563,7 +563,7 @@
         "type": "OrderCard",
         "name": "Learn Quick!",
         "duration": 1,
-        "requirement":[],
+        "requirement": [],
         "reward": {
             "name": "PlayExtraClassUpgrade",
             "amount": 0,
@@ -597,6 +597,12 @@
                 "duration": 2,
                 "stat": null,
                 "value": null
+            },
+            {
+                "name": "StrBoost",
+                "duration": 2,
+                "stat": "Str",
+                "value": 2
             }
         ],
         "isRepeatable": false,
@@ -874,5 +880,40 @@
         "isFreeTargeting": true,
         "targetEffects": [],
         "isRepeatable": false
+    },
+    {
+        "type": "ActionCard",
+        "actionType": "Buff",
+        "name": "Haste",
+        "duration": 0,
+        "distance": [
+            0,
+            0
+        ],
+        "direction": "Straight",
+        "dmgStat": null,
+        "dmgModifier": null,
+        "dmgModifierValue": null,
+        "requiredClassName": "Rouge",
+        "requiredStat": null,
+        "requiredStatValue": null,
+        "requiredGearCategory": null,
+        "isFreeTargeting": true,
+        "targetEffects": [
+            {
+                "name": "Silence",
+                "duration": 2,
+                "stat": null,
+                "value": null
+            },
+            {
+                "name": "DexBoost",
+                "duration": 2,
+                "stat": "Dex",
+                "value": 2
+            }
+        ],
+        "isRepeatable": false,
+        "repeatableStat": null
     }
 ]

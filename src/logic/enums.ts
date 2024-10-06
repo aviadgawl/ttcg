@@ -57,7 +57,11 @@ export enum EffectStatus {
     Burn = 'Burn',
     Poison = 'Poison',
     Immobilize = 'Immobilize',
-    PhysicalImmunity = 'Physical Immunity'
+    PhysicalImmunity = 'Physical Immunity',
+    Silence = 'Silence',
+    StrBoost = 'STR Boost',
+    DexBoost = 'DEX Boost',
+    IntBoost = 'INT Boost'
 };
 
 export enum CardType {
