@@ -64,7 +64,8 @@ export enum EffectStatus {
     IntBoost = 'INT Boost',
     StrRedaction = "STR Redaction",
     DexRedaction = "Dex Redaction",
-    IntRedaction = "Int Redaction"
+    IntRedaction = "Int Redaction",
+    BreakGear = "Break Gear"
 };
 
 export enum CardType {

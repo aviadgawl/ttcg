@@ -1,4 +1,4 @@
-import { GameCard, isCrystal, SummoningCard, ChampionCard, isChampion, ActionCard, AllowedBoardLocationResponse, BoardLocation, PlayerActionLogRecord } from './game-card';
+import { GameCard, isCrystal, SummoningCard, ChampionCard, isChampion, ActionCard, AllowedBoardLocationResponse, BoardLocation, PlayerActionLogRecord, StatusEffect, isGear } from './game-card';
 import { ActionDirections, GameStatus, ActionType, Stats, EffectStatus, MathModifier, ChampionDirection } from './enums';
 import { Game } from './game';
 import { Player } from './player';
@@ -106,6 +106,56 @@ const moveChampion = (board: (GameCard | null)[][], entityToMove: ChampionCard, 
     return { status: 'success', targetedCard: null };
 }
 
+const breakGear = (targetChampion: ChampionCard) => {
+    const bodyPartsWithGear: string[] = [];
+
+    if (isGear(targetChampion.body)) bodyPartsWithGear.push('body');
+    if (isGear(targetChampion.rightHand)) bodyPartsWithGear.push('rightHand');
+    if (isGear(targetChampion.leftHand)) bodyPartsWithGear.push('leftHand');
+
+    if (bodyPartsWithGear.length === 0) return;
+
+    let gearIndexToRemove = 0;
+
+    if (bodyPartsWithGear.length > 1) {
+        gearIndexToRemove = Math.floor(Math.random() * bodyPartsWithGear.length);
+    }
+
+    const randomBodyPart = bodyPartsWithGear[gearIndexToRemove] as keyof typeof targetChampion;
+
+    switch (randomBodyPart) {
+        case 'rightHand':
+            targetChampion.rightHand = null;
+            break;
+        case 'leftHand':
+            targetChampion.leftHand = null;
+            break;
+        case 'body':
+            targetChampion.body = null;
+            break;
+        default:
+            break;
+    }
+}
+
+const applyTargetEffects = (effects: StatusEffect[], targetChampion: ChampionCard) => {
+
+    const durationEffects = effects.filter(effect => effect.duration > 0);
+    targetChampion.statusEffects = targetChampion.statusEffects.concat(durationEffects);
+
+    const immediateEffects = effects.filter(effect => effect.duration === 0);
+
+    immediateEffects.forEach(effects => {
+        switch (effects.name) {
+            case EffectStatus.BreakGear:
+                breakGear(targetChampion);
+                break;
+            default:
+                break;
+        }
+    });
+}
+
 const attack = (game: Game, attackingChampion: ChampionCard,
     actionCard: ActionCard, sourceLocation: BoardLocation, targetLocation: BoardLocation): ChampionActionResult => {
 
@@ -135,7 +185,7 @@ const attack = (game: Game, attackingChampion: ChampionCard,
         applyPhysicalDamage(attackingChampion, actionCard, target);
 
     if (actionCard.targetEffects.length > 0 && isChampion(target)) {
-        target.statusEffects = target.statusEffects.concat(actionCard.targetEffects);
+        applyTargetEffects(actionCard.targetEffects, target);
         calculateStats(target);
     }
 
@@ -182,7 +232,7 @@ const checkBlockingObjects = (board: (GameCard | null)[][], sourceLocation: Boar
 
         if (rowDirection !== 'none')
             rowIndex += rowDirection === 'up' ? -1 : 1;
-            
+
         if (columnDirection !== 'none')
             columnIndex += columnDirection === 'left' ? -1 : 1;
 

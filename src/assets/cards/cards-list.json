@@ -972,5 +972,33 @@
             }
         ],
         "isRepeatable": false
+    },
+    {
+        "type": "ActionCard",
+        "actionType": "Attack",
+        "name": "Acid Bomb",
+        "duration": 0,
+        "distance": [
+            1,
+            4
+        ],
+        "direction": "Straight",
+        "dmgStat": null,
+        "dmgModifier": null,
+        "dmgModifierValue": null,
+        "requiredClassName": null,
+        "requiredStat": "Dex",
+        "requiredStatValue": 3,
+        "requiredGearCategory": null,
+        "isFreeTargeting": true,
+        "targetEffects": [
+            {
+                "name": "BreakGear",
+                "duration": 0,
+                "stat": "Dex",
+                "value": 1
+            }
+        ],
+        "isRepeatable": false
     }
 ]

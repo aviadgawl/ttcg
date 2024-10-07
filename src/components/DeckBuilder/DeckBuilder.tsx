@@ -3,10 +3,10 @@ import { PlayerActionsName } from '../../logic/enums';
 import HandCard, { HandCardMode } from '../HandCard/HandCard';
 import Button from '@mui/material/Button';
 import styles from './DeckBuilder.module.css';
-import { useAppDispatch, useAppSelector, usePlayerAction } from '../../redux/hooks';
+import { useAppSelector, usePlayerAction } from '../../redux/hooks';
 import { GameCard } from '../../logic/game-card';
 import CardsDisplay from '../CardsDisplay/CardsDisplay';
-import { createSelectedData, SelectedData } from '../../redux/store';
+import { SelectedData } from '../../redux/store';
 
 const groupBy = <T, K extends keyof any>(arr: T[], key: (i: T) => K) =>
   arr.reduce((groups, item) => {
@@ -18,7 +18,6 @@ const DeckBuilder: FC = () => {
   const playerIndex = useAppSelector((state) => state.gameActions.game.playerIndex);
   const playerDeck = useAppSelector((state) => state.gameActions.game.players[playerIndex].deck);
   const cardsList = useAppSelector((state) => state.gameActions.cardsList);
-  const dispatch = useAppDispatch();
   const playerAction = usePlayerAction();
 
   const cardsInDeckGroupedByName = groupBy(playerDeck, card => card.name);
