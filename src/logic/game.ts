@@ -55,8 +55,6 @@ export const cardsList = cardsListJson.flatMap(x => {
                     name: x.name,
                     image: getImage(x.name),
                     actionType: ActionType[x.actionType as keyof typeof ActionType],
-                    duration: x.duration ?? 0,
-                    calDuration: x.duration ?? 0,
                     distance: x.distance,
                     direction: ActionDirections[(x.direction ?? '') as keyof typeof ActionDirections],
                     dmgStat: Stats[(x.dmgStat ?? '') as keyof typeof Stats],
@@ -71,7 +69,7 @@ export const cardsList = cardsListJson.flatMap(x => {
                         return {
                             name: EffectStatus[(effect.name ?? '') as keyof typeof EffectStatus],
                             duration: effect.duration ?? 0,
-                            stat: effect.stat === null ? null : Stats[(effect.stat) as keyof typeof Stats],
+                            stat: effect.stat ? Stats[(effect.stat) as keyof typeof Stats] : null,
                             value: effect.value ?? null
                         }
                     }),

@@ -91,8 +91,6 @@ export interface ActionCard extends GameCard {
     actionType: ActionType;
     distance: number[];
     direction: ActionDirections;
-    duration: Number;
-    calDuration: Number;
     dmgStat: Stats | null;
     dmgModifier: MathModifier | null;
     dmgModifierValue: number | null;

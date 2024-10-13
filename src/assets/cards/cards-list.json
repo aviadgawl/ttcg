@@ -577,19 +577,11 @@
         "type": "ActionCard",
         "actionType": "Buff",
         "name": "Enrage",
-        "duration": 0,
         "distance": [
             0,
             0
         ],
         "direction": "Straight",
-        "dmgStat": null,
-        "dmgModifier": null,
-        "dmgModifierValue": null,
-        "requiredClassName": null,
-        "requiredStat": null,
-        "requiredStatValue": null,
-        "requiredGearCategory": null,
         "isFreeTargeting": true,
         "targetEffects": [
             {
@@ -604,15 +596,12 @@
                 "stat": "Str",
                 "value": 2
             }
-        ],
-        "isRepeatable": false,
-        "repeatableStat": null
+        ]
     },
     {
         "type": "ActionCard",
         "actionType": "Attack",
         "name": "Dagger Slash",
-        "duration": 0,
         "distance": [
             1,
             1
@@ -621,20 +610,14 @@
         "dmgStat": "Str",
         "dmgModifier": "Plus",
         "dmgModifierValue": 1,
-        "requiredClassName": null,
-        "requiredStat": null,
-        "requiredStatValue": null,
         "requiredGearCategory": "Daggers",
         "isFreeTargeting": true,
-        "targetEffects": [],
-        "isRepeatable": false,
-        "repeatableStat": null
+        "targetEffects": []
     },
     {
         "type": "ActionCard",
         "actionType": "Attack",
         "name": "Sword Slash",
-        "duration": 0,
         "distance": [
             1,
             1
@@ -643,20 +626,14 @@
         "dmgStat": "Str",
         "dmgModifier": "Plus",
         "dmgModifierValue": 1,
-        "requiredClassName": null,
-        "requiredStat": null,
-        "requiredStatValue": null,
         "requiredGearCategory": "Swords",
         "isFreeTargeting": true,
-        "targetEffects": [],
-        "isRepeatable": false,
-        "repeatableStat": null
+        "targetEffects": []
     },
     {
         "type": "ActionCard",
         "actionType": "Attack",
         "name": "Axe Slash",
-        "duration": 0,
         "distance": [
             1,
             1
@@ -665,14 +642,9 @@
         "dmgStat": "Str",
         "dmgModifier": "Plus",
         "dmgModifierValue": 1,
-        "requiredClassName": null,
-        "requiredStat": null,
-        "requiredStatValue": null,
         "requiredGearCategory": "Axes",
         "isFreeTargeting": true,
-        "targetEffects": [],
-        "isRepeatable": false,
-        "repeatableStat": null
+        "targetEffects": []
     },
     {
         "type": "ActionCard",
@@ -687,14 +659,10 @@
         "dmgStat": "Str",
         "dmgModifier": "Plus",
         "dmgModifierValue": 1,
-        "requiredClassName": null,
         "requiredStat": "Str",
         "requiredStatValue": 3,
-        "requiredGearCategory": null,
         "isFreeTargeting": true,
-        "targetEffects": [],
-        "isRepeatable": false,
-        "repeatableStat": null
+        "targetEffects": []
     },
     {
         "type": "ActionCard",
@@ -706,13 +674,7 @@
             0
         ],
         "direction": "Straight",
-        "dmgStat": null,
-        "dmgModifier": null,
-        "dmgModifierValue": null,
         "requiredClassName": "Knight",
-        "requiredStat": null,
-        "requiredStatValue": null,
-        "requiredGearCategory": null,
         "isFreeTargeting": true,
         "targetEffects": [
             {
@@ -727,50 +689,30 @@
                 "stat": null,
                 "value": null
             }
-        ],
-        "isRepeatable": false,
-        "repeatableStat": null
+        ]
     },
     {
         "type": "ActionCard",
         "actionType": "Attack",
         "name": "Basic Hit",
-        "duration": 0,
         "distance": [
             1,
             1
         ],
         "direction": "Straight",
         "dmgStat": "Str",
-        "dmgModifier": null,
-        "dmgModifierValue": null,
-        "requiredClass": null,
-        "requiredStat": null,
-        "requiredStatValue": null,
-        "requiredGearCategory": null,
         "isFreeTargeting": true,
-        "targetEffects": [],
-        "isRepeatable": false,
-        "repeatableStat": null
+        "targetEffects": []
     },
     {
         "type": "ActionCard",
         "actionType": "Movement",
         "name": "Step",
-        "duration": 0,
         "distance": [
             1,
             1
         ],
         "direction": "Straight",
-        "dmgStat": null,
-        "dmgModifier": null,
-        "dmgModifierValue": null,
-        "requiredClassName": null,
-        "requiredStat": null,
-        "requiredStatValue": null,
-        "requiredGearCategory": null,
-        "isFreeTargeting": false,
         "targetEffects": [],
         "isRepeatable": true,
         "repeatableStat": "Dex"
@@ -785,59 +727,29 @@
             1
         ],
         "direction": "Straight",
-        "dmgStat": null,
-        "dmgModifier": null,
-        "dmgModifierValue": null,
-        "requiredClassName": null,
-        "requiredStat": null,
-        "requiredStatValue": null,
-        "requiredGearCategory": null,
-        "isFreeTargeting": false,
-        "targetEffects": [],
-        "isRepeatable": false,
-        "repeatableStat": null
+        "targetEffects": []
     },
     {
         "type": "ActionCard",
         "actionType": "Movement",
         "name": "Jump Step",
-        "duration": 0,
         "distance": [
             2,
             2
         ],
         "direction": "Straight",
-        "dmgStat": null,
-        "dmgModifier": null,
-        "dmgModifierValue": null,
-        "requiredClassName": null,
-        "requiredStat": null,
-        "requiredStatValue": null,
-        "requiredGearCategory": null,
-        "isFreeTargeting": false,
-        "targetEffects": [],
-        "isRepeatable": false
+        "targetEffects": []
     },
     {
         "type": "ActionCard",
         "actionType": "Movement",
         "name": "Rush Step",
-        "duration": 0,
         "distance": [
             2,
             2
         ],
         "direction": "Straight",
-        "dmgStat": null,
-        "dmgModifier": null,
-        "dmgModifierValue": null,
-        "requiredClassName": null,
-        "requiredStat": null,
-        "requiredStatValue": null,
-        "requiredGearCategory": null,
-        "isFreeTargeting": false,
-        "targetEffects": [],
-        "isRepeatable": false
+        "targetEffects": []
     },
     {
         "type": "ActionCard",
@@ -850,54 +762,33 @@
         ],
         "direction": "Straight",
         "dmgStat": "Dex",
-        "dmgModifier": null,
-        "dmgModifierValue": null,
-        "requiredClassName": null,
-        "requiredStat": null,
-        "requiredStatValue": null,
-        "requiredGearCategory": null,
         "isFreeTargeting": true,
-        "targetEffects": [],
-        "isRepeatable": false
+        "targetEffects": []
     },
     {
         "type": "ActionCard",
         "actionType": "Attack",
         "name": "Arrow Shot",
-        "duration": 0,
         "distance": [
             1,
             4
         ],
         "direction": "Straight",
         "dmgStat": "Dex",
-        "dmgModifier": null,
-        "dmgModifierValue": null,
-        "requiredClassName": null,
-        "requiredStat": null,
-        "requiredStatValue": null,
         "requiredGearCategory": "Bows",
         "isFreeTargeting": true,
-        "targetEffects": [],
-        "isRepeatable": false
+        "targetEffects": []
     },
     {
         "type": "ActionCard",
         "actionType": "Buff",
         "name": "Haste",
-        "duration": 0,
         "distance": [
             0,
             0
         ],
         "direction": "Straight",
-        "dmgStat": null,
-        "dmgModifier": null,
-        "dmgModifierValue": null,
         "requiredClassName": "Rouge",
-        "requiredStat": null,
-        "requiredStatValue": null,
-        "requiredGearCategory": null,
         "isFreeTargeting": true,
         "targetEffects": [
             {
@@ -912,27 +803,18 @@
                 "stat": "Dex",
                 "value": 2
             }
-        ],
-        "isRepeatable": false,
-        "repeatableStat": null
+        ]
     },
     {
         "type": "ActionCard",
         "actionType": "Buff",
         "name": "Precision",
-        "duration": 0,
         "distance": [
             0,
             0
         ],
         "direction": "Straight",
-        "dmgStat": null,
-        "dmgModifier": null,
-        "dmgModifierValue": null,
         "requiredClassName": "Rouge",
-        "requiredStat": null,
-        "requiredStatValue": null,
-        "requiredGearCategory": null,
         "isFreeTargeting": true,
         "targetEffects": [
             {
@@ -941,9 +823,7 @@
                 "stat": "Dex",
                 "value": 1
             }
-        ],
-        "isRepeatable": false,
-        "repeatableStat": null
+        ]
     },
     {
         "type": "ActionCard",
@@ -956,11 +836,7 @@
         ],
         "direction": "Straight",
         "dmgStat": "Dex",
-        "dmgModifier": null,
-        "dmgModifierValue": null,
         "requiredClassName": "Archer",
-        "requiredStat": null,
-        "requiredStatValue": null,
         "requiredGearCategory": "Bows",
         "isFreeTargeting": true,
         "targetEffects": [
@@ -970,26 +846,19 @@
                 "stat": "Dex",
                 "value": -2
             }
-        ],
-        "isRepeatable": false
+        ]
     },
     {
         "type": "ActionCard",
         "actionType": "Attack",
         "name": "Acid Bomb",
-        "duration": 0,
         "distance": [
             1,
             4
         ],
         "direction": "Straight",
-        "dmgStat": null,
-        "dmgModifier": null,
-        "dmgModifierValue": null,
-        "requiredClassName": null,
         "requiredStat": "Dex",
         "requiredStatValue": 3,
-        "requiredGearCategory": null,
         "isFreeTargeting": true,
         "targetEffects": [
             {
@@ -998,8 +867,7 @@
                 "stat": "Dex",
                 "value": 1
             }
-        ],
-        "isRepeatable": false
+        ]
     },
     {
         "type": "ActionCard",
@@ -1010,7 +878,12 @@
             1,
             1
         ],
-        "hitAreas": {"1": {"right": 1, "left": 1}},
+        "hitAreas": {
+            "1": {
+                "right": 1,
+                "left": 1
+            }
+        },
         "direction": "Straight",
         "dmgStat": "Str",
         "requiredGearCategory": "Axes",
@@ -1026,7 +899,12 @@
             1,
             1
         ],
-        "hitAreas": {"1": {"right": 1, "left": 1}},
+        "hitAreas": {
+            "1": {
+                "right": 1,
+                "left": 1
+            }
+        },
         "direction": "Straight",
         "dmgStat": "Str",
         "requiredGearCategory": "Swords",
