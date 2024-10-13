@@ -17,18 +17,6 @@ const checkValidTarget = (target: GameCard): boolean => {
     return isChampion(target) || isCrystal(target);
 }
 
-const getColumnDirection = (sourceColumnIndex: number, targetColumnIndex: number): string => {
-    if (sourceColumnIndex === targetColumnIndex) return 'none';
-
-    return (sourceColumnIndex - targetColumnIndex) > 0 ? 'left' : 'right';
-}
-
-const getRowDirection = (sourceRowIndex: number, targetRowIndex: number): string => {
-    if (sourceRowIndex === targetRowIndex) return 'none';
-
-    return (sourceRowIndex - targetRowIndex) > 0 ? 'up' : 'down';
-}
-
 const applyPhysicalDamage = (sourceChampion: ChampionCard, actionCard: ActionCard, target: SummoningCard) => {
     const pureDmg = getChampionStatValueByStat(sourceChampion, actionCard.dmgStat);
     let calDamage = calculateDamageWithModifier(pureDmg, actionCard);
@@ -273,7 +261,7 @@ const getBoardLocationInStraightPath = (board: (GameCard | null)[][],
         const newLocation: BoardLocation = { rowIndex: i, columnIndex: initialColumnIndex };
         const shouldStopOnBlockers = checkAndPushAllowedLocation(board, allowedLocations, newLocation, stopOnBlockers);
 
-        const hitArea = actionCard?.hitAreas[distanceIndex];
+        const hitArea = actionCard?.hitAreas && actionCard.hitAreas[distanceIndex];
         checkAndPushHitAreaUpDownLocations(hitArea, board, allowedLocations, i, initialColumnIndex, stopOnBlockers);
 
         if (shouldStopOnBlockers) break;
@@ -286,7 +274,7 @@ const getBoardLocationInStraightPath = (board: (GameCard | null)[][],
         const newLocation: BoardLocation = { rowIndex: i, columnIndex: initialColumnIndex };
         const shouldStopOnBlockers = checkAndPushAllowedLocation(board, allowedLocations, newLocation, stopOnBlockers);
 
-        const hitArea = actionCard?.hitAreas[distanceIndex];
+        const hitArea = actionCard?.hitAreas && actionCard.hitAreas[distanceIndex];
         checkAndPushHitAreaUpDownLocations(hitArea, board, allowedLocations, i, initialColumnIndex, stopOnBlockers);
 
         if (shouldStopOnBlockers) break;
@@ -299,7 +287,7 @@ const getBoardLocationInStraightPath = (board: (GameCard | null)[][],
         const newLocation: BoardLocation = { rowIndex: initialRowIndex, columnIndex: i };
         const shouldStopOnBlockers = checkAndPushAllowedLocation(board, allowedLocations, newLocation, stopOnBlockers);
 
-        const hitArea = actionCard?.hitAreas[distanceIndex];
+        const hitArea = actionCard?.hitAreas && actionCard.hitAreas[distanceIndex];
         checkAndPushHitAreaLeftRightLocations(hitArea, board, allowedLocations, initialRowIndex, i, stopOnBlockers);
 
         if (shouldStopOnBlockers) break;
@@ -312,7 +300,7 @@ const getBoardLocationInStraightPath = (board: (GameCard | null)[][],
         const newLocation: BoardLocation = { rowIndex: initialRowIndex, columnIndex: i };
         const shouldStopOnBlockers = checkAndPushAllowedLocation(board, allowedLocations, newLocation, stopOnBlockers);
 
-        const hitArea = actionCard?.hitAreas[distanceIndex];
+        const hitArea = actionCard?.hitAreas && actionCard.hitAreas[distanceIndex];
         checkAndPushHitAreaLeftRightLocations(hitArea, board, allowedLocations, initialRowIndex, i, stopOnBlockers);
 
         if (shouldStopOnBlockers) break;
