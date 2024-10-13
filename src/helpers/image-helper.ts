@@ -49,6 +49,7 @@ import Haste from '../assets/images/Haste.png';
 import Precision from '../assets/images/Precision.png';
 import CripplingShot from '../assets/images/CripplingShot.png';
 import AcidBomb from '../assets/images/AcidBomb.png';
+import AxeSwipe from '../assets/images/AxeSwipe.png';
 // Orders
 import GiveMeMore from '../assets/images/GiveMeMore.png';
 import Regroup from '../assets/images/Regroup.png';
@@ -161,6 +162,8 @@ export const getImage = (id: string): string => {
             return CripplingShot;
         case 'Acid Bomb':
             return AcidBomb;
+        case 'Axe Swipe':
+            return AxeSwipe;
         // Orders
         case 'Give Me More!':
             return GiveMeMore;

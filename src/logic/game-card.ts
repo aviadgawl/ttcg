@@ -106,6 +106,7 @@ export interface ActionCard extends GameCard {
     repeatableStat: Stats | null;
     repeatableActivationLeft: number | null;
     wasPlayed: boolean;
+    hitAreas: { [key: number]: HitArea }
 }
 
 export interface ClassCard extends GameCard {
@@ -152,6 +153,11 @@ export interface ChampionCard extends SummoningCard {
 export interface PlayerActionLogRecord {
     name: string;
     guid: string|null;
+}
+
+export interface HitArea {
+    right: number;
+    left: number;
 }
 
 export const isCrystal = (value: any): value is CrystalCard => !!value?.effect || value?.effect === null;

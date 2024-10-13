@@ -1,4 +1,4 @@
-import { GameCard, isCrystal, SummoningCard, ChampionCard, isChampion, ActionCard, AllowedBoardLocationResponse, BoardLocation, PlayerActionLogRecord, StatusEffect, isGear } from './game-card';
+import { GameCard, isCrystal, SummoningCard, ChampionCard, isChampion, ActionCard, AllowedBoardLocationResponse, BoardLocation, PlayerActionLogRecord, StatusEffect, isGear, HitArea } from './game-card';
 import { ActionDirections, GameStatus, ActionType, Stats, EffectStatus, MathModifier, ChampionDirection } from './enums';
 import { Game } from './game';
 import { Player } from './player';
@@ -172,14 +172,13 @@ const attack = (game: Game, attackingChampion: ChampionCard,
     if (isChampion(target) && target.statusEffects.some(effect => effect.name === EffectStatus.PhysicalImmunity))
         return { status: 'Target is immune to physical damage', targetedCard: target };
 
-    const validDistance = checkAllowedDistance(actionCard.distance[1], actionCard.distance[0], sourceLocation, targetLocation);
-    if (!validDistance) return { status: 'Location to far', targetedCard: target };
+    const allowedLocation = getBoardLocationInStraightPath(game.board, sourceLocation, actionCard);
 
-    const validDirection = checkAllowedDirection(actionCard.direction, sourceLocation, targetLocation);
-    if (!validDirection) return { status: `Not a valid direction for direction: ${ActionDirections.Straight}`, targetedCard: null };
-
-    const isPathBlocked = checkBlockingObjects(game.board, sourceLocation, targetLocation);
-    if (isPathBlocked) return { status: 'Hit path is blocked', targetedCard: null };
+    if (!allowedLocation.some(allowedLocation => (allowedLocation.rowIndex === targetLocation.rowIndex && allowedLocation.columnIndex === targetLocation.columnIndex)))
+        return {
+            status: `Target location row index: ${targetLocation.rowIndex} and column index: ${targetLocation.columnIndex} is not in allowed locations`,
+            targetedCard: target
+        };
 
     if (actionCard.dmgStat !== null)
         applyPhysicalDamage(attackingChampion, actionCard, target);
@@ -194,24 +193,6 @@ const attack = (game: Game, attackingChampion: ChampionCard,
     return { status: 'success', targetedCard: target };
 }
 
-const checkAllowedDistance = (allowedMaxDistance: number,
-    allowedMinDistance: number, sourceLocation: BoardLocation, targetLocation: BoardLocation) => {
-
-    const distance = calculateDistance(sourceLocation, targetLocation);
-    return allowedMinDistance <= distance && distance <= allowedMaxDistance;
-}
-
-const checkAllowedDirection = (allowedDirection: ActionDirections,
-    sourceLocation: BoardLocation, targetLocation: BoardLocation) => {
-
-    switch (allowedDirection) {
-        case ActionDirections.Straight:
-            return sourceLocation.columnIndex === targetLocation.columnIndex || sourceLocation.rowIndex === targetLocation.rowIndex;
-        default:
-            break;
-    }
-}
-
 const calculateDistance = (sourceLocation: BoardLocation, targetLocation: BoardLocation): number => {
     const distanceX = Math.abs(sourceLocation.rowIndex - targetLocation.rowIndex);
     const distanceY = Math.abs(sourceLocation.columnIndex - targetLocation.columnIndex);
@@ -220,28 +201,55 @@ const calculateDistance = (sourceLocation: BoardLocation, targetLocation: BoardL
     return distance;
 }
 
-const checkBlockingObjects = (board: (GameCard | null)[][], sourceLocation: BoardLocation, targetLocation: BoardLocation): boolean => {
-    const distance = calculateDistance(sourceLocation, targetLocation);
-
-    if (distance <= 1) return false;
-
-    const rowDirection = getRowDirection(sourceLocation.rowIndex, targetLocation.rowIndex);
-    const columnDirection = getColumnDirection(sourceLocation.columnIndex, targetLocation.columnIndex);
-
-    for (let index = 0, rowIndex = sourceLocation.rowIndex, columnIndex = sourceLocation.columnIndex; index < distance; index++) {
-
-        if (rowDirection !== 'none')
-            rowIndex += rowDirection === 'up' ? -1 : 1;
-
-        if (columnDirection !== 'none')
-            columnIndex += columnDirection === 'left' ? -1 : 1;
-
-        const targetCell = board[rowIndex][columnIndex] as unknown as SummoningCard;
-
-        return targetCell !== undefined && targetCell !== null && targetCell.isBlocking;
+const checkAndPushAllowedLocation = (board: (GameCard | null)[][], allowedLocations: BoardLocation[], newLocation: BoardLocation, stopOnBlockers: boolean) => {
+    if (board.length < newLocation.rowIndex) {
+        console.log(`checkAndPushAllowedLocation newLocation.rowIndex: ${newLocation.rowIndex} is more then max row are ${board.length}`);
+        return;
     }
 
-    return false;
+    if (board[newLocation.rowIndex].length < newLocation.columnIndex) {
+        console.log(`checkAndPushAllowedLocation newLocation.columnIndex: ${newLocation.columnIndex} is more then max column are ${board[newLocation.rowIndex].length}`);
+        return;
+    }
+
+    const currentLocation = board[newLocation.rowIndex][newLocation.columnIndex];
+
+    if (stopOnBlockers && currentLocation !== null) return true;
+
+    if (!allowedLocations.some(location => (location.rowIndex === newLocation.rowIndex && location.columnIndex === newLocation.columnIndex)))
+        allowedLocations.push(newLocation);
+}
+
+const checkAndPushHitAreaUpDownLocations = (hitArea: HitArea | undefined,
+    board: (GameCard | null)[][], allowedLocations: BoardLocation[], rowIndex: number, columnIndex: number, stopOnBlockers: boolean) => {
+
+    if (!hitArea) return;
+
+    if (hitArea.right > 0) {
+        const rightAreaLocation: BoardLocation = { rowIndex: rowIndex, columnIndex: columnIndex + hitArea.right }
+        checkAndPushAllowedLocation(board, allowedLocations, rightAreaLocation, stopOnBlockers);
+    }
+
+    if (hitArea.left > 0) {
+        const rightAreaLocation: BoardLocation = { rowIndex: rowIndex, columnIndex: columnIndex - hitArea.left }
+        checkAndPushAllowedLocation(board, allowedLocations, rightAreaLocation, stopOnBlockers);
+    }
+}
+
+const checkAndPushHitAreaLeftRightLocations = (hitArea: HitArea | undefined,
+    board: (GameCard | null)[][], allowedLocations: BoardLocation[], rowIndex: number, columnIndex: number, stopOnBlockers: boolean) => {
+
+    if (!hitArea) return;
+
+    if (hitArea.right > 0) {
+        const rightAreaLocation: BoardLocation = { rowIndex: rowIndex + hitArea.right, columnIndex: columnIndex }
+        checkAndPushAllowedLocation(board, allowedLocations, rightAreaLocation, stopOnBlockers);
+    }
+
+    if (hitArea.left > 0) {
+        const rightAreaLocation: BoardLocation = { rowIndex: rowIndex - hitArea.left, columnIndex: columnIndex }
+        checkAndPushAllowedLocation(board, allowedLocations, rightAreaLocation, stopOnBlockers);
+    }
 }
 
 const getBoardLocationInStraightPath = (board: (GameCard | null)[][],
@@ -260,46 +268,54 @@ const getBoardLocationInStraightPath = (board: (GameCard | null)[][],
 
     const maxRowIndex: number = initialRowIndex + maxDistance;
 
-    for (let i = initialRowIndex + minDistance; i < board.length && i <= maxRowIndex; i++) {
+    for (let i = initialRowIndex + minDistance, distanceIndex = minDistance; i < board.length && i <= maxRowIndex; i++, distanceIndex++) {
 
-        const currentLocation = board[i][initialColumnIndex];
+        const newLocation: BoardLocation = { rowIndex: i, columnIndex: initialColumnIndex };
+        const shouldStopOnBlockers = checkAndPushAllowedLocation(board, allowedLocations, newLocation, stopOnBlockers);
 
-        if (stopOnBlockers && currentLocation !== null) break;
+        const hitArea = actionCard?.hitAreas[distanceIndex];
+        checkAndPushHitAreaUpDownLocations(hitArea, board, allowedLocations, i, initialColumnIndex, stopOnBlockers);
 
-        allowedLocations.push({ rowIndex: i, columnIndex: initialColumnIndex })
+        if (shouldStopOnBlockers) break;
     }
 
     const minRowIndex: number = initialRowIndex - maxDistance;
 
-    for (let i = initialRowIndex - minDistance; i >= 0 && i >= minRowIndex; i--) {
+    for (let i = initialRowIndex - minDistance, distanceIndex = minDistance; i >= 0 && i >= minRowIndex; i--, distanceIndex++) {
 
-        const currentLocation = board[i][initialColumnIndex];
+        const newLocation: BoardLocation = { rowIndex: i, columnIndex: initialColumnIndex };
+        const shouldStopOnBlockers = checkAndPushAllowedLocation(board, allowedLocations, newLocation, stopOnBlockers);
 
-        if (stopOnBlockers && currentLocation !== null) break;
+        const hitArea = actionCard?.hitAreas[distanceIndex];
+        checkAndPushHitAreaUpDownLocations(hitArea, board, allowedLocations, i, initialColumnIndex, stopOnBlockers);
 
-        allowedLocations.push({ rowIndex: i, columnIndex: initialColumnIndex })
+        if (shouldStopOnBlockers) break;
     }
 
     const maxColumnIndex: number = initialColumnIndex + maxDistance;
 
-    for (let i = initialColumnIndex + minDistance; i < board[initialRowIndex].length && i <= maxColumnIndex; i++) {
+    for (let i = initialColumnIndex + minDistance, distanceIndex = minDistance; i < board[initialRowIndex].length && i <= maxColumnIndex; i++, distanceIndex++) {
 
-        const currentLocation = board[initialRowIndex][i];
+        const newLocation: BoardLocation = { rowIndex: initialRowIndex, columnIndex: i };
+        const shouldStopOnBlockers = checkAndPushAllowedLocation(board, allowedLocations, newLocation, stopOnBlockers);
 
-        if (stopOnBlockers && currentLocation !== null) break;
+        const hitArea = actionCard?.hitAreas[distanceIndex];
+        checkAndPushHitAreaLeftRightLocations(hitArea, board, allowedLocations, initialRowIndex, i, stopOnBlockers);
 
-        allowedLocations.push({ rowIndex: initialRowIndex, columnIndex: i })
+        if (shouldStopOnBlockers) break;
     }
 
     const minColumnIndex: number = initialColumnIndex - maxDistance;
 
-    for (let i = initialColumnIndex - minDistance; i >= 0 && i >= minColumnIndex; i--) {
+    for (let i = initialColumnIndex - minDistance, distanceIndex = minDistance; i >= 0 && i >= minColumnIndex; i--, distanceIndex++) {
 
-        const currentLocation = board[initialRowIndex][i];
+        const newLocation: BoardLocation = { rowIndex: initialRowIndex, columnIndex: i };
+        const shouldStopOnBlockers = checkAndPushAllowedLocation(board, allowedLocations, newLocation, stopOnBlockers);
 
-        if (stopOnBlockers && currentLocation !== null) break;
+        const hitArea = actionCard?.hitAreas[distanceIndex];
+        checkAndPushHitAreaLeftRightLocations(hitArea, board, allowedLocations, initialRowIndex, i, stopOnBlockers);
 
-        allowedLocations.push({ rowIndex: initialRowIndex, columnIndex: i })
+        if (shouldStopOnBlockers) break;
     }
 
     return allowedLocations;

@@ -21,7 +21,7 @@ export const cardsList = cardsListJson.flatMap(x => {
             case CardType.ChampionCard:
                 newCardsArray.push({
                     guid: createGuid(), name: x.name, image: getImage(x.name), playerIndex: 0,
-                    isBlocking: x.isBlocking, hp: x.hp, currentHp: x.hp,
+                    isBlocking: x.isBlocking ?? false, hp: x.hp, currentHp: x.hp,
                     armor: x.str, str: x.str, calStr: x.str,
                     dex: x.dex, calDex: x.dex,
                     int: x.int, calInt: x.int, mental: x.int,
@@ -36,15 +36,15 @@ export const cardsList = cardsListJson.flatMap(x => {
                 newCardsArray.push({
                     guid: createGuid(), name: x.name, class: x.class,
                     str: x.str, dex: x.dex, int: x.int, hp: x.hp, learnedAction: x.action,
-                    requiredClassName: x.requiredClass, currentHp: 0,
-                    image: getImage(x.name), playerIndex: 0, isBlocking: x.isBlocking
+                    requiredClassName: x.requiredClass ?? null, currentHp: 0,
+                    image: getImage(x.name), playerIndex: 0, isBlocking: x.isBlocking ?? false
                 } as ClassCard);
                 break;
             case CardType.GearCard:
                 newCardsArray.push({
                     guid: createGuid(), name: x.name, str: x.str,
                     dex: x.dex, int: x.int, hp: x.hp, currentHp: x.hp, bodyPart: x.bodyPart,
-                    image: getImage(x.name), playerIndex: 0, isBlocking: x.isBlocking,
+                    image: getImage(x.name), playerIndex: 0, isBlocking: x.isBlocking ?? false,
                     category: GearCategory[x.category as keyof typeof GearCategory]
                 } as GearCard);
                 break;
@@ -55,30 +55,31 @@ export const cardsList = cardsListJson.flatMap(x => {
                     name: x.name,
                     image: getImage(x.name),
                     actionType: ActionType[x.actionType as keyof typeof ActionType],
-                    duration: x.duration,
-                    calDuration: x.duration,
+                    duration: x.duration ?? 0,
+                    calDuration: x.duration ?? 0,
                     distance: x.distance,
                     direction: ActionDirections[(x.direction ?? '') as keyof typeof ActionDirections],
                     dmgStat: Stats[(x.dmgStat ?? '') as keyof typeof Stats],
                     dmgModifier: MathModifier[(x.dmgModifier ?? '') as keyof typeof MathModifier],
-                    dmgModifierValue: x.dmgModifierValue,
-                    requiredClassName: x.requiredClassName,
+                    dmgModifierValue: x.dmgModifierValue ?? null,
+                    requiredClassName: x.requiredClassName ?? null,
                     requiredStat: Stats[(x.requiredStat ?? '') as keyof typeof Stats],
-                    requiredStatValue: x.requiredStatValue,
-                    requiredGearCategory: x.requiredGearCategory,
-                    isFreeTargeting: x.isFreeTargeting,
+                    requiredStatValue: x.requiredStatValue ?? null,
+                    requiredGearCategory: x.requiredGearCategory ?? null,
+                    isFreeTargeting: x.isFreeTargeting ?? false,
                     targetEffects: x.targetEffects?.map(effect => {
                         return {
                             name: EffectStatus[(effect.name ?? '') as keyof typeof EffectStatus],
-                            duration: effect.duration,
+                            duration: effect.duration ?? 0,
                             stat: effect.stat === null ? null : Stats[(effect.stat) as keyof typeof Stats],
-                            value: effect.value
+                            value: effect.value ?? null
                         }
                     }),
-                    isRepeatable: x.isRepeatable,
+                    isRepeatable: x.isRepeatable ?? false,
                     repeatableStat: x.repeatableStat === null ? null : Stats[(x.repeatableStat) as keyof typeof Stats],
                     repeatableActivationLeft: null,
-                    wasPlayed: false
+                    wasPlayed: false,
+                    hitAreas: x.hitAreas ?? null
                 } as ActionCard);
                 break;
             case CardType.OrderCard:
