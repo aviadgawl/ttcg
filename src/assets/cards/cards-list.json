@@ -1013,6 +1013,23 @@
         "hitAreas": {"1": {"right": 1, "left": 1}},
         "direction": "Straight",
         "dmgStat": "Str",
+        "requiredGearCategory": "Axes",
+        "isFreeTargeting": true,
+        "targetEffects": []
+    },
+    {
+        "type": "ActionCard",
+        "actionType": "Attack",
+        "name": "Sword Swipe",
+        "duration": 0,
+        "distance": [
+            1,
+            1
+        ],
+        "hitAreas": {"1": {"right": 1, "left": 1}},
+        "direction": "Straight",
+        "dmgStat": "Str",
+        "requiredGearCategory": "Swords",
         "isFreeTargeting": true,
         "targetEffects": []
     }
