@@ -11,3 +11,4 @@ npx generate-react-cli component MyComponent
 
 # bugs
 Jump Step don't jump over obstacle
+Ultimate defense - need to change to damage immunity  

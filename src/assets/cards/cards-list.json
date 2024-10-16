@@ -910,5 +910,41 @@
         "requiredGearCategory": "Swords",
         "isFreeTargeting": true,
         "targetEffects": []
+    },
+    {
+        "type": "ActionCard",
+        "actionType": "Buff",
+        "name": "Magic Shield",
+        "duration": 0,
+        "distance": [
+            0,
+            0
+        ],
+        "direction": "Straight",
+        "requiredClassName": "Apprentice",
+        "isFreeTargeting": true,
+        "targetEffects": [
+            {
+                "name": "PhysicalImmunity",
+                "duration": 2,
+                "stat": null,
+                "value": null
+            }
+        ]
+    },
+    {
+        "type": "ActionCard",
+        "actionType": "Attack",
+        "name": "Energy Ball",
+        "distance": [
+            1,
+            4
+        ],
+        "direction": "Straight",
+        "dmgStat": "Int",
+        "requiredStat": "Int",
+        "requiredStatValue": 2,
+        "isFreeTargeting": true,
+        "targetEffects": []
     }
 ]

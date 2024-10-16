@@ -51,6 +51,8 @@ import CripplingShot from '../assets/images/CripplingShot.png';
 import AcidBomb from '../assets/images/AcidBomb.png';
 import AxeSwipe from '../assets/images/AxeSwipe.png';
 import SwordSwipe from '../assets/images/SwordSwipe.png';
+import MagicShield from '../assets/images/MagicShield.png';
+import EnergyBall from '../assets/images/EnergyBall.png';
 // Orders
 import GiveMeMore from '../assets/images/GiveMeMore.png';
 import Regroup from '../assets/images/Regroup.png';
@@ -167,6 +169,10 @@ export const getImage = (id: string): string => {
             return AxeSwipe;
         case 'Sword Swipe':
             return SwordSwipe;
+        case 'Magic Shield':
+            return MagicShield;
+        case 'Energy Ball':
+            return EnergyBall;
         // Orders
         case 'Give Me More!':
             return GiveMeMore;
