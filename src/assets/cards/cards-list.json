@@ -946,5 +946,74 @@
         "requiredStatValue": 2,
         "isFreeTargeting": true,
         "targetEffects": []
+    },
+    {
+        "type": "ActionCard",
+        "actionType": "Buff",
+        "name": "Arcane Power",
+        "distance": [
+            0,
+            0
+        ],
+        "direction": "Straight",
+        "isFreeTargeting": true,
+        "targetEffects": [
+            {
+                "name": "Immobilize",
+                "duration": 2,
+                "stat": null,
+                "value": null
+            },
+            {
+                "name": "IntBoost",
+                "duration": 2,
+                "stat": "Int",
+                "value": 2
+            }
+        ]
+    },
+    {
+        "type": "ActionCard",
+        "actionType": "Buff",
+        "name": "Dexterity Blessing",
+        "distance": [
+            1,
+            2
+        ],
+        "direction": "Straight",
+        "isFreeTargeting": true,
+        "requiredStat": "Int",
+        "requiredStatValue": 2,
+        "requiredClassName": "Acolyte",
+        "targetEffects": [
+            {
+                "name": "DexBoost",
+                "duration": 2,
+                "stat": "Dex",
+                "value": 2
+            }
+        ]
+    },
+    {
+        "type": "ActionCard",
+        "actionType": "Buff",
+        "name": "Strength Blessing",
+        "distance": [
+            1,
+            2
+        ],
+        "direction": "Straight",
+        "requiredStat": "Int",
+        "requiredStatValue": 2,
+        "requiredClassName": "Acolyte",
+        "isFreeTargeting": true,
+        "targetEffects": [
+            {
+                "name": "StrBoost",
+                "duration": 2,
+                "stat": "Str",
+                "value": 2
+            }
+        ]
     }
 ]

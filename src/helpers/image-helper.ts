@@ -53,6 +53,9 @@ import AxeSwipe from '../assets/images/AxeSwipe.png';
 import SwordSwipe from '../assets/images/SwordSwipe.png';
 import MagicShield from '../assets/images/MagicShield.png';
 import EnergyBall from '../assets/images/EnergyBall.png';
+import ArcanePower from '../assets/images/ArcanePower.png';
+import DexterityBlessing from '../assets/images/DexterityBlessing.png';
+import StrengthBlessing from '../assets/images/StrengthBlessing.png';
 // Orders
 import GiveMeMore from '../assets/images/GiveMeMore.png';
 import Regroup from '../assets/images/Regroup.png';
@@ -173,6 +176,12 @@ export const getImage = (id: string): string => {
             return MagicShield;
         case 'Energy Ball':
             return EnergyBall;
+        case 'Arcane Power':
+            return ArcanePower;
+        case 'Dexterity Blessing':
+            return DexterityBlessing;
+        case 'Strength Blessing':
+            return StrengthBlessing;
         // Orders
         case 'Give Me More!':
             return GiveMeMore;

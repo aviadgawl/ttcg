@@ -113,8 +113,6 @@ const mockChamp = cardsList[0] as ChampionCard;
 const mockSword = cardsList[60] as GearCard;
 const mockDagger = cardsList[63] as GearCard;
 mockChamp.playerIndex = 1;
-mockChamp.rightHand = mockSword;
-mockChamp.leftHand = mockDagger;
 
 export const createGame = (): Game => {
 
