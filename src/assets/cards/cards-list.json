@@ -247,7 +247,7 @@
         "dex": 1,
         "int": 3,
         "hp": 0,
-        "action": "Back Stab",
+        "action": "Arcane Power",
         "requiredClass": "Apprentice",
         "isBlocking": false
     },
@@ -1013,6 +1013,28 @@
                 "duration": 2,
                 "stat": "Str",
                 "value": 2
+            }
+        ]
+    },
+    {
+        "type": "ActionCard",
+        "actionType": "Attack",
+        "name": "Fire Ball",
+        "distance": [
+            1,
+            4
+        ],
+        "direction": "Straight",
+        "dmgStat": "Int",
+        "requiredStat": "Int",
+        "requiredStatValue": 3,
+        "isFreeTargeting": true,
+        "targetEffects": [
+            {
+                "name": "Burn",
+                "duration": 3,
+                "stat": null,
+                "value": 1
             }
         ]
     }

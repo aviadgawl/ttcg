@@ -19,7 +19,7 @@ import {
     PlayerEffect
 } from './game-card';
 import { calculateStats, setRepeatableActionActivations, getPlayer } from './champion';
-import { Stats, GameStatus, PlayerActionsName, ChampionDirection, BodyPart, CardType, RewardType } from './enums';
+import { Stats, GameStatus, PlayerActionsName, ChampionDirection, BodyPart, CardType, RewardType, EffectStatus } from './enums';
 
 import { Game, } from './game';
 
@@ -495,6 +495,10 @@ const updateChampionStatusEffects = (championCard: ChampionCard) => {
 
     championCard.statusEffects.forEach((statusEffect) => {
         if (statusEffect.duration > 1) {
+            if (statusEffect.name === EffectStatus.Burn && statusEffect.value !== null) {
+                championCard.calHp -= statusEffect.value;
+            }
+
             statusEffect.duration--;
             updatedStatusEffects.push(statusEffect);
         }
@@ -516,20 +520,33 @@ const refreshResources = (game: Game, nextPlayerIndex: number) => {
     player.summonsLeft = 1;
     player.effects.forEach(effect => effect.duration--);
 
-    const board = game.board;
+    game.board.forEach(row => row.forEach(boardPanel => {
+        if (isChampion(boardPanel) && boardPanel.playerIndex === nextPlayerIndex) {
 
-    for (let rowIndex = 0; rowIndex < board.length; rowIndex++) {
-        for (let columnIndex = 0; columnIndex < board[rowIndex].length; columnIndex++) {
-            const card = board[rowIndex][columnIndex];
+            boardPanel.stm = 2;
 
-            if (isChampion(card) && card.playerIndex === nextPlayerIndex) {
-                card.stm = 2;
-                updateLearnedActions(card);
-                updateChampionStatusEffects(card);
-                calculateStats(card);
-            };
-        }
-    }
+            updateLearnedActions(boardPanel);
+            updateChampionStatusEffects(boardPanel);
+
+            if (boardPanel.calHp <= 0)
+                boardPanel = null;
+            else
+                calculateStats(boardPanel);
+        };
+    }));
+
+    // for (let rowIndex = 0; rowIndex < board.length; rowIndex++) {
+    //     for (let columnIndex = 0; columnIndex < board[rowIndex].length; columnIndex++) {
+    //         const card = board[rowIndex][columnIndex];
+
+    //         if (isChampion(card) && card.playerIndex === nextPlayerIndex) {
+    //             card.stm = 2;
+    //             updateLearnedActions(card);
+    //             updateChampionStatusEffects(card);
+    //             calculateStats(card);
+    //         };
+    //     }
+    // }
 }
 
 const getAndRemoveActionCard = (game: Game, actionCardName: string): ActionCard | null => {

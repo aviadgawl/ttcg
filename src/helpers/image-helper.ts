@@ -56,6 +56,7 @@ import EnergyBall from '../assets/images/EnergyBall.png';
 import ArcanePower from '../assets/images/ArcanePower.png';
 import DexterityBlessing from '../assets/images/DexterityBlessing.png';
 import StrengthBlessing from '../assets/images/StrengthBlessing.png';
+import FireBall from '../assets/images/FireBall.png';
 // Orders
 import GiveMeMore from '../assets/images/GiveMeMore.png';
 import Regroup from '../assets/images/Regroup.png';
@@ -182,6 +183,8 @@ export const getImage = (id: string): string => {
             return DexterityBlessing;
         case 'Strength Blessing':
             return StrengthBlessing;
+        case 'Fire Ball':
+            return FireBall;
         // Orders
         case 'Give Me More!':
             return GiveMeMore;

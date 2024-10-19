@@ -451,10 +451,10 @@ export const calculateStats = (champion: ChampionCard) => {
     champion.calHp = newCalHp;
     champion.currentHp += hpDiff;
 
-    champion.learnedActionsCards.forEach(actionCard => {
-        if (!actionCard.wasPlayed)
-            setRepeatableActionActivations(actionCard, champion);
-    });
+    // champion.learnedActionsCards.forEach(actionCard => {
+    //     if (!actionCard.wasPlayed)
+    //         setRepeatableActionActivations(actionCard, champion);
+    // });
 }
 
 export const getChampionsActionsAllowedBoardLocations = (game: Game, actionCard: ActionCard, sourceBoardLocation: BoardLocation | null): AllowedBoardLocationResponse => {
