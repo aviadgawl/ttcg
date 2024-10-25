@@ -32,7 +32,7 @@ export const usePlayerAction = () => {
         else {
             playSoundByPlayerActionName(actionName);
             dispatch(resetSelectedData());
-            if (gameToUpdate.code !== '')
+            if (gameToUpdate.code !== 'Bot' && gameToUpdate.code !== '')
                 updateGameAsync(gameToUpdate).catch(console.error);
         }
 
@@ -75,7 +75,7 @@ export const useChampionAction = () => {
         else {
             playSoundByCardActionName(selectedActionDataClone.card.actionType);
             dispatch(resetSelectedData());
-            if (gameClone.code !== '')
+            if (gameClone.code !== 'Bot')
                 updateGameAsync(gameClone).catch(console.error);
         }
 

@@ -18,23 +18,35 @@ const checkValidTarget = (target: GameCard): boolean => {
 }
 
 const applyPhysicalDamage = (sourceChampion: ChampionCard, actionCard: ActionCard, target: SummoningCard) => {
-    const pureDmg = getChampionStatValueByStat(sourceChampion, actionCard.dmgStat);
-    let calDamage = calculateDamageWithModifier(pureDmg, actionCard);
+    const baseDmg = getChampionStatValueByStat(sourceChampion, actionCard.dmgStat);
+    const calDamage = calculateDamageWithModifier(baseDmg, actionCard);
+
+    if (calDamage === 0) return;
 
     if (isChampion(target)) {
-        const dmg = (pureDmg + calDamage) - target.armor;
+        const isMagicDmg = actionCard.dmgStat === Stats.Int;
+        const mitigation = isMagicDmg ? target.mental : target.armor;
+        const dmg = calDamage - mitigation;
+
+        if (dmg === 0) return;
+
+        let mitigationReduction = 0;
 
         if (dmg > 0) {
-            target.armor = 0;
             target.currentHp -= dmg;
         }
-        else if (dmg < 0) target.armor -= Math.abs(dmg);
-        else if (dmg === 0) return;
+        else mitigationReduction = Math.abs(dmg);
+
+        if (isMagicDmg) target.mental = mitigationReduction;
+        else target.armor = mitigationReduction;
+    }
+    else {
+        target.currentHp -= calDamage;
     }
 }
 
 const calculateDamageWithModifier = (baseDamage: number, actionCard: ActionCard): number => {
-    if (actionCard.dmgModifier === null || actionCard.dmgModifierValue === null) return 0;
+    if (actionCard.dmgModifier === null || actionCard.dmgModifierValue === null) return baseDamage;
 
     switch (actionCard.dmgModifier) {
         case MathModifier.Plus:
@@ -450,11 +462,6 @@ export const calculateStats = (champion: ChampionCard) => {
     const hpDiff = newCalHp - champion.calHp;
     champion.calHp = newCalHp;
     champion.currentHp += hpDiff;
-
-    // champion.learnedActionsCards.forEach(actionCard => {
-    //     if (!actionCard.wasPlayed)
-    //         setRepeatableActionActivations(actionCard, champion);
-    // });
 }
 
 export const getChampionsActionsAllowedBoardLocations = (game: Game, actionCard: ActionCard, sourceBoardLocation: BoardLocation | null): AllowedBoardLocationResponse => {

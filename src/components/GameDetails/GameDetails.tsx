@@ -38,11 +38,11 @@ const GameDetails: FC<GameDetailsProps> = () => {
         </tr>
         <tr>
           <td><img height={25} src={BreakGearIcon} /></td>
-          <td>Break gear</td>
+          <td>Break random piece of gear</td>
         </tr>
         <tr>
           <td><img height={25} src={SilenceIcon} /></td>
-          <td>Silence icon</td>
+          <td>Silenced - Champion can not use actions</td>
         </tr>
         <tr>
           <td><img height={25} src={TimeBoundIcon} /></td>

@@ -534,19 +534,6 @@ const refreshResources = (game: Game, nextPlayerIndex: number) => {
                 calculateStats(boardPanel);
         };
     }));
-
-    // for (let rowIndex = 0; rowIndex < board.length; rowIndex++) {
-    //     for (let columnIndex = 0; columnIndex < board[rowIndex].length; columnIndex++) {
-    //         const card = board[rowIndex][columnIndex];
-
-    //         if (isChampion(card) && card.playerIndex === nextPlayerIndex) {
-    //             card.stm = 2;
-    //             updateLearnedActions(card);
-    //             updateChampionStatusEffects(card);
-    //             calculateStats(card);
-    //         };
-    //     }
-    // }
 }
 
 const getAndRemoveActionCard = (game: Game, actionCardName: string): ActionCard | null => {
