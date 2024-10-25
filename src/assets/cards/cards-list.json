@@ -753,7 +753,7 @@
     },
     {
         "type": "ActionCard",
-        "actionType": "Attack",
+        "actionType": "Ranged",
         "name": "Dagger Throw",
         "duration": 0,
         "distance": [
@@ -767,7 +767,7 @@
     },
     {
         "type": "ActionCard",
-        "actionType": "Attack",
+        "actionType": "Ranged",
         "name": "Arrow Shot",
         "distance": [
             1,
@@ -827,7 +827,7 @@
     },
     {
         "type": "ActionCard",
-        "actionType": "Attack",
+        "actionType": "Ranged",
         "name": "Crippling Shot",
         "duration": 0,
         "distance": [
@@ -850,7 +850,7 @@
     },
     {
         "type": "ActionCard",
-        "actionType": "Attack",
+        "actionType": "Ranged",
         "name": "Acid Bomb",
         "distance": [
             1,
@@ -934,7 +934,7 @@
     },
     {
         "type": "ActionCard",
-        "actionType": "Attack",
+        "actionType": "Magic",
         "name": "Energy Ball",
         "distance": [
             1,
@@ -1018,7 +1018,7 @@
     },
     {
         "type": "ActionCard",
-        "actionType": "Attack",
+        "actionType": "Magic",
         "name": "Fire Ball",
         "distance": [
             1,

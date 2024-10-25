@@ -17,7 +17,7 @@ const checkValidTarget = (target: GameCard): boolean => {
     return isChampion(target) || isCrystal(target);
 }
 
-const applyPhysicalDamage = (sourceChampion: ChampionCard, actionCard: ActionCard, target: SummoningCard) => {
+const applyDamage = (sourceChampion: ChampionCard, actionCard: ActionCard, target: SummoningCard) => {
     const baseDmg = getChampionStatValueByStat(sourceChampion, actionCard.dmgStat);
     const calDamage = calculateDamageWithModifier(baseDmg, actionCard);
 
@@ -181,7 +181,7 @@ const attack = (game: Game, attackingChampion: ChampionCard,
         };
 
     if (actionCard.dmgStat !== null)
-        applyPhysicalDamage(attackingChampion, actionCard, target);
+        applyDamage(attackingChampion, actionCard, target);
 
     if (actionCard.targetEffects.length > 0 && isChampion(target)) {
         applyTargetEffects(actionCard.targetEffects, target);
@@ -431,7 +431,9 @@ export const championAction = (game: Game, actionCardData: ActionCard, sourceLoc
         case ActionType.Movement:
             result = moveChampion(game.board, sourceChampion, actionCard, sourceLocation, targetLocation);
             break;
-        case ActionType.Attack:
+        case ActionType.Melee:
+        case ActionType.Magic:
+        case ActionType.Ranged:
         case ActionType.Buff:
             result = attack(game, sourceChampion, actionCard, sourceLocation, targetLocation);
             break;

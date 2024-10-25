@@ -23,7 +23,7 @@ const Hand: FC = () => {
 
   const dispatch = useAppDispatch();
 
-  const [showUsedCardsDialog, setShowUsedCardsDialog] = useState(true);
+  const [showUsedCardsDialog, setShowUsedCardsDialog] = useState(false);
   const [discardCards, setDiscardCards] = useState([] as GameCard[]);
 
   const handleAction = (actionName: string, hideHand: boolean = false) => {

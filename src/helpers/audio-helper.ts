@@ -7,6 +7,7 @@ import stepSound from '../assets/audio/step.mp3';
 import basicHitSound from '../assets/audio/basic-hit.mp3';
 import daggerThrowSound from '../assets/audio/dagger-throw.mp3';
 import buffSound from '../assets/audio/buff.mp3';
+import magicAttack from '../assets/audio/magic-attack.mp3';
 
 const playSound = (soundFile: string) => {
     const audio = new Audio(soundFile);
@@ -35,14 +36,17 @@ export const playSoundByPlayerActionName = (actionName: string) => {
 
 export const playSoundByCardActionName = (actionType: ActionType) => {
     switch (actionType) {
-        case ActionType.Attack:
+        case ActionType.Melee:
             playSound(basicHitSound);
             break;
-        case ActionType.Movement:
-            playSound(stepSound);
+        case ActionType.Magic:
+            playSound(magicAttack);
             break;
         case ActionType.Ranged:
             playSound(daggerThrowSound);
+            break;
+        case ActionType.Movement:
+            playSound(stepSound);
             break;
         case ActionType.Buff:
             playSound(buffSound);

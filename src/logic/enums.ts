@@ -12,9 +12,9 @@ export enum Stats {
 
 export enum ActionType {
     Movement = 'Movement',
-    Attack = 'Attack',
-    Ranged = 'Ranged',
-    Magic = 'Magic',
+    Melee = 'Melee Attack',
+    Ranged = 'Ranged Attack',
+    Magic = 'Magic Attack',
     Buff = 'Buff'
 };
 
