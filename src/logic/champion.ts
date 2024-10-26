@@ -28,8 +28,6 @@ const applyDamage = (sourceChampion: ChampionCard, actionCard: ActionCard, targe
         const mitigation = isMagicDmg ? target.mental : target.armor;
         const dmg = calDamage - mitigation;
 
-        if (dmg === 0) return;
-
         let mitigationReduction = 0;
 
         if (dmg > 0) {
@@ -92,13 +90,6 @@ const moveChampion = (board: (GameCard | null)[][], entityToMove: ChampionCard, 
 
     const distance = calculateDistance(sourceLocation, targetLocation);
     if (distance > actionCard.distance[1]) return { status: 'Location to far', targetedCard: null };
-
-    const championDirection = getChampionDirection(sourceLocation, targetLocation);
-
-    if (championDirection === null)
-        return { status: 'Could not find movement direction', targetedCard: null };
-
-    entityToMove.direction = championDirection;
 
     board[targetLocation.rowIndex][targetLocation.columnIndex] = entityToMove;
     board[sourceLocation.rowIndex][sourceLocation.columnIndex] = null;
@@ -347,7 +338,7 @@ const getLastPlayedActionGuid = (player: Player): PlayerActionLogRecord => {
 }
 
 const successfulAttackGameUpdate = (game: Game, player: Player, sourceChampion: ChampionCard, actionCard: ActionCard,
-    isAttachedAction: boolean, result: ChampionActionResult) => {
+    isAttachedAction: boolean, result: ChampionActionResult, sourceLocation: BoardLocation, targetLocation: BoardLocation) => {
 
     if (!actionCard.wasPlayed) actionCard.wasPlayed = true;
 
@@ -368,6 +359,13 @@ const successfulAttackGameUpdate = (game: Game, player: Player, sourceChampion: 
         game.loser = loosingPlayer;
         game.status = GameStatus.over;
     }
+
+    const championDirection = getChampionDirection(sourceLocation, targetLocation);
+
+    if (championDirection === null)
+        return { status: 'Could not find movement direction', targetedCard: null };
+
+    sourceChampion.direction = championDirection;
 
     player.actionsLog.push({ name: actionCard.name, guid: actionCard.guid });
 }
@@ -445,7 +443,7 @@ export const championAction = (game: Game, actionCardData: ActionCard, sourceLoc
     const player = getPlayer(game);
 
     if (result.status === 'success')
-        successfulAttackGameUpdate(game, player, sourceChampion, actionCard, isAttachedAction, result);
+        successfulAttackGameUpdate(game, player, sourceChampion, actionCard, isAttachedAction, result, sourceLocation, targetLocation);
 
     return result.status;
 }
