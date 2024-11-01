@@ -21,7 +21,7 @@ export const cardsList = cardsListJson.flatMap(x => {
             case CardType.ChampionCard:
                 newCardsArray.push({
                     guid: createGuid(), name: x.name, image: getImage(x.name), playerIndex: 0,
-                    isBlocking: x.isBlocking ?? false, hp: x.hp, currentHp: 2,
+                    isBlocking: x.isBlocking ?? false, hp: x.hp, currentHp: x.hp,
                     armor: x.str, str: x.str, calStr: x.str,
                     dex: x.dex, calDex: x.dex,
                     int: x.int, calInt: x.int, mental: x.int,
@@ -110,17 +110,17 @@ export interface Game {
     status: GameStatus;
 };
 
-const mockChamp = cardsList[0] as ChampionCard;
-const mockSword = cardsList[60] as GearCard;
-const mockDagger = cardsList[63] as GearCard;
-mockChamp.playerIndex = 1;
+// const mockChamp = cardsList[0] as ChampionCard;
+// const mockSword = cardsList[60] as GearCard;
+// const mockDagger = cardsList[63] as GearCard;
+// mockChamp.playerIndex = 1;
 
 export const createGame = (): Game => {
 
     const board = new Array(new Array<GameCard | null>(7))
 
     for (let index = 0; index < 13; index++) {
-        if (index === 12) board[index] = [null, null, mockChamp, mockCrystalOne, null, null, null, null];
+        if (index === 12) board[index] = [null, null, null, mockCrystalOne, null, null, null, null];
         else if (index === 0) board[index] = [null, null, null, mockCrystalTwo, null, null, null, null];
         else board[index] = [null, null, null, null, null, null, null, null];
     }

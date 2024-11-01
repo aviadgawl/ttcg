@@ -57,8 +57,9 @@ import ArcanePower from '../assets/images/ArcanePower.png';
 import DexterityBlessing from '../assets/images/DexterityBlessing.png';
 import StrengthBlessing from '../assets/images/StrengthBlessing.png';
 import IntelligenceBlessing from '../assets/images/IntelligenceBlessing.png';
-import SelfHeal from '../assets/images/SelfHeal.png';
 import FireBall from '../assets/images/FireBall.png';
+import SelfHeal from '../assets/images/SelfHeal.png';
+import Heal from '../assets/images/Heal.png';
 // Orders
 import GiveMeMore from '../assets/images/GiveMeMore.png';
 import Regroup from '../assets/images/Regroup.png';
@@ -191,6 +192,8 @@ export const getImage = (id: string): string => {
             return FireBall;
         case 'Self Heal':
             return SelfHeal;
+        case 'Heal':
+            return Heal;
         // Orders
         case 'Give Me More!':
             return GiveMeMore;

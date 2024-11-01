@@ -600,7 +600,7 @@
     },
     {
         "type": "ActionCard",
-        "actionType": "Attack",
+        "actionType": "Melee",
         "name": "Dagger Slash",
         "distance": [
             1,
@@ -616,7 +616,7 @@
     },
     {
         "type": "ActionCard",
-        "actionType": "Attack",
+        "actionType": "Melee",
         "name": "Sword Slash",
         "distance": [
             1,
@@ -632,7 +632,7 @@
     },
     {
         "type": "ActionCard",
-        "actionType": "Attack",
+        "actionType": "Melee",
         "name": "Axe Slash",
         "distance": [
             1,
@@ -648,7 +648,7 @@
     },
     {
         "type": "ActionCard",
-        "actionType": "Attack",
+        "actionType": "Melee",
         "name": "Mighty Blow",
         "duration": 0,
         "distance": [
@@ -693,7 +693,7 @@
     },
     {
         "type": "ActionCard",
-        "actionType": "Attack",
+        "actionType": "Melee",
         "name": "Basic Hit",
         "distance": [
             1,
@@ -871,7 +871,7 @@
     },
     {
         "type": "ActionCard",
-        "actionType": "Attack",
+        "actionType": "Melee",
         "name": "Axe Swipe",
         "duration": 0,
         "distance": [
@@ -892,7 +892,7 @@
     },
     {
         "type": "ActionCard",
-        "actionType": "Attack",
+        "actionType": "Melee",
         "name": "Sword Swipe",
         "duration": 0,
         "distance": [
@@ -978,7 +978,7 @@
         "name": "Dexterity Blessing",
         "distance": [
             1,
-            2
+            3
         ],
         "direction": "Straight",
         "isFreeTargeting": true,
@@ -1000,7 +1000,7 @@
         "name": "Strength Blessing",
         "distance": [
             1,
-            2
+            3
         ],
         "direction": "Straight",
         "requiredStat": "Int",
@@ -1022,7 +1022,7 @@
         "name": "Intelligence Blessing",
         "distance": [
             1,
-            2
+            3
         ],
         "direction": "Straight",
         "requiredStat": "Int",
@@ -1074,6 +1074,23 @@
         "isHeal": true,
         "requiredStat": "Int",
         "requiredStatValue": 2,
+        "targetEffects": []
+    },
+    {
+        "type": "ActionCard",
+        "actionType": "Buff",
+        "name": "Heal",
+        "distance": [
+            1,
+            4
+        ],
+        "direction": "Straight",
+        "dmgStat": "Int",
+        "isHeal": true,
+        "requiredStat": "Int",
+        "requiredStatValue": 2,
+        "requiredClassName": "Acolyte",
+        "isFreeTargeting": true,
         "targetEffects": []
     }
 ]
