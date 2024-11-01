@@ -403,6 +403,13 @@ const successfulAttackGameUpdate = (game: Game, player: Player, sourceChampion: 
     player.actionsLog.push({ name: actionCard.name, guid: actionCard.guid });
 }
 
+export const calculateAndUpdateRepeatableActions = (actionCards: ActionCard[], championCard: ChampionCard) => {
+    actionCards.forEach(actionCard => {
+        if (actionCard.isRepeatable && !actionCard.wasPlayed)
+            setRepeatableActionActivations(actionCard, championCard);
+    });
+}
+
 export const getPlayer = (game: Game): Player => {
     return game.players[game.playerIndex];
 }
@@ -495,6 +502,9 @@ export const calculateStats = (champion: ChampionCard) => {
     const hpDiff = newCalHp - champion.calHp;
     champion.calHp = newCalHp;
     champion.currentHp += hpDiff;
+
+    calculateAndUpdateRepeatableActions(champion.attachedActionsCards, champion);
+    calculateAndUpdateRepeatableActions(champion.learnedActionsCards, champion);
 }
 
 export const getChampionsActionsAllowedBoardLocations = (game: Game, actionCard: ActionCard, sourceBoardLocation: BoardLocation | null): AllowedBoardLocationResponse => {

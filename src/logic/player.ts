@@ -308,6 +308,17 @@ const canSummon = (player: Player, game: Game, targetLocation: BoardLocation): V
     return { isValid: true, message: '' };
 }
 
+const setChampionLearnedActions = (game: Game, championCard: ChampionCard) => {
+    championCard.learnedActions.forEach(action => {
+        const actionCard = getAndRemoveActionCard(game, action);
+
+        if (actionCard !== null) {
+            setRepeatableActionActivations(actionCard, championCard);
+            championCard.learnedActionsCards.push(actionCard);
+        }
+    });
+}
+
 const summon = (game: Game, selectedCard: ChampionCard, targetLocation: BoardLocation | undefined): string => {
     if (targetLocation === undefined) return 'targetLocation can not be undefined';
 
@@ -325,14 +336,7 @@ const summon = (game: Game, selectedCard: ChampionCard, targetLocation: BoardLoc
 
     if (selectedCard.learnedActions.length !== 2) return 'Champion can have no less or more than two learned actions';
 
-    selectedCard.learnedActions.forEach(action => {
-        const actionCard = getAndRemoveActionCard(game, action);
-
-        if (actionCard !== null) {
-            setRepeatableActionActivations(actionCard, selectedCard);
-            selectedCard.learnedActionsCards.push(actionCard);
-        }
-    });
+    setChampionLearnedActions(game, selectedCard);
 
     return 'success';
 }
@@ -507,7 +511,7 @@ const updateChampionStatusEffects = (championCard: ChampionCard) => {
     championCard.statusEffects = updatedStatusEffects;
 }
 
-const updateLearnedActions = (championCard: ChampionCard) => {
+const refreshLearnedActions = (championCard: ChampionCard) => {
     championCard.learnedActionsCards.forEach(learnedActionCard => {
         setRepeatableActionActivations(learnedActionCard, championCard);
         learnedActionCard.wasPlayed = false;
@@ -525,7 +529,7 @@ const refreshResources = (game: Game, nextPlayerIndex: number) => {
 
             boardPanel.stm = 2;
 
-            updateLearnedActions(boardPanel);
+            refreshLearnedActions(boardPanel);
             updateChampionStatusEffects(boardPanel);
 
             if (boardPanel.calHp <= 0)
