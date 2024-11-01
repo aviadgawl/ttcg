@@ -21,7 +21,7 @@ export const cardsList = cardsListJson.flatMap(x => {
             case CardType.ChampionCard:
                 newCardsArray.push({
                     guid: createGuid(), name: x.name, image: getImage(x.name), playerIndex: 0,
-                    isBlocking: x.isBlocking ?? false, hp: x.hp, currentHp: x.hp,
+                    isBlocking: x.isBlocking ?? false, hp: x.hp, currentHp: 2,
                     armor: x.str, str: x.str, calStr: x.str,
                     dex: x.dex, calDex: x.dex,
                     int: x.int, calInt: x.int, mental: x.int,
@@ -77,7 +77,8 @@ export const cardsList = cardsListJson.flatMap(x => {
                     repeatableStat: x.repeatableStat === null ? null : Stats[(x.repeatableStat) as keyof typeof Stats],
                     repeatableActivationLeft: null,
                     wasPlayed: false,
-                    hitAreas: x.hitAreas ?? null
+                    hitAreas: x.hitAreas ?? null,
+                    isHeal: x.isHeal ?? false
                 } as ActionCard);
                 break;
             case CardType.OrderCard:

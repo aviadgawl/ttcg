@@ -11,6 +11,5 @@ npx generate-react-cli component MyComponent
 
 # bugs
 Jump Step don't jump over obstacle
-Ultimate defense - need to change to damage immunity
 Need to add auto end turn for bot
 Need to test fire ball card - burn status effect

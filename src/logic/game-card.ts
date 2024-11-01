@@ -104,7 +104,8 @@ export interface ActionCard extends GameCard {
     repeatableStat: Stats | null;
     repeatableActivationLeft: number | null;
     wasPlayed: boolean;
-    hitAreas: { [key: number]: HitArea }
+    hitAreas: { [key: number]: HitArea };
+    isHeal: boolean;
 }
 
 export interface ClassCard extends GameCard {

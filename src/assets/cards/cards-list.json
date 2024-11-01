@@ -678,7 +678,7 @@
         "isFreeTargeting": true,
         "targetEffects": [
             {
-                "name": "PhysicalImmunity",
+                "name": "DamageImmunity",
                 "duration": 2,
                 "stat": null,
                 "value": null
@@ -925,7 +925,7 @@
         "isFreeTargeting": true,
         "targetEffects": [
             {
-                "name": "PhysicalImmunity",
+                "name": "MeleeImmunity",
                 "duration": 2,
                 "stat": null,
                 "value": null
@@ -1018,6 +1018,28 @@
     },
     {
         "type": "ActionCard",
+        "actionType": "Buff",
+        "name": "Intelligence Blessing",
+        "distance": [
+            1,
+            2
+        ],
+        "direction": "Straight",
+        "requiredStat": "Int",
+        "requiredStatValue": 2,
+        "requiredClassName": "Acolyte",
+        "isFreeTargeting": true,
+        "targetEffects": [
+            {
+                "name": "IntBoost",
+                "duration": 2,
+                "stat": "Int",
+                "value": 2
+            }
+        ]
+    },
+    {
+        "type": "ActionCard",
         "actionType": "Magic",
         "name": "Fire Ball",
         "distance": [
@@ -1037,5 +1059,21 @@
                 "value": 1
             }
         ]
+    },
+    {
+        "type": "ActionCard",
+        "actionType": "Buff",
+        "name": "Self Heal",
+        "distance": [
+            0,
+            0
+        ],
+        "direction": "Straight",
+        "dmgStat": "Int",
+        "isFreeTargeting": true,
+        "isHeal": true,
+        "requiredStat": "Int",
+        "requiredStatValue": 2,
+        "targetEffects": []
     }
 ]

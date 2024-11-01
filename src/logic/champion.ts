@@ -17,6 +17,27 @@ const checkValidTarget = (target: GameCard): boolean => {
     return isChampion(target) || isCrystal(target);
 }
 
+const applyHeal = (sourceChampion: ChampionCard, actionCard: ActionCard, target: SummoningCard) => {
+    const baseDmg = getChampionStatValueByStat(sourceChampion, actionCard.dmgStat);
+    const amountToHeal = calculateDamageWithModifier(baseDmg, actionCard);
+
+    if (amountToHeal === 0) return;
+
+    if (isChampion(target)) {
+        const missingHp = target.calHp - target.currentHp;
+
+        if (missingHp === 0)
+            return;
+
+        if (missingHp > amountToHeal) {
+            target.currentHp += amountToHeal;
+            return;
+        }
+
+        target.currentHp = target.calHp;
+    };
+};
+
 const applyDamage = (sourceChampion: ChampionCard, actionCard: ActionCard, target: SummoningCard) => {
     const baseDmg = getChampionStatValueByStat(sourceChampion, actionCard.dmgStat);
     const calDamage = calculateDamageWithModifier(baseDmg, actionCard);
@@ -160,8 +181,16 @@ const attack = (game: Game, attackingChampion: ChampionCard,
     const validTarget = checkValidTarget(target);
     if (!validTarget) return { status: 'Target is not a champion or crystal', targetedCard: target };
 
-    if (isChampion(target) && target.statusEffects.some(effect => effect.name === EffectStatus.PhysicalImmunity))
-        return { status: 'Target is immune to physical damage', targetedCard: target };
+    if (isChampion(target)) {
+        if (target.statusEffects.some(effect => effect.name === EffectStatus.DamageImmunity))
+            return { status: 'Target is immune to damage', targetedCard: target };
+
+        if (actionCard.dmgStat === Stats.Str && target.statusEffects.some(effect => effect.name === EffectStatus.MeleeImmunity))
+            return { status: 'Target is immune to melee damage', targetedCard: target };
+
+        if (actionCard.dmgStat === Stats.Int && target.statusEffects.some(effect => effect.name === EffectStatus.MagicalImmunity))
+            return { status: 'Target is immune to magical damage', targetedCard: target };
+    }
 
     const allowedLocation = getBoardLocationInStraightPath(game.board, sourceLocation, actionCard);
 
@@ -171,8 +200,12 @@ const attack = (game: Game, attackingChampion: ChampionCard,
             targetedCard: target
         };
 
-    if (actionCard.dmgStat !== null)
-        applyDamage(attackingChampion, actionCard, target);
+    if (actionCard.dmgStat !== null) {
+        if (actionCard.isHeal)
+            applyHeal(attackingChampion, actionCard, target);
+        else
+            applyDamage(attackingChampion, actionCard, target);
+    }
 
     if (actionCard.targetEffects.length > 0 && isChampion(target)) {
         applyTargetEffects(actionCard.targetEffects, target);
