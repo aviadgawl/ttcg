@@ -467,7 +467,6 @@ const removeCardFromDeck = (game: Game, cardsList: GameCard[], selectedCard: Gam
     const deletedCards = removeCard(player.deck, selectedCard);
 
     if (deletedCards === null) return 'Error removing card from deck';
-    cardsList.push(selectedCard);
 
     return 'success';
 }
@@ -621,6 +620,22 @@ const isValidForAttach = (championCard: ChampionCard, actionCard: ActionCard): V
     return { message: 'success', isValid: true };
 }
 
+const setStartingChampion = (player: Player, championCard: ChampionCard): string => {
+    if(player.startingChampion?.name === championCard.name) return 'Same card is already set';
+    
+    if(player.startingChampion) {
+        player.deck.push(player.startingChampion);
+    }
+
+    player.startingChampion = championCard;
+
+    const removedCard = removeCard(player.deck, championCard);
+
+    if(removedCard === null) return `Set starting champion card name: ${championCard.name} is not in deck`;
+
+    return 'success';
+}
+
 export const checkCardType = (card: GameCard, cardType: CardType) => {
     switch (cardType) {
         case CardType.OrderCard:
@@ -647,6 +662,9 @@ export const playerAction = (action: string | null, cardsList: GameCard[], game:
     let result: string;
 
     switch (action) {
+        case PlayerActionsName.SetStartingChampion:
+            result = setStartingChampion(player, data.selectedCard as ChampionCard);
+            break;
         case PlayerActionsName.TurnDraw:
             result = turnDraw(player);
             break;

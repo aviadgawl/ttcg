@@ -118,10 +118,6 @@ const gameSlice = createSlice({
         },
         resetSelectedData(state) {
             state.selectedActionData = initialState.selectedActionData;
-        },
-        setStartingChampion(state, action) {
-            const player = state.game.players[state.playerIndex];
-            player.startingChampion = action.payload;
         }
     }
 });
@@ -140,8 +136,7 @@ export const {
     setSelectedActionDataCardsToDraw,
     setGame,
     setCardsList,
-    resetSelectedData,
-    setStartingChampion
+    resetSelectedData
 } = gameSlice.actions;
 
 export type AppDispatch = typeof store.dispatch;

@@ -46,7 +46,8 @@ export enum PlayerActionsName {
     Attach = 'Attach',
     PlayOrder = 'Play Order',
     ClearDeck = 'Clear Deck',
-    TurnDraw = 'Turn Draw'
+    TurnDraw = 'Turn Draw',
+    SetStartingChampion = 'Set Starting Champion'
 };
 
 export enum MathModifier {

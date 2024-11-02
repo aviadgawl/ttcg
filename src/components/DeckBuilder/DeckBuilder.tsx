@@ -6,7 +6,7 @@ import styles from './DeckBuilder.module.css';
 import { useAppSelector, usePlayerAction, useAppDispatch } from '../../redux/hooks';
 import { GameCard, ChampionCard, isChampion } from '../../logic/game-card';
 import CardsDisplay from '../CardsDisplay/CardsDisplay';
-import { SelectedData, setStartingChampion } from '../../redux/store';
+import { SelectedData } from '../../redux/store';
 
 const groupBy = <T, K extends keyof any>(arr: T[], key: (i: T) => K) =>
   arr.reduce((groups, item) => {
@@ -63,12 +63,9 @@ const DeckBuilder: FC = () => {
     playerAction(selectedData);
   }
 
-  const handleSelectingStartingChampion = (championCard: ChampionCard) => {
-    dispatch(setStartingChampion(championCard));
-  }
-
-  const unsetStartingChampion = () => {
-    dispatch(setStartingChampion(null));
+  const handleSelectingStartingChampion = (championCard: GameCard) => {
+    const selectedData = { card: championCard, actionName: PlayerActionsName.SetStartingChampion } as SelectedData;
+    playerAction(selectedData);
   }
 
   return <div className={styles.DeckBuilder}>
@@ -85,7 +82,6 @@ const DeckBuilder: FC = () => {
         <h3> Starting Champion </h3>
         {player.startingChampion && <>
           <HandCard mode={HandCardMode.DeckBuilding} card={player.startingChampion} />
-          <Button onClick={() => unsetStartingChampion()}>Remove</Button>
         </>}
         <h3> Deck </h3>
         {Object.keys(cardsInDeckGroupedByName).map(cardName =>
@@ -93,7 +89,7 @@ const DeckBuilder: FC = () => {
             <span>{cardsInDeckGroupedByName[cardName].length}</span>
             <HandCard mode={HandCardMode.DeckBuilding} card={cardsInDeckGroupedByName[cardName][0]} />
             <Button onClick={() => removeCardFromDeck(cardsInDeckGroupedByName[cardName][0])}>Remove</Button>
-            {isChampion(cardsInDeckGroupedByName[cardName][0]) &&
+            {isChampion(cardsInDeckGroupedByName[cardName][0]) && player.startingChampion?.name !== cardsInDeckGroupedByName[cardName][0].name &&
               <Button variant="outlined" size="small" onClick={() => handleSelectingStartingChampion(cardsInDeckGroupedByName[cardName][0] as ChampionCard)}>
                 Select
               </Button>}
