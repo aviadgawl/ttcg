@@ -43,7 +43,6 @@ export const createSelectedData = (card: GameCard | null,
 
 export const initialState = {
     game: createGame() as Game,
-    playerIndex: 0 as number,
     selectedActionData: {
         card: null,
         actionName: '',
