@@ -45,7 +45,8 @@ export enum PlayerActionsName {
     RemoveCardFromDeck = 'Remove Card From Deck',
     Attach = 'Attach',
     PlayOrder = 'Play Order',
-    ClearDeck = 'Clear Deck'
+    ClearDeck = 'Clear Deck',
+    TurnDraw = 'Turn Draw'
 };
 
 export enum MathModifier {

@@ -52,7 +52,7 @@ const GameJoinCreate: FC<GameJoinCreateProps> = () => {
       return;
     };
 
-    const newSelectedActionData = createSelectedData(null, PlayerActionsName.Draw, GameStoreActionTypes.PlayerAction);
+    const newSelectedActionData = createSelectedData(null, PlayerActionsName.InitialDraw, GameStoreActionTypes.PlayerAction);
     playerAction(newSelectedActionData, 5);
     joinGame(gameFromDb);
     gameUpdatesSubscriber(1);
@@ -66,14 +66,14 @@ const GameJoinCreate: FC<GameJoinCreateProps> = () => {
       return;
     };
 
-    const newSelectedActionData = createSelectedData(null, PlayerActionsName.Draw, GameStoreActionTypes.PlayerAction);
+    const newSelectedActionData = createSelectedData(null, PlayerActionsName.InitialDraw, GameStoreActionTypes.PlayerAction);
     playerAction(newSelectedActionData, 5);
     createGame(gameCode);
     gameUpdatesSubscriber(0);
   }
 
   const handleGameWithBot = async () => {
-    const newSelectedActionData = createSelectedData(null, PlayerActionsName.Draw, GameStoreActionTypes.PlayerAction);
+    const newSelectedActionData = createSelectedData(null, PlayerActionsName.InitialDraw, GameStoreActionTypes.PlayerAction);
     playerAction(newSelectedActionData, 5);
     createGame('Bot');
   }

@@ -26,6 +26,7 @@ export const playSoundByPlayerActionName = (actionName: string) => {
             playSound(summonSound);
             break;
         case PlayerActionsName.InitialDraw:
+        case PlayerActionsName.TurnDraw:
         case PlayerActionsName.Draw:
             playSound(drawSound);
             break;

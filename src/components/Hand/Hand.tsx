@@ -87,7 +87,7 @@ const Hand: FC = () => {
       <div className={styles.CardContainer}>
         <div className={styles.ButtonsContainer}>
           <h3 onClick={() => setShowUsedCardsDialog(true)}> Used Cards: {player.usedCards.length}</h3>
-          <Button disabled={playerIndex !== playingPlayerIndex || player.didDraw} onClick={() => handleAction(PlayerActionsName.InitialDraw)} variant="outlined">Deck: {player.deck.length}</Button>
+          <Button disabled={playerIndex !== playingPlayerIndex || player.didDraw} onClick={() => handleAction(PlayerActionsName.TurnDraw)} variant="outlined">Deck: {player.deck.length}</Button>
           <Button disabled={playerIndex !== playingPlayerIndex} onClick={() => handleAction(PlayerActionsName.EndTurn, true)} variant="outlined">{PlayerActionsName.EndTurn}</Button>
           <Button disabled={playerIndex !== playingPlayerIndex} onClick={() => handleAction(PlayerActionsName.Surrender)} variant="outlined">{PlayerActionsName.Surrender}</Button>
         </div>

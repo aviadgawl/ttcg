@@ -207,10 +207,21 @@ const playOrder = (game: Game, playedOrderCard: OrderCard, cardsPayment: GameCar
     return 'success';
 }
 
-const initialDraw = (player: Player): string => {
+const turnDraw = (player: Player): string => {
     if (player.didDraw) return 'Player already draw this turn';
 
     const result = drawFrom(player.deck, player.hand, 1, null, null, null);
+
+    if (result === 'success') player.didDraw = true;
+
+    return result;
+}
+
+const initialDraw = (player: Player): string => {
+    if (player.startingChampion)
+        player.hand.push(player.startingChampion);
+
+    const result = drawFrom(player.deck, player.hand, 4, null, null, null);
 
     if (result === 'success') player.didDraw = true;
 
@@ -636,6 +647,9 @@ export const playerAction = (action: string | null, cardsList: GameCard[], game:
     let result: string;
 
     switch (action) {
+        case PlayerActionsName.TurnDraw:
+            result = turnDraw(player);
+            break;
         case PlayerActionsName.InitialDraw:
             result = initialDraw(player);
             break;
