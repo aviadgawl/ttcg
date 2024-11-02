@@ -93,11 +93,11 @@ const gameSlice = createSlice({
 
             if (allowedLocationsResult.message === 'success')
                 selectedData = { ...selectedData, ...{ allowedBoardLocations: allowedLocationsResult.locations } }
-            else console.log(allowedLocationsResult.message);
+            else alert(allowedLocationsResult.message);
 
             if (allowedHandCardSelectResult.message === 'success')
                 selectedData = { ...selectedData, ...{ allowedHandCardSelect: allowedHandCardSelectResult.handCards } }
-            else console.log(allowedHandCardSelectResult.message);
+            else alert(allowedHandCardSelectResult.message);
 
             state.selectedActionData = selectedData;
         },
@@ -118,6 +118,10 @@ const gameSlice = createSlice({
         },
         resetSelectedData(state) {
             state.selectedActionData = initialState.selectedActionData;
+        },
+        setStartingChampion(state, action) {
+            const player = state.game.players[state.playerIndex];
+            player.startingChampion = action.payload;
         }
     }
 });
@@ -136,7 +140,8 @@ export const {
     setSelectedActionDataCardsToDraw,
     setGame,
     setCardsList,
-    resetSelectedData
+    resetSelectedData,
+    setStartingChampion
 } = gameSlice.actions;
 
 export type AppDispatch = typeof store.dispatch;

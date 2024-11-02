@@ -14,4 +14,3 @@ Jump Step don't jump over obstacle
 Need to add auto end turn for bot
 Need to test fire ball card - burn status effect
 Add Starting champ
-Bug play step action while new gear was equipped

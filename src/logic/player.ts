@@ -32,21 +32,7 @@ export interface Player {
     summonsLeft: number;
     actionsLog: PlayerActionLogRecord[];
     effects: PlayerEffect[];
-}
-
-export const checkCardType = (card: GameCard, cardType: CardType) => {
-    switch (cardType) {
-        case CardType.OrderCard:
-            return isOrder(card);
-        case CardType.GearCard:
-            return isGear(card);
-        case CardType.ActionCard:
-            return isAction(card);
-        case CardType.ChampionCard:
-            return isChampion(card);
-        default:
-            return false
-    }
+    startingChampion: ChampionCard | null;
 }
 
 const isCardRequirementsValid = (orderCard: OrderCard, orderCardRequirements: OrderCardRequirement, card: GameCard): boolean => {
@@ -622,6 +608,21 @@ const isValidForAttach = (championCard: ChampionCard, actionCard: ActionCard): V
     }
 
     return { message: 'success', isValid: true };
+}
+
+export const checkCardType = (card: GameCard, cardType: CardType) => {
+    switch (cardType) {
+        case CardType.OrderCard:
+            return isOrder(card);
+        case CardType.GearCard:
+            return isGear(card);
+        case CardType.ActionCard:
+            return isAction(card);
+        case CardType.ChampionCard:
+            return isChampion(card);
+        default:
+            return false
+    }
 }
 
 export const playerAction = (action: string | null, cardsList: GameCard[], game: Game, data: any) => {

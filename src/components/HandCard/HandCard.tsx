@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { GameCard, isGear, isChampion, isClass, isAction, isOrder, OrderCard } from '../../logic/game-card';
+import { GameCard, isGear, isChampion, isClass, isAction, isOrder, OrderCard, ChampionCard } from '../../logic/game-card';
 import { PlayerActionsName, RewardType } from '../../logic/enums';
 import { useAppDispatch, usePlayerAction } from '../../redux/hooks';
 import { setSelectedActionData, setShowHand, createSelectedData, setShowCardsInDeck, createShowCardsInDeck } from '../../redux/store';
@@ -67,6 +67,8 @@ const HandCard: FC<CardProps> = (props) => {
 
     dispatch(setSelectedActionData(selectedData));
   }
+
+
 
   return <div>
     <GameCardDraw className="App-card" zoom={true} card={props.card} />
