@@ -25,27 +25,27 @@ const GameDetails: FC<GameDetailsProps> = () => {
       </thead>
       <tbody>
         <tr>
-          <td><img height={25} src={FighterIcon} /></td>
+          <td><img alt="Icon place" height={25} src={FighterIcon} /></td>
           <td>Fighter class</td>
         </tr>
         <tr>
-          <td><img height={25} src={PhysicalDamageImmunityIcon} /></td>
+          <td><img alt="Icon place" height={25} src={PhysicalDamageImmunityIcon} /></td>
           <td>Physical damage immunity icon</td>
         </tr>
         <tr>
-          <td><img height={25} src={BlockingIcon} /></td>
+          <td><img alt="Icon place" height={25} src={BlockingIcon} /></td>
           <td>Blocking</td>
         </tr>
         <tr>
-          <td><img height={25} src={BreakGearIcon} /></td>
+          <td><img alt="Icon place" height={25} src={BreakGearIcon} /></td>
           <td>Break random piece of gear</td>
         </tr>
         <tr>
-          <td><img height={25} src={SilenceIcon} /></td>
+          <td><img alt="Icon place" height={25} src={SilenceIcon} /></td>
           <td>Silenced - Champion can not use actions</td>
         </tr>
         <tr>
-          <td><img height={25} src={TimeBoundIcon} /></td>
+          <td><img alt="Icon place" height={25} src={TimeBoundIcon} /></td>
           <td>Time bound action</td>
         </tr>
       </tbody>
