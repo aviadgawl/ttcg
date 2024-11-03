@@ -1,5 +1,4 @@
 # firestore emulator on
-
 1) gcloud emulators firestore start --host-port=127.0.0.1:8080
 2) npm run start:emu
 
@@ -13,4 +12,3 @@ npx generate-react-cli component MyComponent
 Jump Step don't jump over obstacle
 Need to add auto end turn for bot
 Need to test fire ball card - burn status effect
-Add Starting champ
