@@ -3,7 +3,7 @@ import { PlayerActionsName } from '../../logic/enums';
 import HandCard, { HandCardMode } from '../HandCard/HandCard';
 import Button from '@mui/material/Button';
 import styles from './DeckBuilder.module.css';
-import { useAppSelector, usePlayerAction, useAppDispatch } from '../../redux/hooks';
+import { useAppSelector, usePlayerAction } from '../../redux/hooks';
 import { GameCard, ChampionCard, isChampion } from '../../logic/game-card';
 import CardsDisplay from '../CardsDisplay/CardsDisplay';
 import { SelectedData } from '../../redux/store';
@@ -19,7 +19,6 @@ const DeckBuilder: FC = () => {
     const playerIndex = state.gameActions.game.playerIndex;
     return state.gameActions.game.players[playerIndex];
   });
-  const dispatch = useAppDispatch();
   const cardsList = useAppSelector((state) => state.gameActions.cardsList);
   const playerAction = usePlayerAction();
 
