@@ -464,9 +464,11 @@ const removeCardFromDeck = (game: Game, cardsList: GameCard[], selectedCard: Gam
     if (selectedCard === null) return 'Card can not be null';
 
     const player = getPlayer(game);
-    const deletedCards = removeCard(player.deck, selectedCard);
+    const removedCards = removeCard(player.deck, selectedCard);
 
-    if (deletedCards === null) return 'Error removing card from deck';
+    if (removedCards === null) return 'Error removing card from deck';
+
+    cardsList.push(...removedCards)
 
     return 'success';
 }
@@ -621,9 +623,9 @@ const isValidForAttach = (championCard: ChampionCard, actionCard: ActionCard): V
 }
 
 const setStartingChampion = (player: Player, championCard: ChampionCard): string => {
-    if(player.startingChampion?.name === championCard.name) return 'Same card is already set';
-    
-    if(player.startingChampion) {
+    if (player.startingChampion?.name === championCard.name) return 'Same card is already set';
+
+    if (player.startingChampion) {
         player.deck.push(player.startingChampion);
     }
 
@@ -631,7 +633,7 @@ const setStartingChampion = (player: Player, championCard: ChampionCard): string
 
     const removedCard = removeCard(player.deck, championCard);
 
-    if(removedCard === null) return `Set starting champion card name: ${championCard.name} is not in deck`;
+    if (removedCard === null) return `Set starting champion card name: ${championCard.name} is not in deck`;
 
     return 'success';
 }
@@ -732,5 +734,20 @@ export const getPlayerActionsAllowedBoardLocations = (game: Game, actionName: st
             return getValidChampionsBoardLocations(game, selectedCard, isValidForAttach);
         default:
             return { message: `Player allowed board locations ${actionName} is not implemented yet`, locations: [] };
+    }
+}
+
+export const shouldUpdateMultiplayerGame = (playerAction: PlayerActionsName) => {
+    switch (playerAction) {
+        case PlayerActionsName.Surrender:
+        case PlayerActionsName.Summon:
+        case PlayerActionsName.EndTurn:
+        case PlayerActionsName.Equip:
+        case PlayerActionsName.Upgrade:
+        case PlayerActionsName.Attach:
+        case PlayerActionsName.PlayOrder:
+        return true;
+        default:
+            return false
     }
 }

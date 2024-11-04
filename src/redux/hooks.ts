@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { TypedUseSelectorHook, useDispatch, useSelector, useStore } from 'react-redux';
 import { RootState, AppDispatch, SelectedData, setGame, resetSelectedData, setCardsList } from './store';
 import { playSoundByPlayerActionName, playSoundByCardActionName } from '../helpers/audio-helper';
-import { playerAction } from '../logic/player';
+import { playerAction, shouldUpdateMultiplayerGame } from '../logic/player';
 import { championAction } from '../logic/champion';
 import { updateGameAsync, addGameAsync } from '../firebase/firebase';
 import { BoardLocation, isAction, ActionCard } from '../logic/game-card';
@@ -32,7 +32,8 @@ export const usePlayerAction = () => {
         else {
             playSoundByPlayerActionName(actionName);
             dispatch(resetSelectedData());
-            if (gameToUpdate.code !== 'Bot' && gameToUpdate.code !== '')
+            const shouldUBroadcastUpdate = shouldUpdateMultiplayerGame(actionName);
+            if (gameToUpdate.code !== 'Bot' && gameToUpdate.code !== '' && shouldUBroadcastUpdate)
                 updateGameAsync(gameToUpdate).catch(console.error);
         }
 
