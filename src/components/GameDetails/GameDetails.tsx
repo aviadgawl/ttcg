@@ -1,16 +1,11 @@
 import { FC } from 'react';
 import { useAppSelector } from '../../redux/hooks';
-import FighterIcon from '../../assets/images/FighterIcon.png';
-import PhysicalDamageImmunityIcon from '../../assets/images/PhysicalDamageImmunityIcon.png';
-import BlockingIcon from '../../assets/images/BlockingIcon.png';
-import BreakGearIcon from '../../assets/images/BreakGearIcon.png';
-import SilenceIcon from '../../assets/images/SilenceIcon.png';
-import TimeBoundIcon from '../../assets/images/TimeBoundIcon.png';
+import iconsList from './IconsList';
 import styles from './GameDetails.module.css';
 
-interface GameDetailsProps { }
+const iconHeight = 25;
 
-const GameDetails: FC<GameDetailsProps> = () => {
+const GameDetails: FC = () => {
   const playingPlayer = useAppSelector((state) => state.gameActions.game.playingPlayerIndex);
   const playerIndex = useAppSelector((state) => state.gameActions.game.playerIndex);
 
@@ -19,35 +14,15 @@ const GameDetails: FC<GameDetailsProps> = () => {
     <table>
       <thead>
         <tr>
-          <th>Name</th>
+          <th>Icon</th>
           <th>Description</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td><img alt="Icon place" height={25} src={FighterIcon} /></td>
-          <td>Fighter class</td>
-        </tr>
-        <tr>
-          <td><img alt="Icon place" height={25} src={PhysicalDamageImmunityIcon} /></td>
-          <td>Physical damage immunity icon</td>
-        </tr>
-        <tr>
-          <td><img alt="Icon place" height={25} src={BlockingIcon} /></td>
-          <td>Blocking</td>
-        </tr>
-        <tr>
-          <td><img alt="Icon place" height={25} src={BreakGearIcon} /></td>
-          <td>Break random piece of gear</td>
-        </tr>
-        <tr>
-          <td><img alt="Icon place" height={25} src={SilenceIcon} /></td>
-          <td>Silenced - Champion can not use actions</td>
-        </tr>
-        <tr>
-          <td><img alt="Icon place" height={25} src={TimeBoundIcon} /></td>
-          <td>Time bound action</td>
-        </tr>
+        {iconsList.map(item => <tr>
+          <td><img alt="Icon place" height={iconHeight} src={item.icon} /></td>
+          <td>{item.description}</td>
+        </tr>)}
       </tbody>
     </table>
   </div>
