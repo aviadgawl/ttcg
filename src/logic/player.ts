@@ -425,6 +425,9 @@ const addCardToDeck = (game: Game, cardsList: GameCard[], selectedCard: GameCard
     if (player.deck.filter(card => card.name === selectedCard.name).length === 3)
         return `Can not add more copies of ${selectedCard.name}`;
 
+    if(isChampion(selectedCard) && player.deck.filter(card => isChampion(card)).length === 9)
+        return 'Can not add more champions';
+
     const deletedCards = removeCard(cardsList, selectedCard);
     if (deletedCards === null) return 'Error removing card from cards list';
 
