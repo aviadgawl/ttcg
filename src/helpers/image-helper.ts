@@ -195,7 +195,7 @@ export const getImage = (id: string): string => {
             return SelfHeal;
         case 'Heal':
             return Heal;
-        case 'PetrifiedHex':
+        case 'Petrified Hex':
             return PetrifiedHex;
         // Orders
         case 'Give Me More!':
