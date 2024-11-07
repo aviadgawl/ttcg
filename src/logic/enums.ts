@@ -59,6 +59,7 @@ export enum EffectStatus {
     Burn = 'Burn',
     Poison = 'Poison',
     Immobilize = 'Immobilize',
+    Paralyze = 'Paralyze',
     MeleeImmunity = 'Melee Immunity',
     MagicalImmunity = 'Magical Immunity',
     DamageImmunity = 'Damage Immunity',

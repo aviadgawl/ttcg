@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/ttcg/static/css/main.2c61059e.css",
-    "main.js": "/ttcg/static/js/main.5c908cdf.js",
+    "main.js": "/ttcg/static/js/main.1f5bc694.js",
     "static/media/WarMage.png": "/ttcg/static/media/WarMage.136ac08424c054ae9e45.png",
     "static/media/RefreshMe.png": "/ttcg/static/media/RefreshMe.d1ab3397d77d9648e5fb.png",
     "static/media/Enrage.png": "/ttcg/static/media/Enrage.49813f73dd134e405b2d.png",
@@ -11,6 +11,7 @@
     "static/media/CripplingShot.png": "/ttcg/static/media/CripplingShot.76166d652509c4b6e997.png",
     "static/media/IntelligenceBlessing.png": "/ttcg/static/media/IntelligenceBlessing.4c903fe9bdec7e75ba6f.png",
     "static/media/HighMage.png": "/ttcg/static/media/HighMage.a587f9e33982fd64bbf8.png",
+    "static/media/PetrifiedHex.png": "/ttcg/static/media/PetrifiedHex.80d12f48fd4603943c86.png",
     "static/media/FindHim.png": "/ttcg/static/media/FindHim.608ec1e5669f65c2a650.png",
     "static/media/BattlePriest.png": "/ttcg/static/media/BattlePriest.8544a4908fca75132e4b.png",
     "static/media/UltimateDefense.png": "/ttcg/static/media/UltimateDefense.b3b8d45cedcbd411d18a.png",
@@ -82,10 +83,10 @@
     "static/media/draw.mp3": "/ttcg/static/media/draw.ceb460e6016f04e97598.mp3",
     "index.html": "/ttcg/index.html",
     "main.2c61059e.css.map": "/ttcg/static/css/main.2c61059e.css.map",
-    "main.5c908cdf.js.map": "/ttcg/static/js/main.5c908cdf.js.map"
+    "main.1f5bc694.js.map": "/ttcg/static/js/main.1f5bc694.js.map"
   },
   "entrypoints": [
     "static/css/main.2c61059e.css",
-    "static/js/main.5c908cdf.js"
+    "static/js/main.1f5bc694.js"
   ]
 }

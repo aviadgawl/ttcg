@@ -173,6 +173,9 @@ const attack = (game: Game, attackingChampion: ChampionCard,
 
     const target = game.board[targetLocation.rowIndex][targetLocation.columnIndex] as unknown as SummoningCard;;
 
+    if (attackingChampion.statusEffects.some(x => x.name === EffectStatus.Paralyze))
+        return { status: `Champion is under the effect of ${EffectStatus.Paralyze} and can not move or attack`, targetedCard: null };
+
     if (attackingChampion.statusEffects.some(x => x.name === EffectStatus.Silence))
         return { status: `Champion is under the effect of ${EffectStatus.Silence}`, targetedCard: null };
 
@@ -517,6 +520,9 @@ export const getChampionsActionsAllowedBoardLocations = (game: Game, actionCard:
     if (sourceChampion === null || !isChampion(sourceChampion))
         return { message: 'Champion was not found', locations: resultLocations };
 
+    if (sourceChampion.statusEffects.some(x => x.name === EffectStatus.Paralyze))
+        return { message: `Champion is under the effect of ${EffectStatus.Paralyze} and can not move or attack`, locations: resultLocations };
+
     const isMovementCard = actionCard.actionType === ActionType.Movement;
 
     if (isMovementCard) {
@@ -527,9 +533,6 @@ export const getChampionsActionsAllowedBoardLocations = (game: Game, actionCard:
         if (sourceChampion.statusEffects.some(x => x.name === EffectStatus.Silence))
             return { message: `Champion is under the effect of ${EffectStatus.Silence} and can not attack`, locations: resultLocations };
     }
-
-    if (isMovementCard && sourceChampion.statusEffects.some(x => x.name === EffectStatus.Immobilize))
-        return { message: `Champion is under the effect of ${EffectStatus.Immobilize} and can not move`, locations: resultLocations };
 
     switch (actionCard.direction) {
         case ActionDirections.Straight:

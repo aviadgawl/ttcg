@@ -60,6 +60,7 @@ import IntelligenceBlessing from '../assets/images/IntelligenceBlessing.png';
 import FireBall from '../assets/images/FireBall.png';
 import SelfHeal from '../assets/images/SelfHeal.png';
 import Heal from '../assets/images/Heal.png';
+import PetrifiedHex from '../assets/images/PetrifiedHex.png';
 // Orders
 import GiveMeMore from '../assets/images/GiveMeMore.png';
 import Regroup from '../assets/images/Regroup.png';
@@ -194,6 +195,8 @@ export const getImage = (id: string): string => {
             return SelfHeal;
         case 'Heal':
             return Heal;
+        case 'PetrifiedHex':
+            return PetrifiedHex;
         // Orders
         case 'Give Me More!':
             return GiveMeMore;
