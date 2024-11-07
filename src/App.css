@@ -20,3 +20,9 @@
   width: 200px;
   height: 280px;
 }
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

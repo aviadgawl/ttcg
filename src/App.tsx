@@ -25,7 +25,10 @@ function App() {
 
   return (
     <main className="App">
-      <GameTabs disabledTabIndex={disabledTabIndex} displayMode={currentDisplay} onModeClick={handleDisplaySelect} />
+      <header>
+        <GameTabs disabledTabIndex={disabledTabIndex} displayMode={currentDisplay} onModeClick={handleDisplaySelect} />
+        <div>0.1.0</div>
+      </header>
       <div className="App-content">
         {currentDisplay === 0 && <DeckBuilder />}
         {currentDisplay === 1 && <GameJoinCreate />}
