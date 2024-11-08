@@ -8,11 +8,6 @@ interface ChampionActionResult {
     targetedCard: SummoningCard | null
 }
 
-const checkRepeatableAction = (actionCard: ActionCard): boolean => {
-    if (!actionCard.isRepeatable || actionCard.repeatableActivationLeft === null) return false;
-    return actionCard.repeatableActivationLeft > 0;
-}
-
 const checkValidTarget = (target: GameCard): boolean => {
     return isChampion(target) || isCrystal(target);
 }
@@ -90,6 +85,31 @@ const removeChampionFromBoard = (game: Game, targetLocation: BoardLocation) => {
     const championCardToRemove = game.board[targetLocation.rowIndex][targetLocation.columnIndex];
 
     if (championCardToRemove === null) return;
+
+    if (!isChampion(championCardToRemove)) return;
+
+    if (championCardToRemove.body) {
+        game.players[championCardToRemove.playerIndex].usedCards.push(championCardToRemove);
+        championCardToRemove.body = null;
+    }
+
+    if (championCardToRemove.rightHand) {
+        game.players[championCardToRemove.playerIndex].usedCards.push(championCardToRemove);
+        championCardToRemove.rightHand = null;
+    }
+
+    if (championCardToRemove.leftHand) {
+        game.players[championCardToRemove.playerIndex].usedCards.push(championCardToRemove);
+        championCardToRemove.leftHand = null;
+    }
+
+    if (championCardToRemove.learnedActionsCards.length > 0) {
+        championCardToRemove.learnedActionsCards.forEach(card => game.players[championCardToRemove.playerIndex].usedCards.push(card))
+    }
+
+    if (championCardToRemove.attachedActionsCards.length > 0) {
+        championCardToRemove.attachedActionsCards.forEach(card => game.players[championCardToRemove.playerIndex].usedCards.push(card))
+    }
 
     game.players[championCardToRemove.playerIndex].usedCards.push(championCardToRemove);
 
@@ -383,7 +403,7 @@ const successfulAttackGameUpdate = (game: Game, player: Player, sourceChampion: 
 
     const lastPlayedActionRecord = getLastPlayedActionGuid(player);
 
-    const validRepeatable = checkRepeatableAction(actionCard);
+    const validRepeatable = checkRepeatableAction(player, actionCard);
 
     if (isAttachedAction && !validRepeatable)
         checkAndRemoveFromAttachedActions(game.players[game.playerIndex], sourceChampion, actionCard);
@@ -404,6 +424,14 @@ const successfulAttackGameUpdate = (game: Game, player: Player, sourceChampion: 
     sourceChampion.direction = championDirection;
 
     player.actionsLog.push({ name: actionCard.name, guid: actionCard.guid });
+}
+
+export const checkRepeatableAction = (player: Player, actionCard: ActionCard): boolean => {
+    if (!actionCard.isRepeatable || actionCard.repeatableActivationLeft === null) return false;
+
+    const lastActionPlayed = player.actionsLog.at(-1);
+
+    return actionCard.repeatableActivationLeft > 0 && (!actionCard.wasPlayed || lastActionPlayed?.guid === actionCard.guid);
 }
 
 export const calculateAndUpdateRepeatableActions = (actionCards: ActionCard[], championCard: ChampionCard) => {
@@ -454,9 +482,10 @@ export const championAction = (game: Game, actionCardData: ActionCard, sourceLoc
 
     if (actionCard === null) return `Action ${actionCardData.name} card was not found on champion`;
 
-    if (actionCard.isRepeatable) {
-        const validRepeatable = checkRepeatableAction(actionCard);
+    const player = getPlayer(game);
 
+    if (actionCard.isRepeatable) {
+        const validRepeatable = checkRepeatableAction(player, actionCard);
         if (!validRepeatable) return `Repeatable action depleted`;
     }
     else {
@@ -482,8 +511,6 @@ export const championAction = (game: Game, actionCardData: ActionCard, sourceLoc
             result = { status: `Action ${actionCard.actionType} is not implemented yet`, targetedCard: null };
             break;
     }
-
-    const player = getPlayer(game);
 
     if (result.status === 'success')
         successfulAttackGameUpdate(game, player, sourceChampion, actionCard, isAttachedAction, result, sourceLocation, targetLocation);

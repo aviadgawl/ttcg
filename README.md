@@ -15,3 +15,4 @@ npx generate-react-cli component MyComponent
 Jump Step don't jump over obstacle
 Need to add auto end turn for bot
 Need to test fire ball card - burn status effect
+Add firebase auth and turn on rules in firestore

@@ -19,7 +19,7 @@ const GameDetails: FC = () => {
         </tr>
       </thead>
       <tbody>
-        {iconsList.map(item => <tr>
+        {iconsList.map(item => <tr key={item.description}>
           <td><img alt="Icon place" height={iconHeight} src={item.icon} /></td>
           <td>{item.description}</td>
         </tr>)}

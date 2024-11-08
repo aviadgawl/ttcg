@@ -1,5 +1,6 @@
 import { FC, ReactElement, useState } from 'react';
 import { ActionCard, ChampionCard } from '../../logic/game-card';
+import { checkRepeatableAction } from '../../logic/champion';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { setSelectedActionData, createSelectedData } from '../../redux/store';
 import { GameStoreActionTypes } from '../../redux/types';
@@ -30,6 +31,7 @@ interface BoardChampionProps {
 const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
   const dispatch = useAppDispatch();
   const playerIndex = useAppSelector((state) => state.gameActions.game.playerIndex);
+  const player = useAppSelector((state) => state.gameActions.game.players[state.gameActions.game.playerIndex]);
   const playingPlayerIndex = useAppSelector((state) => state.gameActions.game.playingPlayerIndex);
   const [showDialog, setShowDialog] = useState(false);
   const showInfoButton = props?.champion?.body || props?.champion?.rightHand || props?.champion?.leftHand || props?.champion?.upgrade;
@@ -59,17 +61,17 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
     setAnchorEl(null);
   };
 
-  const isActionCardDisabled = (sourceChampion: ChampionCard, actionCard: ActionCard): boolean => {
-    if(props.champion.playerIndex !== playerIndex) return true;
-    
-    if(playerIndex !== playingPlayerIndex) return true;
+  const isActionCardDisabled = (sourceChampion: ChampionCard, actionCard: ActionCard, isAttached: boolean): boolean => {
+    if (props.champion.playerIndex !== playerIndex) return true;
 
-    if(actionCard.isRepeatable) {
-      if(actionCard.repeatableActivationLeft === null || actionCard.repeatableActivationLeft <= 0) return true;
+    if (playerIndex !== playingPlayerIndex) return true;
+
+    if (actionCard.isRepeatable) {
+      return !checkRepeatableAction(player, actionCard);
     }
     else {
-      if(actionCard.wasPlayed) return true;
-      if(sourceChampion.stm <= 0) return true;
+      if (actionCard.wasPlayed) return true;
+      if (!isAttached && sourceChampion.stm <= 0) return true;
     }
 
     return false;
@@ -102,12 +104,12 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
         <GameCardDraw className={styles.ChampionCardDraw} showChampionStats={true} card={props.champion}>
           <div className={styles.ChampionCardActions}>
             {props.champion.learnedActionsCards.map((card, actionIndex) =>
-              <Button disabled={isActionCardDisabled(props.champion, card)} size="small" variant="contained" className="App-button" key={actionIndex}
+              <Button disabled={isActionCardDisabled(props.champion, card, false)} size="small" variant="contained" className="App-button" key={actionIndex}
                 onClick={() => handleAction(card, false)}>{card.name} {card.isRepeatable && `(${card.repeatableActivationLeft})`}
               </Button>
             )}
             {props.champion.attachedActionsCards.map((card, actionIndex) =>
-              <Button size="small" variant="contained" className="App-button" key={actionIndex}
+              <Button disabled={isActionCardDisabled(props.champion, card, true)} size="small" variant="contained" className="App-button" key={actionIndex}
                 onClick={() => handleAction(card, true)}>{card.name} {card.isRepeatable && `(${card.repeatableActivationLeft})`}
               </Button>
             )}

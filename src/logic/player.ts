@@ -425,7 +425,7 @@ const addCardToDeck = (game: Game, cardsList: GameCard[], selectedCard: GameCard
     if (player.deck.filter(card => card.name === selectedCard.name).length === 3)
         return `Can not add more copies of ${selectedCard.name}`;
 
-    if(isChampion(selectedCard) && player.deck.filter(card => isChampion(card)).length === 9)
+    if (isChampion(selectedCard) && player.deck.filter(card => isChampion(card)).length === 9)
         return 'Can not add more champions';
 
     const deletedCards = removeCard(cardsList, selectedCard);
@@ -483,6 +483,11 @@ const clearDeck = (game: Game, cardsList: GameCard[]) => {
     deckCopy.forEach(card => {
         removeCardFromDeck(game, cardsList, card);
     });
+
+    if (player.startingChampion) {
+        cardsList.push(player.startingChampion);
+        player.startingChampion = null;
+    }
 
     return 'success';
 }
@@ -749,7 +754,7 @@ export const shouldUpdateMultiplayerGame = (playerAction: PlayerActionsName) => 
         case PlayerActionsName.Upgrade:
         case PlayerActionsName.Attach:
         case PlayerActionsName.PlayOrder:
-        return true;
+            return true;
         default:
             return false
     }
