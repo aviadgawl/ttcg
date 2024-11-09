@@ -89,27 +89,32 @@ const removeChampionFromBoard = (game: Game, targetLocation: BoardLocation) => {
     if (!isChampion(championCardToRemove)) return;
 
     if (championCardToRemove.body) {
-        game.players[championCardToRemove.playerIndex].usedCards.push(championCardToRemove);
+        game.players[championCardToRemove.playerIndex].usedCards.push(championCardToRemove.body);
         championCardToRemove.body = null;
     }
 
     if (championCardToRemove.rightHand) {
-        game.players[championCardToRemove.playerIndex].usedCards.push(championCardToRemove);
+        game.players[championCardToRemove.playerIndex].usedCards.push(championCardToRemove.rightHand);
         championCardToRemove.rightHand = null;
     }
 
     if (championCardToRemove.leftHand) {
-        game.players[championCardToRemove.playerIndex].usedCards.push(championCardToRemove);
+        game.players[championCardToRemove.playerIndex].usedCards.push(championCardToRemove.leftHand);
         championCardToRemove.leftHand = null;
     }
 
     if (championCardToRemove.learnedActionsCards.length > 0) {
-        championCardToRemove.learnedActionsCards.forEach(card => game.players[championCardToRemove.playerIndex].usedCards.push(card))
+        championCardToRemove.learnedActionsCards.forEach(card => game.players[championCardToRemove.playerIndex].usedCards.push(card));
+        championCardToRemove.learnedActionsCards = [];
     }
 
     if (championCardToRemove.attachedActionsCards.length > 0) {
-        championCardToRemove.attachedActionsCards.forEach(card => game.players[championCardToRemove.playerIndex].usedCards.push(card))
+        championCardToRemove.attachedActionsCards.forEach(card => game.players[championCardToRemove.playerIndex].usedCards.push(card));
+        championCardToRemove.attachedActionsCards = [];
     }
+
+    if (championCardToRemove.statusEffects.length > 0)
+        championCardToRemove.statusEffects = [];
 
     game.players[championCardToRemove.playerIndex].usedCards.push(championCardToRemove);
 

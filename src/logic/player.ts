@@ -740,6 +740,17 @@ export const getPlayerActionsAllowedBoardLocations = (game: Game, actionName: st
             return getValidChampionsBoardLocations(game, selectedCard, isValidForEquip);
         case PlayerActionsName.Attach:
             return getValidChampionsBoardLocations(game, selectedCard, isValidForAttach);
+        case PlayerActionsName.AddCardToDeck:
+        case PlayerActionsName.ClearDeck:
+        case PlayerActionsName.Draw:
+        case PlayerActionsName.InitialDraw:
+        case PlayerActionsName.PlayOrder:
+        case PlayerActionsName.RemoveCardFromDeck:
+        case PlayerActionsName.SetStartingChampion:
+        case PlayerActionsName.Surrender:
+        case PlayerActionsName.EndTurn:
+        case PlayerActionsName.TurnDraw:
+            return { message: 'success', locations: [] };
         default:
             return { message: `Player allowed board locations ${actionName} is not implemented yet`, locations: [] };
     }
