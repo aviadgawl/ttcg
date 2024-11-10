@@ -292,7 +292,7 @@ const surrender = (game: Game): string => {
     return 'success'
 };
 
-const canSummon = (player: Player, game: Game, targetLocation: BoardLocation): ValidationResult => {
+const canSummon = (player: Player, game: Game, targetLocation: BoardLocation, championToSummon: ChampionCard): ValidationResult => {
     if (player.summonsLeft === 0) return { message: 'Player used his all his summons', isValid: false };
 
     if ((game.playerIndex === 0 && targetLocation.rowIndex < 11) || (game.playerIndex === 1 && targetLocation.rowIndex > 2))
@@ -300,7 +300,19 @@ const canSummon = (player: Player, game: Game, targetLocation: BoardLocation): V
 
     const boardLocation = game.board[targetLocation.rowIndex][targetLocation.columnIndex];
 
-    if (boardLocation !== null) return { message: 'Location is not empty', isValid: false }
+    if (boardLocation !== null) return { message: 'Location is not empty', isValid: false };
+
+    const playerSummonedChampions :ChampionCard[] = [];
+
+    game.board.forEach( row => row.filter(boardPanel => (isChampion(boardPanel) && boardPanel.playerIndex === game.playerIndex)).forEach(championCard => {
+        playerSummonedChampions.push(championCard as ChampionCard);
+    }));
+
+    if (playerSummonedChampions.length >= 3) return { message: `Player ${player.name} has already 3 champions on board`, isValid: false };
+
+    const championWithSameName = playerSummonedChampions.some(championCard => championCard.name === championToSummon.name);
+
+    if (championWithSameName) return { message: `Champion named ${championToSummon.name} is already on board`, isValid: false };
 
     return { isValid: true, message: '' };
 }
@@ -321,7 +333,7 @@ const summon = (game: Game, selectedCard: ChampionCard, targetLocation: BoardLoc
 
     const player = getPlayer(game);
 
-    const validationResult = canSummon(player, game, targetLocation);
+    const validationResult = canSummon(player, game, targetLocation, selectedCard);
     if (!validationResult.isValid) return validationResult.message;
 
     game.board[targetLocation.rowIndex][targetLocation.columnIndex] = selectedCard;
@@ -538,6 +550,7 @@ const refreshResources = (game: Game, nextPlayerIndex: number) => {
             refreshLearnedActions(boardPanel);
             updateChampionStatusEffects(boardPanel);
 
+            // TODO: Need to use remove champ fucntion
             if (boardPanel.calHp <= 0)
                 boardPanel = null;
             else
