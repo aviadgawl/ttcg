@@ -302,9 +302,9 @@ const canSummon = (player: Player, game: Game, targetLocation: BoardLocation, ch
 
     if (boardLocation !== null) return { message: 'Location is not empty', isValid: false };
 
-    const playerSummonedChampions :ChampionCard[] = [];
+    const playerSummonedChampions: ChampionCard[] = [];
 
-    game.board.forEach( row => row.filter(boardPanel => (isChampion(boardPanel) && boardPanel.playerIndex === game.playerIndex)).forEach(championCard => {
+    game.board.forEach(row => row.filter(boardPanel => (isChampion(boardPanel) && boardPanel.playerIndex === game.playerIndex)).forEach(championCard => {
         playerSummonedChampions.push(championCard as ChampionCard);
     }));
 
@@ -536,6 +536,11 @@ const refreshLearnedActions = (championCard: ChampionCard) => {
     });
 }
 
+const refreshArmorAndMental = (championCard: ChampionCard) => {
+    championCard.armor = championCard.calStr;
+    championCard.mental = championCard.calInt;
+}
+
 const refreshResources = (game: Game, nextPlayerIndex: number) => {
     const player = game.players[nextPlayerIndex];
     player.didDraw = false;
@@ -549,12 +554,7 @@ const refreshResources = (game: Game, nextPlayerIndex: number) => {
 
             refreshLearnedActions(boardPanel);
             updateChampionStatusEffects(boardPanel);
-
-            // TODO: Need to use remove champ fucntion
-            if (boardPanel.calHp <= 0)
-                boardPanel = null;
-            else
-                calculateStats(boardPanel);
+            refreshArmorAndMental(boardPanel);
         };
     }));
 }
