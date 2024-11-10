@@ -26,9 +26,16 @@ const Hand: FC = () => {
   const [showUsedCardsDialog, setShowUsedCardsDialog] = useState(false);
   const [discardCards, setDiscardCards] = useState([] as GameCard[]);
 
-  const handleAction = (actionName: string, hideHand: boolean = false) => {
+  const handleAction = (actionName: PlayerActionsName, hideHand: boolean = false) => {
+    if (actionName === PlayerActionsName.Surrender) {
+      const res = window.confirm("Are you sure you want to surrender?");
+      if (!res) return;
+    }
+
     const newSelectedActionData = createSelectedData(null, actionName, GameStoreActionTypes.PlayerAction);
+
     playerAction(newSelectedActionData);
+
     if (hideHand)
       dispatch(setShowHand(false));
   };
