@@ -57,7 +57,7 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
-  const handleCloseMenu = () => {
+  const handleCloseMenu = (): void => {
     setAnchorEl(null);
   };
 
@@ -100,7 +100,6 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
       className={styles.Dialog}
       onClose={handleClose}>
       <DialogContent className={styles.DialogContent}>
-
         <GameCardDraw className={styles.ChampionCardDraw} showChampionStats={true} card={props.champion}>
           <div className={styles.ChampionCardActions}>
             {props.champion.learnedActionsCards.map((card, actionIndex) =>
@@ -116,7 +115,6 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
             {showInfoButton && <button onClick={handleChampionCardClick}><FaCircleInfo /></button>}
           </div>
         </GameCardDraw>
-
         <ChampionMenu anchorEl={anchorEl} open={open} onClose={handleCloseMenu} championCard={props.champion} />
       </DialogContent>
     </Dialog>
