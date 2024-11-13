@@ -289,6 +289,7 @@ const drawFrom = (drawFromPool: GameCard[],
 
 const surrender = (game: Game): string => {
     game.status = GameStatus.over;
+    game.loser = getPlayer(game);
     return 'success'
 };
 

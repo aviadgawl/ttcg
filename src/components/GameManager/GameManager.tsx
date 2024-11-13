@@ -1,4 +1,4 @@
-import { FC, useState, useRef } from 'react';
+import { FC, useState, useRef, useEffect } from 'react';
 import styles from './GameManager.module.css';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -6,7 +6,7 @@ import { GameStatus, PlayerActionsName } from '../../logic/enums';
 import { Game } from '../../logic/game';
 import { gameSubscriber, getGameAsync } from '../../firebase/firebase';
 import { useAppDispatch, useAppSelector, usePlayerAction, useCreateGame, useJoinGame } from '../../redux/hooks';
-import { setPartialGame, createSelectedData } from '../../redux/store';
+import { setPartialGame, createSelectedData, returnToInitialState } from '../../redux/store';
 import { GameStoreActionTypes } from '../../redux/types';
 import Board from '../Board/Board';
 import GameDetails from '../GameDetails/GameDetails';
@@ -16,16 +16,24 @@ interface GameJoinCreateProps { }
 
 const GameJoinCreate: FC<GameJoinCreateProps> = () => {
   const [gameCode, setGameCode] = useState('');
-  const winner = useAppSelector((state) => state.gameActions.game.loser);
+  const loser = useAppSelector((state) => state.gameActions.game.loser);
   const game = useAppSelector((state) => state.gameActions.game);
 
   const dispatch = useAppDispatch();
- 
+
   const playerAction = usePlayerAction();
   const createGame = useCreateGame();
   const joinGame = useJoinGame();
 
   const gameSubRef = useRef(null as any);
+
+  useEffect(() => {
+    if (loser) {
+      alert(`Player ${loser.name} has lost!`);
+      gameSubRef.current = null;
+      dispatch(returnToInitialState())
+    }
+  }, [loser, dispatch])
 
   const gameUpdatesSubscriber = (playerIndex: number) => {
     gameSubRef.current = gameSubscriber(gameCode, (gameFromDb: Game) => {
@@ -35,9 +43,6 @@ const GameJoinCreate: FC<GameJoinCreateProps> = () => {
         dispatch(setPartialGame(gameFromDb));
     });
   }
-
-  if (game.status === GameStatus.over && winner !== null)
-    alert(`Player ${winner.name} has lost!`);
 
   const handleJoinGame = async () => {
     const gameFromDb = await getGameAsync(gameCode);

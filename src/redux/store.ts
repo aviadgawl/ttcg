@@ -23,8 +23,8 @@ interface ShowCardsInDeck {
     byName: string | null
 }
 
-export const createShowCardsInDeck = (show: boolean, byType: CardType | null = null, byName: string | null = null) : ShowCardsInDeck => {
-    return {show: show, byType: byType, byName: byName} as ShowCardsInDeck;
+export const createShowCardsInDeck = (show: boolean, byType: CardType | null = null, byName: string | null = null): ShowCardsInDeck => {
+    return { show: show, byType: byType, byName: byName } as ShowCardsInDeck;
 }
 
 export const createSelectedData = (card: GameCard | null,
@@ -106,6 +106,7 @@ const gameSlice = createSlice({
                 players: action.payload.players,
                 board: action.payload.board,
                 playingPlayerIndex: action.payload.playingPlayerIndex,
+                loser: action.payload.loser
             };
             state.game = updatedGame;
         },
@@ -117,6 +118,9 @@ const gameSlice = createSlice({
         },
         resetSelectedData(state) {
             state.selectedActionData = initialState.selectedActionData;
+        },
+        returnToInitialState() {
+            return initialState;
         }
     }
 });
@@ -135,7 +139,8 @@ export const {
     setSelectedActionDataCardsToDraw,
     setGame,
     setCardsList,
-    resetSelectedData
+    resetSelectedData,
+    returnToInitialState
 } = gameSlice.actions;
 
 export type AppDispatch = typeof store.dispatch;
