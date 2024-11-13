@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/ttcg/static/css/main.46dfbe62.css",
-    "main.js": "/ttcg/static/js/main.1640b191.js",
+    "main.js": "/ttcg/static/js/main.19ffebf5.js",
     "static/media/WarMage.png": "/ttcg/static/media/WarMage.136ac08424c054ae9e45.png",
     "static/media/RefreshMe.png": "/ttcg/static/media/RefreshMe.d1ab3397d77d9648e5fb.png",
     "static/media/Enrage.png": "/ttcg/static/media/Enrage.49813f73dd134e405b2d.png",
@@ -24,8 +24,8 @@
     "static/media/EnergyBall.png": "/ttcg/static/media/EnergyBall.8eb312006bb346e73d47.png",
     "static/media/INeedSomeGear.png": "/ttcg/static/media/INeedSomeGear.3ba44137cd7fedcfcf8a.png",
     "static/media/HighKnight.png": "/ttcg/static/media/HighKnight.d48adc984284c1de55ec.png",
+    "static/media/MagicShield.png": "/ttcg/static/media/MagicShield.1cbaf892d71887c14324.png",
     "static/media/GiveMeMore.png": "/ttcg/static/media/GiveMeMore.03287a0af504e1add77a.png",
-    "static/media/MagicShield.png": "/ttcg/static/media/MagicShield.62ef188d7a412d6c0999.png",
     "static/media/Precision.png": "/ttcg/static/media/Precision.d6d38250408cd06807bb.png",
     "static/media/AxeSwipe.png": "/ttcg/static/media/AxeSwipe.db8a886a7a4d61ef541c.png",
     "static/media/DaggerThrow.png": "/ttcg/static/media/DaggerThrow.74b6bb2cea14972b7c2f.png",
@@ -34,7 +34,7 @@
     "static/media/DaggerSlash.png": "/ttcg/static/media/DaggerSlash.fed46a7929e1ab9b62dc.png",
     "static/media/Shadow.png": "/ttcg/static/media/Shadow.cb212f3b7b173d0b127f.png",
     "static/media/ArcanePower.png": "/ttcg/static/media/ArcanePower.c9f792ebb8372dda4e62.png",
-    "static/media/Haste.png": "/ttcg/static/media/Haste.3ec56c1ae9d713de7716.png",
+    "static/media/Haste.png": "/ttcg/static/media/Haste.6543423194cfc716ba10.png",
     "static/media/ArrowShot.png": "/ttcg/static/media/ArrowShot.c30f7cefbae8db2f82c2.png",
     "static/media/DoItAgain.png": "/ttcg/static/media/DoItAgain.381a26fb514f5981c58d.png",
     "static/media/PlateArmor.png": "/ttcg/static/media/PlateArmor.b09b7ac2b0d711fc7a5b.png",
@@ -65,7 +65,7 @@
     "static/media/Karina.png": "/ttcg/static/media/Karina.c3e82987d6ec8dbd1ba7.png",
     "static/media/Valindra.png": "/ttcg/static/media/Valindra.09a713d827a5eac3e96a.png",
     "static/media/Tafrandir.png": "/ttcg/static/media/Tafrandir.6fef6589032d4f6279ac.png",
-    "static/media/GreatStaff.png": "/ttcg/static/media/GreatStaff.e8406e3fc9b60d3f2455.png",
+    "static/media/GreatStaff.png": "/ttcg/static/media/GreatStaff.1e937cd670bab91aa977.png",
     "static/media/BasicHit.png": "/ttcg/static/media/BasicHit.dd906098cfee3f3ef7fe.png",
     "static/media/background.jpg": "/ttcg/static/media/background.bd83824437efd93a958b.jpg",
     "static/media/JumpStep.png": "/ttcg/static/media/JumpStep.7533a22f2af6078ef446.png",
@@ -83,10 +83,10 @@
     "static/media/draw.mp3": "/ttcg/static/media/draw.ceb460e6016f04e97598.mp3",
     "index.html": "/ttcg/index.html",
     "main.46dfbe62.css.map": "/ttcg/static/css/main.46dfbe62.css.map",
-    "main.1640b191.js.map": "/ttcg/static/js/main.1640b191.js.map"
+    "main.19ffebf5.js.map": "/ttcg/static/js/main.19ffebf5.js.map"
   },
   "entrypoints": [
     "static/css/main.46dfbe62.css",
-    "static/js/main.1640b191.js"
+    "static/js/main.19ffebf5.js"
   ]
 }
