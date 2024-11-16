@@ -44,7 +44,7 @@ const CardsDisplay: FC<CardsDisplayProps> = (props) => {
     {props.cards.map(card => {
       return notExcludedCard(card) && byCardType(card) && byNameContains(card) && <div className={styles.Card} key={card.guid}>
         <HandCard mode={HandCardMode.DeckBuilding} card={card} />
-        {props.onSelectCard && <Button onClick={() => handleClick(card)}>{props.buttonName ?? 'Select'}</Button>}
+        {props.onSelectCard && <Button size="small" onClick={() => handleClick(card)}>{props.buttonName ?? 'Select'}</Button>}
       </div>
     })}
   </div>

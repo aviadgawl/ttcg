@@ -16,10 +16,11 @@
   transform: rotate(180deg);
 }
 
+/* mobile */
 @media only screen and (max-width: 600px) {
   .App-card {
-    width: 160px;
-    height: 230px;
+    width: 140px;
+    height: 200px;
   }
 
   .App-card-large {
@@ -27,7 +28,7 @@
     height: 360px;
   }
 }
-
+/* desktop */
 @media only screen and (min-width: 600px) {
   .App-card {
     width: 200px;

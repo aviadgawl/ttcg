@@ -54,6 +54,7 @@ export const initialState = {
         cardsToDraw: []
     } as SelectedData,
     showHand: false as boolean,
+    showGameDetails: false as boolean,
     showCardsInDeck: { show: false } as ShowCardsInDeck,
     cardsList: cardsList as GameCard[]
 }
@@ -119,8 +120,11 @@ const gameSlice = createSlice({
         resetSelectedData(state) {
             state.selectedActionData = initialState.selectedActionData;
         },
-        returnToInitialState() {
-            return initialState;
+        returnToInitialState(state) {
+            state = initialState;
+        },
+        setShowGameDetails(state, action) {
+            state.showGameDetails = action.payload;
         }
     }
 });
@@ -140,7 +144,8 @@ export const {
     setGame,
     setCardsList,
     resetSelectedData,
-    returnToInitialState
+    returnToInitialState,
+    setShowGameDetails
 } = gameSlice.actions;
 
 export type AppDispatch = typeof store.dispatch;

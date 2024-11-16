@@ -13,6 +13,7 @@ const Board: FC = () => {
   const boardState = useAppSelector((state) => state.gameActions.game.board);
   const playerIndex = useAppSelector((state) => state.gameActions.game.playerIndex);
   const selectedActionData = useAppSelector((state) => state.gameActions.selectedActionData);
+  const playingPlayerIndex = useAppSelector((state) => state.gameActions.game.playingPlayerIndex);
   const championAction = useChampionAction();
   const playerActions = usePlayerAction();
   const dispatch = useAppDispatch();
@@ -50,7 +51,8 @@ const Board: FC = () => {
   }
 
   return (
-    <table style={{ backgroundImage: BackGroundImage }} className={`${styles.Board} ${shouldRotate ? 'App-rotate' : ''}`} >
+    <table style={{ backgroundImage: BackGroundImage }} 
+      className={`${playingPlayerIndex === 0 ? styles.BoardPlayerOneBorder : styles.BoardPlayerTwoBorder} ${styles.Board} ${shouldRotate ? 'App-rotate' : ''}`} >
       <tbody>
         {boardState.map((row, rowIndex) => {
           return <tr key={`${rowIndex}`}>

@@ -17,7 +17,7 @@ const BoardCrystal: FC<BoardCrystalProps> = (props: BoardCrystalProps) => {
   }
 
   return <div className={`${props.className} App-text-color ${styles.BoardCrystal}`} style={{ backgroundImage: `url(${props.crystal.image})` }}>
-    <h2 className={getPlayerClassName()}>{props.crystal.currentHp} / {props.crystal.hp}</h2>
+    <label className={`${styles.BoardCrystalHpLabel} ${getPlayerClassName()}`}>{props.crystal.currentHp}</label>
   </div>
 };
 

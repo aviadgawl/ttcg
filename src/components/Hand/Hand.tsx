@@ -1,16 +1,13 @@
 import { FC, useState } from 'react';
-import styles from './Hand.module.css';
 import { useAppDispatch, useAppSelector, usePlayerAction } from '../../redux/hooks';
-import { setShowHand, createSelectedData, setShowCardsInDeck, setSelectedActionDataCardsToDraw, createShowCardsInDeck, SelectedData } from '../../redux/store';
+import { setShowHand, createSelectedData, setShowCardsInDeck, setSelectedActionDataCardsToDraw, createShowCardsInDeck, SelectedData, setShowGameDetails } from '../../redux/store';
 import { GameStoreActionTypes } from '../../redux/types';
 import { PlayerActionsName } from '../../logic/enums';
 import { GameCard, isOrder } from '../../logic/game-card';
 import HandCard, { HandCardMode } from '../HandCard/HandCard';
 import CardsDisplay from '../CardsDisplay/CardsDisplay';
-import Drawer from '@mui/material/Drawer';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
+import { Drawer, Button, Dialog, DialogContent } from '@mui/material';
+import styles from './Hand.module.css';
 
 const Hand: FC = () => {
   const playerIndex = useAppSelector((state) => state.gameActions.game.playerIndex);
@@ -87,16 +84,17 @@ const Hand: FC = () => {
 
   return <div className={styles.Hand}>
     <div className={styles.HandButton}>
-      <Button onClick={() => dispatch(setShowHand(true))}>Show Hand</Button>
+      <Button variant="outlined" onClick={() => dispatch(setShowHand(true))}>Show Hand</Button>
+      <Button variant="outlined" onClick={() => dispatch(setShowGameDetails(true))}>Show Details</Button>
     </div>
     <Drawer variant="persistent" anchor="bottom" open={showHand} onClose={() => dispatch(setShowHand(false))}>
       <Button onClick={() => dispatch(setShowHand(false))}>Hide Hand</Button>
       <div className={styles.CardContainer}>
-        <div className={styles.ButtonsContainer}>
+        <div className={styles.HandButtonsContainer}>
           <h3 onClick={() => setShowUsedCardsDialog(true)}> Used Cards: {player.usedCards.length}</h3>
-          <Button disabled={playerIndex !== playingPlayerIndex || player.didDraw} onClick={() => handleAction(PlayerActionsName.TurnDraw)} variant="outlined">Deck: {player.deck.length}</Button>
-          <Button disabled={playerIndex !== playingPlayerIndex} onClick={() => handleAction(PlayerActionsName.EndTurn, true)} variant="outlined">{PlayerActionsName.EndTurn}</Button>
-          <Button disabled={playerIndex !== playingPlayerIndex} onClick={() => handleAction(PlayerActionsName.Surrender)} variant="outlined">{PlayerActionsName.Surrender}</Button>
+          <Button size="small" disabled={playerIndex !== playingPlayerIndex || player.didDraw} onClick={() => handleAction(PlayerActionsName.TurnDraw)} variant="outlined">Deck: {player.deck.length}</Button>
+          <Button size="small" disabled={playerIndex !== playingPlayerIndex} onClick={() => handleAction(PlayerActionsName.EndTurn, true)} variant="outlined">{PlayerActionsName.EndTurn}</Button>
+          <Button size="small" disabled={playerIndex !== playingPlayerIndex} onClick={() => handleAction(PlayerActionsName.Surrender)} variant="outlined">{PlayerActionsName.Surrender}</Button>
         </div>
         {player.hand.map((card, index) => <div className={discardCards.some(x => x.guid === card.guid) ? styles.DiscardCard : ''} key={index}>
           <HandCard disabled={playerIndex !== playingPlayerIndex} mode={HandCardMode.Hand} card={card} />

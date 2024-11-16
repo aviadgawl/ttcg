@@ -2,7 +2,6 @@ import { FC, useState } from 'react';
 import { GameCard, isChampion } from '../../logic/game-card';
 import styles from './GameCardDraw.module.css';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';

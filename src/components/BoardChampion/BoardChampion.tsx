@@ -89,10 +89,10 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
     <div style={{ backgroundImage: `url(${props.champion.image})` }}
       className={styles.Panel}
       onClick={handlePanelClick}>
-      <div className={`${styles.DirectionIcon} ${props.shouldRotate && 'App-rotate'}`}>
+      <div className={`${styles.BoardChampionDirectionIcon} ${props.shouldRotate && 'App-rotate'}`}>
         {directionIconMap[props.champion.direction]}
       </div>
-      <h2 className={getPlayerClassName()}>{props.champion.currentHp} / {props.champion.calHp}</h2>
+      <label className={`${styles.BoardChampionHpLabel} ${getPlayerClassName()}`}>{props.champion.currentHp}</label>
     </div>
 
     <Dialog
