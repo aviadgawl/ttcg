@@ -16,9 +16,28 @@
   transform: rotate(180deg);
 }
 
-.App-card {
-  width: 200px;
-  height: 280px;
+@media only screen and (max-width: 600px) {
+  .App-card {
+    width: 160px;
+    height: 230px;
+  }
+
+  .App-card-large {
+    width: 252px;
+    height: 360px;
+  }
+}
+
+@media only screen and (min-width: 600px) {
+  .App-card {
+    width: 200px;
+    height: 280px;
+  }
+
+  .App-card-large {
+    width: 330px;
+    height: 470px;
+  }
 }
 
 header {

@@ -4,12 +4,12 @@ import { checkRepeatableAction } from '../../logic/champion';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { setSelectedActionData, createSelectedData } from '../../redux/store';
 import { GameStoreActionTypes } from '../../redux/types';
+import { FaCircleInfo, FaArrowRight, FaArrowLeft, FaArrowUp, FaArrowDown } from "react-icons/fa6";
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import GameCardDraw from '../GameCardDraw/GameCardDraw';
 import ChampionMenu from '../ChampionMenu/ChampionMenu';
-import { FaCircleInfo, FaArrowRight, FaArrowLeft, FaArrowUp, FaArrowDown } from "react-icons/fa6";
 import styles from './BoardChampion.module.css';
 
 const directionIconMap: ReactElement[] = [
@@ -100,7 +100,7 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
       className={styles.Dialog}
       onClose={handleClose}>
       <DialogContent className={styles.DialogContent}>
-        <GameCardDraw className={styles.ChampionCardDraw} showChampionStats={true} card={props.champion}>
+        <GameCardDraw className="App-card-large" showChampionStats={true} card={props.champion}>
           <div className={styles.ChampionCardActions}>
             {props.champion.learnedActionsCards.map((card, actionIndex) =>
               <Button disabled={isActionCardDisabled(props.champion, card, false)} size="small" variant="contained" className="App-button" key={actionIndex}

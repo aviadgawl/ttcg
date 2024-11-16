@@ -40,9 +40,9 @@ const GameCardDraw: FC<CardProps> = (props) => {
       </div>}
 
     </CardContent>
-    {props.children && <CardActions className={styles.CardActions}>
+    {props.children && <div className={styles.CardActions}>
       {props.children}
-    </CardActions>}
+    </div>}
   </Card>
 
   <Dialog
