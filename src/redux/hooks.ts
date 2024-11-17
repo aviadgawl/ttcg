@@ -123,7 +123,7 @@ export const useJoinGame = () => {
             playerTwoStartingChampion = {...localPlayer.startingChampion, playerIndex: 1};
 
         const playerTwo = { ...localPlayer, name: 'Player Two', deck: playerTwoDeck, hand: playerTwoHand, startingChampion: playerTwoStartingChampion };
-        const joinedGame = { ...game, players: [gameFromDb.players[0], playerTwo], playerIndex: 1, code: gameFromDb.code, status: GameStatus.started };
+        const joinedGame = { ...gameFromDb, players: [gameFromDb.players[0], playerTwo], playerIndex: 1, code: gameFromDb.code, status: GameStatus.started };
 
         updateGameAsync(joinedGame).catch(console.error);
 

@@ -84,7 +84,7 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
       return styles.PlayerTwoObject;
   }
 
-  return (<div className={`App-text-color ${props.className} ${styles.Container} ${props.isSelected ? styles.Selected : styles.NotSelected}`}>
+  return (<div className={`App-text-color ${props.className} ${styles.Container} ${props.isSelected ? styles.BoardChampionSelected : ''}`}>
 
     <div style={{ backgroundImage: `url(${props.champion.image})` }}
       className={styles.Panel}
