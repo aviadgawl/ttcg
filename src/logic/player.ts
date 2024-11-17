@@ -162,17 +162,20 @@ const playOrder = (game: Game, playedOrderCard: OrderCard, cardsPayment: GameCar
         player.effects.push({ type: RewardType.PlayExtraClassUpgrade, duration: playedOrderCard.duration });
     }
 
-    if (playedOrderCard.reward.name === RewardType.ReturnUsedCardToDeck) {
-        drawFrom(player.usedCards,
+    let drawResult: string = '';
+
+    if (playedOrderCard.reward.name === RewardType.ReturnUsedCardToDeck) 
+        drawResult = drawFrom(player.usedCards,
             player.deck,
             playedOrderCard.reward.amount,
             playedOrderCard.reward.cardType,
             playedOrderCard.reward.cardNameContains,
             playedOrderCard.reward.condition);
-    }
+        
+        
 
     if (playedOrderCard.reward.name === RewardType.Draw)
-        drawFrom(player.deck, player.hand,
+    drawResult = drawFrom(player.deck, player.hand,
             playedOrderCard.reward.amount,
             playedOrderCard.reward.cardType,
             playedOrderCard.reward.cardNameContains,
@@ -180,12 +183,14 @@ const playOrder = (game: Game, playedOrderCard: OrderCard, cardsPayment: GameCar
 
     if (playedOrderCard.reward.name === RewardType.ConditionedDraw) {
         const amountToDraw = getAmountToDraw(game, playedOrderCard.reward.condition);
-        drawFrom(player.deck, player.hand, amountToDraw, playedOrderCard.reward.cardType, playedOrderCard.reward.cardNameContains, null);
+        drawResult = drawFrom(player.deck, player.hand, amountToDraw, playedOrderCard.reward.cardType, playedOrderCard.reward.cardNameContains, null);
     }
 
     if (playedOrderCard.reward.name === RewardType.ReturnUsedCard) {
-        drawFrom(player.usedCards, player.hand, playedOrderCard.reward.amount, playedOrderCard.reward.cardType, playedOrderCard.reward.cardNameContains, playedOrderCard.reward.condition);
+        drawResult = drawFrom(player.usedCards, player.hand, playedOrderCard.reward.amount, playedOrderCard.reward.cardType, playedOrderCard.reward.cardNameContains, playedOrderCard.reward.condition);
     }
+
+    if(drawResult !== 'success') return drawResult;
 
     if (playedOrderCard.reward.name === RewardType.SpecificDraw) {
 
@@ -231,7 +236,7 @@ const initialDraw = (player: Player): string => {
 const drawSpecificCard = (drawFromPool: GameCard[],
     drawTo: GameCard[],
     cardToDraw: GameCard,
-    requiredCardType: CardType | null) => {
+    requiredCardType: CardType | null): string => {
 
     if (drawFromPool.length < 1)
         return 'Must be at least one card in pool';
@@ -241,6 +246,8 @@ const drawSpecificCard = (drawFromPool: GameCard[],
 
     drawTo.push(cardToDraw);
     removeCard(drawFromPool, cardToDraw);
+
+    return 'success';
 }
 
 const drawFrom = (drawFromPool: GameCard[],
@@ -252,7 +259,7 @@ const drawFrom = (drawFromPool: GameCard[],
 
     if (amount === undefined) return 'Amount can not be undefined';
 
-    if (drawFromPool.length < amount) return 'Not enough cards in card pool';
+    if (drawFromPool.length < amount) return `Cant draw ${amount} from pool of ${drawFromPool.length}`;
 
     let filteredCards: GameCard[] = drawFromPool;
 
