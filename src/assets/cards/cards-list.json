@@ -495,7 +495,13 @@
         "type": "OrderCard",
         "name": "Do It Again!",
         "duration": 0,
-        "requirement": [],
+        "requirement": [
+            {
+                "name": "discard",
+                "amount": 1,
+                "cardType": "ActionCard"
+            }
+        ],
         "reward": {
             "name": "ReturnUsedCard",
             "amount": 1,

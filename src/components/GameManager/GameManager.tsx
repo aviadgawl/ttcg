@@ -93,7 +93,7 @@ const GameJoinCreate: FC<GameJoinCreateProps> = () => {
       </div>
     </div>}
     {game.status === GameStatus.started && <>
-      <div className={styles.GameAndDetails}>
+      <div className={styles.GameManagerGameAndDetails}>
         <GameDetails />
         <Board />
       </div>
