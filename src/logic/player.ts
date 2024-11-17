@@ -137,6 +137,45 @@ const getAmountToDraw = (game: Game, condition: string | null): number => {
     return amountToDraw;
 }
 
+const orderCardDrawLogic = (drawRewardType: RewardType, game: Game, player: Player, playedOrderCard: OrderCard, cardsToDraw: GameCard[]|undefined): string => {
+    switch (drawRewardType) {
+        case RewardType.ReturnUsedCardToDeck:
+            return drawFrom(player.usedCards,
+                player.deck,
+                playedOrderCard.reward.amount,
+                playedOrderCard.reward.cardType,
+                playedOrderCard.reward.cardNameContains,
+                playedOrderCard.reward.condition);
+        case RewardType.Draw:
+            return drawFrom(player.deck,
+                player.hand,
+                playedOrderCard.reward.amount,
+                playedOrderCard.reward.cardType,
+                playedOrderCard.reward.cardNameContains,
+                playedOrderCard.reward.condition);
+        case RewardType.ConditionedDraw:
+            const amountToDraw = getAmountToDraw(game, playedOrderCard.reward.condition);
+            return drawFrom(player.deck, player.hand, amountToDraw, playedOrderCard.reward.cardType, playedOrderCard.reward.cardNameContains, null);
+        case RewardType.ReturnUsedCard:
+            return drawFrom(player.usedCards,
+                player.hand,
+                playedOrderCard.reward.amount,
+                playedOrderCard.reward.cardType,
+                playedOrderCard.reward.cardNameContains,
+                playedOrderCard.reward.condition);
+        case RewardType.SpecificDraw:
+            if (cardsToDraw === undefined || cardsToDraw === null || cardsToDraw.length <= 0) return 'Must select a card from deck';
+
+            for (const card of cardsToDraw) {
+                const result = drawSpecificCard(player.deck, player.hand, card, playedOrderCard.reward.cardType);
+                if(result !== 'success') return result;
+            }
+            return 'success';
+        default:
+            return 'success';
+    }
+}
+
 const playOrder = (game: Game, playedOrderCard: OrderCard, cardsPayment: GameCard[] | undefined, cardsToDraw: GameCard[] | undefined): string => {
     if (cardsPayment === undefined) return 'cardsPayment can not be undefined';
 
@@ -162,44 +201,9 @@ const playOrder = (game: Game, playedOrderCard: OrderCard, cardsPayment: GameCar
         player.effects.push({ type: RewardType.PlayExtraClassUpgrade, duration: playedOrderCard.duration });
     }
 
-    let drawResult: string = '';
-
-    if (playedOrderCard.reward.name === RewardType.ReturnUsedCardToDeck) 
-        drawResult = drawFrom(player.usedCards,
-            player.deck,
-            playedOrderCard.reward.amount,
-            playedOrderCard.reward.cardType,
-            playedOrderCard.reward.cardNameContains,
-            playedOrderCard.reward.condition);
-        
-        
-
-    if (playedOrderCard.reward.name === RewardType.Draw)
-    drawResult = drawFrom(player.deck, player.hand,
-            playedOrderCard.reward.amount,
-            playedOrderCard.reward.cardType,
-            playedOrderCard.reward.cardNameContains,
-            playedOrderCard.reward.condition);
-
-    if (playedOrderCard.reward.name === RewardType.ConditionedDraw) {
-        const amountToDraw = getAmountToDraw(game, playedOrderCard.reward.condition);
-        drawResult = drawFrom(player.deck, player.hand, amountToDraw, playedOrderCard.reward.cardType, playedOrderCard.reward.cardNameContains, null);
-    }
-
-    if (playedOrderCard.reward.name === RewardType.ReturnUsedCard) {
-        drawResult = drawFrom(player.usedCards, player.hand, playedOrderCard.reward.amount, playedOrderCard.reward.cardType, playedOrderCard.reward.cardNameContains, playedOrderCard.reward.condition);
-    }
+    const drawResult = orderCardDrawLogic(playedOrderCard.reward.name, game, player, playedOrderCard, cardsToDraw);
 
     if(drawResult !== 'success') return drawResult;
-
-    if (playedOrderCard.reward.name === RewardType.SpecificDraw) {
-
-        if (cardsToDraw === undefined || cardsToDraw === null || cardsToDraw.length <= 0) return 'Must select a card from deck';
-
-        cardsToDraw.forEach(card => {
-            drawSpecificCard(player.deck, player.hand, card, playedOrderCard.reward.cardType);
-        });
-    }
 
     cardToDiscard.forEach(card => {
         removeCard(player.hand, card);
