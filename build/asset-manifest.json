@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/ttcg/static/css/main.7e852a1d.css",
-    "main.js": "/ttcg/static/js/main.9a7aebdb.js",
+    "main.css": "/ttcg/static/css/main.1b285185.css",
+    "main.js": "/ttcg/static/js/main.93206ea7.js",
     "static/media/WarMage.png": "/ttcg/static/media/WarMage.136ac08424c054ae9e45.png",
     "static/media/RefreshMe.png": "/ttcg/static/media/RefreshMe.d1ab3397d77d9648e5fb.png",
     "static/media/Enrage.png": "/ttcg/static/media/Enrage.49813f73dd134e405b2d.png",
@@ -36,7 +36,7 @@
     "static/media/ArcanePower.png": "/ttcg/static/media/ArcanePower.c9f792ebb8372dda4e62.png",
     "static/media/Haste.png": "/ttcg/static/media/Haste.6543423194cfc716ba10.png",
     "static/media/ArrowShot.png": "/ttcg/static/media/ArrowShot.c30f7cefbae8db2f82c2.png",
-    "static/media/DoItAgain.png": "/ttcg/static/media/DoItAgain.381a26fb514f5981c58d.png",
+    "static/media/DoItAgain.png": "/ttcg/static/media/DoItAgain.25f9c2cd8e2b6155e622.png",
     "static/media/PlateArmor.png": "/ttcg/static/media/PlateArmor.b09b7ac2b0d711fc7a5b.png",
     "static/media/GreatAxe.png": "/ttcg/static/media/GreatAxe.9d5097edf4f986803abe.png",
     "static/media/FireBall.png": "/ttcg/static/media/FireBall.8ef1de0bfc6f4682938f.png",
@@ -82,11 +82,11 @@
     "static/media/equip.mp3": "/ttcg/static/media/equip.3ac421cb0bd63fb4faee.mp3",
     "static/media/draw.mp3": "/ttcg/static/media/draw.ceb460e6016f04e97598.mp3",
     "index.html": "/ttcg/index.html",
-    "main.7e852a1d.css.map": "/ttcg/static/css/main.7e852a1d.css.map",
-    "main.9a7aebdb.js.map": "/ttcg/static/js/main.9a7aebdb.js.map"
+    "main.1b285185.css.map": "/ttcg/static/css/main.1b285185.css.map",
+    "main.93206ea7.js.map": "/ttcg/static/js/main.93206ea7.js.map"
   },
   "entrypoints": [
-    "static/css/main.7e852a1d.css",
-    "static/js/main.9a7aebdb.js"
+    "static/css/main.1b285185.css",
+    "static/js/main.93206ea7.js"
   ]
 }
