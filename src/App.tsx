@@ -42,7 +42,7 @@ function App() {
     <main className="App">
       <header>
         <GameTabs disabledTabIndexes={disabledTabIndex} displayMode={currentDisplay} onModeClick={handleDisplaySelect} />
-        <div>0.8.0</div>
+        <div>0.9.0</div>
       </header>
       <div>
         {currentDisplay === 0 && <Login />}
