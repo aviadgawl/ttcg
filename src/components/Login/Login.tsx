@@ -7,21 +7,22 @@ import { useAppDispatch } from '../../redux/hooks';
 import styles from './Login.module.css';
 
 const Login: FC = () => {
-  const [password, setPassword] = useState<string|null>(null);
-  const [email, setEmail] = useState<string|null>(null);
-  const [emailError, setEmailError] = useState<string|null>(null);
-  const [passwordError, setPasswordError] = useState<string|null>(null);
+  const [password, setPassword] = useState<string | null>(null);
+  const [email, setEmail] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
 
   const dispatch = useAppDispatch();
 
   const handleLoginClick = () => {
-    if(!email) return setEmailError(`Email: ${email} not valid`);
-    if(!password) return setPasswordError('Password not valid');
+    if (!email) return setEmailError(`Email: ${email} not valid`);
+    if (!password) return setPasswordError('Password not valid');
 
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         //const user = userCredential.user;
         dispatch(setIsLoggedIn(true));
+        localStorage.setItem("isLoggedIn", 'true');
       })
       .catch((error) => {
         console.log(`${error.code} ${error.message}`);
