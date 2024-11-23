@@ -1,7 +1,6 @@
 import { FC, useState, useRef, useEffect } from 'react';
 import styles from './GameManager.module.css';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
+import { TextField, Button } from '@mui/material';
 import { GameStatus, PlayerActionsName } from '../../logic/enums';
 import { Game } from '../../logic/game';
 import { gameSubscriber, getGameAsync } from '../../firebase/firebase';
@@ -85,7 +84,7 @@ const GameJoinCreate: FC<GameJoinCreateProps> = () => {
 
   return <div className={styles.GameJoinCreate}>
     {game.status === GameStatus.over && <div>
-      <TextField onChange={(input) => setGameCode(input.target.value)} placeholder='Code' helperText="Enter Game Code"></TextField>
+      <TextField onChange={(input) => setGameCode(input.target.value)} placeholder='Code' helperText="Enter Game Code" />
       <div>
         <Button onClick={handleJoinGame}>Join</Button>
         <Button onClick={handleCreateGame}>Create</Button>
