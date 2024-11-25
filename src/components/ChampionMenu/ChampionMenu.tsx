@@ -2,8 +2,8 @@ import { FC } from 'react';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import GameCardDraw from '../GameCardDraw/GameCardDraw';
-import styles from './ChampionMenu.module.css';
 import { ChampionCard } from '../../logic/game-card';
+import styles from './ChampionMenu.module.css';
 
 interface ChampionMenuProps {
   anchorEl: Element|null,
