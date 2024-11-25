@@ -1,6 +1,4 @@
-.Board {
-    background-image: url("https://firebasestorage.googleapis.com/v0/b/battlelordstoolapp.appspot.com/o/background.jpg?alt=media&token=1fd9930b-602f-4f3d-939c-18e886fcc1a8");
-}
+.Board {}
 
 .Board td {
     position: relative;

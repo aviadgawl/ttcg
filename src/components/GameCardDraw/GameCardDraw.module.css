@@ -8,26 +8,28 @@
 }
 
 .CardActions {
-    background-color: rgba(0,0,0,.5);
+    background-color: rgba(255, 255, 255, 0.8);
     display: flex;
     justify-content: space-around;
+    border-left: 5px solid black;
+    border-right: 5px solid black;
+    padding: 5px;
 }
 
 .CardStats {
-    background-color: rgba(0,0,0,.5);
+    background-color: rgba(255, 255, 255, 0.8);
     font-size: large;
     font-weight: 400;
+    padding: 5px;
+    border-left: 5px solid black;
+    border-right: 5px solid black;
 }
 
 .CardStats div {
-    color: white;
-    border: 1px solid white;
+    color: black;
+    border: 1px solid black;
     padding: 4px;
     display: inline-block;
-}
-
-.CardName {
-    background-color: rgba(0,0,0,.5);
 }
 
 .CardContent {
@@ -57,8 +59,4 @@
 
 .CardImage {
     height: 500px;
-}
-
-.CardActions {
-    width: 100%;
 }

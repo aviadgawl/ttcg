@@ -6,8 +6,10 @@ import { isCrystal, CrystalCard, isChampion, BoardLocation } from '../../logic/g
 import BoardChampion from '../BoardChampion/BoardChampion';
 import BoardCrystal from '../BoardCrystal/BoardCrystal';
 import { FaHandPointer } from "react-icons/fa";
+
+import BoardBackground from '../../assets/images/BoardBackground.jpg';
+
 import styles from './Board.module.css';
-import BackGroundImage from '../../assets/images/background.jpg';
 
 const Board: FC = () => {
   const boardState = useAppSelector((state) => state.gameActions.game.board);
@@ -51,7 +53,7 @@ const Board: FC = () => {
   }
 
   return (
-    <table style={{ backgroundImage: BackGroundImage }} 
+    <table style={{ backgroundImage: `url(${BoardBackground})` }} 
       className={`${playingPlayerIndex === 0 ? styles.BoardPlayerOneBorder : styles.BoardPlayerTwoBorder} ${styles.Board} ${shouldRotate ? 'App-rotate' : ''}`} >
       <tbody>
         {boardState.map((row, rowIndex) => {
