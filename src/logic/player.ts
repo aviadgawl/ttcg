@@ -567,6 +567,7 @@ const refreshResources = (game: Game, nextPlayerIndex: number) => {
             refreshLearnedActions(boardPanel);
             updateChampionStatusEffects(boardPanel);
             refreshArmorAndMental(boardPanel);
+            calculateStats(boardPanel);
         };
     }));
 }

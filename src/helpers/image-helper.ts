@@ -61,6 +61,9 @@ import FireBall from '../assets/images/FireBall.png';
 import SelfHeal from '../assets/images/SelfHeal.png';
 import Heal from '../assets/images/Heal.png';
 import PetrifiedHex from '../assets/images/PetrifiedHex.png';
+import ShieldBash from '../assets/images/ShieldBash.png';
+import ArmorBreak from '../assets/images/ArmorBreak.png';
+import MindBreak from '../assets/images/MindBreak.png';
 // Orders
 import GiveMeMore from '../assets/images/GiveMeMore.png';
 import Regroup from '../assets/images/Regroup.png';
@@ -197,6 +200,12 @@ export const getImage = (id: string): string => {
             return Heal;
         case 'Petrified Hex':
             return PetrifiedHex;
+        case 'Shield Bash':
+            return ShieldBash;
+        case 'Armor Break':
+            return ArmorBreak;
+        case 'Mind Break':
+            return MindBreak;
         // Orders
         case 'Give Me More!':
             return GiveMeMore;

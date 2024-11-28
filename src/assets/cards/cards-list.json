@@ -671,6 +671,27 @@
     },
     {
         "type": "ActionCard",
+        "actionType": "Melee",
+        "name": "Armor Break",
+        "distance": [
+            1,
+            1
+        ],
+        "direction": "Straight",
+        "requiredStat": "Str",
+        "requiredStatValue": 3,
+        "isFreeTargeting": true,
+        "targetEffects": [
+            {
+                "name": "StrRedaction",
+                "duration": 1,
+                "stat": "Str",
+                "value": -6
+            }
+        ]
+    },
+    {
+        "type": "ActionCard",
         "actionType": "Buff",
         "name": "Ultimate Defense",
         "distance": [
@@ -912,6 +933,27 @@
     },
     {
         "type": "ActionCard",
+        "actionType": "Melee",
+        "name": "Shield Bash",
+        "distance": [
+            1,
+            1
+        ],
+        "direction": "Straight",
+        "dmgStat": "Str",
+        "requiredGearCategory": "Shields",
+        "isFreeTargeting": true,
+        "targetEffects": [
+            {
+                "name": "Paralyze",
+                "duration": 2,
+                "stat": null,
+                "value": null
+            }
+        ]
+    },
+    {
+        "type": "ActionCard",
         "actionType": "Buff",
         "name": "Magic Shield",
         "distance": [
@@ -1105,9 +1147,30 @@
         "targetEffects": [
             {
                 "name": "Paralyze",
-                "duration": 1,
+                "duration": 2,
                 "stat": null,
                 "value": null
+            }
+        ]
+    },
+    {
+        "type": "ActionCard",
+        "actionType": "Magic",
+        "name": "Mind Break",
+        "distance": [
+            1,
+            3
+        ],
+        "direction": "Straight",
+        "requiredStat": "Int",
+        "requiredStatValue": 3,
+        "isFreeTargeting": true,
+        "targetEffects": [
+            {
+                "name": "IntRedaction",
+                "duration": 1,
+                "stat": "Int",
+                "value": -6
             }
         ]
     }
