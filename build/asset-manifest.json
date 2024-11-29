@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/ttcg/static/css/main.44dd4575.css",
-    "main.js": "/ttcg/static/js/main.7d0c9694.js",
+    "main.css": "/ttcg/static/css/main.1c705dcb.css",
+    "main.js": "/ttcg/static/js/main.b0870479.js",
     "static/media/WarMage.png": "/ttcg/static/media/WarMage.136ac08424c054ae9e45.png",
     "static/media/RefreshMe.png": "/ttcg/static/media/RefreshMe.d1ab3397d77d9648e5fb.png",
     "static/media/Enrage.png": "/ttcg/static/media/Enrage.49813f73dd134e405b2d.png",
@@ -77,6 +77,8 @@
     "static/media/step.mp3": "/ttcg/static/media/step.c1d9fad0d7ec9c58cd90.mp3",
     "static/media/Step.png": "/ttcg/static/media/Step.68276f980fda1490c1ee.png",
     "static/media/BasicStep.png": "/ttcg/static/media/BasicStep.7b1895a1cd21dbbdd6e8.png",
+    "static/media/start-turn.mp3": "/ttcg/static/media/start-turn.8368e1549c1e25bb938c.mp3",
+    "static/media/damage.mp3": "/ttcg/static/media/damage.6eb36a7b2965ce789c12.mp3",
     "static/media/buff.mp3": "/ttcg/static/media/buff.9615bc9c96edd9c5fe2d.mp3",
     "static/media/dagger-throw.mp3": "/ttcg/static/media/dagger-throw.80d0b2243d2ec0d670f0.mp3",
     "static/media/RushStep.png": "/ttcg/static/media/RushStep.a819a36abdb87e2c5faf.png",
@@ -85,11 +87,11 @@
     "static/media/equip.mp3": "/ttcg/static/media/equip.3ac421cb0bd63fb4faee.mp3",
     "static/media/draw.mp3": "/ttcg/static/media/draw.ceb460e6016f04e97598.mp3",
     "index.html": "/ttcg/index.html",
-    "main.44dd4575.css.map": "/ttcg/static/css/main.44dd4575.css.map",
-    "main.7d0c9694.js.map": "/ttcg/static/js/main.7d0c9694.js.map"
+    "main.1c705dcb.css.map": "/ttcg/static/css/main.1c705dcb.css.map",
+    "main.b0870479.js.map": "/ttcg/static/js/main.b0870479.js.map"
   },
   "entrypoints": [
-    "static/css/main.44dd4575.css",
-    "static/js/main.7d0c9694.js"
+    "static/css/main.1c705dcb.css",
+    "static/js/main.b0870479.js"
   ]
 }

@@ -1,5 +1,4 @@
 import { FC, useState, useRef, useEffect } from 'react';
-import styles from './GameManager.module.css';
 import { TextField, Button } from '@mui/material';
 import { GameStatus, PlayerActionsName } from '../../logic/enums';
 import { Game } from '../../logic/game';
@@ -10,6 +9,8 @@ import { GameStoreActionTypes } from '../../redux/types';
 import Board from '../Board/Board';
 import GameDetails from '../GameDetails/GameDetails';
 import Hand from '../Hand/Hand';
+import { playSoundByEvent } from '../../helpers/audio-helper';
+import styles from './GameManager.module.css';
 
 interface GameJoinCreateProps { }
 
@@ -25,6 +26,11 @@ const GameJoinCreate: FC<GameJoinCreateProps> = () => {
   const joinGame = useJoinGame();
 
   const gameSubRef = useRef(null as any);
+
+  useEffect(() => {
+    if (game.playingPlayerIndex === game.playerIndex)
+      playSoundByEvent('StartTurn');
+  }, [game.playingPlayerIndex])
 
   useEffect(() => {
     if (loser) {
