@@ -36,7 +36,7 @@ const GameCardDraw: FC<CardProps> = (props) => {
           <div>Mental: {props.card.mental} / {props.card.calInt}</div>
           <div>Class: {props.card.calClass}</div>
           <div>Race: {props.card.race}</div>
-          {props.card.statusEffects.length > 0 && <div className={styles.ChampionStatusEffect}>{props.card.statusEffects.map(effect => <span> {effect.name} </span>)}</div>}
+          {props.card.statusEffects.length > 0 && <div className={styles.ChampionStatusEffect}>{props.card.statusEffects.map((effect, i) => <span key={i}> {effect.name} </span>)}</div>}
         </div>}
         {props.children && <div className={styles.CardActions}>
           {props.children}

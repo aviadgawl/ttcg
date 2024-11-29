@@ -530,7 +530,7 @@ const updateChampionStatusEffects = (championCard: ChampionCard) => {
     championCard.statusEffects.forEach((statusEffect) => {
         if (statusEffect.duration > 1) {
             if (statusEffect.name === EffectStatus.Burn && statusEffect.value !== null) {
-                championCard.calHp -= statusEffect.value;
+                championCard.currentHp -= statusEffect.value;
             }
 
             statusEffect.duration--;
@@ -631,7 +631,7 @@ const isValidForEquip = (championCard: ChampionCard, gearCard: GearCard): Valida
 }
 
 const isValidForAttach = (championCard: ChampionCard, actionCard: ActionCard): ValidationResult => {
-    if (actionCard.requiredClassName !== null && championCard.calClass !== actionCard.requiredClassName)
+    if (actionCard.requiredClassName !== null && championCard.calClass !== actionCard.requiredClassName && championCard.class !== actionCard.requiredClassName)
         return { message: `Champion das not have the required class of ${actionCard.requiredClassName}`, isValid: false };
 
     if (actionCard.requiredGearCategory !== null) {

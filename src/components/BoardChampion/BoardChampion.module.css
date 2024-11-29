@@ -77,3 +77,11 @@ span {
         width: 11px;
     }  
 }
+
+.LearnedActions {
+    background-color: chocolate!important;
+}
+
+.LearnedActions:hover {
+    background-color: rgb(146, 139, 134)!important;
+}

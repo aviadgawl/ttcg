@@ -283,7 +283,7 @@
         "dex": 0,
         "int": 1,
         "hp": 3,
-        "action": "Heal",
+        "action": "Self Heal",
         "requiredClass": "Acolyte",
         "isBlocking": false
     },
@@ -1094,7 +1094,7 @@
         "targetEffects": [
             {
                 "name": "Burn",
-                "duration": 3,
+                "duration": 4,
                 "stat": null,
                 "value": 1
             }

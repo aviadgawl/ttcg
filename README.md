@@ -14,6 +14,7 @@ npx generate-react-cli component MyComponent
 # bugs
 Jump Step don't jump over obstacle
 Need to add auto end turn for bot
-Need to test fire ball card - burn status effect
+Need to test fire ball card - burn status effect - bugged
 Add reconnect
 Add refresh
+class based actions lower class dont work: fixed need to test it

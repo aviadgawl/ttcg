@@ -26,6 +26,11 @@ function App() {
   }, []);
 
   useEffect(() => {
+    if (isLoggedIn)
+      setCurrentDisplay(1);
+  }, [isLoggedIn]);
+
+  useEffect(() => {
     if (!isLoggedIn)
       setDisabledTabIndex([1, 2]);
     else if (gameStatus === GameStatus.started)
@@ -42,7 +47,7 @@ function App() {
     <main className="App">
       <header>
         <GameTabs disabledTabIndexes={disabledTabIndex} displayMode={currentDisplay} onModeClick={handleDisplaySelect} />
-        <div>1.0.0</div>
+        <div>1.1.0</div>
       </header>
       <div>
         {currentDisplay === 0 && <Login />}

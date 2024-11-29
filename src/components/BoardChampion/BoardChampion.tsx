@@ -34,7 +34,12 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
   const player = useAppSelector((state) => state.gameActions.game.players[state.gameActions.game.playerIndex]);
   const playingPlayerIndex = useAppSelector((state) => state.gameActions.game.playingPlayerIndex);
   const [showDialog, setShowDialog] = useState(false);
-  const showInfoButton = props?.champion?.body || props?.champion?.rightHand || props?.champion?.leftHand || props?.champion?.upgrade;
+  const showInfoButton = props?.champion?.body ||
+    props?.champion?.rightHand ||
+    props?.champion?.leftHand ||
+    props?.champion?.upgrade ||
+    props?.champion?.attachedActionsCards ||
+    props?.champion?.learnedActionsCards;
 
   const handlePanelClick = () => {
     setShowDialog(true);
@@ -103,12 +108,12 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
         <GameCardDraw className="App-card-large" showChampionStats={true} card={props.champion}>
           <div className={styles.ChampionCardActions}>
             {props.champion.learnedActionsCards.map((card, actionIndex) =>
-              <Button disabled={isActionCardDisabled(props.champion, card, false)} size="small" variant="contained" className="App-button" key={actionIndex}
+              <Button disabled={isActionCardDisabled(props.champion, card, false)} size="small" variant="contained" className={styles.LearnedActions} key={actionIndex}
                 onClick={() => handleAction(card, false)}>{card.name} {card.isRepeatable && `(${card.repeatableActivationLeft})`}
               </Button>
             )}
             {props.champion.attachedActionsCards.map((card, actionIndex) =>
-              <Button disabled={isActionCardDisabled(props.champion, card, true)} size="small" variant="contained" className="App-button" key={actionIndex}
+              <Button disabled={isActionCardDisabled(props.champion, card, true)} size="small" variant="contained" key={actionIndex}
                 onClick={() => handleAction(card, true)}>{card.name} {card.isRepeatable && `(${card.repeatableActivationLeft})`}
               </Button>
             )}
