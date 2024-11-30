@@ -307,7 +307,9 @@ const surrender = (game: Game): string => {
 const canSummon = (player: Player, game: Game, targetLocation: BoardLocation, championToSummon: ChampionCard): ValidationResult => {
     if (player.summonsLeft === 0) return { message: 'Player used his all his summons', isValid: false };
 
-    if ((game.playerIndex === 0 && targetLocation.rowIndex < 11) || (game.playerIndex === 1 && targetLocation.rowIndex > 2))
+    const maxRow = game.board.length - 2;
+
+    if ((game.playerIndex === 0 && targetLocation.rowIndex < maxRow) || (game.playerIndex === 1 && targetLocation.rowIndex > 2))
         return { message: `Player ${game.playerIndex + 1} can not summon here ${targetLocation.rowIndex}-${targetLocation.columnIndex}`, isValid: false };
 
     const boardLocation = game.board[targetLocation.rowIndex][targetLocation.columnIndex];
