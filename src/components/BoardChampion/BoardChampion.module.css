@@ -31,22 +31,6 @@ span {
     padding: 0px!important;
 }
 
-.BoardChampionHpLabel {
-    font-weight: bolder;
-}
-
-@media only screen and (max-width: 600px) {
-    .BoardChampionHpLabel {
-        font-size: 20px;
-    }
-}
-  
-@media only screen and (min-width: 600px) {
-    .BoardChampionHpLabel {
-        font-size: 40px;
-    }
-}
-
 .PlayerOneObject {
     color: var(--player-one-color);
 }
@@ -63,25 +47,16 @@ span {
     flex-wrap: wrap;
  }
 
- .BoardChampionDirectionIcon {
-    background-color: white;
-    border: 1px solid black;
-    border-radius: 30%;
-    display: flex;
-    align-items: center;
- }
-
- @media only screen and (max-width: 600px) {
-    .BoardChampionDirectionIcon {
-        height: 16px;
-        width: 11px;
-    }  
-}
-
 .LearnedActions {
     background-color: chocolate!important;
 }
 
 .LearnedActions:hover {
     background-color: rgb(146, 139, 134)!important;
+}
+
+.Damage {
+    background-color: red;
+    width: 100%;
+    height: 100%;
 }

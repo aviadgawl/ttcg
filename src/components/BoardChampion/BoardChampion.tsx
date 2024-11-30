@@ -10,6 +10,8 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import GameCardDraw from '../GameCardDraw/GameCardDraw';
 import ChampionMenu from '../ChampionMenu/ChampionMenu';
+import BoardChampionPanel from '../BoardChampionPanel/BoardChampionPanel';
+import { playSoundByEvent } from '../../helpers/audio-helper';
 import styles from './BoardChampion.module.css';
 
 const directionIconMap: ReactElement[] = [
@@ -38,8 +40,8 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
     props?.champion?.rightHand ||
     props?.champion?.leftHand ||
     props?.champion?.upgrade ||
-    props?.champion?.attachedActionsCards ||
-    props?.champion?.learnedActionsCards;
+    props?.champion?.attachedActionsCards?.length > 0 ||
+    props?.champion?.learnedActionsCards?.length > 0;
 
   const handlePanelClick = () => {
     setShowDialog(true);
@@ -82,23 +84,9 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
     return false;
   }
 
-  const getPlayerClassName = () => {
-    if (props.champion.playerIndex === 0)
-      return styles.PlayerOneObject;
-    else if (props.champion.playerIndex === 1)
-      return styles.PlayerTwoObject;
-  }
+  return (<div className={`${props.className} ${styles.Container} ${props.isSelected ? styles.BoardChampionSelected : ''}`}>
 
-  return (<div className={`App-text-color ${props.className} ${styles.Container} ${props.isSelected ? styles.BoardChampionSelected : ''}`}>
-
-    <div style={{ backgroundImage: `url(${props.champion.image})` }}
-      className={styles.Panel}
-      onClick={handlePanelClick}>
-      <div className={`${styles.BoardChampionDirectionIcon} ${props.shouldRotate && 'App-rotate'}`}>
-        {directionIconMap[props.champion.direction]}
-      </div>
-      <label className={`${styles.BoardChampionHpLabel} ${getPlayerClassName()}`}>{props.champion.currentHp}</label>
-    </div>
+    <BoardChampionPanel champion={props.champion} onPanelClick={handlePanelClick} shouldRotate={props.shouldRotate} />
 
     <Dialog
       open={showDialog}

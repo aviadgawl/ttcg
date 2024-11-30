@@ -37,7 +37,7 @@ const Board: FC = () => {
   };
 
   const playerBaseClassName = (rowIndex: number) => {
-    if (rowIndex >= 11) return styles.PlayerOneBase;
+    if (rowIndex >= 8) return styles.PlayerOneBase;
     if (rowIndex <= 1) return styles.PlayerTwoBase;
   };
 

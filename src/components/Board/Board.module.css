@@ -28,11 +28,11 @@
 }
 
 .BoardPlayerOneBorder {
-    border: solid var(--player-one-color);
+    border: solid var(--player-one-color) 5px;
 }
 
 .BoardPlayerTwoBorder {
-    border: solid var(--player-two-color);
+    border: solid var(--player-two-color) 5px;
 }
 
 .PlayerTwoBase {

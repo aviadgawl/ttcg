@@ -114,10 +114,10 @@ export const createGame = (): Game => {
 
     const board = new Array(new Array<GameCard | null>(7))
 
-    for (let index = 0; index < 13; index++) {
-        if (index === 12) board[index] = [null, null, null, mockCrystalOne, null, null, null, null];
-        else if (index === 0) board[index] = [null, null, null, mockCrystalTwo, null, null, null, null];
-        else board[index] = [null, null, null, null, null, null, null, null];
+    for (let index = 0; index < 10; index++) {
+        if (index === 9) board[index] = [null, null, null, mockCrystalOne, null, null, null];
+        else if (index === 0) board[index] = [null, null, null, mockCrystalTwo, null, null, null];
+        else board[index] = [null, null, null, null, null, null, null];
     }
 
     return { board: board, players: [mockPlayerOne], status: GameStatus.over, playerIndex: 0, playingPlayerIndex: 0, loser: null, code: '' };

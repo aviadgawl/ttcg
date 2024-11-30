@@ -16,7 +16,7 @@ const BoardCrystal: FC<BoardCrystalProps> = (props: BoardCrystalProps) => {
       return styles.PlayerTwoObject;
   }
 
-  return <div className={`${props.className} App-text-color ${styles.BoardCrystal}`} style={{ backgroundImage: `url(${props.crystal.image})` }}>
+  return <div className={`${props.className} ${styles.BoardCrystal}`} style={{ backgroundImage: `url(${props.crystal.image})` }}>
     <label className={`${styles.BoardCrystalHpLabel} ${getPlayerClassName()}`}>{props.crystal.currentHp}</label>
   </div>
 };

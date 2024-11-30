@@ -24,7 +24,7 @@ const GameCardDraw: FC<CardProps> = (props) => {
 
   return <div className={props.className}>
     <Card onClick={handleShowDialog}
-      className={`${styles.Card} App-text-color`} sx={{ maxWidth: 345 }}>
+      className={`${styles.Card}`} sx={{ maxWidth: 345 }}>
 
       <CardContent style={{ backgroundImage: `url(${props.card.image})` }} className={styles.CardContent}>
         {props.showChampionStats && isChampion(props.card) && <div className={styles.CardStats}>
