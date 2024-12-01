@@ -23,6 +23,7 @@ const DeckBuilder: FC = () => {
   const cardsList = useAppSelector((state) => state.gameActions.cardsList);
   const playerAction = usePlayerAction();
 
+  const disablePrebuiltDecks = player.deck?.length > 0 || player.startingChampion !== null;
   const cardsInDeckGroupedByName = groupBy(player.deck, card => card.name);
 
   const handleExport = () => {
@@ -33,8 +34,6 @@ const DeckBuilder: FC = () => {
   }
 
   const importDeck = (deckString: string) => {
-    handleClear();
-
     deckString?.slice(1).split(',').forEach(cardData => {
       const [cardName, cardAmount] = cardData.split(':');
       const cardAmountAsNumber: number = parseInt(cardAmount);
@@ -75,10 +74,10 @@ const DeckBuilder: FC = () => {
   return <div className={styles.DeckBuilder}>
     <div className={styles.PrebuiltDecks}>
       <label>Decks:</label>
-      <Button onClick={() => importDeck(prebuiltDecks.Fighters)} variant='outlined'>Fighters</Button>
-      <Button onClick={() => importDeck(prebuiltDecks.Apprentices)} variant='outlined'>Apprentices</Button>
-      <Button onClick={() => importDeck(prebuiltDecks.Rouges)} variant='outlined'>Rouges</Button>
-      <Button onClick={() => importDeck(prebuiltDecks.FightersAndAcolytes)} variant='outlined'>Fighters & Acolytes</Button>
+      <Button disabled={disablePrebuiltDecks} onClick={() => importDeck(prebuiltDecks.Fighters)} variant='outlined'>Fighters</Button>
+      <Button disabled={disablePrebuiltDecks} onClick={() => importDeck(prebuiltDecks.Apprentices)} variant='outlined'>Apprentices</Button>
+      <Button disabled={disablePrebuiltDecks} onClick={() => importDeck(prebuiltDecks.Rouges)} variant='outlined'>Rouges</Button>
+      <Button disabled={disablePrebuiltDecks} onClick={() => importDeck(prebuiltDecks.FightersAndAcolytes)} variant='outlined'>Fighters & Acolytes</Button>
     </div>
     <div className={styles.Container}>
       <div className={styles.Deck}>
