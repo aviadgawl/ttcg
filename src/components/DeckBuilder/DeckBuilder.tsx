@@ -2,11 +2,12 @@ import { FC } from 'react';
 import { PlayerActionsName } from '../../logic/enums';
 import HandCard, { HandCardMode } from '../HandCard/HandCard';
 import Button from '@mui/material/Button';
-import styles from './DeckBuilder.module.css';
 import { useAppSelector, usePlayerAction } from '../../redux/hooks';
 import { GameCard, ChampionCard, isChampion } from '../../logic/game-card';
 import CardsDisplay from '../CardsDisplay/CardsDisplay';
 import { SelectedData } from '../../redux/store';
+import prebuiltDecks from './prebuilt-decks.json';
+import styles from './DeckBuilder.module.css';
 
 const groupBy = <T, K extends keyof any>(arr: T[], key: (i: T) => K) =>
   arr.reduce((groups, item) => {
@@ -31,10 +32,8 @@ const DeckBuilder: FC = () => {
     alert(deckBuildString);
   }
 
-  const handleImport = () => {
-    const deckString = prompt('Please deck string', '');
-
-    if (!deckString) return;
+  const importDeck = (deckString: string) => {
+    handleClear();
 
     deckString?.slice(1).split(',').forEach(cardData => {
       const [cardName, cardAmount] = cardData.split(':');
@@ -45,6 +44,12 @@ const DeckBuilder: FC = () => {
       if (cardsToAdd && cardsToAdd.length > 0)
         cardsToAdd.forEach(cardToAdd => addCardToDeck(cardToAdd));
     });
+  }
+
+  const handleImport = () => {
+    const deckString = prompt('Please deck string', '');
+    if (!deckString) return;
+    importDeck(deckString);
   }
 
   const handleClear = () => {
@@ -68,36 +73,44 @@ const DeckBuilder: FC = () => {
   }
 
   return <div className={styles.DeckBuilder}>
-    <div className={styles.Deck}>
-      <div>
-        <Button onClick={handleExport}>Export</Button>
-        <Button onClick={handleImport}>Import</Button>
-        <Button onClick={handleClear}>Clear</Button>
-        <hr />
-        <h2>Total: {player.deck.length}</h2>
-      </div>
-      <hr />
-      <div>
-        <h3> Starting Champion </h3>
-        {player.startingChampion && <>
-          <HandCard mode={HandCardMode.DeckBuilding} card={player.startingChampion} />
-        </>}
-        <h3> Deck </h3>
-        {Object.keys(cardsInDeckGroupedByName).map(cardName =>
-          <div key={cardName}>
-            <span>{cardsInDeckGroupedByName[cardName].length}</span>
-            <HandCard mode={HandCardMode.DeckBuilding} card={cardsInDeckGroupedByName[cardName][0]} />
-            <Button onClick={() => removeCardFromDeck(cardsInDeckGroupedByName[cardName][0])}>Remove</Button>
-            {isChampion(cardsInDeckGroupedByName[cardName][0]) && player.startingChampion?.name !== cardsInDeckGroupedByName[cardName][0].name &&
-              <Button variant="outlined" size="small" onClick={() => handleSelectingStartingChampion(cardsInDeckGroupedByName[cardName][0] as ChampionCard)}>
-                Select
-              </Button>}
-          </div>
-        )}
-      </div>
+    <div className={styles.PrebuiltDecks}>
+      <label>Decks:</label>
+      <Button onClick={() => importDeck(prebuiltDecks.Fighters)} variant='outlined'>Fighters</Button>
+      <Button onClick={() => importDeck(prebuiltDecks.Apprentices)} variant='outlined'>Apprentices</Button>
+      <Button onClick={() => importDeck(prebuiltDecks.Rouges)} variant='outlined'>Rouges</Button>
+      <Button onClick={() => importDeck(prebuiltDecks.FightersAndAcolytes)} variant='outlined'>Fighters & Acolytes</Button>
     </div>
-
-    <CardsDisplay cards={cardsList} onSelectCard={(card) => addCardToDeck(card)} buttonName="Add to deck" />
+    <div className={styles.Container}>
+      <div className={styles.Deck}>
+        <div>
+          <Button onClick={handleExport}>Export</Button>
+          <Button onClick={handleImport}>Import</Button>
+          <Button onClick={handleClear}>Clear</Button>
+          <hr />
+          <h2>Total: {player.deck.length}</h2>
+        </div>
+        <hr />
+        <div>
+          <h3> Starting Champion </h3>
+          {player.startingChampion && <>
+            <HandCard mode={HandCardMode.DeckBuilding} card={player.startingChampion} />
+          </>}
+          <h3> Deck </h3>
+          {Object.keys(cardsInDeckGroupedByName).map(cardName =>
+            <div key={cardName}>
+              <span>{cardsInDeckGroupedByName[cardName].length}</span>
+              <HandCard mode={HandCardMode.DeckBuilding} card={cardsInDeckGroupedByName[cardName][0]} />
+              <Button onClick={() => removeCardFromDeck(cardsInDeckGroupedByName[cardName][0])}>Remove</Button>
+              {isChampion(cardsInDeckGroupedByName[cardName][0]) && player.startingChampion?.name !== cardsInDeckGroupedByName[cardName][0].name &&
+                <Button variant="outlined" size="small" onClick={() => handleSelectingStartingChampion(cardsInDeckGroupedByName[cardName][0] as ChampionCard)}>
+                  Select
+                </Button>}
+            </div>
+          )}
+        </div>
+      </div>
+      <CardsDisplay cards={cardsList} onSelectCard={(card) => addCardToDeck(card)} buttonName="Add to deck" />
+    </div>
   </div>
 };
 
