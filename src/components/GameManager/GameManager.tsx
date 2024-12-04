@@ -9,7 +9,7 @@ import { GameStoreActionTypes } from '../../redux/types';
 import Board from '../Board/Board';
 import GameDetails from '../GameDetails/GameDetails';
 import Hand from '../Hand/Hand';
-import { playSoundByEvent } from '../../helpers/audio-helper';
+import { playSoundByEvent, SoundEvents } from '../../helpers/audio-helper';
 import styles from './GameManager.module.css';
 
 interface GameJoinCreateProps { }
@@ -29,7 +29,7 @@ const GameJoinCreate: FC<GameJoinCreateProps> = () => {
 
   useEffect(() => {
     if (game.playingPlayerIndex === game.playerIndex)
-      playSoundByEvent('StartTurn');
+      playSoundByEvent(SoundEvents.startTurn);
   }, [game.playingPlayerIndex])
 
   useEffect(() => {

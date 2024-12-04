@@ -1,7 +1,7 @@
 import React, { FC, useState, ReactElement, useEffect, useRef } from 'react';
 import { ChampionCard } from '../../logic/game-card';
 import { FaArrowRight, FaArrowLeft, FaArrowUp, FaArrowDown } from "react-icons/fa6";
-import { playSoundByEvent } from '../../helpers/audio-helper';
+import { playSoundByEvent , SoundEvents } from '../../helpers/audio-helper';
 import styles from './BoardChampionPanel.module.css';
 
 interface BoardChampionAnimationsProps {
@@ -19,18 +19,16 @@ const directionIconMap: ReactElement[] = [
 ];
 
 const BoardChampionPanel: FC<BoardChampionAnimationsProps> = (props: BoardChampionAnimationsProps) => {
-  console.log('champ', props.champion);
-
   const [showDamage, setShowDamage] = useState(false);
   const currentHpRef = useRef<number>()
 
   useEffect(() => {
-    if (currentHpRef.current && currentHpRef.current < props.champion.currentHp){
+    if (currentHpRef.current && currentHpRef.current > props.champion.currentHp){
       setShowDamage(true);
-      playSoundByEvent('');
+      playSoundByEvent(SoundEvents.hpDamage);
       setTimeout(() => {
         setShowDamage(false);
-      },500);
+      },1000);
     }
 
     currentHpRef.current = props.champion.currentHp;

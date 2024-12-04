@@ -9,20 +9,30 @@ import daggerThrowSound from '../assets/audio/dagger-throw.mp3';
 import buffSound from '../assets/audio/buff.mp3';
 import magicAttack from '../assets/audio/magic-attack.mp3';
 import turnStart from '../assets/audio/start-turn.mp3';
-import damage from '../assets/audio/damage.mp3';
+import armorDamage from '../assets/audio/armor-damage.mp3';
+import hpDamage from '../assets/audio/hp-damage.mp3';
 
 const playSound = (soundFile: string) => {
     const audio = new Audio(soundFile);
     audio.play();
 }
 
-export const playSoundByEvent = (eventName: string) => {
+export enum SoundEvents {
+    startTurn = 0,
+    hpDamage,
+    armorDamage
+}
+
+export const playSoundByEvent = (eventName: SoundEvents) => {
     switch (eventName) {
-        case 'StartTurn':
+        case SoundEvents.startTurn:
             playSound(turnStart);
             break;
-        case 'ChampionWasAttacked':
-            playSound(damage);
+        case SoundEvents.hpDamage:
+            playSound(hpDamage);
+            break;
+        case SoundEvents.armorDamage:
+            playSound(armorDamage);
             break;
         default:
             break;

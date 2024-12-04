@@ -54,9 +54,3 @@ span {
 .LearnedActions:hover {
     background-color: rgb(146, 139, 134)!important;
 }
-
-.Damage {
-    background-color: red;
-    width: 100%;
-    height: 100%;
-}

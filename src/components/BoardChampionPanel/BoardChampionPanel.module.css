@@ -48,3 +48,15 @@
 .PlayerTwoObject {
     color: var(--player-two-color);
 }
+
+.Damage {
+    background-color: red;
+    width: 100%;
+    height: 100%;
+    animation: damageAnimation 2s;
+}
+
+@keyframes damageAnimation {
+    from {background-color: transparent;}
+    to {background-color: red;}
+  }
