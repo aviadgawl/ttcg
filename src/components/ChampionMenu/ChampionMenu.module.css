@@ -1,3 +1,4 @@
 .ChampionMenuList ul {
     display: flex;
+    overflow: scroll;
 }
