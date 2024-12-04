@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/ttcg/static/css/main.1ceff929.css",
-    "main.js": "/ttcg/static/js/main.3f4ed41b.js",
-    "static/media/WarMage.png": "/ttcg/static/media/WarMage.136ac08424c054ae9e45.png",
+    "main.js": "/ttcg/static/js/main.fa63c74d.js",
+    "static/media/WarMage.png": "/ttcg/static/media/WarMage.f9c97f024f1c9bdfaf21.png",
     "static/media/RefreshMe.png": "/ttcg/static/media/RefreshMe.d1ab3397d77d9648e5fb.png",
     "static/media/Enrage.png": "/ttcg/static/media/Enrage.49813f73dd134e405b2d.png",
     "static/media/FixIt.png": "/ttcg/static/media/FixIt.6d4040057ab83afe8395.png",
@@ -13,7 +13,7 @@
     "static/media/HighMage.png": "/ttcg/static/media/HighMage.a587f9e33982fd64bbf8.png",
     "static/media/PetrifiedHex.png": "/ttcg/static/media/PetrifiedHex.80d12f48fd4603943c86.png",
     "static/media/FindHim.png": "/ttcg/static/media/FindHim.608ec1e5669f65c2a650.png",
-    "static/media/BattlePriest.png": "/ttcg/static/media/BattlePriest.8544a4908fca75132e4b.png",
+    "static/media/BattlePriest.png": "/ttcg/static/media/BattlePriest.f3cfb2d8306106003db3.png",
     "static/media/UltimateDefense.png": "/ttcg/static/media/UltimateDefense.b3b8d45cedcbd411d18a.png",
     "static/media/AxeSlash.png": "/ttcg/static/media/AxeSlash.42d02946456297e912a8.png",
     "static/media/Barbarian.png": "/ttcg/static/media/Barbarian.ebdf2f143604e2f03f2f.png",
@@ -55,6 +55,7 @@
     "static/media/GreatBow.png": "/ttcg/static/media/GreatBow.281f683a424c53cccb08.png",
     "static/media/Chiron.png": "/ttcg/static/media/Chiron.88c10edf3ece48c8ab35.png",
     "static/media/SimpleWand.png": "/ttcg/static/media/SimpleWand.f8891effa12a784d708b.png",
+    "static/media/DualDaggers.png": "/ttcg/static/media/DualDaggers.aed87d4d0a576515160b.png",
     "static/media/AcidBomb.png": "/ttcg/static/media/AcidBomb.1394db343e933d433cc0.png",
     "static/media/Aron.png": "/ttcg/static/media/Aron.180d26d3c14d5181dbe1.png",
     "static/media/LeatherArmor.png": "/ttcg/static/media/LeatherArmor.20edbc3dddd443254ceb.png",
@@ -89,10 +90,10 @@
     "static/media/draw.mp3": "/ttcg/static/media/draw.ceb460e6016f04e97598.mp3",
     "index.html": "/ttcg/index.html",
     "main.1ceff929.css.map": "/ttcg/static/css/main.1ceff929.css.map",
-    "main.3f4ed41b.js.map": "/ttcg/static/js/main.3f4ed41b.js.map"
+    "main.fa63c74d.js.map": "/ttcg/static/js/main.fa63c74d.js.map"
   },
   "entrypoints": [
     "static/css/main.1ceff929.css",
-    "static/js/main.3f4ed41b.js"
+    "static/js/main.fa63c74d.js"
   ]
 }

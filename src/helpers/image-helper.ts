@@ -31,6 +31,7 @@ import PlateArmor from '../assets/images/PlateArmor.png';
 import RobeArmor from '../assets/images/RobeArmor.png';
 import GreatBow from '../assets/images/GreatBow.png';
 import GreatAxe from '../assets/images/GreatAxe.png';
+import DualDaggers from '../assets/images/DualDaggers.png';
 // Actions
 import Step from '../assets/images/Step.png';
 import BasicHit from '../assets/images/BasicHit.png';
@@ -141,6 +142,8 @@ export const getImage = (id: string): string => {
             return GreatBow;
         case 'Great Axe':
             return GreatAxe;
+        case 'Dual Daggers':
+            return DualDaggers;
         // Actions
         case 'Step':
             return Step;

@@ -303,10 +303,21 @@
         "name": "Simple Dagger",
         "category": "Daggers",
         "str": 0,
-        "dex": 2,
+        "dex": 1,
         "int": 0,
         "hp": 0,
         "bodyPart": "Hand",
+        "isBlocking": false
+    },
+    {
+        "type": "GearCard",
+        "name": "Dual Daggers",
+        "category": "Daggers",
+        "str": 1,
+        "dex": 1,
+        "int": 0,
+        "hp": 0,
+        "bodyPart": "Hands",
         "isBlocking": false
     },
     {
