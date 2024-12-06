@@ -65,6 +65,7 @@ export const cardsList = cardsListJson.flatMap(x => {
                     requiredStatValue: x.requiredStatValue ?? null,
                     requiredGearCategory: x.requiredGearCategory ?? null,
                     isFreeTargeting: x.isFreeTargeting ?? false,
+                    isBackTargeting: x.isBackTargeting ?? false,
                     targetEffects: x.targetEffects?.map(effect => {
                         return {
                             name: EffectStatus[(effect.name ?? '') as keyof typeof EffectStatus],

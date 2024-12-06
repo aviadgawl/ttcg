@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/ttcg/static/css/main.1ceff929.css",
-    "main.js": "/ttcg/static/js/main.fa63c74d.js",
+    "main.js": "/ttcg/static/js/main.46bab12f.js",
     "static/media/WarMage.png": "/ttcg/static/media/WarMage.f9c97f024f1c9bdfaf21.png",
     "static/media/RefreshMe.png": "/ttcg/static/media/RefreshMe.d1ab3397d77d9648e5fb.png",
     "static/media/Enrage.png": "/ttcg/static/media/Enrage.49813f73dd134e405b2d.png",
@@ -33,7 +33,7 @@
     "static/media/HighPriest.png": "/ttcg/static/media/HighPriest.4d6481f86610cd3a70f0.png",
     "static/media/SelfHeal.png": "/ttcg/static/media/SelfHeal.5a1b834851196bb14a97.png",
     "static/media/DaggerSlash.png": "/ttcg/static/media/DaggerSlash.fed46a7929e1ab9b62dc.png",
-    "static/media/Shadow.png": "/ttcg/static/media/Shadow.cb212f3b7b173d0b127f.png",
+    "static/media/Shadow.png": "/ttcg/static/media/Shadow.55db7fa0aa25682f0b89.png",
     "static/media/ShieldBash.png": "/ttcg/static/media/ShieldBash.882df2d870cd79e93a2a.png",
     "static/media/ArcanePower.png": "/ttcg/static/media/ArcanePower.c9f792ebb8372dda4e62.png",
     "static/media/Haste.png": "/ttcg/static/media/Haste.6543423194cfc716ba10.png",
@@ -71,6 +71,7 @@
     "static/media/Tafrandir.png": "/ttcg/static/media/Tafrandir.6fef6589032d4f6279ac.png",
     "static/media/GreatStaff.png": "/ttcg/static/media/GreatStaff.1e937cd670bab91aa977.png",
     "static/media/BasicHit.png": "/ttcg/static/media/BasicHit.dd906098cfee3f3ef7fe.png",
+    "static/media/BackStab.png": "/ttcg/static/media/BackStab.7cfed83058dc74d2c80f.png",
     "static/media/BoardBackground.jpg": "/ttcg/static/media/BoardBackground.bd83824437efd93a958b.jpg",
     "static/media/JumpStep.png": "/ttcg/static/media/JumpStep.7533a22f2af6078ef446.png",
     "static/media/basic-hit.mp3": "/ttcg/static/media/basic-hit.6562a7f771f3f3aa3de1.mp3",
@@ -90,10 +91,10 @@
     "static/media/draw.mp3": "/ttcg/static/media/draw.ceb460e6016f04e97598.mp3",
     "index.html": "/ttcg/index.html",
     "main.1ceff929.css.map": "/ttcg/static/css/main.1ceff929.css.map",
-    "main.fa63c74d.js.map": "/ttcg/static/js/main.fa63c74d.js.map"
+    "main.46bab12f.js.map": "/ttcg/static/js/main.46bab12f.js.map"
   },
   "entrypoints": [
     "static/css/main.1ceff929.css",
-    "static/js/main.fa63c74d.js"
+    "static/js/main.46bab12f.js"
   ]
 }

@@ -905,6 +905,24 @@
     {
         "type": "ActionCard",
         "actionType": "Melee",
+        "name": "Back Stab",
+        "distance": [
+            1,
+            1
+        ],
+        "direction": "Straight",
+        "dmgStat": "Str",
+        "dmgModifier": "Multiply",
+        "dmgModifierValue": 2,
+        "requiredClassName": "Shadow",
+        "requiredGearCategory": "Daggers",
+        "isFreeTargeting": true,
+        "isBackTargeting": true,
+        "targetEffects": []
+    },
+    {
+        "type": "ActionCard",
+        "actionType": "Melee",
         "name": "Axe Swipe",
         "distance": [
             1,

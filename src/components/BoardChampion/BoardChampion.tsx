@@ -1,25 +1,17 @@
-import { FC, ReactElement, useState } from 'react';
+import { FC, useState } from 'react';
 import { ActionCard, ChampionCard } from '../../logic/game-card';
 import { checkRepeatableAction } from '../../logic/champion';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { setSelectedActionData, createSelectedData } from '../../redux/store';
 import { GameStoreActionTypes } from '../../redux/types';
-import { FaCircleInfo, FaArrowRight, FaArrowLeft, FaArrowUp, FaArrowDown } from "react-icons/fa6";
+import { FaCircleInfo } from "react-icons/fa6";
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import GameCardDraw from '../GameCardDraw/GameCardDraw';
 import ChampionMenu from '../ChampionMenu/ChampionMenu';
 import BoardChampionPanel from '../BoardChampionPanel/BoardChampionPanel';
-import { playSoundByEvent } from '../../helpers/audio-helper';
 import styles from './BoardChampion.module.css';
-
-const directionIconMap: ReactElement[] = [
-  <FaArrowUp />,
-  <FaArrowDown />,
-  <FaArrowLeft />,
-  <FaArrowRight />
-];
 
 interface BoardChampionProps {
   champion: ChampionCard;

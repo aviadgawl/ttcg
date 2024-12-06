@@ -65,6 +65,7 @@ import PetrifiedHex from '../assets/images/PetrifiedHex.png';
 import ShieldBash from '../assets/images/ShieldBash.png';
 import ArmorBreak from '../assets/images/ArmorBreak.png';
 import MindBreak from '../assets/images/MindBreak.png';
+import BackStab from '../assets/images/BackStab.png';
 // Orders
 import GiveMeMore from '../assets/images/GiveMeMore.png';
 import Regroup from '../assets/images/Regroup.png';
@@ -209,6 +210,8 @@ export const getImage = (id: string): string => {
             return ArmorBreak;
         case 'Mind Break':
             return MindBreak;
+        case 'Back Stab':
+            return BackStab;
         // Orders
         case 'Give Me More!':
             return GiveMeMore;

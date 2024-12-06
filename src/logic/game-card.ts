@@ -101,6 +101,7 @@ export interface ActionCard extends GameCard {
     isFreeTargeting: boolean;
     targetEffects: StatusEffect[];
     isRepeatable: boolean;
+    isBackTargeting: boolean;
     repeatableStat: Stats | null;
     repeatableActivationLeft: number | null;
     wasPlayed: boolean;

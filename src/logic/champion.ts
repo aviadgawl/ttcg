@@ -210,6 +210,13 @@ const attack = (game: Game, attackingChampion: ChampionCard,
     if (!validTarget) return { status: 'Target is not a champion or crystal', targetedCard: target };
 
     if (isChampion(target)) {
+
+        if(actionCard.isBackTargeting) {
+            const attackDirection = getChampionDirection(sourceLocation, targetLocation);
+            if(target.direction !== attackDirection) 
+                return { status: 'This attack can only hit champions from behind', targetedCard: target };
+        }
+
         if (target.statusEffects.some(effect => effect.name === EffectStatus.DamageImmunity))
             return { status: 'Target is immune to damage', targetedCard: target };
 
