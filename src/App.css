@@ -7,6 +7,14 @@
   text-align: center;
 }
 
+.App-player-one-color {
+  color: var(--player-one-color);
+}
+
+.App-player-two-color {
+  color: var(--player-two-color);
+}
+
 .App-rotate {
   transform: rotate(180deg);
 }

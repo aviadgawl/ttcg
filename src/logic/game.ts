@@ -112,11 +112,11 @@ export interface Game {
 };
 
 export const createGame = (): Game => {
-
+    const maxRows = 11;
     const board = new Array(new Array<GameCard | null>(7))
 
-    for (let index = 0; index < 10; index++) {
-        if (index === 9) board[index] = [null, null, null, mockCrystalOne, null, null, null];
+    for (let index = 0; index < maxRows; index++) {
+        if (index === (maxRows - 1)) board[index] = [null, null, null, mockCrystalOne, null, null, null];
         else if (index === 0) board[index] = [null, null, null, mockCrystalTwo, null, null, null];
         else board[index] = [null, null, null, null, null, null, null];
     }

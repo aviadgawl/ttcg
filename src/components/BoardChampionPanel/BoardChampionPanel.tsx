@@ -8,7 +8,8 @@ interface BoardChampionAnimationsProps {
   children?: React.ReactNode,
   champion: ChampionCard,
   onPanelClick: () => void,
-  shouldRotate?: boolean
+  shouldRotate?: boolean,
+  colorClassName: string,
 }
 
 const directionIconMap: ReactElement[] = [
@@ -34,13 +35,6 @@ const BoardChampionPanel: FC<BoardChampionAnimationsProps> = (props: BoardChampi
     currentHpRef.current = props.champion.currentHp;
   }, [props.champion.currentHp])
 
-  const getPlayerClassName = () => {
-    if (props.champion.playerIndex === 0)
-      return styles.PlayerOneObject;
-    else if (props.champion.playerIndex === 1)
-      return styles.PlayerTwoObject;
-  }
-
   return <div style={{ backgroundImage: `url(${props.champion.image})` }}
     className={styles.Panel}
     onClick={props.onPanelClick}>
@@ -48,7 +42,7 @@ const BoardChampionPanel: FC<BoardChampionAnimationsProps> = (props: BoardChampi
       <div className={`${styles.DirectionIcon} ${props.shouldRotate && 'App-rotate'}`}>
         {directionIconMap[props.champion.direction]}
       </div>
-      <label className={`${styles.HpLabel} ${getPlayerClassName()}`}>{props.champion.currentHp}</label>
+      <label className={`${styles.HpLabel} ${props.colorClassName}`}>{props.champion.currentHp}</label>
     </div>
   </div>
 };

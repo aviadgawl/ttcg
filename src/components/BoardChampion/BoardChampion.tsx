@@ -20,6 +20,7 @@ interface BoardChampionProps {
   isSelected: boolean;
   shouldRotate?: boolean;
   className: string;
+  colorClassName: string;
 }
 
 const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
@@ -78,7 +79,7 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
 
   return (<div className={`${props.className} ${styles.Container} ${props.isSelected ? styles.BoardChampionSelected : ''}`}>
 
-    <BoardChampionPanel champion={props.champion} onPanelClick={handlePanelClick} shouldRotate={props.shouldRotate} />
+    <BoardChampionPanel colorClassName={props.colorClassName} champion={props.champion} onPanelClick={handlePanelClick} shouldRotate={props.shouldRotate} />
 
     <Dialog
       open={showDialog}

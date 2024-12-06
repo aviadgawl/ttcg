@@ -27,11 +27,11 @@
     z-index: 1;
 }
 
-.BoardPlayerOneBorder {
+.PlayerOneBorder {
     border: solid var(--player-one-color) 5px;
 }
 
-.BoardPlayerTwoBorder {
+.PlayerTwoBorder {
     border: solid var(--player-two-color) 5px;
 }
 
@@ -43,14 +43,14 @@
     background-color: var(--player-one-color);
 }
 
-.BoardPanel {
+.Panel {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100%;
 }
 
-.BoardObject {
+.Object {
     width: 100%;
     z-index: 2;
 }

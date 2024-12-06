@@ -31,14 +31,6 @@ span {
     padding: 0px!important;
 }
 
-.PlayerOneObject {
-    color: var(--player-one-color);
-}
-
-.PlayerTwoObject {
-    color: var(--player-two-color);
-}
-
 .ChampionCardActions {
     display: flex;
     width: 100%;

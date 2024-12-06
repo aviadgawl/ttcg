@@ -10,6 +10,7 @@ import Board from '../Board/Board';
 import GameDetails from '../GameDetails/GameDetails';
 import Hand from '../Hand/Hand';
 import { playSoundByEvent, SoundEvents } from '../../helpers/audio-helper';
+import StoneBackground from '../../assets/images/StoneBackground.jpg';
 import styles from './GameManager.module.css';
 
 interface GameJoinCreateProps { }
@@ -98,7 +99,7 @@ const GameJoinCreate: FC<GameJoinCreateProps> = () => {
       </div>
     </div>}
     {game.status === GameStatus.started && <>
-      <div className={styles.GameManagerGameAndDetails}>
+      <div style={{ backgroundImage: `url(${StoneBackground})` }} className={styles.GameAndDetails}>
         <GameDetails />
         <Board />
       </div>

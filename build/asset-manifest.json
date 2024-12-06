@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/ttcg/static/css/main.1ceff929.css",
-    "main.js": "/ttcg/static/js/main.46bab12f.js",
+    "main.css": "/ttcg/static/css/main.182f44de.css",
+    "main.js": "/ttcg/static/js/main.48c6f5d2.js",
     "static/media/WarMage.png": "/ttcg/static/media/WarMage.f9c97f024f1c9bdfaf21.png",
     "static/media/RefreshMe.png": "/ttcg/static/media/RefreshMe.d1ab3397d77d9648e5fb.png",
     "static/media/Enrage.png": "/ttcg/static/media/Enrage.49813f73dd134e405b2d.png",
@@ -50,6 +50,7 @@
     "static/media/Heal.png": "/ttcg/static/media/Heal.8fe107b1026e69085da6.png",
     "static/media/Firsha.png": "/ttcg/static/media/Firsha.1b9eb75bc37f3065bc14.png",
     "static/media/RobeArmor.png": "/ttcg/static/media/RobeArmor.cbcaf1563ba2aca3f48d.png",
+    "static/media/StoneBackground.jpg": "/ttcg/static/media/StoneBackground.a24c6a3860573fe7aafd.jpg",
     "static/media/Gurak.png": "/ttcg/static/media/Gurak.0aff5435480ed71027a3.png",
     "static/media/Eduard.png": "/ttcg/static/media/Eduard.85f6575de7633a14034d.png",
     "static/media/GreatBow.png": "/ttcg/static/media/GreatBow.281f683a424c53cccb08.png",
@@ -72,7 +73,6 @@
     "static/media/GreatStaff.png": "/ttcg/static/media/GreatStaff.1e937cd670bab91aa977.png",
     "static/media/BasicHit.png": "/ttcg/static/media/BasicHit.dd906098cfee3f3ef7fe.png",
     "static/media/BackStab.png": "/ttcg/static/media/BackStab.7cfed83058dc74d2c80f.png",
-    "static/media/BoardBackground.jpg": "/ttcg/static/media/BoardBackground.bd83824437efd93a958b.jpg",
     "static/media/JumpStep.png": "/ttcg/static/media/JumpStep.7533a22f2af6078ef446.png",
     "static/media/basic-hit.mp3": "/ttcg/static/media/basic-hit.6562a7f771f3f3aa3de1.mp3",
     "static/media/magic-attack.mp3": "/ttcg/static/media/magic-attack.718cb9e214abf6733b29.mp3",
@@ -90,11 +90,11 @@
     "static/media/hp-damage.mp3": "/ttcg/static/media/hp-damage.e932eef6fc9036076d78.mp3",
     "static/media/draw.mp3": "/ttcg/static/media/draw.ceb460e6016f04e97598.mp3",
     "index.html": "/ttcg/index.html",
-    "main.1ceff929.css.map": "/ttcg/static/css/main.1ceff929.css.map",
-    "main.46bab12f.js.map": "/ttcg/static/js/main.46bab12f.js.map"
+    "main.182f44de.css.map": "/ttcg/static/css/main.182f44de.css.map",
+    "main.48c6f5d2.js.map": "/ttcg/static/js/main.48c6f5d2.js.map"
   },
   "entrypoints": [
-    "static/css/main.1ceff929.css",
-    "static/js/main.46bab12f.js"
+    "static/css/main.182f44de.css",
+    "static/js/main.48c6f5d2.js"
   ]
 }
