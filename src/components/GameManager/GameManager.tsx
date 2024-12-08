@@ -13,9 +13,9 @@ import { playSoundByEvent, SoundEvents } from '../../helpers/audio-helper';
 import StoneBackground from '../../assets/images/StoneBackground.jpg';
 import styles from './GameManager.module.css';
 
-interface GameJoinCreateProps { }
+interface GameManagerProps { }
 
-const GameJoinCreate: FC<GameJoinCreateProps> = () => {
+const GameManager: FC<GameManagerProps> = () => {
   const [gameCode, setGameCode] = useState('');
   const loser = useAppSelector((state) => state.gameActions.game.loser);
   const game = useAppSelector((state) => state.gameActions.game);
@@ -89,7 +89,7 @@ const GameJoinCreate: FC<GameJoinCreateProps> = () => {
     createGame('Bot');
   }
 
-  return <div className={styles.GameJoinCreate}>
+  return <div>
     {game.status === GameStatus.over && <div>
       <TextField onChange={(input) => setGameCode(input.target.value)} placeholder='Code' helperText="Enter Game Code" />
       <div>
@@ -108,4 +108,4 @@ const GameJoinCreate: FC<GameJoinCreateProps> = () => {
   </div>
 };
 
-export default GameJoinCreate;
+export default GameManager;

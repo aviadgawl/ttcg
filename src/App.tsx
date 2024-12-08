@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import DeckBuilder from './components/DeckBuilder/DeckBuilder';
 import GameTabs from './components/GameTabs/GameTabs';
-import GameJoinCreate from './components/GameManager/GameManager';
+import GameManager from './components/GameManager/GameManager';
 import { useAppSelector, useAppDispatch } from './redux/hooks';
 import { setIsLoggedIn } from './redux/store';
 import { GameStatus } from './logic/enums';
@@ -49,11 +49,9 @@ function App() {
         <GameTabs disabledTabIndexes={disabledTabIndex} displayMode={currentDisplay} onModeClick={handleDisplaySelect} />
         <div>1.6.0</div>
       </header>
-      <div>
-        {currentDisplay === 0 && <Login />}
-        {currentDisplay === 1 && <DeckBuilder />}
-        {currentDisplay === 2 && <GameJoinCreate />}
-      </div>
+      {currentDisplay === 0 && <Login />}
+      {currentDisplay === 1 && <DeckBuilder />}
+      {currentDisplay === 2 && <GameManager />}
     </main>
   );
 }

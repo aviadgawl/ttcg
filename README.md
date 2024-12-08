@@ -16,3 +16,6 @@ Jump Step don't jump over obstacle
 Need to add auto end turn for bot
 Add reconnect
 Add refresh
+Attached action step disappears after one use
+Learned actions disabled when summoning champion
+limit steps, armor, mental to 6

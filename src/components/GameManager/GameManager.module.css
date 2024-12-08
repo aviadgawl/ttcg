@@ -9,7 +9,7 @@
 
 /* mobile */
 @media only screen and (max-width: 600px) {
-    .GameManagerGameAndDetails {
+    .GameAndDetails {
         height: 86.5dvh;
     }
 }
