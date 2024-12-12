@@ -87,8 +87,7 @@ const Hand: FC = () => {
       <Button variant="outlined" onClick={() => dispatch(setShowHand(true))}>Show Hand</Button>
       <Button variant="outlined" onClick={() => dispatch(setShowGameDetails(true))}>Show Details</Button>
     </div>
-    <Drawer variant="persistent" anchor="bottom" open={showHand} onClose={() => dispatch(setShowHand(false))}>
-      <Button onClick={() => dispatch(setShowHand(false))}>Hide Hand</Button>
+    <Drawer anchor="bottom" open={showHand} onClose={() => dispatch(setShowHand(false))}>
       <div className={styles.CardContainer}>
         <div className={styles.HandButtonsContainer}>
           <h3 onClick={() => setShowUsedCardsDialog(true)}> Used Cards: {player.usedCards.length}</h3>
