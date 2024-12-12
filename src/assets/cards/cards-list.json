@@ -1202,5 +1202,20 @@
                 "value": -6
             }
         ]
+    },
+    {
+        "type": "ActionCard",
+        "actionType": "Magic",
+        "name": "Ether Blade Slash",
+        "distance": [
+            1,
+            1
+        ],
+        "direction": "Straight",
+        "dmgStat": "Int",
+        "dmgModifier": "Plus",
+        "dmgModifierValue": 2,
+        "isFreeTargeting": true,
+        "targetEffects": []
     }
 ]

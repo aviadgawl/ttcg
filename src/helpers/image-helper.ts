@@ -66,6 +66,7 @@ import ShieldBash from '../assets/images/ShieldBash.png';
 import ArmorBreak from '../assets/images/ArmorBreak.png';
 import MindBreak from '../assets/images/MindBreak.png';
 import BackStab from '../assets/images/BackStab.png';
+import EtherBladeSlash from '../assets/images/EtherBladeSlash.png';
 // Orders
 import GiveMeMore from '../assets/images/GiveMeMore.png';
 import Regroup from '../assets/images/Regroup.png';
@@ -212,6 +213,8 @@ export const getImage = (id: string): string => {
             return MindBreak;
         case 'Back Stab':
             return BackStab;
+        case 'Ether Blade Slash':
+            return EtherBladeSlash;
         // Orders
         case 'Give Me More!':
             return GiveMeMore;

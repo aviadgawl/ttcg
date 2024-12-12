@@ -1,8 +1,9 @@
 {
   "files": {
     "main.css": "/ttcg/static/css/main.b191f8b3.css",
-    "main.js": "/ttcg/static/js/main.e59b776e.js",
+    "main.js": "/ttcg/static/js/main.e4a83277.js",
     "static/media/WarMage.png": "/ttcg/static/media/WarMage.b9d64aaec59d6ed573e0.png",
+    "static/media/EtherBladeSlash.png": "/ttcg/static/media/EtherBladeSlash.9bb6fe3bcb05e6c93833.png",
     "static/media/RefreshMe.png": "/ttcg/static/media/RefreshMe.d1ab3397d77d9648e5fb.png",
     "static/media/Enrage.png": "/ttcg/static/media/Enrage.49813f73dd134e405b2d.png",
     "static/media/FixIt.png": "/ttcg/static/media/FixIt.6d4040057ab83afe8395.png",
@@ -91,10 +92,10 @@
     "static/media/draw.mp3": "/ttcg/static/media/draw.ceb460e6016f04e97598.mp3",
     "index.html": "/ttcg/index.html",
     "main.b191f8b3.css.map": "/ttcg/static/css/main.b191f8b3.css.map",
-    "main.e59b776e.js.map": "/ttcg/static/js/main.e59b776e.js.map"
+    "main.e4a83277.js.map": "/ttcg/static/js/main.e4a83277.js.map"
   },
   "entrypoints": [
     "static/css/main.b191f8b3.css",
-    "static/js/main.e59b776e.js"
+    "static/js/main.e4a83277.js"
   ]
 }
