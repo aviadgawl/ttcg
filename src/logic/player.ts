@@ -35,21 +35,21 @@ export interface Player {
     startingChampion: ChampionCard | null;
 }
 
-const isCardRequirementsValid = (orderCard: OrderCard, orderCardRequirements: OrderCardRequirement, card: GameCard): boolean => {
+export const isCardRequirementsValid = (orderCard: OrderCard, orderCardRequirements: OrderCardRequirement, card: GameCard): boolean => {
     if (card.guid === orderCard.guid) return false;
     if (orderCardRequirements.cardType === null) return true;
 
     return checkCardType(card, orderCardRequirements.cardType);
 }
 
-const removeFromArray = <T>(array: T[], predicate: (item: T) => boolean) => {
+export const removeFromArray = <T>(array: T[], predicate: (item: T) => boolean) => {
     const index = array.findIndex(predicate);
     if (index === -1) return;
 
     array.splice(index, 1);
 }
 
-const getValidCardsForDiscard = (player: Player, cards: GameCard[], orderCard: OrderCard): { cardToDiscard: GameCard[], amountToDiscard: number | undefined } => {
+export const getValidCardsForDiscard = (player: Player, cards: GameCard[], orderCard: OrderCard): { cardToDiscard: GameCard[], amountToDiscard: number | undefined } => {
     const orderCardDiscardRequirement: OrderCardRequirement | undefined = orderCard.requirement.find(x => x.name === 'discard');
 
     if (orderCardDiscardRequirement === undefined)
@@ -70,7 +70,7 @@ const getValidCardsForDiscard = (player: Player, cards: GameCard[], orderCard: O
     return { cardToDiscard: cardAllowedToDiscard, amountToDiscard: orderCardDiscardRequirement?.amount };
 }
 
-const getSummonBoardLocation = (game: Game, startingRow: number, endRow: number): BoardLocation[] => {
+export const getSummonBoardLocation = (game: Game, startingRow: number, endRow: number): BoardLocation[] => {
     let locations: BoardLocation[] = [];
 
     for (let rowIndex = startingRow; rowIndex < endRow; rowIndex++) {
@@ -85,7 +85,7 @@ const getSummonBoardLocation = (game: Game, startingRow: number, endRow: number)
     return locations;
 }
 
-const getSummonBoardLocations = (game: Game): AllowedBoardLocationResponse => {
+export const getSummonBoardLocations = (game: Game): AllowedBoardLocationResponse => {
     let locations: BoardLocation[] = [];
 
     const player = getPlayer(game);
@@ -102,7 +102,7 @@ const getSummonBoardLocations = (game: Game): AllowedBoardLocationResponse => {
     return { message: 'success', locations: locations };
 }
 
-const getValidChampionsBoardLocations = (game: Game, selectedCard: GameCard | null, predicate: Function): AllowedBoardLocationResponse => {
+export const getValidChampionsBoardLocations = (game: Game, selectedCard: GameCard | null, predicate: Function): AllowedBoardLocationResponse => {
     const locations: BoardLocation[] = [];
 
     if (selectedCard !== null)
@@ -118,7 +118,7 @@ const getValidChampionsBoardLocations = (game: Game, selectedCard: GameCard | nu
     return { message: 'success', locations: locations };
 }
 
-const getAmountToDraw = (game: Game, condition: string | null): number => {
+export const getAmountToDraw = (game: Game, condition: string | null): number => {
     let amountToDraw: number = 0;
 
     switch (condition) {
@@ -137,7 +137,7 @@ const getAmountToDraw = (game: Game, condition: string | null): number => {
     return amountToDraw;
 }
 
-const orderCardDrawLogic = (drawRewardType: RewardType, game: Game, player: Player, playedOrderCard: OrderCard, cardsToDraw: GameCard[]|undefined): string => {
+export const orderCardDrawLogic = (drawRewardType: RewardType, game: Game, player: Player, playedOrderCard: OrderCard, cardsToDraw: GameCard[]|undefined): string => {
     switch (drawRewardType) {
         case RewardType.ReturnUsedCardToDeck:
             return drawFrom(player.usedCards,
@@ -176,7 +176,7 @@ const orderCardDrawLogic = (drawRewardType: RewardType, game: Game, player: Play
     }
 }
 
-const playOrder = (game: Game, playedOrderCard: OrderCard, cardsPayment: GameCard[] | undefined, cardsToDraw: GameCard[] | undefined): string => {
+export const playOrder = (game: Game, playedOrderCard: OrderCard, cardsPayment: GameCard[] | undefined, cardsToDraw: GameCard[] | undefined): string => {
     if (cardsPayment === undefined) return 'cardsPayment can not be undefined';
 
     const player = getPlayer(game);
@@ -216,7 +216,7 @@ const playOrder = (game: Game, playedOrderCard: OrderCard, cardsPayment: GameCar
     return 'success';
 }
 
-const turnDraw = (player: Player): string => {
+export const turnDraw = (player: Player): string => {
     if (player.didDraw) return 'Player already draw this turn';
 
     const result = drawFrom(player.deck, player.hand, 1, null, null, null);
@@ -226,7 +226,7 @@ const turnDraw = (player: Player): string => {
     return result;
 }
 
-const initialDraw = (player: Player): string => {
+export const initialDraw = (player: Player): string => {
     if (player.startingChampion)
         player.hand.push(player.startingChampion);
 
@@ -237,7 +237,7 @@ const initialDraw = (player: Player): string => {
     return result;
 }
 
-const drawSpecificCard = (drawFromPool: GameCard[],
+export const drawSpecificCard = (drawFromPool: GameCard[],
     drawTo: GameCard[],
     cardToDraw: GameCard,
     requiredCardType: CardType | null): string => {
@@ -254,7 +254,7 @@ const drawSpecificCard = (drawFromPool: GameCard[],
     return 'success';
 }
 
-const drawFrom = (drawFromPool: GameCard[],
+export const drawFrom = (drawFromPool: GameCard[],
     drawTo: GameCard[],
     amount: number | undefined,
     filterByCardType: CardType | null,
@@ -298,13 +298,13 @@ const drawFrom = (drawFromPool: GameCard[],
     return 'success';
 };
 
-const surrender = (game: Game): string => {
+export const surrender = (game: Game): string => {
     game.status = GameStatus.over;
     game.loser = getPlayer(game);
     return 'success'
 };
 
-const canSummon = (player: Player, game: Game, targetLocation: BoardLocation, championToSummon: ChampionCard): ValidationResult => {
+export const canSummon = (player: Player, game: Game, targetLocation: BoardLocation, championToSummon: ChampionCard): ValidationResult => {
     if (player.summonsLeft === 0) return { message: 'Player used his all his summons', isValid: false };
 
     const maxRow = game.board.length - 2;
@@ -331,7 +331,7 @@ const canSummon = (player: Player, game: Game, targetLocation: BoardLocation, ch
     return { isValid: true, message: '' };
 }
 
-const setChampionLearnedActions = (game: Game, championCard: ChampionCard) => {
+export const setChampionLearnedActions = (game: Game, championCard: ChampionCard) => {
     championCard.learnedActions.forEach(action => {
         const actionCard = getAndRemoveActionCard(game, action);
 
@@ -342,7 +342,7 @@ const setChampionLearnedActions = (game: Game, championCard: ChampionCard) => {
     });
 }
 
-const summon = (game: Game, selectedCard: ChampionCard, targetLocation: BoardLocation | undefined): string => {
+export const summon = (game: Game, selectedCard: ChampionCard, targetLocation: BoardLocation | undefined): string => {
     if (targetLocation === undefined) return 'targetLocation can not be undefined';
 
     const player = getPlayer(game);
@@ -364,7 +364,7 @@ const summon = (game: Game, selectedCard: ChampionCard, targetLocation: BoardLoc
     return 'success';
 }
 
-const endTurn = (game: Game): string => {
+export const endTurn = (game: Game): string => {
     let nextPlayerIndex = 0;
 
     if (game.playingPlayerIndex === 0)
@@ -379,7 +379,7 @@ const endTurn = (game: Game): string => {
     return 'success';
 }
 
-const equip = (game: Game, player: Player, selectedCard: GearCard, targetLocation: BoardLocation | undefined): string => {
+export const equip = (game: Game, player: Player, selectedCard: GearCard, targetLocation: BoardLocation | undefined): string => {
     if (targetLocation === undefined) return 'targetLocation can not be undefined';
 
     var targetChampion = game.board[targetLocation.rowIndex][targetLocation.columnIndex] as ChampionCard;
@@ -405,7 +405,7 @@ const equip = (game: Game, player: Player, selectedCard: GearCard, targetLocatio
     return 'success';
 }
 
-const upgrade = (game: Game, player: Player, selectedCard: ClassCard, targetLocation: BoardLocation | undefined): string => {
+export const upgrade = (game: Game, player: Player, selectedCard: ClassCard, targetLocation: BoardLocation | undefined): string => {
     if (targetLocation === undefined) return 'targetLocation can not be undefined';
 
     if (selectedCard === null) return 'Upgrade card can not be null';
@@ -443,7 +443,7 @@ const upgrade = (game: Game, player: Player, selectedCard: ClassCard, targetLoca
     return 'success';
 }
 
-const addCardToDeck = (game: Game, cardsList: GameCard[], selectedCard: GameCard) => {
+export const addCardToDeck = (game: Game, cardsList: GameCard[], selectedCard: GameCard) => {
     if (selectedCard === null) return 'Card can not be null';
 
     const player = getPlayer(game);
@@ -462,7 +462,7 @@ const addCardToDeck = (game: Game, cardsList: GameCard[], selectedCard: GameCard
     return 'success';
 }
 
-const attachAction = (game: Game, player: Player, actionCard: ActionCard, targetLocation: BoardLocation | undefined) => {
+export const attachAction = (game: Game, player: Player, actionCard: ActionCard, targetLocation: BoardLocation | undefined) => {
     if (targetLocation === undefined) return 'targetLocation can not be undefined';
 
     if (actionCard === null)
@@ -489,7 +489,7 @@ const attachAction = (game: Game, player: Player, actionCard: ActionCard, target
     return 'success';
 }
 
-const removeCardFromDeck = (game: Game, cardsList: GameCard[], selectedCard: GameCard) => {
+export const removeCardFromDeck = (game: Game, cardsList: GameCard[], selectedCard: GameCard) => {
     if (selectedCard === null) return 'Card can not be null';
 
     const player = getPlayer(game);
@@ -502,7 +502,7 @@ const removeCardFromDeck = (game: Game, cardsList: GameCard[], selectedCard: Gam
     return 'success';
 }
 
-const clearDeck = (game: Game, cardsList: GameCard[]) => {
+export const clearDeck = (game: Game, cardsList: GameCard[]) => {
     const player: Player = game.players[game.playerIndex];
     const deckCopy = [...player.deck];
 
@@ -518,7 +518,7 @@ const clearDeck = (game: Game, cardsList: GameCard[]) => {
     return 'success';
 }
 
-const removeCard = (cards: GameCard[], selectedCard: GameCard): GameCard[] | null => {
+export const removeCard = (cards: GameCard[], selectedCard: GameCard): GameCard[] | null => {
     const cardIndexToRemove = cards.findIndex(card => card.guid === selectedCard.guid);
 
     if (cardIndexToRemove === -1) return null;
@@ -526,7 +526,7 @@ const removeCard = (cards: GameCard[], selectedCard: GameCard): GameCard[] | nul
     return cards.splice(cardIndexToRemove, 1);
 }
 
-const updateChampionStatusEffects = (championCard: ChampionCard) => {
+export const updateChampionStatusEffects = (championCard: ChampionCard) => {
     const updatedStatusEffects: StatusEffect[] = [];
 
     championCard.statusEffects.forEach((statusEffect) => {
@@ -543,19 +543,19 @@ const updateChampionStatusEffects = (championCard: ChampionCard) => {
     championCard.statusEffects = updatedStatusEffects;
 }
 
-const refreshLearnedActions = (championCard: ChampionCard) => {
+export const refreshLearnedActions = (championCard: ChampionCard) => {
     championCard.learnedActionsCards.forEach(learnedActionCard => {
         setRepeatableActionActivations(learnedActionCard, championCard);
         learnedActionCard.wasPlayed = false;
     });
 }
 
-const refreshArmorAndMental = (championCard: ChampionCard) => {
+export const refreshArmorAndMental = (championCard: ChampionCard) => {
     championCard.armor = championCard.calStr;
     championCard.mental = championCard.calInt;
 }
 
-const refreshResources = (game: Game, nextPlayerIndex: number) => {
+export const refreshResources = (game: Game, nextPlayerIndex: number) => {
     const player = game.players[nextPlayerIndex];
     player.didDraw = false;
     player.summonsLeft = 1;
@@ -574,7 +574,7 @@ const refreshResources = (game: Game, nextPlayerIndex: number) => {
     }));
 }
 
-const getAndRemoveActionCard = (game: Game, actionCardName: string): ActionCard | null => {
+export const getAndRemoveActionCard = (game: Game, actionCardName: string): ActionCard | null => {
     const player = getPlayer(game);
 
     let actionCard = findCard(player.usedCards, actionCardName);
@@ -601,12 +601,12 @@ const getAndRemoveActionCard = (game: Game, actionCardName: string): ActionCard 
     return null;
 }
 
-const findCard = (cards: GameCard[], selectedCardName: string): GameCard | null => {
+export const findCard = (cards: GameCard[], selectedCardName: string): GameCard | null => {
     const card = cards.find((x) => x.name === selectedCardName);
     return card ?? null;
 }
 
-const getChampionStatValue = (champion: ChampionCard, stat: Stats): number => {
+export const getChampionStatValue = (champion: ChampionCard, stat: Stats): number => {
     switch (stat) {
         case Stats.Str:
             return champion.calStr;
@@ -619,7 +619,7 @@ const getChampionStatValue = (champion: ChampionCard, stat: Stats): number => {
     }
 }
 
-const isValidForUpgrade = (championCard: ChampionCard, classCard: ClassCard): ValidationResult => {
+export const isValidForUpgrade = (championCard: ChampionCard, classCard: ClassCard): ValidationResult => {
     const isClassValid = championCard.calClass === classCard.requiredClassName;
 
     if (!isClassValid)
@@ -628,11 +628,11 @@ const isValidForUpgrade = (championCard: ChampionCard, classCard: ClassCard): Va
     return { message: 'success', isValid: true };
 }
 
-const isValidForEquip = (championCard: ChampionCard, gearCard: GearCard): ValidationResult => {
+export const isValidForEquip = (championCard: ChampionCard, gearCard: GearCard): ValidationResult => {
     return { message: 'success', isValid: true };
 }
 
-const isValidForAttach = (championCard: ChampionCard, actionCard: ActionCard): ValidationResult => {
+export const isValidForAttach = (championCard: ChampionCard, actionCard: ActionCard): ValidationResult => {
     if (actionCard.requiredClassName !== null && championCard.calClass !== actionCard.requiredClassName && championCard.class !== actionCard.requiredClassName)
         return { message: `Champion das not have the required class of ${actionCard.requiredClassName}`, isValid: false };
 
@@ -658,7 +658,7 @@ const isValidForAttach = (championCard: ChampionCard, actionCard: ActionCard): V
     return { message: 'success', isValid: true };
 }
 
-const setStartingChampion = (player: Player, championCard: ChampionCard): string => {
+export const setStartingChampion = (player: Player, championCard: ChampionCard): string => {
     if (player.startingChampion?.name === championCard.name) return 'Same card is already set';
 
     if (player.startingChampion) {

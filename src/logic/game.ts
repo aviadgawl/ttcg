@@ -1,6 +1,27 @@
 import { Player } from './player';
-import { GameCard, GearCard, CrystalCard, ChampionCard, ClassCard, ActionCard, OrderCard, OrderCardReward } from './game-card';
-import { ActionType, Stats, ActionDirections, GameStatus, GearCategory, MathModifier, EffectStatus, ChampionDirection, Race, CardType } from './enums';
+import {
+    GameCard,
+    GearCard,
+    CrystalCard,
+    ChampionCard,
+    ClassCard,
+    ActionCard,
+    OrderCard,
+    OrderCardReward,
+    GameEffect
+} from './game-card';
+import {
+    ActionType,
+    Stats,
+    ActionDirections,
+    GameStatus,
+    GearCategory,
+    MathModifier,
+    EffectStatus,
+    ChampionDirection,
+    Race,
+    CardType
+} from './enums';
 import { getImage } from '../helpers/image-helper';
 import cardsListJson from '../assets/cards/cards-list.json';
 
@@ -127,10 +148,10 @@ export const createGame = (): Game => {
 const mockPlayerOne: Player = { name: 'Player One', hand: [], deck: [], usedCards: [], didDraw: false, summonsLeft: 1, actionsLog: [], effects: [], startingChampion: null };
 const mockCrystalOne: CrystalCard = {
     image: 'https://img.freepik.com/premium-photo/magical-crystal-with-swirling-colors-digital-art-style-illustration_812426-6398.jpg',
-    hp: 30, currentHp: 30, name: 'Warrior Spirit', guid: '5', effect: null, playerIndex: 0, isBlocking: true, calHp: 30
+    hp: 30, currentHp: 30, name: 'Warrior Spirit', guid: '5', effect: {} as GameEffect, playerIndex: 0, isBlocking: true, calHp: 30
 };
 
 const mockCrystalTwo: CrystalCard = {
     image: 'https://img.freepik.com/premium-photo/magical-crystal-with-swirling-colors-digital-art-style-illustration_812426-6466.jpg?w=740',
-    hp: 30, currentHp: 30, name: 'Warrior Spirit', guid: '5', effect: null, playerIndex: 1, isBlocking: true, calHp: 30
+    hp: 30, currentHp: 30, name: 'Warrior Spirit', guid: '5', effect: {} as GameEffect, playerIndex: 1, isBlocking: true, calHp: 30
 };

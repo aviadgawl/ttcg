@@ -8,11 +8,11 @@ interface ChampionActionResult {
     targetedCard: SummoningCard | null
 }
 
-const checkValidTarget = (target: GameCard): boolean => {
+export const checkValidTarget = (target: GameCard): boolean => {
     return isChampion(target) || isCrystal(target);
 }
 
-const applyHeal = (sourceChampion: ChampionCard, actionCard: ActionCard, target: SummoningCard) => {
+export const applyHeal = (sourceChampion: ChampionCard, actionCard: ActionCard, target: SummoningCard) => {
     const baseDmg = getChampionStatValueByStat(sourceChampion, actionCard.dmgStat);
     const amountToHeal = calculateDamageWithModifier(baseDmg, actionCard);
 
@@ -33,7 +33,7 @@ const applyHeal = (sourceChampion: ChampionCard, actionCard: ActionCard, target:
     };
 };
 
-const applyDamage = (sourceChampion: ChampionCard, actionCard: ActionCard, target: SummoningCard) => {
+export const applyDamage = (sourceChampion: ChampionCard, actionCard: ActionCard, target: SummoningCard) => {
     const baseDmg = getChampionStatValueByStat(sourceChampion, actionCard.dmgStat);
     const calDamage = calculateDamageWithModifier(baseDmg, actionCard);
 
@@ -59,7 +59,7 @@ const applyDamage = (sourceChampion: ChampionCard, actionCard: ActionCard, targe
     }
 }
 
-const calculateDamageWithModifier = (baseDamage: number, actionCard: ActionCard): number => {
+export const calculateDamageWithModifier = (baseDamage: number, actionCard: ActionCard): number => {
     if (actionCard.dmgModifier === null || actionCard.dmgModifierValue === null) return baseDamage;
 
     switch (actionCard.dmgModifier) {
@@ -72,7 +72,7 @@ const calculateDamageWithModifier = (baseDamage: number, actionCard: ActionCard)
     }
 }
 
-const getChampionDirection = (sourceLocation: BoardLocation, targetLocation: BoardLocation): ChampionDirection | null => {
+export const getChampionDirection = (sourceLocation: BoardLocation, targetLocation: BoardLocation): ChampionDirection | null => {
     if (sourceLocation.rowIndex < targetLocation.rowIndex) return ChampionDirection.Down;
     if (sourceLocation.rowIndex > targetLocation.rowIndex) return ChampionDirection.Up;
     if (sourceLocation.columnIndex < targetLocation.columnIndex) return ChampionDirection.Right;
@@ -81,7 +81,7 @@ const getChampionDirection = (sourceLocation: BoardLocation, targetLocation: Boa
     return null;
 }
 
-const removeChampionFromBoard = (game: Game, targetLocation: BoardLocation) => {
+export const removeChampionFromBoard = (game: Game, targetLocation: BoardLocation) => {
     const championCardToRemove = game.board[targetLocation.rowIndex][targetLocation.columnIndex];
 
     if (championCardToRemove === null) return;
@@ -121,7 +121,7 @@ const removeChampionFromBoard = (game: Game, targetLocation: BoardLocation) => {
     game.board[targetLocation.rowIndex][targetLocation.columnIndex] = null;
 }
 
-const moveChampion = (board: (GameCard | null)[][], entityToMove: ChampionCard, actionCard: ActionCard, sourceLocation: BoardLocation, targetLocation: BoardLocation): ChampionActionResult => {
+export const moveChampion = (board: (GameCard | null)[][], entityToMove: ChampionCard, actionCard: ActionCard, sourceLocation: BoardLocation, targetLocation: BoardLocation): ChampionActionResult => {
     const targetCell = board[targetLocation.rowIndex][targetLocation.columnIndex] as unknown as SummoningCard;
 
     if (targetCell !== null) return { status: 'Target location isn\'t empty', targetedCard: null };
@@ -143,7 +143,7 @@ const moveChampion = (board: (GameCard | null)[][], entityToMove: ChampionCard, 
     return { status: 'success', targetedCard: null };
 }
 
-const breakGear = (targetChampion: ChampionCard) => {
+export const breakGear = (targetChampion: ChampionCard) => {
     const bodyPartsWithGear: string[] = [];
 
     if (isGear(targetChampion.body)) bodyPartsWithGear.push('body');
@@ -175,7 +175,7 @@ const breakGear = (targetChampion: ChampionCard) => {
     }
 }
 
-const applyTargetEffects = (effects: StatusEffect[], targetChampion: ChampionCard) => {
+export const applyTargetEffects = (effects: StatusEffect[], targetChampion: ChampionCard) => {
 
     const durationEffects = effects.filter(effect => effect.duration > 0);
     targetChampion.statusEffects = targetChampion.statusEffects.concat(durationEffects);
@@ -193,7 +193,7 @@ const applyTargetEffects = (effects: StatusEffect[], targetChampion: ChampionCar
     });
 }
 
-const attack = (game: Game, attackingChampion: ChampionCard,
+export const attack = (game: Game, attackingChampion: ChampionCard,
     actionCard: ActionCard, sourceLocation: BoardLocation, targetLocation: BoardLocation): ChampionActionResult => {
 
     const target = game.board[targetLocation.rowIndex][targetLocation.columnIndex] as unknown as SummoningCard;;
@@ -252,7 +252,7 @@ const attack = (game: Game, attackingChampion: ChampionCard,
     return { status: 'success', targetedCard: target };
 }
 
-const calculateDistance = (sourceLocation: BoardLocation, targetLocation: BoardLocation): number => {
+export const calculateDistance = (sourceLocation: BoardLocation, targetLocation: BoardLocation): number => {
     const distanceX = Math.abs(sourceLocation.rowIndex - targetLocation.rowIndex);
     const distanceY = Math.abs(sourceLocation.columnIndex - targetLocation.columnIndex);
     const distance = distanceX + distanceY;
@@ -260,7 +260,7 @@ const calculateDistance = (sourceLocation: BoardLocation, targetLocation: BoardL
     return distance;
 }
 
-const checkAndPushAllowedLocation = (board: (GameCard | null)[][], allowedLocations: BoardLocation[], newLocation: BoardLocation, stopOnBlockers: boolean) => {
+export const checkAndPushAllowedLocation = (board: (GameCard | null)[][], allowedLocations: BoardLocation[], newLocation: BoardLocation, stopOnBlockers: boolean) => {
     if (board.length < newLocation.rowIndex) {
         console.log(`checkAndPushAllowedLocation newLocation.rowIndex: ${newLocation.rowIndex} is more then max row are ${board.length}`);
         return;
@@ -279,7 +279,7 @@ const checkAndPushAllowedLocation = (board: (GameCard | null)[][], allowedLocati
         allowedLocations.push(newLocation);
 }
 
-const checkAndPushHitAreaUpDownLocations = (hitArea: HitArea | undefined,
+export const checkAndPushHitAreaUpDownLocations = (hitArea: HitArea | undefined,
     board: (GameCard | null)[][], allowedLocations: BoardLocation[], rowIndex: number, columnIndex: number, stopOnBlockers: boolean) => {
 
     if (!hitArea) return;
@@ -295,7 +295,7 @@ const checkAndPushHitAreaUpDownLocations = (hitArea: HitArea | undefined,
     }
 }
 
-const checkAndPushHitAreaLeftRightLocations = (hitArea: HitArea | undefined,
+export const checkAndPushHitAreaLeftRightLocations = (hitArea: HitArea | undefined,
     board: (GameCard | null)[][], allowedLocations: BoardLocation[], rowIndex: number, columnIndex: number, stopOnBlockers: boolean) => {
 
     if (!hitArea) return;
@@ -311,7 +311,7 @@ const checkAndPushHitAreaLeftRightLocations = (hitArea: HitArea | undefined,
     }
 }
 
-const getBoardLocationInStraightPath = (board: (GameCard | null)[][],
+export const getBoardLocationInStraightPath = (board: (GameCard | null)[][],
     initialLocation: BoardLocation, actionCard: ActionCard): BoardLocation[] => {
 
     const minDistance = actionCard.distance[0];
@@ -380,7 +380,7 @@ const getBoardLocationInStraightPath = (board: (GameCard | null)[][],
     return allowedLocations;
 }
 
-const checkAndRemoveFromAttachedActions = (player: Player, sourceChampion: ChampionCard, actionCard: ActionCard) => {
+export const checkAndRemoveFromAttachedActions = (player: Player, sourceChampion: ChampionCard, actionCard: ActionCard) => {
     const index = sourceChampion.attachedActionsCards.findIndex(x => x.guid === actionCard.guid);
 
     if (index === -1) return;
@@ -390,7 +390,7 @@ const checkAndRemoveFromAttachedActions = (player: Player, sourceChampion: Champ
     player.usedCards.push(newUsedCards[0]);
 }
 
-const getActionCardFromChampion = (sourceChampion: ChampionCard, actionCardGuid: string): ActionCard | null => {
+export const getActionCardFromChampion = (sourceChampion: ChampionCard, actionCardGuid: string): ActionCard | null => {
     let actionCard: ActionCard | undefined = undefined;
 
     actionCard = sourceChampion.learnedActionsCards.find(card => card.guid === actionCardGuid);
@@ -401,11 +401,11 @@ const getActionCardFromChampion = (sourceChampion: ChampionCard, actionCardGuid:
     return actionCard ?? null;
 }
 
-const getLastPlayedActionGuid = (player: Player): PlayerActionLogRecord => {
+export const getLastPlayedActionGuid = (player: Player): PlayerActionLogRecord => {
     return player.actionsLog[player.actionsLog.length - 1];
 }
 
-const successfulAttackGameUpdate = (game: Game, player: Player, sourceChampion: ChampionCard, actionCard: ActionCard,
+export const successfulAttackGameUpdate = (game: Game, player: Player, sourceChampion: ChampionCard, actionCard: ActionCard,
     isAttachedAction: boolean, result: ChampionActionResult, sourceLocation: BoardLocation, targetLocation: BoardLocation) => {
 
     if (!actionCard.wasPlayed) actionCard.wasPlayed = true;

@@ -160,7 +160,7 @@ export interface HitArea {
     left: number;
 }
 
-export const isCrystal = (value: any): value is CrystalCard => !!value?.effect || value?.effect === null;
+export const isCrystal = (value: any): value is CrystalCard => !!value?.effect;
 
 export const isGear = (value: any): value is GearCard => !!value?.bodyPart;
 
