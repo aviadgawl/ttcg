@@ -1,179 +1,164 @@
 import { Game } from './game';
 import { Player } from './player';
 import { GameCard, ChampionCard, ActionCard, GearCard, ClassCard, OrderCard, isChampion, isGear, isAction, isOrder, isClass } from './game-card';
-import { PlayerActionsName, CardType } from './enums';
+import { PlayerActionsName } from './enums';
 import { BoardLocation } from './game-card';
 import { getPlayerActionsAllowedBoardLocations, getValidCardsForDiscard, playerAction } from './player';
 
-export class GameBot {
-    private playerTwo: Player;
-    private botPlayerIndex: number = 1;
+export const makeMove = (game: Game): void => {
+    const botPlayer = game.players[1];
 
-    constructor(private game: Game) {
-        const player = this.game.players[this.game.playerIndex];
-        this.playerTwo = structuredClone(player);
+    // Try to play cards in order of priority
+    !botPlayer.didDraw && performDraw(game);
+    tryPlayChampion(game, botPlayer);
+    tryPlayGear(game, botPlayer);
+    tryPlayClass(game, botPlayer);
+    tryPlayAction(game, botPlayer);
+    tryPlayOrder(game, botPlayer);
 
-        this.game.players.push(this.playerTwo);
-    }
+    // If no other moves, end turn
+    endTurn(game);
+}
 
-    makeMove(): void {
-        // Priority of actions
-        if (!this.playerTwo.didDraw) {
-            this.performDraw();
-            return;
-        }
+export const performDraw = (game: Game): void => {
+    executeAction(game, PlayerActionsName.TurnDraw, null, null);
+}
 
-        // Try to play cards in order of priority
-        if (this.tryPlayChampion()) return;
-        if (this.tryPlayGear()) return;
-        if (this.tryPlayClass()) return;
-        if (this.tryPlayAction()) return;
-        if (this.tryPlayOrder()) return;
-        
-        // If no other moves, end turn
-        this.endTurn();
-    }
+export const tryPlayChampion = (game: Game, botPlayer: Player): boolean => {
+    const champion = findPlayableCard(botPlayer ,player =>
+        player.hand.find(card => isChampion(card))) as ChampionCard;
 
-    private performDraw(): void {
-        this.executeAction(PlayerActionsName.TurnDraw, null, null);
-    }
+    if (!champion) return false;
 
-    private tryPlayChampion(): boolean {
-        const champion = this.findPlayableCard(player => 
-            player.hand.find(card => isChampion(card))) as ChampionCard;
-        
-        if (!champion) return false;
+    const locations = getPlayerActionsAllowedBoardLocations(
+        game,
+        PlayerActionsName.Summon,
+        champion
+    );
 
-        const locations = getPlayerActionsAllowedBoardLocations(
-            this.game,
-            PlayerActionsName.Summon,
-            champion
-        );
+    if (locations.locations.length === 0) return false;
 
-        if (locations.locations.length === 0) return false;
+    // Choose first available location
+    const targetLocation = locations.locations[0];
+    return executeAction(game, PlayerActionsName.Summon, champion, targetLocation);
+}
 
-        // Choose first available location
-        const targetLocation = locations.locations[0];
-        return this.executeAction(PlayerActionsName.Summon, champion, targetLocation);
-    }
+export const tryPlayGear = (game: Game, botPlayer: Player): boolean => {
+    const gear = findPlayableCard(botPlayer, player =>
+        player.hand.find(card => isGear(card))) as GearCard;
 
-    private tryPlayGear(): boolean {
-        const gear = this.findPlayableCard(player => 
-            player.hand.find(card => isGear(card))) as GearCard;
-        
-        if (!gear) return false;
+    if (!gear) return false;
 
-        const locations = getPlayerActionsAllowedBoardLocations(
-            this.game,
-            PlayerActionsName.Equip,
-            gear
-        );
+    const locations = getPlayerActionsAllowedBoardLocations(
+        game,
+        PlayerActionsName.Equip,
+        gear
+    );
 
-        if (locations.locations.length === 0) return false;
+    if (locations.locations.length === 0) return false;
 
-        // Choose first available champion
-        const targetLocation = locations.locations[0];
-        return this.executeAction(PlayerActionsName.Equip, gear, targetLocation);
-    }
+    // Choose first available champion
+    const targetLocation = locations.locations[0];
+    return executeAction(game, PlayerActionsName.Equip, gear, targetLocation);
+}
 
-    private tryPlayClass(): boolean {
-        const classCard = this.findPlayableCard(player => 
-            player.hand.find(card => isClass(card))) as ClassCard;
-        
-        if (!classCard) return false;
+export const tryPlayClass = (game: Game, botPlayer: Player): boolean => {
+    const classCard = findPlayableCard(botPlayer, player =>
+        player.hand.find(card => isClass(card))) as ClassCard;
 
-        const locations = getPlayerActionsAllowedBoardLocations(
-            this.game,
-            PlayerActionsName.Upgrade,
-            classCard
-        );
+    if (!classCard) return false;
 
-        if (locations.locations.length === 0) return false;
+    const locations = getPlayerActionsAllowedBoardLocations(
+        game,
+        PlayerActionsName.Upgrade,
+        classCard
+    );
 
-        // Choose first available champion to upgrade
-        const targetLocation = locations.locations[0];
-        return this.executeAction(PlayerActionsName.Upgrade, classCard, targetLocation);
-    }
+    if (locations.locations.length === 0) return false;
 
-    private tryPlayAction(): boolean {
-        const action = this.findPlayableCard(player => 
-            player.hand.find(card => isAction(card))) as ActionCard;
-        
-        if (!action) return false;
+    // Choose first available champion to upgrade
+    const targetLocation = locations.locations[0];
+    return executeAction(game, PlayerActionsName.Upgrade, classCard, targetLocation);
+}
 
-        const locations = getPlayerActionsAllowedBoardLocations(
-            this.game,
-            PlayerActionsName.Attach,
-            action
-        );
+export const tryPlayAction = (game: Game, botPlayer: Player): boolean => {
+    const action = findPlayableCard(botPlayer, player =>
+        player.hand.find(card => isAction(card))) as ActionCard;
 
-        if (locations.locations.length === 0) return false;
+    if (!action) return false;
 
-        // Choose first available target
-        const targetLocation = locations.locations[0];
-        return this.executeAction(PlayerActionsName.Attach, action, targetLocation);
-    }
+    const locations = getPlayerActionsAllowedBoardLocations(
+        game,
+        PlayerActionsName.Attach,
+        action
+    );
 
-    private tryPlayOrder(): boolean {
-        const order = this.findPlayableCard(player => 
-            player.hand.find(card => isOrder(card))) as OrderCard;
-        
-        if (!order) return false;
+    if (locations.locations.length === 0) return false;
 
-        // Find valid cards for discard requirement
-        const player = this.game.players[this.game.playerIndex];
-        const { cardToDiscard } = getValidCardsForDiscard(player, player.hand, order);
+    // Choose first available target
+    const targetLocation = locations.locations[0];
+    return executeAction(game, PlayerActionsName.Attach, action, targetLocation);
+}
 
-        if (cardToDiscard.length === 0) return false;
+export const tryPlayOrder = (game: Game, botPlayer: Player): boolean => {
+    const order = findPlayableCard(botPlayer, player =>
+        player.hand.find(card => isOrder(card))) as OrderCard;
 
-        return this.executeAction(PlayerActionsName.PlayOrder, order, null, cardToDiscard);
-    }
+    if (!order) return false;
 
-    private findPlayableCard(finder: (player: Player) => GameCard | undefined): GameCard | null {
-        return finder(this.playerTwo) || null;
-    }
+    // Find valid cards for discard requirement
+    const { cardToDiscard } = getValidCardsForDiscard(botPlayer, botPlayer.hand, order);
 
-    private executeAction(
-        action: PlayerActionsName,
-        card: GameCard | null,
-        targetLocation: BoardLocation | null,
-        extraData?: any
-    ): boolean {
-        const result = playerAction(action, [], this.game, targetLocation || extraData);
+    if (cardToDiscard.length === 0) return false;
 
-        return result === 'success';
-    }
+    return executeAction(game, PlayerActionsName.PlayOrder, order, null, cardToDiscard);
+}
 
-    private endTurn(): void {
-        this.executeAction(PlayerActionsName.EndTurn, null, null);
-    }
+export const findPlayableCard = (botPlayer: Player, finder: (player: Player) => GameCard | undefined): GameCard | null => {
+    return finder(botPlayer) || null;
+}
 
-    // Helper method to evaluate board state and make strategic decisions
-    private evaluateBoard(): number {
-        const player = this.game.players[this.game.playerIndex];
-        const opponent = this.game.players[1 - this.game.playerIndex];
+export const executeAction = (
+    game: Game,
+    action: PlayerActionsName,
+    card: GameCard | null,
+    targetLocation: BoardLocation | null,
+    extraData?: any
+): boolean => {
+    const result = playerAction(action, [], game, targetLocation || extraData);
 
-        let score = 0;
+    return result === 'success';
+}
 
-        // Count champions on board
-        this.game.board.forEach(row => row.forEach(cell => {
-            if (isChampion(cell)) {
-                if (cell.playerIndex === this.game.playerIndex) {
-                    score += 10; // Own champion
-                    score += cell.currentHp; // Add HP value
-                    score += (cell.calStr + cell.calDex + cell.calInt) / 3; // Add stats value
-                } else {
-                    score -= 10; // Opponent's champion
-                    score -= cell.currentHp;
-                    score -= (cell.calStr + cell.calDex + cell.calInt) / 3;
-                }
+export const endTurn = (game: Game): void => {
+    executeAction(game, PlayerActionsName.EndTurn, null, null);
+}
+
+// Helper method to evaluate board state and make strategic decisions
+export const evaluateBoard = (game: Game): number => {
+    const player = game.players[game.playerIndex];
+    const opponent = game.players[1 - game.playerIndex];
+
+    let score = 0;
+
+    // Count champions on board
+    game.board.forEach(row => row.forEach(cell => {
+        if (isChampion(cell)) {
+            if (cell.playerIndex === game.playerIndex) {
+                score += 10; // Own champion
+                score += cell.currentHp; // Add HP value
+                score += (cell.calStr + cell.calDex + cell.calInt) / 3; // Add stats value
+            } else {
+                score -= 10; // Opponent's champion
+                score -= cell.currentHp;
+                score -= (cell.calStr + cell.calDex + cell.calInt) / 3;
             }
-        }));
+        }
+    }));
 
-        // Value cards in hand
-        score += player.hand.length * 2;
-        score -= opponent.hand.length * 2;
+    // Value cards in hand
+    score += player.hand.length * 2;
+    score -= opponent.hand.length * 2;
 
-        return score;
-    }
-} 
+    return score;
+}

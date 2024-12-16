@@ -7,7 +7,9 @@ import { championAction } from '../logic/champion';
 import { updateGameAsync, addGameAsync } from '../firebase/firebase';
 import { BoardLocation, isAction, ActionCard } from '../logic/game-card';
 import { Game } from '../logic/game';
-import { GameStatus } from '../logic/enums';
+import { GameStatus, PlayerActionsName } from '../logic/enums';
+import { makeMove } from '../logic/game-bot';
+import { Player } from '../logic/player';
 
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
@@ -31,10 +33,16 @@ export const usePlayerAction = () => {
         if (result !== 'success') alert(result);
         else {
             playSoundByPlayerActionName(actionName);
+
             dispatch(resetSelectedData());
+
             const shouldUBroadcastUpdate = shouldUpdateMultiplayerGame(actionName);
             if (gameToUpdate.code !== 'Bot' && gameToUpdate.code !== '' && shouldUBroadcastUpdate)
                 updateGameAsync(gameToUpdate).catch(console.error);
+
+            if (actionName === PlayerActionsName.EndTurn && gameToUpdate.code === 'Bot') {
+                makeMove(gameToUpdate);
+            }
         }
 
         dispatch(setGame(gameToUpdate));
@@ -90,10 +98,14 @@ export const useCreateGame = () => {
 
     return useCallback((gameCode: string) => {
         const state = store.getState() as any;
-        const createdGame: Game = { ...state.gameActions.game, status: GameStatus.started, code: gameCode };
+        let createdGame: Game = { ...state.gameActions.game, status: GameStatus.started, code: gameCode };
 
         if (gameCode !== 'Bot')
             addGameAsync(createdGame).catch(console.error);
+        else {
+            const botPlayer = changeLocalPlayerToPlayerTwo(createdGame.players[0]);
+            createdGame = { ...createdGame, players: [createdGame.players[0], botPlayer] };
+        }
 
         dispatch(setGame(createdGame));
     }, [dispatch, store])
@@ -109,24 +121,45 @@ export const useJoinGame = () => {
 
         const localPlayer = game.players[0];
 
-        const playerTwoDeck = localPlayer.deck.map(card => {
-            return { ...card, playerIndex: 1 }
-        });
-
-        const playerTwoHand = localPlayer.hand.map(card => {
-            return { ...card, playerIndex: 1 }
-        });
-
-        let playerTwoStartingChampion = null;
-
-        if(localPlayer.startingChampion)
-            playerTwoStartingChampion = {...localPlayer.startingChampion, playerIndex: 1};
-
-        const playerTwo = { ...localPlayer, name: 'Player Two', deck: playerTwoDeck, hand: playerTwoHand, startingChampion: playerTwoStartingChampion };
-        const joinedGame = { ...gameFromDb, players: [gameFromDb.players[0], playerTwo], playerIndex: 1, code: gameFromDb.code, status: GameStatus.started };
+        const playerTwo = changeLocalPlayerToPlayerTwo(localPlayer);
+        const joinedGame = {
+            ...gameFromDb,
+            players: [gameFromDb.players[0],
+                playerTwo],
+            playerIndex: 1,
+            code: gameFromDb.code,
+            status: GameStatus.started
+        };
 
         updateGameAsync(joinedGame).catch(console.error);
 
         dispatch(setGame(joinedGame));
     }, [dispatch, store]);
+};
+
+const changeLocalPlayerToPlayerTwo = (localPlayer: Player) => {
+    const localPlayerClone = structuredClone(localPlayer) as Player;
+
+    const playerTwoDeck = localPlayerClone.deck.map(card => {
+        return { ...card, playerIndex: 1 }
+    });
+
+    const playerTwoHand = localPlayerClone.hand.map(card => {
+        return { ...card, playerIndex: 1 }
+    });
+
+    let playerTwoStartingChampion = null;
+
+    if (localPlayerClone.startingChampion)
+        playerTwoStartingChampion = { ...localPlayerClone.startingChampion, playerIndex: 1 };
+
+    const playerTwo = {
+        ...localPlayerClone,
+        name: 'Player Two',
+        deck: playerTwoDeck,
+        hand: playerTwoHand,
+        startingChampion: playerTwoStartingChampion
+    };
+
+    return playerTwo;
 };
