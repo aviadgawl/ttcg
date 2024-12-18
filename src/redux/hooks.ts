@@ -41,7 +41,9 @@ export const usePlayerAction = () => {
                 updateGameAsync(gameToUpdate).catch(console.error);
 
             if (actionName === PlayerActionsName.EndTurn && gameToUpdate.code === 'Bot') {
+                gameToUpdate.playerIndex = 1;
                 makeMove(gameToUpdate);
+                gameToUpdate.playerIndex = 0;
             }
         }
 

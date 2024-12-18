@@ -6,13 +6,12 @@ import { BoardLocation } from './game-card';
 import { getPlayerActionsAllowedBoardLocations, getValidCardsForDiscard, playerAction } from './player';
 
 export const makeMove = (game: Game): void => {
-    const botPlayer = game.players[1];
-
+    const botPlayer = game.players[game.playerIndex];
     // Try to play cards in order of priority
-    !botPlayer.didDraw && performDraw(game);
+    performDraw(game);
     tryPlayChampion(game, botPlayer);
     tryPlayGear(game, botPlayer);
-    tryPlayClass(game, botPlayer);
+    botPlayer.summonsLeft > 0 && tryPlayClass(game, botPlayer);
     tryPlayAction(game, botPlayer);
     tryPlayOrder(game, botPlayer);
 
@@ -25,7 +24,7 @@ export const performDraw = (game: Game): void => {
 }
 
 export const tryPlayChampion = (game: Game, botPlayer: Player): boolean => {
-    const champion = findPlayableCard(botPlayer ,player =>
+    const champion = findPlayableCard(botPlayer, player =>
         player.hand.find(card => isChampion(card))) as ChampionCard;
 
     if (!champion) return false;
@@ -125,8 +124,8 @@ export const executeAction = (
     targetLocation: BoardLocation | null,
     extraData?: any
 ): boolean => {
-    const result = playerAction(action, [], game, targetLocation || extraData);
-
+    const result = playerAction(action, [], game, { selectedCard: card, extendedData: targetLocation || extraData });
+    console.log('Bot: ', { action, result });
     return result === 'success';
 }
 
