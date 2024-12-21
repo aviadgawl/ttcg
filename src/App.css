@@ -7,6 +7,10 @@
   text-align: center;
 }
 
+.Version-number {
+  padding: 5px;
+}
+
 .App-player-one-color {
   color: var(--player-one-color);
 }

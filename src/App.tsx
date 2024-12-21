@@ -23,6 +23,10 @@ function App() {
       dispatch(setIsLoggedIn(true));
       setCurrentDisplay(1);
     }
+
+    window.onbeforeunload = function () {
+      return "Are you really sure?";
+    };
   }, []);
 
   useEffect(() => {
@@ -47,7 +51,7 @@ function App() {
     <main className="App">
       <header>
         <GameTabs disabledTabIndexes={disabledTabIndex} displayMode={currentDisplay} onModeClick={handleDisplaySelect} />
-        <div>1.7.0</div>
+        <div className="Version-number">1.8.0</div>
       </header>
       {currentDisplay === 0 && <Login />}
       {currentDisplay === 1 && <DeckBuilder />}

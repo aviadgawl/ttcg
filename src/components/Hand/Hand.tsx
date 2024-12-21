@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { useAppDispatch, useAppSelector, usePlayerAction } from '../../redux/hooks';
+import { useAppDispatch, useAppSelector, usePlayerAction, useRefreshGame } from '../../redux/hooks';
 import { setShowHand, createSelectedData, setShowCardsInDeck, setSelectedActionDataCardsToDraw, createShowCardsInDeck, SelectedData, setShowGameDetails } from '../../redux/store';
 import { GameStoreActionTypes } from '../../redux/types';
 import { PlayerActionsName } from '../../logic/enums';
@@ -17,6 +17,7 @@ const Hand: FC = () => {
   const selectedActionData: SelectedData = useAppSelector((state) => state.gameActions.selectedActionData);
   const showCardsInDeck = useAppSelector((state) => state.gameActions.showCardsInDeck);
   const playerAction = usePlayerAction();
+  const refreshGame = useRefreshGame();
 
   const dispatch = useAppDispatch();
 
@@ -94,6 +95,7 @@ const Hand: FC = () => {
           <Button size="small" disabled={playerIndex !== playingPlayerIndex || player.didDraw} onClick={() => handleAction(PlayerActionsName.TurnDraw)} variant="outlined">Deck: {player.deck.length}</Button>
           <Button size="small" disabled={playerIndex !== playingPlayerIndex} onClick={() => handleAction(PlayerActionsName.EndTurn, true)} variant="outlined">{PlayerActionsName.EndTurn}</Button>
           <Button size="small" disabled={playerIndex !== playingPlayerIndex} onClick={() => handleAction(PlayerActionsName.Surrender)} variant="outlined">{PlayerActionsName.Surrender}</Button>
+          <Button size="small" onClick={() => refreshGame()} variant="outlined">Refresh</Button>
         </div>
         {player.hand.map((card, index) => <div className={discardCards.some(x => x.guid === card.guid) ? styles.DiscardCard : ''} key={index}>
           <HandCard disabled={playerIndex !== playingPlayerIndex} mode={HandCardMode.Hand} card={card} />

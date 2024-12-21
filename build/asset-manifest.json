@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/ttcg/static/css/main.b191f8b3.css",
-    "main.js": "/ttcg/static/js/main.e4a83277.js",
+    "main.css": "/ttcg/static/css/main.a756924b.css",
+    "main.js": "/ttcg/static/js/main.4dba5472.js",
     "static/media/WarMage.png": "/ttcg/static/media/WarMage.b9d64aaec59d6ed573e0.png",
     "static/media/EtherBladeSlash.png": "/ttcg/static/media/EtherBladeSlash.9bb6fe3bcb05e6c93833.png",
     "static/media/RefreshMe.png": "/ttcg/static/media/RefreshMe.d1ab3397d77d9648e5fb.png",
@@ -9,7 +9,7 @@
     "static/media/FixIt.png": "/ttcg/static/media/FixIt.6d4040057ab83afe8395.png",
     "static/media/SwordSlash.png": "/ttcg/static/media/SwordSlash.0c992b81a50ef1947ce8.png",
     "static/media/Hawkeye.png": "/ttcg/static/media/Hawkeye.c0a4471316d2b11274c2.png",
-    "static/media/CripplingShot.png": "/ttcg/static/media/CripplingShot.76166d652509c4b6e997.png",
+    "static/media/CripplingShot.png": "/ttcg/static/media/CripplingShot.6a4fd20e1f4d8f5ae9c3.png",
     "static/media/IntelligenceBlessing.png": "/ttcg/static/media/IntelligenceBlessing.4c903fe9bdec7e75ba6f.png",
     "static/media/HighMage.png": "/ttcg/static/media/HighMage.371a4e9d3b7f9e0d3a82.png",
     "static/media/PetrifiedHex.png": "/ttcg/static/media/PetrifiedHex.80d12f48fd4603943c86.png",
@@ -25,7 +25,7 @@
     "static/media/EnergyBall.png": "/ttcg/static/media/EnergyBall.8eb312006bb346e73d47.png",
     "static/media/INeedSomeGear.png": "/ttcg/static/media/INeedSomeGear.3ba44137cd7fedcfcf8a.png",
     "static/media/HighKnight.png": "/ttcg/static/media/HighKnight.66027157361601eb6ad0.png",
-    "static/media/ArmorBreak.png": "/ttcg/static/media/ArmorBreak.8f85f98f5e85766695e7.png",
+    "static/media/ArmorBreak.png": "/ttcg/static/media/ArmorBreak.6d607943dacbb942ef7c.png",
     "static/media/MagicShield.png": "/ttcg/static/media/MagicShield.1cbaf892d71887c14324.png",
     "static/media/GiveMeMore.png": "/ttcg/static/media/GiveMeMore.03287a0af504e1add77a.png",
     "static/media/Precision.png": "/ttcg/static/media/Precision.d6d38250408cd06807bb.png",
@@ -91,11 +91,11 @@
     "static/media/hp-damage.mp3": "/ttcg/static/media/hp-damage.e932eef6fc9036076d78.mp3",
     "static/media/draw.mp3": "/ttcg/static/media/draw.ceb460e6016f04e97598.mp3",
     "index.html": "/ttcg/index.html",
-    "main.b191f8b3.css.map": "/ttcg/static/css/main.b191f8b3.css.map",
-    "main.e4a83277.js.map": "/ttcg/static/js/main.e4a83277.js.map"
+    "main.a756924b.css.map": "/ttcg/static/css/main.a756924b.css.map",
+    "main.4dba5472.js.map": "/ttcg/static/js/main.4dba5472.js.map"
   },
   "entrypoints": [
-    "static/css/main.b191f8b3.css",
-    "static/js/main.e4a83277.js"
+    "static/css/main.a756924b.css",
+    "static/js/main.4dba5472.js"
   ]
 }

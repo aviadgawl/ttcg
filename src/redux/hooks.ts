@@ -1,10 +1,10 @@
 import { useCallback } from 'react';
 import { TypedUseSelectorHook, useDispatch, useSelector, useStore } from 'react-redux';
-import { RootState, AppDispatch, SelectedData, setGame, resetSelectedData, setCardsList } from './store';
+import { RootState, AppDispatch, SelectedData, setGame, resetSelectedData, setCardsList, setPartialGame } from './store';
 import { playSoundByPlayerActionName, playSoundByCardActionName } from '../helpers/audio-helper';
 import { playerAction, shouldUpdateMultiplayerGame } from '../logic/player';
 import { championAction } from '../logic/champion';
-import { updateGameAsync, addGameAsync } from '../firebase/firebase';
+import { updateGameAsync, addGameAsync, getGameAsync } from '../firebase/firebase';
 import { BoardLocation, isAction, ActionCard } from '../logic/game-card';
 import { Game } from '../logic/game';
 import { GameStatus, PlayerActionsName } from '../logic/enums';
@@ -138,6 +138,20 @@ export const useJoinGame = () => {
         dispatch(setGame(joinedGame));
     }, [dispatch, store]);
 };
+
+export const useRefreshGame = () => {
+    const store = useStore();
+    const dispatch = useAppDispatch();
+
+    return useCallback(async () => {
+        const state = store.getState() as any;
+        const game: Game = state.gameActions.game;
+
+        const gameFromDb = await getGameAsync(game.code);
+
+        dispatch(setPartialGame(gameFromDb));
+    }, [dispatch, store]);
+}
 
 const changeLocalPlayerToPlayerTwo = (localPlayer: Player) => {
     const localPlayerClone = structuredClone(localPlayer) as Player;
