@@ -1291,6 +1291,7 @@
             1,
             1
         ],
+        "requiredClassName": "War Mage",
         "direction": "Straight",
         "damages": [
             {
@@ -1299,6 +1300,67 @@
             {
                 "dmgModifier": "+",
                 "dmgStat": "STR"
+            },
+            {
+                "dmgModifier": "+",
+                "dmgModifierValue": 1
+            }
+        ],
+        "isFreeTargeting": true,
+        "targetEffects": []
+    },
+    {
+        "type": "ActionCard",
+        "actionType": "Magic",
+        "name": "Magic Punch",
+        "requiredStat": "Int",
+        "requiredStatValue": 3,
+        "distance": [
+            1,
+            1
+        ],
+        "direction": "Straight",
+        "damages": [
+            {
+                "dmgStat": "INT"
+            },
+            {
+                "dmgModifier": "+",
+                "dmgStat": "STR"
+            }
+        ],
+        "isFreeTargeting": true,
+        "targetEffects": []
+    },
+    {
+        "type": "ActionCard",
+        "actionType": "Magic",
+        "name": "Ether Blade Swipe",
+        "distance": [
+            1,
+            1
+        ],
+        "requiredClassName": "War Mage",
+        "requiredStat": "Int",
+        "requiredStatValue": 5,
+        "direction": "Straight",
+        "hitAreas": {
+            "1": {
+                "right": 1,
+                "left": 1
+            }
+        },
+        "damages": [
+            {
+                "dmgStat": "INT"
+            },
+            {
+                "dmgModifier": "+",
+                "dmgStat": "STR"
+            },
+            {
+                "dmgModifier": "+",
+                "dmgModifierValue": 1
             }
         ],
         "isFreeTargeting": true,

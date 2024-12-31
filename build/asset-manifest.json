@@ -1,9 +1,10 @@
 {
   "files": {
     "main.css": "/ttcg/static/css/main.a756924b.css",
-    "main.js": "/ttcg/static/js/main.0e4e0198.js",
+    "main.js": "/ttcg/static/js/main.c969dd1e.js",
     "static/media/WarMage.png": "/ttcg/static/media/WarMage.b9d64aaec59d6ed573e0.png",
-    "static/media/EtherBladeSlash.png": "/ttcg/static/media/EtherBladeSlash.9bb6fe3bcb05e6c93833.png",
+    "static/media/EtherBladeSlash.png": "/ttcg/static/media/EtherBladeSlash.803a5e9b695d63a32f2c.png",
+    "static/media/MagicPunch.png": "/ttcg/static/media/MagicPunch.2def5c878f983eeec1d8.png",
     "static/media/RefreshMe.png": "/ttcg/static/media/RefreshMe.d1ab3397d77d9648e5fb.png",
     "static/media/Enrage.png": "/ttcg/static/media/Enrage.49813f73dd134e405b2d.png",
     "static/media/FixIt.png": "/ttcg/static/media/FixIt.6d4040057ab83afe8395.png",
@@ -12,6 +13,7 @@
     "static/media/CripplingShot.png": "/ttcg/static/media/CripplingShot.6a4fd20e1f4d8f5ae9c3.png",
     "static/media/IntelligenceBlessing.png": "/ttcg/static/media/IntelligenceBlessing.4c903fe9bdec7e75ba6f.png",
     "static/media/HighMage.png": "/ttcg/static/media/HighMage.371a4e9d3b7f9e0d3a82.png",
+    "static/media/EtherBladeSwipe.png": "/ttcg/static/media/EtherBladeSwipe.1801a0068e907c2b027e.png",
     "static/media/PetrifiedHex.png": "/ttcg/static/media/PetrifiedHex.80d12f48fd4603943c86.png",
     "static/media/FindHim.png": "/ttcg/static/media/FindHim.608ec1e5669f65c2a650.png",
     "static/media/BattlePriest.png": "/ttcg/static/media/BattlePriest.7cbdc037c816a3660c42.png",
@@ -92,10 +94,10 @@
     "static/media/draw.mp3": "/ttcg/static/media/draw.ceb460e6016f04e97598.mp3",
     "index.html": "/ttcg/index.html",
     "main.a756924b.css.map": "/ttcg/static/css/main.a756924b.css.map",
-    "main.0e4e0198.js.map": "/ttcg/static/js/main.0e4e0198.js.map"
+    "main.c969dd1e.js.map": "/ttcg/static/js/main.c969dd1e.js.map"
   },
   "entrypoints": [
     "static/css/main.a756924b.css",
-    "static/js/main.0e4e0198.js"
+    "static/js/main.c969dd1e.js"
   ]
 }

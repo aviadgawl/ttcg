@@ -17,7 +17,6 @@ import {
     ActionDirections,
     GameStatus,
     GearCategory,
-    MathModifier,
     EffectStatus,
     ChampionDirection,
     Race,
