@@ -336,6 +336,7 @@ export const setChampionLearnedActions = (game: Game, championCard: ChampionCard
         const actionCard = getAndRemoveActionCard(game, action);
 
         if (actionCard !== null) {
+            actionCard.wasPlayed = false;
             setRepeatableActionActivations(actionCard, championCard);
             championCard.learnedActionsCards.push(actionCard);
         }

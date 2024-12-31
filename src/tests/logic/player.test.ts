@@ -135,9 +135,7 @@ describe('Player Logic Tests', () => {
             requiredGearCategory: null,
             image: 'test.png',
             actionType: ActionType.Melee,
-            dmgStat: Stats.Str,
-            dmgModifier: null,
-            dmgModifierValue: null,
+            damages: [{ dmgStat: Stats.Str, dmgModifier: null, dmgModifierValue: null }],
             isRepeatable: false,
             repeatableStat: null,
             repeatableActivationLeft: null,
@@ -205,7 +203,7 @@ describe('Player Logic Tests', () => {
         mockGame = {
             playerIndex: 0,
             playingPlayerIndex: 0,
-            players: [mockPlayer],
+            players: [mockPlayer, {...mockPlayer, name: 'Test player 2'}],
             board: Array(8).fill(null).map(() => Array(8).fill(null)),
             status: GameStatus.onGoing,
             loser: null
@@ -636,7 +634,7 @@ describe('Player Logic Tests', () => {
         describe('orderCardDrawLogic', () => {
             it('should handle ReturnUsedCardToDeck', () => {
                 mockPlayer.usedCards = [mockActionCard];
-                const orderCard = { ...mockOrderCard, reward: { ...mockOrderCard.reward, name: RewardType.ReturnUsedCardToDeck }};
+                const orderCard = { ...mockOrderCard, reward: { ...mockOrderCard.reward, name: RewardType.ReturnUsedCardToDeck } };
                 const result = orderCardDrawLogic(RewardType.ReturnUsedCardToDeck, mockGame, mockPlayer, orderCard, undefined);
                 expect(result).toBe('success');
                 expect(mockPlayer.deck).toContain(mockActionCard);
@@ -645,7 +643,7 @@ describe('Player Logic Tests', () => {
             it('should handle ConditionedDraw', () => {
                 mockPlayer.deck = [mockActionCard];
                 mockGame.board[0][0] = mockChampion;
-                const orderCard = { ...mockOrderCard, reward: { ...mockOrderCard.reward, name: RewardType.ConditionedDraw, condition: 'SummonedChampions' }};
+                const orderCard = { ...mockOrderCard, reward: { ...mockOrderCard.reward, name: RewardType.ConditionedDraw, condition: 'SummonedChampions' } };
                 const result = orderCardDrawLogic(RewardType.ConditionedDraw, mockGame, mockPlayer, orderCard, undefined);
                 expect(result).toBe('success');
                 expect(mockPlayer.hand).toContain(mockActionCard);
@@ -716,7 +714,8 @@ describe('Player Logic Tests', () => {
             it('should handle extra class upgrade effect', () => {
                 const orderCard = {
                     ...mockOrderCard,
-                    reward: { name: RewardType.PlayExtraClassUpgrade, amount: 1, duration: 1, cardType: null, cardNameContains: null, condition: null }
+                    reward: { name: RewardType.PlayExtraClassUpgrade, amount: 1, duration: 1, cardType: null, cardNameContains: null, condition: null },
+                    requirement: []
                 };
 
                 const result = playOrder(mockGame, orderCard, [], undefined);
@@ -747,10 +746,10 @@ describe('Player Logic Tests', () => {
             });
 
             it('should replace existing champion', () => {
-                const oldChampion = { ...mockChampion, guid: 'old-champion' };
+                const oldChampion = { ...mockChampion, name: 'old-champion' };
                 mockPlayer.startingChampion = oldChampion;
                 mockPlayer.deck = [mockChampion];
-                
+
                 const result = setStartingChampion(mockPlayer, mockChampion);
                 expect(result).toBe('success');
                 expect(mockPlayer.startingChampion).toBe(mockChampion);

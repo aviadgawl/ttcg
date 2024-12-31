@@ -87,13 +87,17 @@ export interface OrderCard extends GameCard {
     reward: OrderCardReward
 }
 
+export interface Damage {
+    dmgStat: Stats | null;
+    dmgModifier: MathModifier | null;
+    dmgModifierValue: number | null;
+}
+
 export interface ActionCard extends GameCard {
     actionType: ActionType;
     distance: number[];
     direction: ActionDirections;
-    dmgStat: Stats | null;
-    dmgModifier: MathModifier | null;
-    dmgModifierValue: number | null;
+    damages: Damage[]
     requiredClassName: string | null;
     requiredStat: Stats | null;
     requiredStatValue: number | null;

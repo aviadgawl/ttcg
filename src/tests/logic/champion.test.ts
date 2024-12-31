@@ -6,7 +6,8 @@ import {
     StatusEffect,
     GameEffect,
     SummoningCard,
-    GearCard
+    GearCard,
+    Damage
 } from '../../logic/game-card';
 import {
     Stats,
@@ -27,7 +28,7 @@ import {
     calculateAndUpdateRepeatableActions,
     getPlayer,
     setRepeatableActionActivations,
-    getChampionStatValueByStat,
+    getChampionDamageValueByStat,
     championAction,
     calculateStats,
     checkValidTarget,
@@ -101,9 +102,11 @@ describe('Champion Logic Tests', () => {
             name: 'Test Action',
             playerIndex: 0,
             actionType: ActionType.Melee,
-            dmgStat: Stats.Str,
-            dmgModifier: null,
-            dmgModifierValue: null,
+            damages: [{
+                dmgStat: Stats.Str,
+                dmgModifier: null,
+                dmgModifierValue: null,
+            }],
             isRepeatable: false,
             repeatableStat: null,
             repeatableActivationLeft: null,
@@ -195,24 +198,24 @@ describe('Champion Logic Tests', () => {
         });
     });
 
-    describe('getChampionStatValueByStat', () => {
+    describe('getChampionDamageValueByStat', () => {
         it('should return correct Strength value', () => {
-            const result = getChampionStatValueByStat(mockChampion, Stats.Str);
+            const result = getChampionDamageValueByStat(mockChampion, Stats.Str);
             expect(result).toBe(5);
         });
 
         it('should return correct Dexterity value', () => {
-            const result = getChampionStatValueByStat(mockChampion, Stats.Dex);
+            const result = getChampionDamageValueByStat(mockChampion, Stats.Dex);
             expect(result).toBe(5);
         });
 
         it('should return correct Intelligence value', () => {
-            const result = getChampionStatValueByStat(mockChampion, Stats.Int);
+            const result = getChampionDamageValueByStat(mockChampion, Stats.Int);
             expect(result).toBe(5);
         });
 
         it('should return 0 for null stat', () => {
-            const result = getChampionStatValueByStat(mockChampion, null);
+            const result = getChampionDamageValueByStat(mockChampion, null);
             expect(result).toBe(0);
         });
     });
@@ -306,7 +309,7 @@ describe('Champion Logic Tests', () => {
                 playerIndex: 0,
                 name: 'Invalid Target'
             } as GameCard;
-            
+
             const result = checkValidTarget(invalidTarget);
             expect(result).toBe(false);
         });
@@ -314,17 +317,17 @@ describe('Champion Logic Tests', () => {
 
     describe('calculateDamageWithModifier', () => {
         it('should return base damage when no modifier', () => {
-            const result = calculateDamageWithModifier(5, { ...mockActionCard, dmgModifier: null, dmgModifierValue: null });
+            const result = calculateDamageWithModifier(5, null, null);
             expect(result).toBe(5);
         });
 
         it('should add modifier value', () => {
-            const result = calculateDamageWithModifier(5, { ...mockActionCard, dmgModifier: MathModifier.Plus, dmgModifierValue: 2 });
+            const result = calculateDamageWithModifier(5, MathModifier.Plus, 2);
             expect(result).toBe(7);
         });
 
         it('should multiply by modifier value', () => {
-            const result = calculateDamageWithModifier(5, { ...mockActionCard, dmgModifier: MathModifier.Multiply, dmgModifierValue: 2 });
+            const result = calculateDamageWithModifier(5, MathModifier.Multiply, 2);
             expect(result).toBe(10);
         });
     });
@@ -361,7 +364,7 @@ describe('Champion Logic Tests', () => {
             board[3][4] = mockCrystal; // Place blocker
             const source: BoardLocation = { rowIndex: 3, columnIndex: 3 };
             const target: BoardLocation = { rowIndex: 3, columnIndex: 4 };
-            
+
             const result = moveChampion(board, mockChampion, mockActionCard, source, target);
             expect(result.status).toContain('Target location isn\'t empty');
         });
@@ -371,7 +374,7 @@ describe('Champion Logic Tests', () => {
             mockChampion.calDex = 0;
             const source: BoardLocation = { rowIndex: 3, columnIndex: 3 };
             const target: BoardLocation = { rowIndex: 3, columnIndex: 4 };
-            
+
             const result = moveChampion(board, mockChampion, mockActionCard, source, target);
             expect(result.status).toBe('Dex must be higher than zero');
         });
@@ -380,7 +383,7 @@ describe('Champion Logic Tests', () => {
             const board = Array(8).fill(null).map(() => Array(8).fill(null));
             const source: BoardLocation = { rowIndex: 3, columnIndex: 3 };
             const target: BoardLocation = { rowIndex: 4, columnIndex: 4 };
-            
+
             const result = moveChampion(board, mockChampion, mockActionCard, source, target);
             expect(result.status).toBe('Champion must move in one direction');
         });
@@ -390,7 +393,7 @@ describe('Champion Logic Tests', () => {
         it('should calculate Manhattan distance correctly', () => {
             const source: BoardLocation = { rowIndex: 1, columnIndex: 1 };
             const target: BoardLocation = { rowIndex: 3, columnIndex: 4 };
-            
+
             const result = calculateDistance(source, target);
             expect(result).toBe(5); // |3-1| + |4-1| = 2 + 3 = 5
         });
@@ -399,16 +402,16 @@ describe('Champion Logic Tests', () => {
     describe('applyDamage', () => {
         it('should apply physical damage correctly', () => {
             const target = { ...mockChampion, armor: 2, currentHp: 10 };
-            const action = { ...mockActionCard, dmgStat: Stats.Str };
-            
+            const action = { ...mockActionCard, damages: [{ dmgStat: Stats.Str, dmgModifierValue: null, dmgModifier: null }] as Damage[] };
+
             applyDamage(mockChampion, action, target);
             expect(target.currentHp).toBe(7); // 5 (str) - 2 (armor) = 3 damage
         });
 
         it('should apply magical damage correctly', () => {
             const target = { ...mockChampion, mental: 1, currentHp: 10 };
-            const action = { ...mockActionCard, dmgStat: Stats.Int };
-            
+            const action = { ...mockActionCard, damages: [{ dmgStat: Stats.Int, dmgModifierValue: null, dmgModifier: null }] as Damage[] };
+
             applyDamage(mockChampion, action, target);
             expect(target.currentHp).toBe(6); // 5 (int) - 1 (mental) = 4 damage
         });
@@ -418,7 +421,7 @@ describe('Champion Logic Tests', () => {
         it('should heal up to missing health', () => {
             const target = { ...mockChampion, calHp: 10, currentHp: 5 };
             const action = { ...mockActionCard, isHeal: true, dmgStat: Stats.Int };
-            
+
             applyHeal(mockChampion, action, target);
             expect(target.currentHp).toBe(10);
         });
@@ -426,7 +429,7 @@ describe('Champion Logic Tests', () => {
         it('should not heal above max health', () => {
             const target = { ...mockChampion, calHp: 10, currentHp: 8 };
             const action = { ...mockActionCard, isHeal: true, dmgStat: Stats.Int };
-            
+
             applyHeal(mockChampion, action, target);
             expect(target.currentHp).toBe(10);
         });
@@ -434,10 +437,10 @@ describe('Champion Logic Tests', () => {
 
     describe('breakGear', () => {
         it('should break random gear piece', () => {
-            mockChampion.body = { 
-                guid: 'gear1', 
-                name: 'Test Gear', 
-                playerIndex: 0, 
+            mockChampion.body = {
+                guid: 'gear1',
+                name: 'Test Gear',
+                playerIndex: 0,
                 image: 'test.png',
                 str: 1,
                 dex: 1,
@@ -446,10 +449,10 @@ describe('Champion Logic Tests', () => {
                 category: GearCategory.Armors,
                 bodyPart: BodyPart.Body
             };
-            mockChampion.rightHand = { 
-                guid: 'gear2', 
-                name: 'Test Gear', 
-                playerIndex: 0, 
+            mockChampion.rightHand = {
+                guid: 'gear2',
+                name: 'Test Gear',
+                playerIndex: 0,
                 image: 'test.png',
                 str: 1,
                 dex: 1,
@@ -458,11 +461,11 @@ describe('Champion Logic Tests', () => {
                 category: GearCategory.Swords,
                 bodyPart: BodyPart.Hand
             };
-            
+
             breakGear(mockChampion);
-            
-            const hasGearBroken = 
-                mockChampion.body === null || 
+
+            const hasGearBroken =
+                mockChampion.body === null ||
                 mockChampion.rightHand === null;
             expect(hasGearBroken).toBe(true);
         });
@@ -473,17 +476,17 @@ describe('Champion Logic Tests', () => {
             const effects: StatusEffect[] = [
                 { name: EffectStatus.StrBoost, stat: Stats.Str, value: 2, duration: 2 }
             ];
-            
+
             applyTargetEffects(effects, mockChampion);
             expect(mockChampion.statusEffects).toHaveLength(1);
             expect(mockChampion.statusEffects[0]).toEqual(effects[0]);
         });
 
         it('should apply break gear effect immediately', () => {
-            mockChampion.body = { 
-                guid: 'gear1', 
-                name: 'Test Gear', 
-                playerIndex: 0, 
+            mockChampion.body = {
+                guid: 'gear1',
+                name: 'Test Gear',
+                playerIndex: 0,
                 image: 'test.png',
                 str: 1,
                 dex: 1,
@@ -496,7 +499,7 @@ describe('Champion Logic Tests', () => {
             const effects: StatusEffect[] = [
                 { name: EffectStatus.BreakGear, duration: 0, stat: null, value: null }
             ];
-            
+
             applyTargetEffects(effects, mockChampion);
             expect(mockChampion.body).toBeNull();
         });
@@ -548,7 +551,7 @@ describe('Champion Logic Tests', () => {
         it('should update repeatable actions that were not played', () => {
             const actionCard = { ...mockActionCard, isRepeatable: true, repeatableStat: Stats.Str };
             mockChampion.calStr = 3;
-            
+
             calculateAndUpdateRepeatableActions([actionCard], mockChampion);
             expect(actionCard.repeatableActivationLeft).toBe(3);
         });
@@ -624,7 +627,7 @@ describe('Champion Logic Tests', () => {
         it('should return initial location for zero distance', () => {
             const initialLocation = { rowIndex: 3, columnIndex: 3 };
             const action = { ...mockActionCard, distance: [0, 0] };
-            
+
             const result = getBoardLocationInStraightPath(board, initialLocation, action);
             expect(result).toEqual([initialLocation]);
         });
@@ -632,7 +635,7 @@ describe('Champion Logic Tests', () => {
         it('should return locations in all directions within range', () => {
             const initialLocation = { rowIndex: 3, columnIndex: 3 };
             const action = { ...mockActionCard, distance: [1, 1] };
-            
+
             const result = getBoardLocationInStraightPath(board, initialLocation, action);
             expect(result).toContainEqual({ rowIndex: 2, columnIndex: 3 }); // Up
             expect(result).toContainEqual({ rowIndex: 4, columnIndex: 3 }); // Down
@@ -644,7 +647,7 @@ describe('Champion Logic Tests', () => {
             const initialLocation = { rowIndex: 3, columnIndex: 3 };
             const action = { ...mockActionCard, distance: [1, 2], isFreeTargeting: false };
             board[3][4] = mockChampion; // Place blocker
-            
+
             const result = getBoardLocationInStraightPath(board, initialLocation, action);
             expect(result.some(loc => loc.rowIndex === 3 && loc.columnIndex === 5)).toBe(false);
         });
@@ -656,7 +659,7 @@ describe('Champion Logic Tests', () => {
                 distance: [1, 1],
                 hitAreas: { 1: { right: 1, left: 1 } }
             };
-            
+
             const result = getBoardLocationInStraightPath(board, initialLocation, action);
             // Check for side locations at distance 1
             expect(result).toContainEqual({ rowIndex: 4, columnIndex: 4 }); // Diagonal right
@@ -669,9 +672,9 @@ describe('Champion Logic Tests', () => {
             mockChampion.body = mockGearCard;
             mockChampion.rightHand = mockGearCard;
             mockGame.board[3][3] = mockChampion;
-            
+
             removeChampionFromBoard(mockGame, { rowIndex: 3, columnIndex: 3 });
-            
+
             expect(mockGame.board[3][3]).toBeNull();
             expect(mockPlayer.usedCards).toContain(mockChampion);
             expect(mockPlayer.usedCards).toContain(mockGearCard);
@@ -681,9 +684,9 @@ describe('Champion Logic Tests', () => {
             mockChampion.learnedActionsCards = [mockActionCard];
             mockChampion.attachedActionsCards = [mockActionCard];
             mockGame.board[3][3] = mockChampion;
-            
+
             removeChampionFromBoard(mockGame, { rowIndex: 3, columnIndex: 3 });
-            
+
             expect(mockPlayer.usedCards).toContain(mockActionCard);
             expect(mockChampion.learnedActionsCards).toHaveLength(0);
             expect(mockChampion.attachedActionsCards).toHaveLength(0);
@@ -694,7 +697,7 @@ describe('Champion Logic Tests', () => {
         it('should return last played action record', () => {
             const actionRecord = { guid: 'action1', name: 'Test Action' };
             mockPlayer.actionsLog.push(actionRecord);
-            
+
             const result = getLastPlayedActionGuid(mockPlayer);
             expect(result).toBe(actionRecord);
         });
@@ -705,9 +708,9 @@ describe('Champion Logic Tests', () => {
             const sourceLocation = { rowIndex: 3, columnIndex: 3 };
             const targetLocation = { rowIndex: 3, columnIndex: 4 };
             const result = { status: 'success', targetedCard: null };
-            
+
             successfulAttackGameUpdate(mockGame, mockPlayer, mockChampion, mockActionCard, false, result, sourceLocation, targetLocation);
-            
+
             expect(mockActionCard.wasPlayed).toBe(true);
             expect(mockChampion.stm).toBe(2);
             expect(mockChampion.direction).toBe(ChampionDirection.Right);
@@ -716,21 +719,21 @@ describe('Champion Logic Tests', () => {
         it('should handle repeatable actions', () => {
             mockActionCard.isRepeatable = true;
             mockActionCard.repeatableActivationLeft = 2;
-            
+
             const result = { status: 'success', targetedCard: null };
-            successfulAttackGameUpdate(mockGame, mockPlayer, mockChampion, mockActionCard, false, result, 
+            successfulAttackGameUpdate(mockGame, mockPlayer, mockChampion, mockActionCard, false, result,
                 { rowIndex: 0, columnIndex: 0 }, { rowIndex: 0, columnIndex: 1 });
-            
+
             expect(mockActionCard.repeatableActivationLeft).toBe(1);
         });
 
         it('should end game when crystal is destroyed', () => {
             mockCrystal.currentHp = -1;
             const result = { status: 'success', targetedCard: mockCrystal };
-            
+
             successfulAttackGameUpdate(mockGame, mockPlayer, mockChampion, mockActionCard, false, result,
                 { rowIndex: 0, columnIndex: 0 }, { rowIndex: 0, columnIndex: 1 });
-            
+
             expect(mockGame.status).toBe(GameStatus.over);
             expect(mockGame.loser).toBe(mockPlayer);
         });
@@ -741,7 +744,7 @@ describe('Champion Logic Tests', () => {
             mockChampion.statusEffects = [{ name: EffectStatus.Paralyze, duration: 1, stat: null, value: null }];
             const sourceLocation: BoardLocation = { rowIndex: 3, columnIndex: 3 };
             const targetLocation: BoardLocation = { rowIndex: 3, columnIndex: 4 };
-            
+
             const result = attack(mockGame, mockChampion, mockActionCard, sourceLocation, targetLocation);
             expect(result.status).toContain('Paralyze');
         });
@@ -750,7 +753,7 @@ describe('Champion Logic Tests', () => {
             mockChampion.statusEffects = [{ name: EffectStatus.Silence, duration: 1, stat: null, value: null }];
             const sourceLocation: BoardLocation = { rowIndex: 3, columnIndex: 3 };
             const targetLocation: BoardLocation = { rowIndex: 3, columnIndex: 4 };
-            
+
             const result = attack(mockGame, mockChampion, mockActionCard, sourceLocation, targetLocation);
             expect(result.status).toContain('Silence');
         });
@@ -759,7 +762,7 @@ describe('Champion Logic Tests', () => {
             const sourceLocation: BoardLocation = { rowIndex: 3, columnIndex: 3 };
             const targetLocation: BoardLocation = { rowIndex: 3, columnIndex: 4 };
             mockGame.board[3][4] = { ...mockActionCard, hp: 10, calHp: 10, currentHp: 10, isBlocking: false } as unknown as SummoningCard;
-            
+
             const result = attack(mockGame, mockChampion, mockActionCard, sourceLocation, targetLocation);
             expect(result.status).toContain('Target is not a champion or crystal');
         });
@@ -769,7 +772,7 @@ describe('Champion Logic Tests', () => {
             const targetLocation: BoardLocation = { rowIndex: 3, columnIndex: 4 };
             const target = { ...mockChampion, currentHp: 10, armor: 0 } as unknown as SummoningCard;
             mockGame.board[3][4] = target;
-            
+
             const result = attack(mockGame, mockChampion, mockActionCard, sourceLocation, targetLocation);
             expect(result.status).toBe('success');
             expect(target.currentHp).toBeLessThan(10);

@@ -624,9 +624,15 @@
             1
         ],
         "direction": "Straight",
-        "dmgStat": "Str",
-        "dmgModifier": "Plus",
-        "dmgModifierValue": 1,
+        "damages": [
+            {
+                "dmgStat": "STR"
+            },
+            {
+                "dmgModifier": "+",
+                "dmgModifierValue": 1
+            }
+        ],
         "requiredGearCategory": "Daggers",
         "isFreeTargeting": true,
         "targetEffects": []
@@ -640,9 +646,15 @@
             1
         ],
         "direction": "Straight",
-        "dmgStat": "Str",
-        "dmgModifier": "Plus",
-        "dmgModifierValue": 1,
+        "damages": [
+            {
+                "dmgStat": "STR"
+            },
+            {
+                "dmgModifier": "+",
+                "dmgModifierValue": 1
+            }
+        ],
         "requiredGearCategory": "Swords",
         "isFreeTargeting": true,
         "targetEffects": []
@@ -656,9 +668,15 @@
             1
         ],
         "direction": "Straight",
-        "dmgStat": "Str",
-        "dmgModifier": "Plus",
-        "dmgModifierValue": 1,
+        "damages": [
+            {
+                "dmgStat": "STR"
+            },
+            {
+                "dmgModifier": "+",
+                "dmgModifierValue": 1
+            }
+        ],
         "requiredGearCategory": "Axes",
         "isFreeTargeting": true,
         "targetEffects": []
@@ -672,9 +690,15 @@
             1
         ],
         "direction": "Straight",
-        "dmgStat": "Str",
-        "dmgModifier": "Plus",
-        "dmgModifierValue": 1,
+        "damages": [
+            {
+                "dmgStat": "STR"
+            },
+            {
+                "dmgModifier": "+",
+                "dmgModifierValue": 1
+            }
+        ],
         "requiredStat": "Str",
         "requiredStatValue": 3,
         "isFreeTargeting": true,
@@ -736,7 +760,11 @@
             1
         ],
         "direction": "Straight",
-        "dmgStat": "Str",
+        "damages": [
+            {
+                "dmgStat": "STR"
+            }
+        ],
         "isFreeTargeting": true,
         "targetEffects": []
     },
@@ -795,7 +823,11 @@
             3
         ],
         "direction": "Straight",
-        "dmgStat": "Dex",
+        "damages": [
+            {
+                "dmgStat": "DEX"
+            }
+        ],
         "isFreeTargeting": true,
         "targetEffects": []
     },
@@ -808,7 +840,11 @@
             4
         ],
         "direction": "Straight",
-        "dmgStat": "Dex",
+        "damages": [
+            {
+                "dmgStat": "DEX"
+            }
+        ],
         "requiredGearCategory": "Bows",
         "isFreeTargeting": true,
         "targetEffects": []
@@ -868,7 +904,11 @@
             4
         ],
         "direction": "Straight",
-        "dmgStat": "Dex",
+        "damages": [
+            {
+                "dmgStat": "DEX"
+            }
+        ],
         "requiredClassName": "Archer",
         "requiredGearCategory": "Bows",
         "isFreeTargeting": true,
@@ -911,9 +951,17 @@
             1
         ],
         "direction": "Straight",
-        "dmgStat": "Str",
-        "dmgModifier": "Multiply",
-        "dmgModifierValue": 2,
+        "damages": [
+            {
+                "dmgStat": "STR",
+                "dmgModifier": null,
+                "dmgModifierValue": null
+            },
+            {
+                "dmgModifier": "x",
+                "dmgModifierValue": 2
+            }
+        ],
         "requiredClassName": "Shadow",
         "requiredGearCategory": "Daggers",
         "isFreeTargeting": true,
@@ -935,7 +983,11 @@
             }
         },
         "direction": "Straight",
-        "dmgStat": "Str",
+        "damages": [
+            {
+                "dmgStat": "STR"
+            }
+        ],
         "requiredGearCategory": "Axes",
         "isFreeTargeting": true,
         "targetEffects": []
@@ -955,7 +1007,11 @@
             }
         },
         "direction": "Straight",
-        "dmgStat": "Str",
+        "damages": [
+            {
+                "dmgStat": "STR"
+            }
+        ],
         "requiredGearCategory": "Swords",
         "isFreeTargeting": true,
         "targetEffects": []
@@ -969,7 +1025,11 @@
             1
         ],
         "direction": "Straight",
-        "dmgStat": "Str",
+        "damages": [
+            {
+                "dmgStat": "STR"
+            }
+        ],
         "requiredGearCategory": "Shields",
         "isFreeTargeting": true,
         "targetEffects": [
@@ -1010,7 +1070,11 @@
             4
         ],
         "direction": "Straight",
-        "dmgStat": "Int",
+        "damages": [
+            {
+                "dmgStat": "INT"
+            }
+        ],
         "requiredStat": "Int",
         "requiredStatValue": 2,
         "isFreeTargeting": true,
@@ -1116,7 +1180,11 @@
             4
         ],
         "direction": "Straight",
-        "dmgStat": "Int",
+        "damages": [
+            {
+                "dmgStat": "INT"
+            }
+        ],
         "requiredStat": "Int",
         "requiredStatValue": 3,
         "isFreeTargeting": true,
@@ -1138,7 +1206,11 @@
             0
         ],
         "direction": "Straight",
-        "dmgStat": "Int",
+        "damages": [
+            {
+                "dmgStat": "INT"
+            }
+        ],
         "isFreeTargeting": true,
         "isHeal": true,
         "requiredStat": "Int",
@@ -1154,7 +1226,11 @@
             4
         ],
         "direction": "Straight",
-        "dmgStat": "Int",
+        "damages": [
+            {
+                "dmgStat": "INT"
+            }
+        ],
         "isHeal": true,
         "requiredStat": "Int",
         "requiredStatValue": 2,
@@ -1171,7 +1247,11 @@
             3
         ],
         "direction": "Straight",
-        "dmgStat": "Int",
+        "damages": [
+            {
+                "dmgStat": "INT"
+            }
+        ],
         "isFreeTargeting": true,
         "targetEffects": [
             {
@@ -1212,9 +1292,15 @@
             1
         ],
         "direction": "Straight",
-        "dmgStat": "Int",
-        "dmgModifier": "Plus",
-        "dmgModifierValue": 2,
+        "damages": [
+            {
+                "dmgStat": "INT"
+            },
+            {
+                "dmgModifier": "+",
+                "dmgStat": "STR"
+            }
+        ],
         "isFreeTargeting": true,
         "targetEffects": []
     }

@@ -13,8 +13,6 @@ npx generate-react-cli component MyComponent
 
 # bugs
 Jump Step don't jump over obstacle
-Need to add auto end turn for bot
 Add reconnect
-Add refresh
 Attached action step disappears after one use (not recreated)
-Learned actions disabled when summoning champion (not recreated)
+Change converting enums

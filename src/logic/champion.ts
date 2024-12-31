@@ -13,8 +13,7 @@ export const checkValidTarget = (target: GameCard): boolean => {
 }
 
 export const applyHeal = (sourceChampion: ChampionCard, actionCard: ActionCard, target: SummoningCard) => {
-    const baseDmg = getChampionStatValueByStat(sourceChampion, actionCard.dmgStat);
-    const amountToHeal = calculateDamageWithModifier(baseDmg, actionCard);
+    const amountToHeal = calculateDamage(sourceChampion, actionCard);
 
     if (amountToHeal === 0) return;
 
@@ -34,13 +33,14 @@ export const applyHeal = (sourceChampion: ChampionCard, actionCard: ActionCard, 
 };
 
 export const applyDamage = (sourceChampion: ChampionCard, actionCard: ActionCard, target: SummoningCard) => {
-    const baseDmg = getChampionStatValueByStat(sourceChampion, actionCard.dmgStat);
-    const calDamage = calculateDamageWithModifier(baseDmg, actionCard);
+    if(actionCard.damages.length === 0) return;
+
+    const calDamage = calculateDamage(sourceChampion, actionCard);
 
     if (calDamage === 0) return;
 
     if (isChampion(target)) {
-        const isMagicDmg = actionCard.dmgStat === Stats.Int;
+        const isMagicDmg = actionCard.damages[0].dmgStat === Stats.Int;
         const mitigation = isMagicDmg ? target.mental : target.armor;
         const dmg = calDamage - mitigation;
 
@@ -59,14 +59,27 @@ export const applyDamage = (sourceChampion: ChampionCard, actionCard: ActionCard
     }
 }
 
-export const calculateDamageWithModifier = (baseDamage: number, actionCard: ActionCard): number => {
-    if (actionCard.dmgModifier === null || actionCard.dmgModifierValue === null) return baseDamage;
+export const calculateDamage = (champion: ChampionCard, actionCard: ActionCard): number => {
+    let calculatedDamage = 0;
 
-    switch (actionCard.dmgModifier) {
+    actionCard.damages.forEach((damage) => {
+        const statDamage = damage.dmgStat ? getChampionDamageValueByStat(champion, damage.dmgStat) : 0;
+        const regularDamage = damage.dmgModifierValue ?? 0;
+
+        calculatedDamage = calculateDamageWithModifier(statDamage + regularDamage, damage.dmgModifier, calculatedDamage);
+    });
+
+    return calculatedDamage;
+}
+
+export const calculateDamageWithModifier = (baseDamage: number, dmgModifier: MathModifier | null, dmgModifierValue: number | null): number => {
+    if (dmgModifier === null || dmgModifierValue === null) return baseDamage;
+
+    switch (dmgModifier) {
         case MathModifier.Plus:
-            return baseDamage + actionCard.dmgModifierValue;
+            return baseDamage + dmgModifierValue;
         case MathModifier.Multiply:
-            return baseDamage * actionCard.dmgModifierValue;
+            return baseDamage * dmgModifierValue;
         default:
             return 0;
     }
@@ -211,19 +224,19 @@ export const attack = (game: Game, attackingChampion: ChampionCard,
 
     if (isChampion(target)) {
 
-        if(actionCard.isBackTargeting) {
+        if (actionCard.isBackTargeting) {
             const attackDirection = getChampionDirection(sourceLocation, targetLocation);
-            if(target.direction !== attackDirection) 
+            if (target.direction !== attackDirection)
                 return { status: 'This attack can only hit champions from behind', targetedCard: target };
         }
 
         if (target.statusEffects.some(effect => effect.name === EffectStatus.DamageImmunity))
             return { status: 'Target is immune to damage', targetedCard: target };
 
-        if (actionCard.dmgStat === Stats.Str && target.statusEffects.some(effect => effect.name === EffectStatus.MeleeImmunity))
+        if (actionCard.damages.length > 0 && actionCard.damages[0].dmgStat === Stats.Str && target.statusEffects.some(effect => effect.name === EffectStatus.MeleeImmunity))
             return { status: 'Target is immune to melee damage', targetedCard: target };
 
-        if (actionCard.dmgStat === Stats.Int && target.statusEffects.some(effect => effect.name === EffectStatus.MagicalImmunity))
+        if (actionCard.damages.length > 0 && actionCard.damages[0].dmgStat === Stats.Int && target.statusEffects.some(effect => effect.name === EffectStatus.MagicalImmunity))
             return { status: 'Target is immune to magical damage', targetedCard: target };
     }
 
@@ -235,7 +248,7 @@ export const attack = (game: Game, attackingChampion: ChampionCard,
             targetedCard: target
         };
 
-    if (actionCard.dmgStat !== null) {
+    if (actionCard.damages.length > 0) {
         if (actionCard.isHeal)
             applyHeal(attackingChampion, actionCard, target);
         else
@@ -401,7 +414,10 @@ export const getActionCardFromChampion = (sourceChampion: ChampionCard, actionCa
     return actionCard ?? null;
 }
 
-export const getLastPlayedActionGuid = (player: Player): PlayerActionLogRecord => {
+export const getLastPlayedActionGuid = (player: Player): PlayerActionLogRecord|null => {
+    if(player.actionsLog.length)
+        return null;
+
     return player.actionsLog[player.actionsLog.length - 1];
 }
 
@@ -414,12 +430,11 @@ export const successfulAttackGameUpdate = (game: Game, player: Player, sourceCha
         actionCard.repeatableActivationLeft--;
 
     const lastPlayedActionRecord = getLastPlayedActionGuid(player);
-
     const validRepeatable = checkRepeatableAction(player, actionCard);
 
     if (isAttachedAction && !validRepeatable)
         checkAndRemoveFromAttachedActions(game.players[game.playerIndex], sourceChampion, actionCard);
-    else if (lastPlayedActionRecord.guid !== actionCard.guid || !actionCard.isRepeatable)
+    else if (lastPlayedActionRecord?.guid !== actionCard.guid || !actionCard.isRepeatable)
         sourceChampion.stm--;
 
     if (result.targetedCard !== null && isCrystal(result.targetedCard) && result.targetedCard.currentHp < 0) {
@@ -460,11 +475,11 @@ export const getPlayer = (game: Game): Player => {
 export const setRepeatableActionActivations = (actionCard: ActionCard, sourceChampion: ChampionCard) => {
     if (!actionCard.isRepeatable) return;
 
-    const statValue = getChampionStatValueByStat(sourceChampion, actionCard.repeatableStat);
+    const statValue = getChampionDamageValueByStat(sourceChampion, actionCard.repeatableStat);
     actionCard.repeatableActivationLeft = statValue;
 }
 
-export const getChampionStatValueByStat = (champion: ChampionCard, damageStat: Stats | null): number => {
+export const getChampionDamageValueByStat = (champion: ChampionCard, damageStat: Stats | null): number => {
     switch (damageStat) {
         case Stats.Str:
             return champion.calStr;

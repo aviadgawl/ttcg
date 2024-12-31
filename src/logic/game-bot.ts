@@ -1,9 +1,15 @@
 import { Game } from './game';
 import { Player } from './player';
 import { GameCard, ChampionCard, ActionCard, GearCard, ClassCard, OrderCard, isChampion, isGear, isAction, isOrder, isClass } from './game-card';
-import { PlayerActionsName } from './enums';
+import { ActionType, PlayerActionsName } from './enums';
 import { BoardLocation } from './game-card';
 import { getPlayerActionsAllowedBoardLocations, getValidCardsForDiscard, playerAction } from './player';
+import { getChampionsActionsAllowedBoardLocations } from './champion';
+
+type GetPlayerSummonedChampionsResult = {
+    sourceLocation: BoardLocation;
+    championCard: ChampionCard;
+}
 
 export const makeMove = (game: Game): void => {
     const botPlayer = game.players[game.playerIndex];
@@ -40,6 +46,26 @@ export const tryPlayChampion = (game: Game, botPlayer: Player): boolean => {
     // Choose first available location
     const targetLocation = locations.locations[0];
     return executeAction(game, PlayerActionsName.Summon, champion, targetLocation);
+}
+
+export const tryToChampionsLearnedActions = (game: Game): boolean => {
+    const champions = getPlayerSummonedChampions(game);
+
+    champions.forEach(summonedChampion => {
+        if(summonedChampion.championCard.stm > 0 && summonedChampion.championCard.learnedActionsCards.length > 0) {
+            const unplayedActionCards = summonedChampion.championCard.learnedActionsCards.filter(actionCard => actionCard.wasPlayed === false);
+
+            unplayedActionCards.forEach( actionCard => {
+                if(actionCard.actionType === ActionType.Movement) {
+
+                    const locations = getChampionsActionsAllowedBoardLocations(game, actionCard, summonedChampion.sourceLocation);
+
+                }
+            });
+        }
+    });
+
+    return true;
 }
 
 export const tryPlayGear = (game: Game, botPlayer: Player): boolean => {
@@ -160,4 +186,18 @@ export const evaluateBoard = (game: Game): number => {
     score -= opponent.hand.length * 2;
 
     return score;
+}
+
+export const getPlayerSummonedChampions = (game: Game): GetPlayerSummonedChampionsResult[] => {
+    const champions: GetPlayerSummonedChampionsResult[] = [];
+
+    game.board.forEach((row, rowIndex) => {
+        row.forEach((card, columnIndex) => {
+            if (isChampion(card) && card.playerIndex == game.playerIndex)
+                champions.push({sourceLocation: {rowIndex, columnIndex} ,championCard: card});
+
+        });
+    });
+
+    return champions;
 }

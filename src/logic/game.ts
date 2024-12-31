@@ -8,7 +8,8 @@ import {
     ActionCard,
     OrderCard,
     OrderCardReward,
-    GameEffect
+    GameEffect,
+    Damage
 } from './game-card';
 import {
     ActionType,
@@ -78,9 +79,6 @@ export const cardsList = cardsListJson.flatMap(x => {
                     actionType: ActionType[x.actionType as keyof typeof ActionType],
                     distance: x.distance,
                     direction: ActionDirections[(x.direction ?? '') as keyof typeof ActionDirections],
-                    dmgStat: Stats[(x.dmgStat ?? '') as keyof typeof Stats],
-                    dmgModifier: MathModifier[(x.dmgModifier ?? '') as keyof typeof MathModifier],
-                    dmgModifierValue: x.dmgModifierValue ?? null,
                     requiredClassName: x.requiredClassName ?? null,
                     requiredStat: Stats[(x.requiredStat ?? '') as keyof typeof Stats],
                     requiredStatValue: x.requiredStatValue ?? null,
@@ -100,7 +98,13 @@ export const cardsList = cardsListJson.flatMap(x => {
                     repeatableActivationLeft: null,
                     wasPlayed: false,
                     hitAreas: x.hitAreas ?? null,
-                    isHeal: x.isHeal ?? false
+                    isHeal: x.isHeal ?? false,
+                    damages: x.damages ? x.damages.map((damage: any) =>
+                    ({
+                        dmgStat: damage.dmgStat ?? null,
+                        dmgModifier: damage.dmgModifier ?? null,
+                        dmgModifierValue: damage.dmgModifierValue ?? null
+                    } as Damage)) : [] as Damage[]
                 } as ActionCard);
                 break;
             case CardType.OrderCard:
