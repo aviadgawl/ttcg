@@ -415,7 +415,7 @@ export const getActionCardFromChampion = (sourceChampion: ChampionCard, actionCa
 }
 
 export const getLastPlayedActionGuid = (player: Player): PlayerActionLogRecord|null => {
-    if(player.actionsLog.length)
+    if(player.actionsLog.length === 0)
         return null;
 
     return player.actionsLog[player.actionsLog.length - 1];

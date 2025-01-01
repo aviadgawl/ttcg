@@ -770,10 +770,11 @@ describe('Champion Logic Tests', () => {
         it('should successfully damage target', () => {
             const sourceLocation: BoardLocation = { rowIndex: 3, columnIndex: 3 };
             const targetLocation: BoardLocation = { rowIndex: 3, columnIndex: 4 };
+            const actionCard = { ...mockActionCard, isFreeTargeting: true } as ActionCard;
             const target = { ...mockChampion, currentHp: 10, armor: 0 } as unknown as SummoningCard;
             mockGame.board[3][4] = target;
 
-            const result = attack(mockGame, mockChampion, mockActionCard, sourceLocation, targetLocation);
+            const result = attack(mockGame, mockChampion, actionCard, sourceLocation, targetLocation);
             expect(result.status).toBe('success');
             expect(target.currentHp).toBeLessThan(10);
         });
