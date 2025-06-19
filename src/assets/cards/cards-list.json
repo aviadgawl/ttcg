@@ -610,7 +610,7 @@
             {
                 "name": "StrBoost",
                 "duration": 2,
-                "stat": "Str",
+                "stat": "STR",
                 "value": 2
             }
         ]
@@ -699,7 +699,7 @@
                 "dmgModifierValue": 1
             }
         ],
-        "requiredStat": "Str",
+        "requiredStat": "STR",
         "requiredStatValue": 3,
         "isFreeTargeting": true,
         "targetEffects": []
@@ -713,14 +713,14 @@
             1
         ],
         "direction": "Straight",
-        "requiredStat": "Str",
+        "requiredStat": "STR",
         "requiredStatValue": 3,
         "isFreeTargeting": true,
         "targetEffects": [
             {
                 "name": "StrRedaction",
                 "duration": 1,
-                "stat": "Str",
+                "stat": "STR",
                 "value": -6
             }
         ]
@@ -779,7 +779,7 @@
         "direction": "Straight",
         "targetEffects": [],
         "isRepeatable": true,
-        "repeatableStat": "Dex"
+        "repeatableStat": "DEX"
     },
     {
         "type": "ActionCard",
@@ -870,7 +870,7 @@
             {
                 "name": "DexBoost",
                 "duration": 2,
-                "stat": "Dex",
+                "stat": "DEX",
                 "value": 2
             }
         ]
@@ -888,9 +888,9 @@
         "isFreeTargeting": true,
         "targetEffects": [
             {
-                "name": "DexBoost",
+                "name": "Dex Boost",
                 "duration": 1,
-                "stat": "Dex",
+                "stat": "DEX",
                 "value": 1
             }
         ]
@@ -914,9 +914,9 @@
         "isFreeTargeting": true,
         "targetEffects": [
             {
-                "name": "DexRedaction",
+                "name": "Dex Redaction",
                 "duration": 2,
-                "stat": "Dex",
+                "stat": "DEX",
                 "value": -2
             }
         ]
@@ -930,14 +930,14 @@
             4
         ],
         "direction": "Straight",
-        "requiredStat": "Dex",
+        "requiredStat": "DEX",
         "requiredStatValue": 3,
         "isFreeTargeting": true,
         "targetEffects": [
             {
-                "name": "BreakGear",
+                "name": "Break Gear",
                 "duration": 0,
-                "stat": "Dex",
+                "stat": "DEX",
                 "value": 1
             }
         ]
@@ -1054,7 +1054,7 @@
         "isFreeTargeting": true,
         "targetEffects": [
             {
-                "name": "MeleeImmunity",
+                "name": "Melee Immunity",
                 "duration": 2,
                 "stat": null,
                 "value": null
@@ -1075,7 +1075,7 @@
                 "dmgStat": "INT"
             }
         ],
-        "requiredStat": "Int",
+        "requiredStat": "INT",
         "requiredStatValue": 2,
         "isFreeTargeting": true,
         "targetEffects": []
@@ -1100,7 +1100,7 @@
             {
                 "name": "IntBoost",
                 "duration": 2,
-                "stat": "Int",
+                "stat": "INT",
                 "value": 2
             }
         ]
@@ -1115,14 +1115,14 @@
         ],
         "direction": "Straight",
         "isFreeTargeting": true,
-        "requiredStat": "Int",
+        "requiredStat": "INT",
         "requiredStatValue": 2,
         "requiredClassName": "Acolyte",
         "targetEffects": [
             {
-                "name": "DexBoost",
+                "name": "Dex Boost",
                 "duration": 2,
-                "stat": "Dex",
+                "stat": "DEX",
                 "value": 2
             }
         ]
@@ -1136,15 +1136,15 @@
             3
         ],
         "direction": "Straight",
-        "requiredStat": "Int",
+        "requiredStat": "INT",
         "requiredStatValue": 2,
         "requiredClassName": "Acolyte",
         "isFreeTargeting": true,
         "targetEffects": [
             {
-                "name": "StrBoost",
+                "name": "Str Boost",
                 "duration": 2,
-                "stat": "Str",
+                "stat": "STR",
                 "value": 2
             }
         ]
@@ -1158,15 +1158,15 @@
             3
         ],
         "direction": "Straight",
-        "requiredStat": "Int",
+        "requiredStat": "INT",
         "requiredStatValue": 2,
         "requiredClassName": "Acolyte",
         "isFreeTargeting": true,
         "targetEffects": [
             {
-                "name": "IntBoost",
+                "name": "Int Boost",
                 "duration": 2,
-                "stat": "Int",
+                "stat": "INT",
                 "value": 2
             }
         ]
@@ -1185,7 +1185,7 @@
                 "dmgStat": "INT"
             }
         ],
-        "requiredStat": "Int",
+        "requiredStat": "INT",
         "requiredStatValue": 3,
         "isFreeTargeting": true,
         "targetEffects": [
@@ -1213,7 +1213,7 @@
         ],
         "isFreeTargeting": true,
         "isHeal": true,
-        "requiredStat": "Int",
+        "requiredStat": "INT",
         "requiredStatValue": 2,
         "targetEffects": []
     },
@@ -1232,7 +1232,7 @@
             }
         ],
         "isHeal": true,
-        "requiredStat": "Int",
+        "requiredStat": "INT",
         "requiredStatValue": 2,
         "requiredClassName": "Acolyte",
         "isFreeTargeting": true,
@@ -1271,14 +1271,14 @@
             3
         ],
         "direction": "Straight",
-        "requiredStat": "Int",
+        "requiredStat": "INT",
         "requiredStatValue": 3,
         "isFreeTargeting": true,
         "targetEffects": [
             {
-                "name": "IntRedaction",
+                "name": "Int Redaction",
                 "duration": 1,
-                "stat": "Int",
+                "stat": "INT",
                 "value": -6
             }
         ]
@@ -1313,7 +1313,7 @@
         "type": "ActionCard",
         "actionType": "Magic",
         "name": "Magic Punch",
-        "requiredStat": "Int",
+        "requiredStat": "INT",
         "requiredStatValue": 3,
         "distance": [
             1,
@@ -1341,7 +1341,7 @@
             1
         ],
         "requiredClassName": "War Mage",
-        "requiredStat": "Int",
+        "requiredStat": "INT",
         "requiredStatValue": 5,
         "direction": "Straight",
         "hitAreas": {

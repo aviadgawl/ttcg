@@ -34,7 +34,7 @@ const createGuid = (): string => {
         });
 };
 
-export const cardsList = cardsListJson.flatMap(x => {
+export const cardsJsonToObjects = (cardsListJson: any): GameCard[] => cardsListJson.flatMap((x: any) => {
     const newCardsArray: GameCard[] = [];
 
     for (let index = 0; index < 3; index++) {
@@ -50,7 +50,7 @@ export const cardsList = cardsListJson.flatMap(x => {
                     body: null, rightHand: null, leftHand: null,
                     class: x.class, calClass: x.class, upgrade: null, calHp: x.hp,
                     direction: ChampionDirection.Up,
-                    race: Race[x.race as keyof typeof Race]
+                    race: x.race
                 } as ChampionCard);
                 break;
             case 'Class':
@@ -66,7 +66,7 @@ export const cardsList = cardsListJson.flatMap(x => {
                     guid: createGuid(), name: x.name, str: x.str,
                     dex: x.dex, int: x.int, hp: x.hp, currentHp: x.hp, bodyPart: x.bodyPart,
                     image: getImage(x.name), playerIndex: 0, isBlocking: x.isBlocking ?? false,
-                    category: GearCategory[x.category as keyof typeof GearCategory]
+                    category: x.category
                 } as GearCard);
                 break;
             case CardType.ActionCard:
@@ -79,21 +79,21 @@ export const cardsList = cardsListJson.flatMap(x => {
                     distance: x.distance,
                     direction: ActionDirections[(x.direction ?? '') as keyof typeof ActionDirections],
                     requiredClassName: x.requiredClassName ?? null,
-                    requiredStat: Stats[(x.requiredStat ?? '') as keyof typeof Stats],
+                    requiredStat: x.requiredStat ?? null,
                     requiredStatValue: x.requiredStatValue ?? null,
                     requiredGearCategory: x.requiredGearCategory ?? null,
                     isFreeTargeting: x.isFreeTargeting ?? false,
                     isBackTargeting: x.isBackTargeting ?? false,
-                    targetEffects: x.targetEffects?.map(effect => {
+                    targetEffects: x.targetEffects?.map((effect: any) => {
                         return {
-                            name: EffectStatus[(effect.name ?? '') as keyof typeof EffectStatus],
+                            name: effect.name,
                             duration: effect.duration ?? 0,
-                            stat: effect.stat ? Stats[(effect.stat) as keyof typeof Stats] : null,
+                            stat: effect.stat ?? null,
                             value: effect.value ?? null
                         }
                     }),
                     isRepeatable: x.isRepeatable ?? false,
-                    repeatableStat: x.repeatableStat === null ? null : Stats[(x.repeatableStat) as keyof typeof Stats],
+                    repeatableStat: x.repeatableStat ?? null,
                     repeatableActivationLeft: null,
                     wasPlayed: false,
                     hitAreas: x.hitAreas ?? null,
@@ -124,6 +124,8 @@ export const cardsList = cardsListJson.flatMap(x => {
     }
     return newCardsArray;
 });
+
+export const cardsList = cardsJsonToObjects(cardsListJson);
 
 export interface Game {
     code: string;
