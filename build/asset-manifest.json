@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/ttcg/static/css/main.a756924b.css",
-    "main.js": "/ttcg/static/js/main.c969dd1e.js",
+    "main.js": "/ttcg/static/js/main.44e60a72.js",
     "static/media/WarMage.png": "/ttcg/static/media/WarMage.b9d64aaec59d6ed573e0.png",
     "static/media/EtherBladeSlash.png": "/ttcg/static/media/EtherBladeSlash.803a5e9b695d63a32f2c.png",
-    "static/media/MagicPunch.png": "/ttcg/static/media/MagicPunch.2def5c878f983eeec1d8.png",
     "static/media/RefreshMe.png": "/ttcg/static/media/RefreshMe.d1ab3397d77d9648e5fb.png",
     "static/media/Enrage.png": "/ttcg/static/media/Enrage.49813f73dd134e405b2d.png",
     "static/media/FixIt.png": "/ttcg/static/media/FixIt.6d4040057ab83afe8395.png",
     "static/media/SwordSlash.png": "/ttcg/static/media/SwordSlash.0c992b81a50ef1947ce8.png",
+    "static/media/MagicPunch.png": "/ttcg/static/media/MagicPunch.f81356cd62874f078a62.png",
     "static/media/Hawkeye.png": "/ttcg/static/media/Hawkeye.c0a4471316d2b11274c2.png",
     "static/media/CripplingShot.png": "/ttcg/static/media/CripplingShot.6a4fd20e1f4d8f5ae9c3.png",
     "static/media/IntelligenceBlessing.png": "/ttcg/static/media/IntelligenceBlessing.4c903fe9bdec7e75ba6f.png",
@@ -23,7 +23,6 @@
     "static/media/SwordSwipe.png": "/ttcg/static/media/SwordSwipe.062677b14a4485f0c045.png",
     "static/media/KeepMoving.png": "/ttcg/static/media/KeepMoving.538e3a2afef1ebd491cb.png",
     "static/media/Regroup.png": "/ttcg/static/media/Regroup.5a912808c9e2ea6d90a8.png",
-    "static/media/MightyBlow.png": "/ttcg/static/media/MightyBlow.2d6c825b5d3ef9ad2d36.png",
     "static/media/EnergyBall.png": "/ttcg/static/media/EnergyBall.8eb312006bb346e73d47.png",
     "static/media/INeedSomeGear.png": "/ttcg/static/media/INeedSomeGear.3ba44137cd7fedcfcf8a.png",
     "static/media/HighKnight.png": "/ttcg/static/media/HighKnight.66027157361601eb6ad0.png",
@@ -36,6 +35,7 @@
     "static/media/HighPriest.png": "/ttcg/static/media/HighPriest.5f328bea941ce3a0eecb.png",
     "static/media/SelfHeal.png": "/ttcg/static/media/SelfHeal.5a1b834851196bb14a97.png",
     "static/media/DaggerSlash.png": "/ttcg/static/media/DaggerSlash.fed46a7929e1ab9b62dc.png",
+    "static/media/MightyBlow.png": "/ttcg/static/media/MightyBlow.2d93f04c143ed0e98a71.png",
     "static/media/Shadow.png": "/ttcg/static/media/Shadow.c056e6c7b2217d53efa8.png",
     "static/media/ShieldBash.png": "/ttcg/static/media/ShieldBash.882df2d870cd79e93a2a.png",
     "static/media/ArcanePower.png": "/ttcg/static/media/ArcanePower.c9f792ebb8372dda4e62.png",
@@ -94,10 +94,10 @@
     "static/media/draw.mp3": "/ttcg/static/media/draw.ceb460e6016f04e97598.mp3",
     "index.html": "/ttcg/index.html",
     "main.a756924b.css.map": "/ttcg/static/css/main.a756924b.css.map",
-    "main.c969dd1e.js.map": "/ttcg/static/js/main.c969dd1e.js.map"
+    "main.44e60a72.js.map": "/ttcg/static/js/main.44e60a72.js.map"
   },
   "entrypoints": [
     "static/css/main.a756924b.css",
-    "static/js/main.c969dd1e.js"
+    "static/js/main.44e60a72.js"
   ]
 }
