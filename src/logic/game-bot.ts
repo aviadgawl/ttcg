@@ -151,7 +151,7 @@ export const executeAction = (
     extraData?: any
 ): boolean => {
     const result = playerAction(action, [], game, { selectedCard: card, extendedData: targetLocation || extraData });
-    console.log('Bot: ', { action, result });
+    console.log('Bot: ', { action, result, player: game.players[1] });
     return result === 'success';
 }
 

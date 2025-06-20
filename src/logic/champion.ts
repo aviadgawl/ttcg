@@ -33,7 +33,7 @@ export const applyHeal = (sourceChampion: ChampionCard, actionCard: ActionCard, 
 };
 
 export const applyDamage = (sourceChampion: ChampionCard, actionCard: ActionCard, target: SummoningCard) => {
-    if(actionCard.damages.length === 0) return;
+    if (actionCard.damages.length === 0) return;
 
     const calDamage = calculateDamage(sourceChampion, actionCard);
 
@@ -414,8 +414,8 @@ export const getActionCardFromChampion = (sourceChampion: ChampionCard, actionCa
     return actionCard ?? null;
 }
 
-export const getLastPlayedActionGuid = (player: Player): PlayerActionLogRecord|null => {
-    if(player.actionsLog.length === 0)
+export const getLastPlayedActionGuid = (player: Player): PlayerActionLogRecord | null => {
+    if (player.actionsLog.length === 0)
         return null;
 
     return player.actionsLog[player.actionsLog.length - 1];
@@ -424,18 +424,19 @@ export const getLastPlayedActionGuid = (player: Player): PlayerActionLogRecord|n
 export const successfulAttackGameUpdate = (game: Game, player: Player, sourceChampion: ChampionCard, actionCard: ActionCard,
     isAttachedAction: boolean, result: ChampionActionResult, sourceLocation: BoardLocation, targetLocation: BoardLocation) => {
 
-    if (!actionCard.wasPlayed) actionCard.wasPlayed = true;
-
     if (actionCard.isRepeatable && actionCard.repeatableActivationLeft !== null)
         actionCard.repeatableActivationLeft--;
 
     const lastPlayedActionRecord = getLastPlayedActionGuid(player);
     const validRepeatable = checkRepeatableAction(player, actionCard);
 
-    if (isAttachedAction && !validRepeatable)
-        checkAndRemoveFromAttachedActions(game.players[game.playerIndex], sourceChampion, actionCard);
+    if (isAttachedAction && !validRepeatable) {
+        checkAndRemoveFromAttachedActions(player, sourceChampion, actionCard);
+    }
     else if (lastPlayedActionRecord?.guid !== actionCard.guid || !actionCard.isRepeatable)
         sourceChampion.stm--;
+
+    if (!actionCard.wasPlayed) actionCard.wasPlayed = true;
 
     if (result.targetedCard !== null && isCrystal(result.targetedCard) && result.targetedCard.currentHp < 0) {
         const loosingPlayer = game.players[result.targetedCard.playerIndex];

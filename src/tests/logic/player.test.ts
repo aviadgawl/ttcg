@@ -203,7 +203,7 @@ describe('Player Logic Tests', () => {
         mockGame = {
             playerIndex: 0,
             playingPlayerIndex: 0,
-            players: [mockPlayer, {...mockPlayer, name: 'Test player 2'}],
+            players: [mockPlayer, { ...mockPlayer, name: 'Test player 2' }],
             board: Array(8).fill(null).map(() => Array(8).fill(null)),
             status: GameStatus.onGoing,
             loser: null
@@ -612,6 +612,15 @@ describe('Player Logic Tests', () => {
                 expect(shouldUpdateMultiplayerGame(PlayerActionsName.TurnDraw)).toBe(false);
             });
         });
+
+        describe('getPlayerAllowedHandCardSelect', () => {
+            it('should return valid cards for order requirements', () => {
+                mockPlayer.hand = [mockActionCard, mockOrderCard];
+                const result = getPlayerAllowedHandCardSelect(mockGame, mockOrderCard);
+                expect(result.message).toBe('success');
+                expect(result.handCards).toContain(mockActionCard);
+            });
+        });
     });
 
     describe('Board Location Functions', () => {
@@ -651,15 +660,13 @@ describe('Player Logic Tests', () => {
         });
     });
 
-    describe('Champion Management', () => {
-        describe('setChampionLearnedActions', () => {
-            it('should set learned actions from deck', () => {
-                mockPlayer.deck = [mockActionCard];
-                mockChampion.learnedActions = [mockActionCard.name];
-                setChampionLearnedActions(mockGame, mockChampion);
-                expect(mockChampion.learnedActionsCards).toContain(mockActionCard);
-                expect(mockPlayer.deck).not.toContain(mockActionCard);
-            });
+    describe('setChampionLearnedActions', () => {
+        it('should set learned actions from deck', () => {
+            mockPlayer.deck = [mockActionCard];
+            mockChampion.learnedActions = [mockActionCard.name];
+            setChampionLearnedActions(mockGame, mockChampion);
+            expect(mockChampion.learnedActionsCards).toContain(mockActionCard);
+            expect(mockPlayer.deck).not.toContain(mockActionCard);
         });
     });
 
@@ -681,23 +688,10 @@ describe('Player Logic Tests', () => {
         });
     });
 
-    describe('Validation Functions', () => {
-        describe('isValidForEquip', () => {
-            it('should validate equipment requirements', () => {
-                const result = isValidForEquip(mockChampion, mockGearCard);
-                expect(result.isValid).toBe(true);
-            });
-        });
-    });
-
-    describe('UI Helper Functions', () => {
-        describe('getPlayerAllowedHandCardSelect', () => {
-            it('should return valid cards for order requirements', () => {
-                mockPlayer.hand = [mockActionCard, mockOrderCard];
-                const result = getPlayerAllowedHandCardSelect(mockGame, mockOrderCard);
-                expect(result.message).toBe('success');
-                expect(result.handCards).toContain(mockActionCard);
-            });
+    describe('isValidForEquip', () => {
+        it('should validate equipment requirements', () => {
+            const result = isValidForEquip(mockChampion, mockGearCard);
+            expect(result.isValid).toBe(true);
         });
     });
 
