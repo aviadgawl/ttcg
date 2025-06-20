@@ -6,7 +6,7 @@ import { playerAction, shouldUpdateMultiplayerGame } from '../logic/player';
 import { championAction } from '../logic/champion';
 import { updateGameAsync, addGameAsync, getGameAsync } from '../firebase/firebase';
 import { BoardLocation, isAction, ActionCard } from '../logic/game-card';
-import { Game } from '../logic/game';
+import { Game, startNewGame } from '../logic/game';
 import { GameStatus, PlayerActionsName } from '../logic/enums';
 import { makeMove } from '../logic/game-bot';
 import { Player } from '../logic/player';
@@ -100,7 +100,7 @@ export const useCreateGame = () => {
 
     return useCallback((gameCode: string) => {
         const state = store.getState() as any;
-        let createdGame: Game = { ...state.gameActions.game, status: GameStatus.started, code: gameCode };
+        let createdGame = startNewGame(state.gameActions.game, gameCode);
 
         if (gameCode !== 'Bot')
             addGameAsync(createdGame).catch(console.error);

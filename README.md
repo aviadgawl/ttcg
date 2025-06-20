@@ -14,5 +14,5 @@ npx generate-react-cli component MyComponent
 # bugs
 Jump Step don't jump over obstacle
 Add reconnect
-Attached action step disappears after one use (not recreated)
-Change converting enums
+Attached action step disappears after one use
+When surrendering the game don't restart

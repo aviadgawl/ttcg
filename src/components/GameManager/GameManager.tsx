@@ -31,7 +31,7 @@ const GameManager: FC<GameManagerProps> = () => {
   useEffect(() => {
     if (game.playingPlayerIndex === game.playerIndex)
       playSoundByEvent(SoundEvents.startTurn);
-  }, [game.playingPlayerIndex])
+  }, [game.playingPlayerIndex, game.playerIndex])
 
   useEffect(() => {
     if (loser) {
@@ -78,15 +78,15 @@ const GameManager: FC<GameManagerProps> = () => {
     };
 
     const newSelectedActionData = createSelectedData(null, PlayerActionsName.InitialDraw, GameStoreActionTypes.PlayerAction);
-    playerAction(newSelectedActionData, 5);
     createGame(gameCode);
+    playerAction(newSelectedActionData, 5);
     gameUpdatesSubscriber(0);
   }
 
   const handleGameWithBot = async () => {
     const newSelectedActionData = createSelectedData(null, PlayerActionsName.InitialDraw, GameStoreActionTypes.PlayerAction);
-    playerAction(newSelectedActionData, 5);
     createGame('Bot');
+    playerAction(newSelectedActionData, 5);
   }
 
   return <div>

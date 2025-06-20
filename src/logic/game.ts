@@ -13,17 +13,23 @@ import {
 } from './game-card';
 import {
     ActionType,
-    Stats,
     ActionDirections,
     GameStatus,
-    GearCategory,
-    EffectStatus,
     ChampionDirection,
-    Race,
     CardType
 } from './enums';
 import { getImage } from '../helpers/image-helper';
 import cardsListJson from '../assets/cards/cards-list.json';
+
+export interface Game {
+    code: string;
+    playingPlayerIndex: number;
+    playerIndex: number;
+    players: Player[];
+    loser: Player | null,
+    board: (GameCard | null)[][];
+    status: GameStatus;
+};
 
 const createGuid = (): string => {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
@@ -127,19 +133,19 @@ export const cardsJsonToObjects = (cardsListJson: any): GameCard[] => cardsListJ
 
 export const cardsList = cardsJsonToObjects(cardsListJson);
 
-export interface Game {
-    code: string;
-    playingPlayerIndex: number;
-    playerIndex: number;
-    players: Player[];
-    loser: Player | null,
-    board: (GameCard | null)[][];
-    status: GameStatus;
-};
-
-export const createGame = (): Game => {
+const createBoard = (): Array<Array<GameCard | null>> => {
     const maxRows = 11;
-    const board = new Array(new Array<GameCard | null>(7))
+    const board = new Array(new Array<GameCard | null>(7));
+
+    const mockCrystalOne: CrystalCard = {
+        image: 'https://img.freepik.com/premium-photo/magical-crystal-with-swirling-colors-digital-art-style-illustration_812426-6398.jpg',
+        hp: 30, currentHp: 30, name: 'Warrior Spirit', guid: '5', effect: {} as GameEffect, playerIndex: 0, isBlocking: true, calHp: 30
+    };
+
+    const mockCrystalTwo: CrystalCard = {
+        image: 'https://img.freepik.com/premium-photo/magical-crystal-with-swirling-colors-digital-art-style-illustration_812426-6466.jpg?w=740',
+        hp: 30, currentHp: 30, name: 'Warrior Spirit', guid: '5', effect: {} as GameEffect, playerIndex: 1, isBlocking: true, calHp: 30
+    };
 
     for (let index = 0; index < maxRows; index++) {
         if (index === (maxRows - 1)) board[index] = [null, null, null, mockCrystalOne, null, null, null];
@@ -147,16 +153,37 @@ export const createGame = (): Game => {
         else board[index] = [null, null, null, null, null, null, null];
     }
 
+    return board;
+};
+
+const createPlayerOne = (): Player => {
+    const playerOne: Player = {
+        name: 'Player One',
+        hand: [],
+        deck: [],
+        usedCards: [],
+        didDraw: false,
+        summonsLeft: 1,
+        actionsLog: [],
+        effects: [],
+        startingChampion: null
+    };
+
+    return playerOne;
+};
+
+export const createGame = (): Game => {
+
+    const board = createBoard();
+    const mockPlayerOne = createPlayerOne();
+
     return { board: board, players: [mockPlayerOne], status: GameStatus.over, playerIndex: 0, playingPlayerIndex: 0, loser: null, code: '' };
 };
 
-const mockPlayerOne: Player = { name: 'Player One', hand: [], deck: [], usedCards: [], didDraw: false, summonsLeft: 1, actionsLog: [], effects: [], startingChampion: null };
-const mockCrystalOne: CrystalCard = {
-    image: 'https://img.freepik.com/premium-photo/magical-crystal-with-swirling-colors-digital-art-style-illustration_812426-6398.jpg',
-    hp: 30, currentHp: 30, name: 'Warrior Spirit', guid: '5', effect: {} as GameEffect, playerIndex: 0, isBlocking: true, calHp: 30
-};
+export const startNewGame = (game: Game, newCode: string) => {
+    const newBoard = createBoard();
+    const player = game.players[game.playerIndex];
+    const restedPlayer = { ...createPlayerOne(), deck: player.deck, startingChampion: player.startingChampion, name: player.name };
 
-const mockCrystalTwo: CrystalCard = {
-    image: 'https://img.freepik.com/premium-photo/magical-crystal-with-swirling-colors-digital-art-style-illustration_812426-6466.jpg?w=740',
-    hp: 30, currentHp: 30, name: 'Warrior Spirit', guid: '5', effect: {} as GameEffect, playerIndex: 1, isBlocking: true, calHp: 30
+    return { ...game, status: GameStatus.started, board: newBoard, players: [restedPlayer], loser: null, code: newCode }
 };

@@ -193,7 +193,7 @@ export const getPlayerSummonedChampions = (game: Game): GetPlayerSummonedChampio
 
     game.board.forEach((row, rowIndex) => {
         row.forEach((card, columnIndex) => {
-            if (isChampion(card) && card.playerIndex == game.playerIndex)
+            if (isChampion(card) && card.playerIndex === game.playerIndex)
                 champions.push({sourceLocation: {rowIndex, columnIndex} ,championCard: card});
 
         });
