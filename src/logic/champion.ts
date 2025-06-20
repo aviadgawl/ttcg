@@ -412,14 +412,23 @@ export const getActionCardFromChampion = (sourceChampion: ChampionCard, actionCa
         actionCard = sourceChampion.attachedActionsCards.find(card => card.guid === actionCardGuid);
 
     return actionCard ?? null;
-}
+};
 
 export const getLastPlayedActionGuid = (player: Player): PlayerActionLogRecord | null => {
     if (player.actionsLog.length === 0)
         return null;
 
     return player.actionsLog[player.actionsLog.length - 1];
-}
+};
+
+export const removeInvalidRepeatableActionCards = (sourceChampion: ChampionCard, player: Player) => {
+    const invalidRepeatableActionCards = sourceChampion.attachedActionsCards
+        .filter(actionCard => !checkRepeatableAction(player, actionCard));
+    
+    invalidRepeatableActionCards.forEach((actionCard) => {
+        checkAndRemoveFromAttachedActions(player, sourceChampion, actionCard);
+    });
+};
 
 export const successfulAttackGameUpdate = (game: Game, player: Player, sourceChampion: ChampionCard, actionCard: ActionCard,
     isAttachedAction: boolean, result: ChampionActionResult, sourceLocation: BoardLocation, targetLocation: BoardLocation) => {
@@ -428,12 +437,8 @@ export const successfulAttackGameUpdate = (game: Game, player: Player, sourceCha
         actionCard.repeatableActivationLeft--;
 
     const lastPlayedActionRecord = getLastPlayedActionGuid(player);
-    const validRepeatable = checkRepeatableAction(player, actionCard);
 
-    if (isAttachedAction && !validRepeatable) {
-        checkAndRemoveFromAttachedActions(player, sourceChampion, actionCard);
-    }
-    else if (lastPlayedActionRecord?.guid !== actionCard.guid || !actionCard.isRepeatable)
+    if (lastPlayedActionRecord?.guid !== actionCard.guid || !actionCard.isRepeatable)
         sourceChampion.stm--;
 
     if (!actionCard.wasPlayed) actionCard.wasPlayed = true;
@@ -452,7 +457,9 @@ export const successfulAttackGameUpdate = (game: Game, player: Player, sourceCha
     sourceChampion.direction = championDirection;
 
     player.actionsLog.push({ name: actionCard.name, guid: actionCard.guid });
-}
+
+    removeInvalidRepeatableActionCards(sourceChampion, player);
+};
 
 export const checkRepeatableAction = (player: Player, actionCard: ActionCard): boolean => {
     if (!actionCard.isRepeatable || actionCard.repeatableActivationLeft === null) return false;
