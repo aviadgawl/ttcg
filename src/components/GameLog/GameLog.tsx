@@ -12,10 +12,10 @@ type formattedLog = {
   log: PlayerActionLogRecord;
 };
 
-const combinedAndSortLog = (playerOneLog: PlayerActionLogRecord[], playerTwoLog: PlayerActionLogRecord[]): formattedLog[] => {
+const combineAndSortLog = (playerOneLog: PlayerActionLogRecord[], playerTwoLog: PlayerActionLogRecord[]): formattedLog[] => {
 
   const playerOneLogFormatted: formattedLog[] = playerOneLog.map(logItem => ({ playerNumber: 1, log: logItem }));
-  const playerTwoLogFormatted: formattedLog[] = playerTwoLog.map(logItem => ({ playerNumber: 1, log: logItem }));
+  const playerTwoLogFormatted: formattedLog[] = playerTwoLog.map(logItem => ({ playerNumber: 2, log: logItem }));
 
   const combinedAndSorted = [...playerOneLogFormatted, ...playerTwoLogFormatted].sort((a, b) => a.log.timestamp - b.log.timestamp);
 
@@ -26,7 +26,7 @@ const GameLog: FC<GameLogProps> = () => {
   const players = useAppSelector((state) => state.gameActions.game.players);
   const showLog = useAppSelector((state) => state.gameActions.showGameLog);
 
-  const combinedAndSortedLog: formattedLog[] = useMemo(() => combinedAndSortLog(players[0].actionsLog, players[1].actionsLog),
+  const combinedAndSortedLog: formattedLog[] = useMemo(() => combineAndSortLog(players[0].actionsLog, players[1].actionsLog),
     [players[0].actionsLog.length, players[1].actionsLog.length]);
 
   return <Drawer variant="persistent" anchor="right" open={showLog} className={styles.GameLog} >
