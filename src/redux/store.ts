@@ -57,7 +57,8 @@ export const initialState = {
     showGameDetails: false as boolean,
     showCardsInDeck: { show: false } as ShowCardsInDeck,
     cardsList: cardsList as GameCard[],
-    isLoggedIn: false as boolean
+    isLoggedIn: false as boolean,
+    showGameLog: false as boolean
 }
 
 const gameSlice = createSlice({
@@ -127,6 +128,9 @@ const gameSlice = createSlice({
         setShowGameDetails(state, action) {
             state.showGameDetails = action.payload;
         },
+        setShowGameLog(state, action) {
+            state.showGameLog = action.payload;
+        },
         setIsLoggedIn(state, action) {
             state.isLoggedIn = action.payload;
         }
@@ -150,7 +154,8 @@ export const {
     resetSelectedData,
     returnToInitialState,
     setShowGameDetails,
-    setIsLoggedIn
+    setIsLoggedIn,
+    setShowGameLog
 } = gameSlice.actions;
 
 export type AppDispatch = typeof store.dispatch;

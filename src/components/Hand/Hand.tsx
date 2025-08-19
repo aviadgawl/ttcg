@@ -1,6 +1,7 @@
 import { FC, useState } from 'react';
 import { useAppDispatch, useAppSelector, usePlayerAction, useRefreshGame } from '../../redux/hooks';
-import { setShowHand, createSelectedData, setShowCardsInDeck, setSelectedActionDataCardsToDraw, createShowCardsInDeck, SelectedData, setShowGameDetails } from '../../redux/store';
+import { setShowHand, createSelectedData, setShowCardsInDeck, setSelectedActionDataCardsToDraw, createShowCardsInDeck, SelectedData, setShowGameDetails, setShowGameLog }
+  from '../../redux/store';
 import { GameStoreActionTypes } from '../../redux/types';
 import { PlayerActionsName } from '../../logic/enums';
 import { GameCard, isOrder } from '../../logic/game-card';
@@ -87,6 +88,7 @@ const Hand: FC = () => {
     <div className={styles.HandButton}>
       <Button variant="outlined" onClick={() => dispatch(setShowHand(true))}>Show Hand</Button>
       <Button variant="outlined" onClick={() => dispatch(setShowGameDetails(true))}>Show Details</Button>
+      <Button variant="outlined" onClick={() => dispatch(setShowGameLog(true))}>Show Log</Button>
     </div>
     <Drawer anchor="bottom" open={showHand} onClose={() => dispatch(setShowHand(false))}>
       <div className={styles.CardContainer}>

@@ -8,6 +8,7 @@ import { setPartialGame, createSelectedData, returnToInitialState } from '../../
 import { GameStoreActionTypes } from '../../redux/types';
 import Board from '../Board/Board';
 import GameDetails from '../GameDetails/GameDetails';
+import GameLog from '../GameLog/GameLog';
 import Hand from '../Hand/Hand';
 import { playSoundByEvent, SoundEvents } from '../../helpers/audio-helper';
 import StoneBackground from '../../assets/images/StoneBackground.jpg';
@@ -102,6 +103,7 @@ const GameManager: FC<GameManagerProps> = () => {
       <div style={{ backgroundImage: `url(${StoneBackground})` }} className={styles.GameAndDetails}>
         <GameDetails />
         <Board />
+        <GameLog />
       </div>
       <Hand />
     </>}

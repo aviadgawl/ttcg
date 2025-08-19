@@ -191,7 +191,7 @@ describe('Champion Logic Tests', () => {
         it('should return true for valid repeatable action', () => {
             mockActionCard.isRepeatable = true;
             mockActionCard.repeatableActivationLeft = 2;
-            mockPlayer.actionsLog.push({ guid: mockActionCard.guid, name: mockActionCard.name });
+            mockPlayer.actionsLog.push({ card: mockActionCard, timestamp: Date.now(), name: mockActionCard.name });
 
             const result = checkRepeatableAction(mockPlayer, mockActionCard);
             expect(result).toBe(true);
@@ -695,7 +695,7 @@ describe('Champion Logic Tests', () => {
 
     describe('getLastPlayedActionGuid', () => {
         it('should return last played action record', () => {
-            const actionRecord = { guid: 'action1', name: 'Test Action' };
+            const actionRecord = { card: null, timestamp: Date.now(), name: 'Test Action' };
             mockPlayer.actionsLog.push(actionRecord);
 
             const result = getLastPlayedActionGuid(mockPlayer);
@@ -709,7 +709,7 @@ describe('Champion Logic Tests', () => {
             const targetLocation = { rowIndex: 3, columnIndex: 4 };
             const result = { status: 'success', targetedCard: null };
 
-            successfulAttackGameUpdate(mockGame, mockPlayer, mockChampion, mockActionCard, false, result, sourceLocation, targetLocation);
+            successfulAttackGameUpdate(mockGame, mockPlayer, mockChampion, mockActionCard, result, sourceLocation, targetLocation);
 
             expect(mockActionCard.wasPlayed).toBe(true);
             expect(mockChampion.stm).toBe(2);
@@ -721,7 +721,7 @@ describe('Champion Logic Tests', () => {
             mockActionCard.repeatableActivationLeft = 2;
 
             const result = { status: 'success', targetedCard: null };
-            successfulAttackGameUpdate(mockGame, mockPlayer, mockChampion, mockActionCard, false, result,
+            successfulAttackGameUpdate(mockGame, mockPlayer, mockChampion, mockActionCard, result,
                 { rowIndex: 0, columnIndex: 0 }, { rowIndex: 0, columnIndex: 1 });
 
             expect(mockActionCard.repeatableActivationLeft).toBe(1);
@@ -731,7 +731,7 @@ describe('Champion Logic Tests', () => {
             mockCrystal.currentHp = -1;
             const result = { status: 'success', targetedCard: mockCrystal };
 
-            successfulAttackGameUpdate(mockGame, mockPlayer, mockChampion, mockActionCard, false, result,
+            successfulAttackGameUpdate(mockGame, mockPlayer, mockChampion, mockActionCard, result,
                 { rowIndex: 0, columnIndex: 0 }, { rowIndex: 0, columnIndex: 1 });
 
             expect(mockGame.status).toBe(GameStatus.over);

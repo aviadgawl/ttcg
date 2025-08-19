@@ -748,7 +748,7 @@ export const playerAction = (action: string | null, cardsList: GameCard[], game:
     }
 
     if (result === 'success')
-        player.actionsLog.push({ name: action, guid: data?.selectedCard?.guid });
+        player.actionsLog.push({ name: action, timestamp: Date.now(), card: data?.selectedCard });
 
     return result;
 }

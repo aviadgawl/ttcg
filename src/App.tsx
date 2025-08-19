@@ -27,7 +27,7 @@ function App() {
     window.onbeforeunload = function () {
       return "Are you really sure?";
     };
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (isLoggedIn)

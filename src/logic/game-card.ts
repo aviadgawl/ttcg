@@ -156,7 +156,8 @@ export interface ChampionCard extends SummoningCard {
 
 export interface PlayerActionLogRecord {
     name: string;
-    guid: string|null;
+    timestamp: number;
+    card: GameCard|null;
 }
 
 export interface HitArea {
