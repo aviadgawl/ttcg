@@ -156,8 +156,8 @@ const createBoard = (): Array<Array<GameCard | null>> => {
     return board;
 };
 
-const createPlayerOne = (): Player => {
-    const playerOne: Player = {
+export const createNewPlayer = (): Player => {
+    const newPlayer: Player = {
         name: 'Player One',
         hand: [],
         deck: [],
@@ -169,13 +169,13 @@ const createPlayerOne = (): Player => {
         startingChampion: null
     };
 
-    return playerOne;
+    return newPlayer;
 };
 
 export const createGame = (): Game => {
 
     const board = createBoard();
-    const mockPlayerOne = createPlayerOne();
+    const mockPlayerOne = createNewPlayer();
 
     return { board: board, players: [mockPlayerOne], status: GameStatus.over, playerIndex: 0, playingPlayerIndex: 0, loser: null, code: '' };
 };
@@ -183,7 +183,7 @@ export const createGame = (): Game => {
 export const startNewGame = (game: Game, newCode: string) => {
     const newBoard = createBoard();
     const player = game.players[game.playerIndex];
-    const restedPlayer = { ...createPlayerOne(), deck: player.deck, startingChampion: player.startingChampion, name: player.name };
+    const restedPlayer = { ...createNewPlayer(), deck: player.deck, startingChampion: player.startingChampion, name: player.name, hand: player.hand };
 
     return { ...game, status: GameStatus.started, board: newBoard, players: [restedPlayer], loser: null, code: newCode }
 };

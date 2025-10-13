@@ -6,7 +6,7 @@ import { playerAction, shouldUpdateMultiplayerGame } from '../logic/player';
 import { championAction } from '../logic/champion';
 import { updateGameAsync, addGameAsync, getGameAsync } from '../firebase/firebase';
 import { BoardLocation, isAction, ActionCard } from '../logic/game-card';
-import { Game, startNewGame } from '../logic/game';
+import { Game, startNewGame, createNewPlayer } from '../logic/game';
 import { GameStatus, PlayerActionsName } from '../logic/enums';
 import { makeMove } from '../logic/game-bot';
 import { Player } from '../logic/player';
@@ -169,13 +169,7 @@ const changeLocalPlayerToPlayerTwo = (localPlayer: Player) => {
     if (localPlayerClone.startingChampion)
         playerTwoStartingChampion = { ...localPlayerClone.startingChampion, playerIndex: 1 };
 
-    const playerTwo = {
-        ...localPlayerClone,
-        name: 'Player Two',
-        deck: playerTwoDeck,
-        hand: playerTwoHand,
-        startingChampion: playerTwoStartingChampion
-    };
+    const restedPlayerTwo = { ...createNewPlayer(), deck: playerTwoDeck, startingChampion: playerTwoStartingChampion, name: 'Player Two', hand: playerTwoHand };
 
-    return playerTwo;
+    return restedPlayerTwo;
 };

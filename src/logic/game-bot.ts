@@ -59,7 +59,6 @@ export const tryToChampionsLearnedActions = (game: Game): boolean => {
                 if(actionCard.actionType === ActionType.Movement) {
 
                     const locations = getChampionsActionsAllowedBoardLocations(game, actionCard, summonedChampion.sourceLocation);
-
                 }
             });
         }

@@ -79,15 +79,15 @@ const GameManager: FC<GameManagerProps> = () => {
     };
 
     const newSelectedActionData = createSelectedData(null, PlayerActionsName.InitialDraw, GameStoreActionTypes.PlayerAction);
-    createGame(gameCode);
     playerAction(newSelectedActionData, 5);
+    createGame(gameCode);
     gameUpdatesSubscriber(0);
   }
 
   const handleGameWithBot = async () => {
     const newSelectedActionData = createSelectedData(null, PlayerActionsName.InitialDraw, GameStoreActionTypes.PlayerAction);
-    createGame('Bot');
     playerAction(newSelectedActionData, 5);
+    createGame('Bot');
   }
 
   return <div>

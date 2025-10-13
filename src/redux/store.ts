@@ -1,5 +1,5 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
-import { createGame, Game, cardsList } from '../logic/game';
+import { createGame, cardsList } from '../logic/game';
 import { GameCard, isAction, isOrder, OrderCard, AllowedBoardLocationResponse, BoardLocation, AllowedHandCardSelectResponse } from '../logic/game-card';
 import { getChampionsActionsAllowedBoardLocations } from '../logic/champion';
 import { CardType } from '../logic/enums';
@@ -42,7 +42,7 @@ export const createSelectedData = (card: GameCard | null,
 }
 
 export const initialState = {
-    game: createGame() as Game,
+    game: createGame(),
     selectedActionData: {
         card: null,
         actionName: '',

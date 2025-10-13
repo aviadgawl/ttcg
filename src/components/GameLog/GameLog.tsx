@@ -13,10 +13,10 @@ type formattedLog = {
   log: PlayerActionLogRecord;
 };
 
-const combineAndSortLog = (playerOneLog: PlayerActionLogRecord[], playerTwoLog: PlayerActionLogRecord[]): formattedLog[] => {
+const combineAndSortLog = (playerOneLog: PlayerActionLogRecord[]|undefined, playerTwoLog: PlayerActionLogRecord[]|undefined): formattedLog[] => {
 
-  const playerOneLogFormatted: formattedLog[] = playerOneLog.map(logItem => ({ playerNumber: 1, log: logItem }));
-  const playerTwoLogFormatted: formattedLog[] = playerTwoLog.map(logItem => ({ playerNumber: 2, log: logItem }));
+  const playerOneLogFormatted: formattedLog[] = playerOneLog === undefined ? [] : playerOneLog.map(logItem => ({ playerNumber: 1, log: logItem }));
+  const playerTwoLogFormatted: formattedLog[] = playerTwoLog === undefined ? [] : playerTwoLog.map(logItem => ({ playerNumber: 2, log: logItem }));
 
   const combinedAndSorted = [...playerOneLogFormatted, ...playerTwoLogFormatted].sort((a, b) => a.log.timestamp - b.log.timestamp);
 
@@ -26,11 +26,14 @@ const combineAndSortLog = (playerOneLog: PlayerActionLogRecord[], playerTwoLog: 
 const GameLog: FC<GameLogProps> = () => {
   const dispatch = useAppDispatch();
 
-  const players = useAppSelector((state) => state.gameActions.game.players);
+  const [playerOne, playerTwo] = useAppSelector((state) => state.gameActions.game.players);
   const showLog = useAppSelector((state) => state.gameActions.showGameLog);
 
-  const combinedAndSortedLog: formattedLog[] = useMemo(() => combineAndSortLog(players[0].actionsLog, players[1].actionsLog),
-    [players[0].actionsLog.length, players[1].actionsLog.length]);
+  const playerOneActionLog = playerOne.actionsLog;
+  const playerTwoActionLog = playerTwo?.actionsLog;
+
+  const combinedAndSortedLog: formattedLog[] = useMemo(() => combineAndSortLog(playerOneActionLog, playerTwoActionLog),
+    [playerOneActionLog, playerTwoActionLog]);
 
   return <Drawer variant="persistent" anchor="right" open={showLog} className={styles.GameLogContainer} >
     <Button size="small" variant="outlined" onClick={() => { dispatch(setShowGameLog(false)) }}>Hide log</Button>

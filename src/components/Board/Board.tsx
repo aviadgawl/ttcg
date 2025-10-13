@@ -18,7 +18,7 @@ const Board: FC = () => {
   const dispatch = useAppDispatch();
 
   const shouldRotate = playerIndex === 1;
-  const boardPlayerOneBaseIndex = useMemo(() => boardState.length - 2, [boardState.length, boardState[0].length]);
+  const boardPlayerOneBaseIndex = useMemo(() => boardState.length - 2, [boardState.length]);
 
   const handleAction = (targetX: number, targetY: number) => {
 
