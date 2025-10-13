@@ -7,7 +7,7 @@ import { PlayerActionsName } from '../../logic/enums';
 import { GameCard, isOrder } from '../../logic/game-card';
 import HandCard, { HandCardMode } from '../HandCard/HandCard';
 import CardsDisplay from '../CardsDisplay/CardsDisplay';
-import { Drawer, Button, Dialog, DialogContent, Typography } from '@mui/material';
+import { Drawer, Button, Dialog, DialogContent, Typography, Box } from '@mui/material';
 import * as motion from "motion/react-client"
 import styles from './Hand.module.css';
 
@@ -86,11 +86,11 @@ const Hand: FC = () => {
   }
 
   return <div className={styles.Hand}>
-    <div className={styles.HandButton}>
+    <Box className={styles.HandButton}>
       <Button variant="outlined" onClick={() => dispatch(setShowHand(true))}>Show Hand</Button>
       <Button variant="outlined" onClick={() => dispatch(setShowGameDetails(true))}>Show Details</Button>
       <Button variant="outlined" onClick={() => dispatch(setShowGameLog(true))}>Show Log</Button>
-    </div>
+    </Box>
     <Drawer anchor="bottom" open={showHand} onClose={() => dispatch(setShowHand(false))}>
       <div className={styles.CardContainer}>
         <div className={styles.HandButtonsContainer}>

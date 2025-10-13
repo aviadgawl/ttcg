@@ -6,7 +6,7 @@ https://aviadgawl.github.io/ttcg/
 2) npm run start:emu
 
 # deploy new version
-1) raise version number
+1) raise version number in App.tsx and in package.json
 2) npm run build
 3) git add & commit & push changes
 
@@ -19,4 +19,3 @@ npx generate-react-cli component MyComponent
 # bugs
 Jump Step don't jump over obstacle
 Add reconnect
-When 2 players play their hand get messed up
