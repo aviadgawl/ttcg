@@ -1,8 +1,9 @@
-import { Drawer } from '@mui/material';
-import { useAppSelector } from '../../redux/hooks';
-import React, { FC, useMemo } from 'react';
+import { Drawer, Button, Typography, Card, Stack } from '@mui/material';
+import { useAppSelector, useAppDispatch } from '../../redux/hooks';
+import { FC, useMemo } from 'react';
 import styles from './GameLog.module.css';
 import { PlayerActionLogRecord } from '../../logic/game-card';
+import { setShowGameLog } from '../../redux/store';
 import GameCardDraw from '../GameCardDraw/GameCardDraw';
 
 interface GameLogProps { }
@@ -23,21 +24,25 @@ const combineAndSortLog = (playerOneLog: PlayerActionLogRecord[], playerTwoLog: 
 };
 
 const GameLog: FC<GameLogProps> = () => {
+  const dispatch = useAppDispatch();
+
   const players = useAppSelector((state) => state.gameActions.game.players);
   const showLog = useAppSelector((state) => state.gameActions.showGameLog);
 
   const combinedAndSortedLog: formattedLog[] = useMemo(() => combineAndSortLog(players[0].actionsLog, players[1].actionsLog),
     [players[0].actionsLog.length, players[1].actionsLog.length]);
 
-  return <Drawer variant="persistent" anchor="right" open={showLog} className={styles.GameLog} >
-    {combinedAndSortedLog.map((logItem, index) => {
-      const playerNumberElement = <span>{`${logItem.playerNumber}: `} </span>;
-
-      if (logItem.log.card != null)
-        return <div> {playerNumberElement} <GameCardDraw key={`${logItem.log.name}-${index}`} card={logItem.log.card} className="App-card" /></div>
-
-      return <div key={`${logItem.log.name}-${index}`}>{playerNumberElement}{logItem.log.name}</div>;
-    })}
+  return <Drawer variant="persistent" anchor="right" open={showLog} className={styles.GameLogContainer} >
+    <Button size="small" variant="outlined" onClick={() => { dispatch(setShowGameLog(false)) }}>Hide log</Button>
+    <Stack gap={1}>
+      {combinedAndSortedLog.map((logItem, index) => {
+        return <Card variant="outlined" key={`${logItem.log.name}-${index}`}>
+          <Typography>{`player number: ${logItem.playerNumber}: `} </Typography>
+          <Typography variant='h6'>{logItem.log.name}</Typography>
+          {logItem.log.card != null && <GameCardDraw key={`${logItem.log.name}-${index}`} card={logItem.log.card} className="App-card" />}
+        </Card>;
+      })}
+    </Stack>
   </Drawer>
 };
 
