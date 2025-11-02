@@ -1,11 +1,11 @@
 import { FC, useState } from 'react';
 import { GameCard, isChampion } from '../../logic/game-card';
 import { Card, CardContent, Dialog, DialogContent } from '@mui/material';
-import * as motion from 'motion/react-client';
 import HpIcon from '../../assets/images/HpIcon.png';
 import DexIcon from '../../assets/images/DexIcon.png';
 import IntIcon from '../../assets/images/IntIcon.png';
 import StrIcon from '../../assets/images/StrIcon.png';
+import Bounce from '../Motion/Bounce';
 import styles from './GameCardDraw.module.css';
 
 interface CardProps {
@@ -24,7 +24,7 @@ const GameCardDraw: FC<CardProps> = (props) => {
   }
 
   return <div className={props.className}>
-    <motion.div className={styles.CardMotion} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+    <Bounce className={styles.CardMotion}>
       <Card onClick={handleShowDialog}
         className={styles.Card} sx={{ maxWidth: 345, backgroundImage: `url(${props.card.image})` }}>
         <CardContent className={styles.CardContent}>
@@ -46,7 +46,7 @@ const GameCardDraw: FC<CardProps> = (props) => {
 
         </CardContent>
       </Card>
-    </motion.div>
+    </Bounce>
 
     <Dialog
       open={showDialog}
