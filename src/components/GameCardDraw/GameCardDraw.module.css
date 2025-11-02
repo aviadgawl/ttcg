@@ -1,10 +1,17 @@
-.Card{
+.Card {
     height: 100%;
     width: 100%;
     display: flex;
     align-items: flex-start;
     flex-direction: column;
     justify-content: flex-end;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.CardMotion {
+    height: 100%;
 }
 
 .CardActions {
@@ -33,11 +40,6 @@
 }
 
 .CardContent {
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    height: 100%;
-    width: 100%;
     padding: 0!important;
     display: flex;
     flex-direction: column;

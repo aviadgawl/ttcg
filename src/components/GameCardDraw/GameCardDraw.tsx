@@ -1,6 +1,7 @@
 import { FC, useState } from 'react';
 import { GameCard, isChampion } from '../../logic/game-card';
 import { Card, CardContent, Dialog, DialogContent } from '@mui/material';
+import * as motion from 'motion/react-client';
 import HpIcon from '../../assets/images/HpIcon.png';
 import DexIcon from '../../assets/images/DexIcon.png';
 import IntIcon from '../../assets/images/IntIcon.png';
@@ -23,26 +24,29 @@ const GameCardDraw: FC<CardProps> = (props) => {
   }
 
   return <div className={props.className}>
-    <Card onClick={handleShowDialog}
-      className={styles.Card} sx={{ maxWidth: 345 }}>
+    <motion.div className={styles.CardMotion} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+      <Card onClick={handleShowDialog}
+        className={styles.Card} sx={{ maxWidth: 345, backgroundImage: `url(${props.card.image})` }}>
+        <CardContent className={styles.CardContent}>
 
-      <CardContent style={{ backgroundImage: `url(${props.card.image})` }} className={styles.CardContent}>
-        {props.showChampionStats && isChampion(props.card) && <div className={styles.CardStats}>
-          <div><img width={20} alt="hp icon" title="HP" src={HpIcon} /> {props.card.currentHp} / {props.card.calHp}</div>
-          <div><img width={20} alt="str icon" title="STR" src={StrIcon} /> {props.card.calStr}</div>
-          <div><img width={20} alt="dex icon" title="DEX" src={DexIcon} /> {props.card.calDex}</div>
-          <div><img width={20} alt="int icon" title="INT" src={IntIcon} /> {props.card.calInt}</div>
-          <div>Armor: {props.card.armor} / {props.card.calStr}</div>
-          <div>Mental: {props.card.mental} / {props.card.calInt}</div>
-          <div>Class: {props.card.calClass}</div>
-          <div>Race: {props.card.race}</div>
-          {props.card.statusEffects.length > 0 && <div className={styles.ChampionStatusEffect}>{props.card.statusEffects.map((effect, i) => <span key={i}> {effect.name} </span>)}</div>}
-        </div>}
-        {props.children && <div className={styles.CardActions}>
-          {props.children}
-        </div>}
-      </CardContent>
-    </Card>
+          {props.showChampionStats && isChampion(props.card) && <div className={styles.CardStats}>
+            <div><img width={20} alt="hp icon" title="HP" src={HpIcon} /> {props.card.currentHp} / {props.card.calHp}</div>
+            <div><img width={20} alt="str icon" title="STR" src={StrIcon} /> {props.card.calStr}</div>
+            <div><img width={20} alt="dex icon" title="DEX" src={DexIcon} /> {props.card.calDex}</div>
+            <div><img width={20} alt="int icon" title="INT" src={IntIcon} /> {props.card.calInt}</div>
+            <div>Armor: {props.card.armor} / {props.card.calStr}</div>
+            <div>Mental: {props.card.mental} / {props.card.calInt}</div>
+            <div>Class: {props.card.calClass}</div>
+            <div>Race: {props.card.race}</div>
+            {props.card.statusEffects.length > 0 && <div className={styles.ChampionStatusEffect}>{props.card.statusEffects.map((effect, i) => <span key={i}> {effect.name} </span>)}</div>}
+          </div>}
+          {props.children && <div className={styles.CardActions}>
+            {props.children}
+          </div>}
+
+        </CardContent>
+      </Card>
+    </motion.div>
 
     <Dialog
       open={showDialog}
@@ -51,7 +55,7 @@ const GameCardDraw: FC<CardProps> = (props) => {
         <img alt="card visual" className="App-card-large" src={props.card.image} />
       </DialogContent>
     </Dialog>
-  </div>
+  </div >
 };
 
 export default GameCardDraw;

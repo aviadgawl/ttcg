@@ -50,13 +50,11 @@
 }
 
 .Damage {
-    background-color: red;
-    width: 100%;
-    height: 100%;
+    filter: invert(1);
     animation: damageAnimation 2s;
 }
 
 @keyframes damageAnimation {
-    from {background-color: transparent;}
-    to {background-color: red;}
+    from {filter: invert(0);}
+    to {background-color: invert(1);}
   }

@@ -29,21 +29,19 @@ const BoardChampionPanel: FC<BoardChampionAnimationsProps> = (props: BoardChampi
       playSoundByEvent(SoundEvents.hpDamage);
       setTimeout(() => {
         setShowDamage(false);
-      },1000);
+      },2000);
     }
 
     currentHpRef.current = props.champion.currentHp;
   }, [props.champion.currentHp])
 
   return <div style={{ backgroundImage: `url(${props.champion.image})` }}
-    className={styles.Panel}
+    className={`${styles.Panel} ${showDamage && styles.Damage}`}
     onClick={props.onPanelClick}>
-    <div className={`${styles.Panel} ${showDamage && styles.Damage}`}>
       <div className={`${styles.DirectionIcon} ${props.shouldRotate && 'App-rotate'}`}>
         {directionIconMap[props.champion.direction]}
       </div>
       <label className={`${styles.HpLabel} ${props.colorClassName}`}>{props.champion.currentHp}</label>
-    </div>
   </div>
 };
 

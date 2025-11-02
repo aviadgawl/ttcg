@@ -8,7 +8,6 @@ import { GameCard, isOrder } from '../../logic/game-card';
 import HandCard, { HandCardMode } from '../HandCard/HandCard';
 import CardsDisplay from '../CardsDisplay/CardsDisplay';
 import { Drawer, Button, Dialog, DialogContent, Typography, Box } from '@mui/material';
-import * as motion from "motion/react-client"
 import styles from './Hand.module.css';
 
 const Hand: FC = () => {
@@ -85,7 +84,7 @@ const Hand: FC = () => {
       dispatch(setShowCardsInDeck(createShowCardsInDeck(false)));
   }
 
-  return <div className={styles.Hand}>
+  return <Box>
     <Box className={styles.HandButton}>
       <Button variant="outlined" onClick={() => dispatch(setShowHand(true))}>Show Hand</Button>
       <Button variant="outlined" onClick={() => dispatch(setShowGameDetails(true))}>Show Details</Button>
@@ -101,9 +100,7 @@ const Hand: FC = () => {
           <Button size="small" onClick={() => refreshGame()} variant="outlined">Refresh</Button>
         </div>
         {player.hand.map((card, index) => <div className={discardCards.some(x => x.guid === card.guid) ? styles.DiscardCard : ''} key={index}>
-          <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-            <HandCard disabled={playerIndex !== playingPlayerIndex} mode={HandCardMode.Hand} card={card} />
-          </motion.div>
+          <HandCard disabled={playerIndex !== playingPlayerIndex} mode={HandCardMode.Hand} card={card} />
           {selectedActionData?.allowedHandCardSelect?.some(x => x.guid === card.guid) && <Button onClick={() => handleDiscardAction(card)}>Discard</Button>}
         </div>)}
       </div>
@@ -126,7 +123,7 @@ const Hand: FC = () => {
           excludedCards={selectedActionData.cardsToDraw} />
       </DialogContent>
     </Dialog>
-  </div>
+  </Box>
 };
 
 export default Hand;
