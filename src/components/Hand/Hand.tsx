@@ -10,6 +10,14 @@ import CardsDisplay from '../CardsDisplay/CardsDisplay';
 import { Drawer, Button, Dialog, DialogContent, Typography, Box } from '@mui/material';
 import styles from './Hand.module.css';
 
+const typographyFontSize = {
+  fontSize: {
+    xs: '0.6rem',   // extra-small screens (mobile)
+    sm: '1.2rem', // small screens (tablet)
+    md: '1.1rem', // medium screens (desktop)
+  }
+};
+
 const Hand: FC = () => {
   const playerIndex = useAppSelector((state) => state.gameActions.game.playerIndex);
   const playingPlayerIndex = useAppSelector((state) => state.gameActions.game.playingPlayerIndex);
@@ -86,15 +94,22 @@ const Hand: FC = () => {
 
   return <Box>
     <Box className={styles.HandButton}>
-      <Button variant="outlined" onClick={() => dispatch(setShowHand(true))}>Show Hand</Button>
-      <Button variant="outlined" onClick={() => dispatch(setShowGameDetails(true))}>Show Details</Button>
-      <Button variant="outlined" onClick={() => dispatch(setShowGameLog(true))}>Show Log</Button>
+      <Button variant="outlined" onClick={() => dispatch(setShowHand(true))}>
+        <Typography sx={typographyFontSize}> Show Hand </Typography>
+      </Button>
+      <Button variant="outlined" onClick={() => dispatch(setShowGameDetails(true))}>
+        <Typography sx={typographyFontSize}> Show Details </Typography>
+      </Button>
+      <Button variant="outlined" onClick={() => dispatch(setShowGameLog(true))}>
+        <Typography sx={typographyFontSize}> Show Log </Typography>
+      </Button>
     </Box>
     <Drawer anchor="bottom" open={showHand} onClose={() => dispatch(setShowHand(false))}>
       <div className={styles.CardContainer}>
         <div className={styles.HandButtonsContainer}>
-          <Typography variant="h3" onClick={() => setShowUsedCardsDialog(true)}> Used Cards: {player.usedCards.length}</Typography>
-          <Button size="small" disabled={playerIndex !== playingPlayerIndex || player.didDraw} onClick={() => handleAction(PlayerActionsName.TurnDraw)} variant="outlined">Deck: {player.deck.length}</Button>
+          <Typography variant="h5" onClick={() => setShowUsedCardsDialog(true)}> Cards in deck: {player.deck.length}</Typography>
+          <Typography variant="h5" onClick={() => setShowUsedCardsDialog(true)}> Used Cards: {player.usedCards.length}</Typography>
+          <Button size="small" disabled={playerIndex !== playingPlayerIndex || player.didDraw} onClick={() => handleAction(PlayerActionsName.TurnDraw)} variant="outlined">Draw</Button>
           <Button size="small" disabled={playerIndex !== playingPlayerIndex} onClick={() => handleAction(PlayerActionsName.EndTurn, true)} variant="outlined">{PlayerActionsName.EndTurn}</Button>
           <Button size="small" disabled={playerIndex !== playingPlayerIndex} onClick={() => handleAction(PlayerActionsName.Surrender)} variant="outlined">{PlayerActionsName.Surrender}</Button>
           <Button size="small" onClick={() => refreshGame()} variant="outlined">Refresh</Button>
