@@ -6,6 +6,7 @@ import { setSelectedActionData, setShowHand, createSelectedData, setShowCardsInD
 import { GameStoreActionTypes } from '../../redux/types';
 import Button from '@mui/material/Button';
 import GameCardDraw from '../GameCardDraw/GameCardDraw';
+import MyTypography from '../Shared/MyTypography';
 import styles from './HandCard.module.css';
 
 export enum HandCardMode {
@@ -72,19 +73,24 @@ const HandCard: FC<CardProps> = (props) => {
     <GameCardDraw className="App-card" zoom={true} card={props.card} />
     {props.mode === HandCardMode.Hand && <div className={styles.Buttons}>
       {isClass(props.card) && <Button disabled={props.disabled} variant="outlined" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Upgrade)}>
-        {PlayerActionsName.Upgrade} </Button>}
+        <MyTypography variant="button"> {PlayerActionsName.Upgrade} </MyTypography>
+      </Button>}
 
       {isGear(props.card) && <Button disabled={props.disabled} variant="outlined" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Equip)}>
-        {PlayerActionsName.Equip} </Button>}
+        <MyTypography variant="button"> {PlayerActionsName.Equip} </MyTypography>
+      </Button>}
 
       {isChampion(props.card) && <Button disabled={props.disabled} variant="outlined" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Summon)}>
-        {PlayerActionsName.Summon} </Button>}
+        <MyTypography variant="button"> {PlayerActionsName.Summon} </MyTypography>
+      </Button>}
 
       {isAction(props.card) && <Button disabled={props.disabled} variant="outlined" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Attach)}>
-        {PlayerActionsName.Attach} </Button>}
+        <MyTypography variant="button"> {PlayerActionsName.Attach} </MyTypography>
+      </Button>}
 
       {isOrder(props.card) && <Button disabled={props.disabled} variant="outlined" size="small" onClick={handleOrderCardAction}>
-        {PlayerActionsName.PlayOrder} </Button>}
+        <MyTypography variant="button"> {PlayerActionsName.PlayOrder} </MyTypography>
+      </Button>}
     </div>}
   </div>;
 }

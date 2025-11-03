@@ -26,8 +26,8 @@
 /* mobile */
 @media only screen and (max-width: 600px) {
   .App-card {
-    width: 100px;
-    height: 142px;
+    width: 71px;
+    height: 101px;
   }
 
   .App-card-large {

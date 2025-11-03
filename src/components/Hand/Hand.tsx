@@ -8,15 +8,8 @@ import { GameCard, isOrder } from '../../logic/game-card';
 import HandCard, { HandCardMode } from '../HandCard/HandCard';
 import CardsDisplay from '../CardsDisplay/CardsDisplay';
 import { Drawer, Button, Dialog, DialogContent, Typography, Box } from '@mui/material';
+import MyTypography from '../Shared/MyTypography';
 import styles from './Hand.module.css';
-
-const typographyFontSize = {
-  fontSize: {
-    xs: '0.6rem',   // extra-small screens (mobile)
-    sm: '1.2rem', // small screens (tablet)
-    md: '1.1rem', // medium screens (desktop)
-  }
-};
 
 const Hand: FC = () => {
   const playerIndex = useAppSelector((state) => state.gameActions.game.playerIndex);
@@ -95,28 +88,38 @@ const Hand: FC = () => {
   return <Box>
     <Box className={styles.HandButton}>
       <Button variant="outlined" onClick={() => dispatch(setShowHand(true))}>
-        <Typography sx={typographyFontSize}> Show Hand </Typography>
+        <MyTypography variant="button"> Show Hand </MyTypography>
       </Button>
       <Button variant="outlined" onClick={() => dispatch(setShowGameDetails(true))}>
-        <Typography sx={typographyFontSize}> Show Details </Typography>
+        <MyTypography variant="button"> Show Details </MyTypography>
       </Button>
       <Button variant="outlined" onClick={() => dispatch(setShowGameLog(true))}>
-        <Typography sx={typographyFontSize}> Show Log </Typography>
+        <MyTypography variant="button"> Show Log </MyTypography>
       </Button>
     </Box>
     <Drawer anchor="bottom" open={showHand} onClose={() => dispatch(setShowHand(false))}>
       <div className={styles.CardContainer}>
         <div className={styles.HandButtonsContainer}>
-          <Typography variant="h5" onClick={() => setShowUsedCardsDialog(true)}> Cards in deck: {player.deck.length}</Typography>
-          <Typography variant="h5" onClick={() => setShowUsedCardsDialog(true)}> Used Cards: {player.usedCards.length}</Typography>
-          <Button size="small" disabled={playerIndex !== playingPlayerIndex || player.didDraw} onClick={() => handleAction(PlayerActionsName.TurnDraw)} variant="outlined">Draw</Button>
-          <Button size="small" disabled={playerIndex !== playingPlayerIndex} onClick={() => handleAction(PlayerActionsName.EndTurn, true)} variant="outlined">{PlayerActionsName.EndTurn}</Button>
-          <Button size="small" disabled={playerIndex !== playingPlayerIndex} onClick={() => handleAction(PlayerActionsName.Surrender)} variant="outlined">{PlayerActionsName.Surrender}</Button>
-          <Button size="small" onClick={() => refreshGame()} variant="outlined">Refresh</Button>
+          <MyTypography noWrap variant="body1" onClick={() => setShowUsedCardsDialog(true)}> Cards in deck: {player.deck.length}</MyTypography>
+          <MyTypography variant="body1" onClick={() => setShowUsedCardsDialog(true)}> Used Cards: {player.usedCards.length}</MyTypography>
+          <Button size="small" disabled={playerIndex !== playingPlayerIndex || player.didDraw} onClick={() => handleAction(PlayerActionsName.TurnDraw)} variant="outlined">
+            <MyTypography variant="button">Draw</MyTypography>
+          </Button>
+          <Button size="small" disabled={playerIndex !== playingPlayerIndex} onClick={() => handleAction(PlayerActionsName.EndTurn, true)} variant="outlined">
+            <MyTypography variant="button">{PlayerActionsName.EndTurn}</MyTypography>
+          </Button>
+          <Button size="small" disabled={playerIndex !== playingPlayerIndex} onClick={() => handleAction(PlayerActionsName.Surrender)} variant="outlined">
+            <MyTypography variant="button">{PlayerActionsName.Surrender}</MyTypography>
+          </Button>
+          <Button size="small" onClick={() => refreshGame()} variant="outlined">
+            <MyTypography variant="button">Refresh</MyTypography>
+          </Button>
         </div>
         {player.hand.map((card, index) => <div className={discardCards.some(x => x.guid === card.guid) ? styles.DiscardCard : ''} key={index}>
           <HandCard disabled={playerIndex !== playingPlayerIndex} mode={HandCardMode.Hand} card={card} />
-          {selectedActionData?.allowedHandCardSelect?.some(x => x.guid === card.guid) && <Button onClick={() => handleDiscardAction(card)}>Discard</Button>}
+          {selectedActionData?.allowedHandCardSelect?.some(x => x.guid === card.guid) && <Button onClick={() => handleDiscardAction(card)}>
+            <MyTypography variant="button">Discard</MyTypography>
+          </Button>}
         </div>)}
       </div>
     </Drawer>
