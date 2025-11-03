@@ -3,11 +3,25 @@ import * as motion from 'motion/react-client';
 
 interface BounceProps {
     className?: string,
-    children: React.ReactNode
-  }
+    children: React.ReactNode,
+    isDisabled?: boolean
+};
+
+const animationConfig = {
+    active: {
+        whileHover: { scale: 1.1 },
+        whileTap: { scale: 0.95 }
+    },
+    disabled: {
+        whileHover: { scale: 1 },
+        whileTap: { scale: 1 }
+    }
+};
 
 const Bounce: FC<BounceProps> = (props) => {
-    return <motion.div className={props.className} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+    const currentConfig = props.isDisabled ? animationConfig.disabled : animationConfig.active;
+
+    return <motion.div className={props.className} whileHover={currentConfig.whileHover} whileTap={currentConfig.whileTap}>
         {props.children}
     </motion.div>
 };

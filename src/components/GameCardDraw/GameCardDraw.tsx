@@ -13,8 +13,9 @@ interface CardProps {
   children?: React.ReactNode,
   zoom?: boolean,
   showChampionStats?: boolean,
-  className?: string
-}
+  className?: string,
+  disableAnimation?: boolean
+};
 
 const GameCardDraw: FC<CardProps> = (props) => {
   const [showDialog, setShowDialog] = useState(false);
@@ -24,7 +25,7 @@ const GameCardDraw: FC<CardProps> = (props) => {
   }
 
   return <div className={props.className}>
-    <Bounce className={styles.CardMotion}>
+    <Bounce isDisabled={props.disableAnimation} className={styles.CardMotion}>
       <Card onClick={handleShowDialog}
         className={styles.Card} sx={{ maxWidth: 345, backgroundImage: `url(${props.card.image})` }}>
         <CardContent className={styles.CardContent}>
