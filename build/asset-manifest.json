@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/ttcg/static/css/main.52deb9f2.css",
-    "main.js": "/ttcg/static/js/main.b10eff1c.js",
+    "main.css": "/ttcg/static/css/main.c5136968.css",
+    "main.js": "/ttcg/static/js/main.63972817.js",
     "static/media/WarMage.png": "/ttcg/static/media/WarMage.b9d64aaec59d6ed573e0.png",
     "static/media/EtherBladeSlash.png": "/ttcg/static/media/EtherBladeSlash.803a5e9b695d63a32f2c.png",
     "static/media/RefreshMe.png": "/ttcg/static/media/RefreshMe.d1ab3397d77d9648e5fb.png",
@@ -93,11 +93,11 @@
     "static/media/hp-damage.mp3": "/ttcg/static/media/hp-damage.e932eef6fc9036076d78.mp3",
     "static/media/draw.mp3": "/ttcg/static/media/draw.ceb460e6016f04e97598.mp3",
     "index.html": "/ttcg/index.html",
-    "main.52deb9f2.css.map": "/ttcg/static/css/main.52deb9f2.css.map",
-    "main.b10eff1c.js.map": "/ttcg/static/js/main.b10eff1c.js.map"
+    "main.c5136968.css.map": "/ttcg/static/css/main.c5136968.css.map",
+    "main.63972817.js.map": "/ttcg/static/js/main.63972817.js.map"
   },
   "entrypoints": [
-    "static/css/main.52deb9f2.css",
-    "static/js/main.b10eff1c.js"
+    "static/css/main.c5136968.css",
+    "static/js/main.63972817.js"
   ]
 }
