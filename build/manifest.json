@@ -1,6 +1,7 @@
 {
-  "short_name": "App ttcg",
-  "name": "Board game",
+  "short_name": "PS",
+  "name": "Planestraider",
+  "orientation": "any",
   "icons": [
     {
       "src": "favicon.ico",
@@ -8,14 +9,16 @@
       "type": "image/x-icon"
     },
     {
-      "src": "rift.png",
+      "src": "rift192x192.png",
       "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "192x192",
+      "purpose": "any"
     },
     {
       "src": "rift.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "512x512",
+      "purpose": "any"
     }
   ],
   "start_url": ".",
