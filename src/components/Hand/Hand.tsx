@@ -127,7 +127,7 @@ const Hand: FC = () => {
       open={showUsedCardsDialog && player.usedCards.length > 0}
       onClose={() => setShowUsedCardsDialog(false)}>
       <DialogContent className={styles.DialogContent}>
-        <CardsDisplay cards={player.usedCards} />
+        <CardsDisplay buttonName="Select" cards={player.usedCards} />
       </DialogContent>
     </Dialog>
     <Dialog
@@ -138,7 +138,8 @@ const Hand: FC = () => {
           cardType={showCardsInDeck?.byType}
           nameContains={showCardsInDeck?.byName}
           cards={player.deck}
-          excludedCards={selectedActionData.cardsToDraw} />
+          excludedCards={selectedActionData.cardsToDraw}
+          buttonName="Select" />
       </DialogContent>
     </Dialog>
   </Box>

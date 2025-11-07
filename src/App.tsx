@@ -51,7 +51,7 @@ function App() {
     <main className="App">
       <header>
         <GameTabs disabledTabIndexes={disabledTabIndex} displayMode={currentDisplay} onModeClick={handleDisplaySelect} />
-        <div className="Version-number">2.0.4</div>
+        <div className="Version-number">2.0.5</div>
       </header>
       {currentDisplay === 0 && <Login />}
       {currentDisplay === 1 && <DeckBuilder />}

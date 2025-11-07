@@ -5,6 +5,7 @@ import HandCard, { HandCardMode } from '../HandCard/HandCard';
 import Button from '@mui/material/Button';
 import { CardType } from '../../logic/enums';
 import { groupBy } from '../../helpers/functions-helper';
+import MyTypography from '../Shared/MyTypography';
 import styles from './CardsDisplay.module.css';
 
 interface CardsDisplayProps {
@@ -38,7 +39,9 @@ const CardsDisplay: FC<CardsDisplayProps> = (props) => {
       return firstCard && <div className={styles.Card} key={firstCard.guid}>
         <div>{filteredCardGroup.length}</div>
         <HandCard mode={HandCardMode.DeckBuilding} card={firstCard} />
-        {props.onSelectCard && <Button size="small" onClick={() => handleClick(firstCard)}>{props.buttonName ?? 'Select'}</Button>}
+        {props.onSelectCard && <Button size="small" onClick={() => handleClick(firstCard)}>
+          <MyTypography> {props.buttonName} </MyTypography>
+        </Button>}
       </div>
     })}
   </div>

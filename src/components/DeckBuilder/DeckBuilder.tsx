@@ -2,12 +2,15 @@ import { FC } from 'react';
 import { PlayerActionsName } from '../../logic/enums';
 import HandCard, { HandCardMode } from '../HandCard/HandCard';
 import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 import { useAppSelector, usePlayerAction } from '../../redux/hooks';
 import { GameCard, ChampionCard, isChampion } from '../../logic/game-card';
 import CardsDisplay from '../CardsDisplay/CardsDisplay';
 import { SelectedData } from '../../redux/store';
 import { groupBy } from '../../helpers/functions-helper';
 import prebuiltDecks from './prebuilt-decks.json';
+import MyTypography from '../Shared/MyTypography';
 import styles from './DeckBuilder.module.css';
 
 const DeckBuilder: FC = () => {
@@ -68,38 +71,48 @@ const DeckBuilder: FC = () => {
 
   return <div className={styles.DeckBuilder}>
     <div className={styles.PrebuiltDecks}>
-      <label>Decks:</label>
-      <Button disabled={disablePrebuiltDecks} onClick={() => importDeck(prebuiltDecks.Fighters)} variant='outlined'>Fighters</Button>
-      <Button disabled={disablePrebuiltDecks} onClick={() => importDeck(prebuiltDecks.Apprentices)} variant='outlined'>Apprentices</Button>
-      <Button disabled={disablePrebuiltDecks} onClick={() => importDeck(prebuiltDecks.Rouges)} variant='outlined'>Rouges</Button>
-      <Button disabled={disablePrebuiltDecks} onClick={() => importDeck(prebuiltDecks.FightersAndAcolytes)} variant='outlined'>Fighters & Acolytes</Button>
+      <MyTypography>Decks:</MyTypography>
+      <Button disabled={disablePrebuiltDecks} onClick={() => importDeck(prebuiltDecks.Fighters)} variant='outlined'>
+        <MyTypography>Fighters</MyTypography>
+      </Button>
+      <Button disabled={disablePrebuiltDecks} onClick={() => importDeck(prebuiltDecks.Apprentices)} variant='outlined'>
+        <MyTypography>Apprentices</MyTypography>
+      </Button>
+      <Button disabled={disablePrebuiltDecks} onClick={() => importDeck(prebuiltDecks.Rouges)} variant='outlined'>
+        <MyTypography>Rouges</MyTypography>
+      </Button>
+      <Button disabled={disablePrebuiltDecks} onClick={() => importDeck(prebuiltDecks.FightersAndAcolytes)} variant='outlined'>
+        <MyTypography>Fighters & Acolytes</MyTypography>
+      </Button>
     </div>
     <div className={styles.Container}>
       <div className={styles.Deck}>
         <div>
-          <Button onClick={handleExport}>Export</Button>
-          <Button onClick={handleImport}>Import</Button>
-          <Button onClick={handleClear}>Clear</Button>
+          <Button onClick={handleExport}><MyTypography>Export</MyTypography></Button>
+          <Button onClick={handleImport}><MyTypography>Import</MyTypography></Button>
+          <Button onClick={handleClear}><MyTypography>Clear</MyTypography></Button>
           <hr />
-          <h2>Total: {player.deck.length}</h2>
+          <Typography variant="h5">Total: {player.deck.length}</Typography>
         </div>
         <hr />
         <div>
-          <h3> Starting Champion </h3>
+          <Typography variant="h6"> Starting Champion </Typography>
           {player.startingChampion && <>
             <HandCard mode={HandCardMode.DeckBuilding} card={player.startingChampion} />
           </>}
-          <h3> Deck </h3>
+          <hr />
+          <Typography> Deck </Typography>
           {Object.keys(cardsInDeckGroupedByName).map(cardName =>
-            <div key={cardName}>
+            <Stack justifyContent="center" key={cardName}>
               <span>{cardsInDeckGroupedByName[cardName].length}</span>
+
               <HandCard mode={HandCardMode.DeckBuilding} card={cardsInDeckGroupedByName[cardName][0]} />
               <Button onClick={() => removeCardFromDeck(cardsInDeckGroupedByName[cardName][0])}>Remove</Button>
               {isChampion(cardsInDeckGroupedByName[cardName][0]) && player.startingChampion?.name !== cardsInDeckGroupedByName[cardName][0].name &&
                 <Button variant="outlined" size="small" onClick={() => handleSelectingStartingChampion(cardsInDeckGroupedByName[cardName][0] as ChampionCard)}>
-                  Select
+                  <MyTypography>Select</MyTypography>
                 </Button>}
-            </div>
+            </Stack>
           )}
         </div>
       </div>

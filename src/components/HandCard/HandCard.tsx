@@ -5,6 +5,7 @@ import { useAppDispatch, usePlayerAction } from '../../redux/hooks';
 import { setSelectedActionData, setShowHand, createSelectedData, setShowCardsInDeck, createShowCardsInDeck } from '../../redux/store';
 import { GameStoreActionTypes } from '../../redux/types';
 import Button from '@mui/material/Button';
+import Box from '@mui/material/Button';
 import GameCardDraw from '../GameCardDraw/GameCardDraw';
 import MyTypography from '../Shared/MyTypography';
 import styles from './HandCard.module.css';
@@ -69,7 +70,7 @@ const HandCard: FC<CardProps> = (props) => {
     dispatch(setSelectedActionData(selectedData));
   }
 
-  return <div>
+  return <Box>
     <GameCardDraw className="App-card" zoom={true} card={props.card} />
     {props.mode === HandCardMode.Hand && <div className={styles.Buttons}>
       {isClass(props.card) && <Button disabled={props.disabled} variant="outlined" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Upgrade)}>
@@ -92,7 +93,7 @@ const HandCard: FC<CardProps> = (props) => {
         <MyTypography variant="button"> {PlayerActionsName.PlayOrder} </MyTypography>
       </Button>}
     </div>}
-  </div>;
+  </Box>;
 }
 
 export default HandCard;
