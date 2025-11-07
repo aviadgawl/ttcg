@@ -7,21 +7,11 @@ interface BounceProps {
     isDisabled?: boolean
 };
 
-const animationConfig = {
-    active: {
-        whileHover: { scale: 1.1 },
-        whileTap: { scale: 0.95 }
-    },
-    disabled: {
-        whileHover: { scale: 1 },
-        whileTap: { scale: 1 }
-    }
-};
-
 const Bounce: FC<BounceProps> = (props) => {
-    const currentConfig = props.isDisabled ? animationConfig.disabled : animationConfig.active;
+    if(props.isDisabled)
+        return <>{props.children}</>;
 
-    return <motion.div className={props.className} whileHover={currentConfig.whileHover} whileTap={currentConfig.whileTap}>
+    return <motion.div className={props.className} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
         {props.children}
     </motion.div>
 };

@@ -7,7 +7,7 @@ import { PlayerActionsName } from '../../logic/enums';
 import { GameCard, isOrder } from '../../logic/game-card';
 import HandCard, { HandCardMode } from '../HandCard/HandCard';
 import CardsDisplay from '../CardsDisplay/CardsDisplay';
-import { Drawer, Button, Dialog, DialogContent, Typography, Box } from '@mui/material';
+import { Drawer, Button, Dialog, DialogContent, Stack, Box } from '@mui/material';
 import MyTypography from '../Shared/MyTypography';
 import styles from './Hand.module.css';
 
@@ -115,12 +115,13 @@ const Hand: FC = () => {
             <MyTypography variant="button">Refresh</MyTypography>
           </Button>
         </div>
-        {player.hand.map((card, index) => <div className={discardCards.some(x => x.guid === card.guid) ? styles.DiscardCard : ''} key={index}>
+        {player.hand.map((card, index) => <Stack className={discardCards.some(x => x.guid === card.guid) ? styles.DiscardCard : ''} key={index}>
           <HandCard disabled={playerIndex !== playingPlayerIndex} mode={HandCardMode.Hand} card={card} />
-          {selectedActionData?.allowedHandCardSelect?.some(x => x.guid === card.guid) && <Button onClick={() => handleDiscardAction(card)}>
-            <MyTypography variant="button">Discard</MyTypography>
-          </Button>}
-        </div>)}
+          {selectedActionData?.allowedHandCardSelect?.some(x => x.guid === card.guid) &&
+            <Button onClick={() => handleDiscardAction(card)}>
+              <MyTypography variant="button">Discard</MyTypography>
+            </Button>}
+        </Stack>)}
       </div>
     </Drawer>
     <Dialog

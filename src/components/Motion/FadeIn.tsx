@@ -3,11 +3,15 @@ import * as motion from 'motion/react-client';
 
 interface FadeInProps {
     className?: string,
-    children: React.ReactNode
+    children: React.ReactNode,
+    isDisabled?: boolean
 }
 
 const FadeIn: FC<FadeInProps> = (props) => {
-    return <motion.div className={props.className} initial={{ opacity: 0, scale: 0.5 }}
+    if(props.isDisabled)
+        return <>{props.children}</>;
+
+    return <motion.div style={{height: '100%'}} className={props.className} initial={{ opacity: 0, scale: 0.5 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{
             duration: 0.8,
