@@ -421,11 +421,11 @@ export const getLastPlayedActionGuid = (player: Player): PlayerActionLogRecord |
     return player.actionsLog[player.actionsLog.length - 1];
 };
 
-export const removeInvalidRepeatableActionCards = (sourceChampion: ChampionCard, player: Player) => {
-    const invalidRepeatableActionCards = sourceChampion.attachedActionsCards
-        .filter(actionCard => !checkRepeatableAction(player, actionCard));
+export const removeUsedAttachedActionCards = (sourceChampion: ChampionCard, player: Player) => {
+    const usedAttachedActionCards = sourceChampion.attachedActionsCards
+        .filter(actionCard => (!actionCard.isRepeatable && actionCard.wasPlayed) || (actionCard.isRepeatable && actionCard.repeatableActivationLeft === 0));
 
-    invalidRepeatableActionCards.forEach((actionCard) => {
+        usedAttachedActionCards.forEach((actionCard) => {
         checkAndRemoveFromAttachedActions(player, sourceChampion, actionCard);
     });
 };
@@ -458,10 +458,10 @@ export const successfulAttackGameUpdate = (game: Game, player: Player, sourceCha
 
     player.actionsLog.push({ name: actionCard.name, timestamp: Date.now(), card: actionCard });
 
-    removeInvalidRepeatableActionCards(sourceChampion, player);
+    removeUsedAttachedActionCards(sourceChampion, player);
 };
 
-export const checkRepeatableAction = (player: Player, actionCard: ActionCard): boolean => {
+export const checkValidRepeatableAction = (player: Player, actionCard: ActionCard): boolean => {
     if (!actionCard.isRepeatable || actionCard.repeatableActivationLeft === null) return false;
 
     const lastActionPlayed = player.actionsLog.at(-1);
@@ -520,7 +520,7 @@ export const championAction = (game: Game, actionCardData: ActionCard, sourceLoc
     const player = getPlayer(game);
 
     if (actionCard.isRepeatable) {
-        const validRepeatable = checkRepeatableAction(player, actionCard);
+        const validRepeatable = checkValidRepeatableAction(player, actionCard);
         if (!validRepeatable) return `Repeatable action depleted`;
     }
     else {

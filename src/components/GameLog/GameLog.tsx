@@ -42,7 +42,7 @@ const GameLog: FC<GameLogProps> = () => {
         return <Card variant="outlined" key={`${logItem.log.name}-${index}`}>
           <Typography>{`player number: ${logItem.playerNumber}: `} </Typography>
           <Typography variant='h6'>{logItem.log.name}</Typography>
-          {logItem.log.card != null && <GameCardDraw key={`${logItem.log.name}-${index}`} card={logItem.log.card} className="App-card" />}
+          {logItem.log.card != null && <GameCardDraw disableAnimation key={`${logItem.log.name}-${index}`} card={logItem.log.card} className="App-card" />}
         </Card>;
       })}
     </Stack>

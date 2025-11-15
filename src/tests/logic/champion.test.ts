@@ -24,7 +24,7 @@ import {
 import { Game } from '../../logic/game';
 import { Player } from '../../logic/player';
 import {
-    checkRepeatableAction,
+    checkValidRepeatableAction,
     calculateAndUpdateRepeatableActions,
     getPlayer,
     setRepeatableActionActivations,
@@ -182,9 +182,9 @@ describe('Champion Logic Tests', () => {
         mockGame.board[3][3] = mockChampion;
     });
 
-    describe('checkRepeatableAction', () => {
+    describe('Check repeatable action', () => {
         it('should return false for non-repeatable action', () => {
-            const result = checkRepeatableAction(mockPlayer, mockActionCard);
+            const result = checkValidRepeatableAction(mockPlayer, mockActionCard);
             expect(result).toBe(false);
         });
 
@@ -193,12 +193,43 @@ describe('Champion Logic Tests', () => {
             mockActionCard.repeatableActivationLeft = 2;
             mockPlayer.actionsLog.push({ card: mockActionCard, timestamp: Date.now(), name: mockActionCard.name });
 
-            const result = checkRepeatableAction(mockPlayer, mockActionCard);
+            const result = checkValidRepeatableAction(mockPlayer, mockActionCard);
             expect(result).toBe(true);
+        });
+
+        it('should set correct number of activations based on stat', () => {
+            mockActionCard.isRepeatable = true;
+            mockActionCard.repeatableStat = Stats.Str;
+            mockChampion.calStr = 3;
+
+            setRepeatableActionActivations(mockActionCard, mockChampion);
+            expect(mockActionCard.repeatableActivationLeft).toBe(3);
+        });
+
+        it('should not set activations for non-repeatable action', () => {
+            mockActionCard.isRepeatable = false;
+            mockActionCard.repeatableStat = Stats.Str;
+
+            setRepeatableActionActivations(mockActionCard, mockChampion);
+            expect(mockActionCard.repeatableActivationLeft).toBeNull();
+        });
+
+        it('should update repeatable actions that were not played', () => {
+            const actionCard = { ...mockActionCard, isRepeatable: true, repeatableStat: Stats.Str };
+            mockChampion.calStr = 3;
+
+            calculateAndUpdateRepeatableActions([actionCard], mockChampion);
+            expect(actionCard.repeatableActivationLeft).toBe(3);
+        });
+
+        it('should not update non-repeatable actions', () => {
+            const actionCard = { ...mockActionCard, isRepeatable: false };
+            calculateAndUpdateRepeatableActions([actionCard], mockChampion);
+            expect(actionCard.repeatableActivationLeft).toBeNull();
         });
     });
 
-    describe('getChampionDamageValueByStat', () => {
+    describe('Get champion damage value by stat', () => {
         it('should return correct Strength value', () => {
             const result = getChampionDamageValueByStat(mockChampion, Stats.Str);
             expect(result).toBe(5);
@@ -220,7 +251,7 @@ describe('Champion Logic Tests', () => {
         });
     });
 
-    describe('calculateStats', () => {
+    describe('Calculate stats', () => {
         it('should calculate base stats correctly', () => {
             calculateStats(mockChampion);
             expect(mockChampion.calStr).toBe(5);
@@ -245,7 +276,7 @@ describe('Champion Logic Tests', () => {
         });
     });
 
-    describe('championAction', () => {
+    describe('Champion action', () => {
         it('should prevent action when champion has no stamina', () => {
             mockChampion.stm = 0;
             mockChampion.learnedActionsCards.push(mockActionCard);
@@ -264,28 +295,42 @@ describe('Champion Logic Tests', () => {
             const result = championAction(mockGame, mockActionCard, sourceLocation, targetLocation, false);
             expect(result).toContain('can not play on other player');
         });
-    });
 
-    describe('setRepeatableActionActivations', () => {
-        it('should set correct number of activations based on stat', () => {
-            mockActionCard.isRepeatable = true;
-            mockActionCard.repeatableStat = Stats.Str;
-            mockChampion.calStr = 3;
+        it('should use learned attack without removing attached actions', () => {
+            const sourceLocation: BoardLocation = { rowIndex: 3, columnIndex: 3 };
+            const targetLocation: BoardLocation = { rowIndex: 3, columnIndex: 4 };
+            const firstActionCard = { ...mockActionCard, isFreeTargeting: true } as ActionCard;
+            const secondActionCard = { ...mockActionCard, guid: 't1', name: 'test1' } as ActionCard;
+            const thirdActionCard = { ...mockActionCard, guid: 't2', name: 'test2' } as ActionCard;
+            const target = { ...mockChampion, currentHp: 10, armor: 0 } as unknown as SummoningCard;
+            mockChampion.attachedActionsCards = [secondActionCard, thirdActionCard];
+            mockChampion.learnedActionsCards = [firstActionCard];
+            mockGame.board[3][4] = target;
 
-            setRepeatableActionActivations(mockActionCard, mockChampion);
-            expect(mockActionCard.repeatableActivationLeft).toBe(3);
+            const result = championAction(mockGame, firstActionCard, sourceLocation, targetLocation, false);
+            expect(result).toContain('success');
+            expect(target.currentHp).toBeLessThan(10);
+            expect(mockChampion.attachedActionsCards.length).toBe(2);
         });
 
-        it('should not set activations for non-repeatable action', () => {
-            mockActionCard.isRepeatable = false;
-            mockActionCard.repeatableStat = Stats.Str;
+        it('should use attached attack without removing the unused attached actions', () => {
+            const sourceLocation: BoardLocation = { rowIndex: 3, columnIndex: 3 };
+            const targetLocation: BoardLocation = { rowIndex: 3, columnIndex: 4 };
+            const firstActionCard = { ...mockActionCard, isFreeTargeting: true, isRepeatable: true, repeatableActivationLeft: 1 } as ActionCard;
+            const secondActionCard = { ...mockActionCard, guid: 't1', name: 'test1' } as ActionCard;
+            const thirdActionCard = { ...mockActionCard, guid: 't2', name: 'test2' } as ActionCard;
+            const target = { ...mockChampion, currentHp: 10, armor: 0 } as unknown as SummoningCard;
+            mockChampion.attachedActionsCards = [firstActionCard, secondActionCard, thirdActionCard];
+            mockGame.board[3][4] = target;
 
-            setRepeatableActionActivations(mockActionCard, mockChampion);
-            expect(mockActionCard.repeatableActivationLeft).toBeNull();
-        });
+            const result = championAction(mockGame, firstActionCard, sourceLocation, targetLocation, false);
+            expect(result).toContain('success');
+            expect(target.currentHp).toBeLessThan(10);
+            expect(mockChampion.attachedActionsCards.length).toBe(2);
+        })
     });
-
-    describe('getPlayer', () => {
+ 
+    describe('Get player', () => {
         it('should return correct player', () => {
             const result = getPlayer(mockGame);
             expect(result).toBe(mockGame.players[0]);
@@ -544,22 +589,6 @@ describe('Champion Logic Tests', () => {
             const newLocation: BoardLocation = { rowIndex: 3, columnIndex: 3 };
             checkAndPushAllowedLocation(board, allowedLocations, newLocation, true);
             expect(allowedLocations).toHaveLength(0);
-        });
-    });
-
-    describe('calculateAndUpdateRepeatableActions', () => {
-        it('should update repeatable actions that were not played', () => {
-            const actionCard = { ...mockActionCard, isRepeatable: true, repeatableStat: Stats.Str };
-            mockChampion.calStr = 3;
-
-            calculateAndUpdateRepeatableActions([actionCard], mockChampion);
-            expect(actionCard.repeatableActivationLeft).toBe(3);
-        });
-
-        it('should not update non-repeatable actions', () => {
-            const actionCard = { ...mockActionCard, isRepeatable: false };
-            calculateAndUpdateRepeatableActions([actionCard], mockChampion);
-            expect(actionCard.repeatableActivationLeft).toBeNull();
         });
     });
 
