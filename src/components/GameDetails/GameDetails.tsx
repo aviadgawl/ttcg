@@ -1,37 +1,38 @@
 import { FC } from 'react';
 import { useAppSelector, useAppDispatch } from '../../redux/hooks';
 import { setShowGameDetails } from '../../redux/store';
-import { Drawer, Button } from '@mui/material';
+import { Drawer, Typography } from '@mui/material';
 import iconsList from './IconsList';
+import MyTypography from '../Shared/MyTypography';
 import styles from './GameDetails.module.css';
 
 const iconHeight = 25;
 
 const GameDetails: FC = () => {
-  const playingPlayer = useAppSelector((state) => state.gameActions.game.playingPlayerIndex);
+  const playingPlayerIndex = useAppSelector((state) => state.gameActions.game.playingPlayerIndex);
   const playerIndex = useAppSelector((state) => state.gameActions.game.playerIndex);
   const showGameDetails = useAppSelector((state) => state.gameActions.showGameDetails);
 
   const dispatch = useAppDispatch();
 
-  return <Drawer variant="persistent" anchor="left" open={showGameDetails} className={styles.GameDetails}>
-    <h2>Player Number: {playerIndex + 1} | Playing Player: {playingPlayer + 1}</h2>
+  return <Drawer anchor="left" open={showGameDetails} className={styles.GameDetails} onClose={() => {dispatch(setShowGameDetails(false))}}>
+    <Typography variant='h6'>Player Number: {playerIndex + 1}</Typography>
+    <Typography variant='h6'>Playing Player: {playingPlayerIndex + 1}</Typography>
     <div className={styles.GameDetailsContent}>
       <table>
         <thead>
           <tr>
-            <th>Icon</th>
-            <th>Description</th>
+            <th><Typography variant='h6'>Icon</Typography></th>
+            <th><Typography variant='h6'>Description</Typography></th>
           </tr>
         </thead>
         <tbody>
           {iconsList.map(item => <tr key={item.description}>
             <td><img alt="Icon place" height={iconHeight} src={item.icon} /></td>
-            <td>{item.description}</td>
+            <td><MyTypography>{item.description}</MyTypography></td>
           </tr>)}
         </tbody>
       </table>
-      <Button size="small" variant="outlined" onClick={() => { dispatch(setShowGameDetails(false)) }}>Hide details</Button>
     </div>
   </Drawer>
 };

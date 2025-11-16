@@ -13,8 +13,8 @@ interface CardProps {
   children?: React.ReactNode,
   zoom?: boolean,
   showChampionStats?: boolean,
-  className?: string,
-  disableAnimation?: boolean
+  disableAnimation?: boolean,
+  isLarge?: boolean
 };
 
 const GameCardDraw: FC<CardProps> = (props) => {
@@ -24,7 +24,7 @@ const GameCardDraw: FC<CardProps> = (props) => {
     if (props.zoom && event.target.type !== 'button') setShowDialog(!showDialog);
   }
 
-  return <div className={props.className}>
+  return <div className={`App-card${props.isLarge ? '-large' : ''}`}>
     <Bounce isDisabled={props.disableAnimation} className={styles.CardMotion}>
       <Card onClick={handleShowDialog}
         className={styles.Card} sx={{ maxWidth: 345, backgroundImage: `url(${props.card.image})` }}>

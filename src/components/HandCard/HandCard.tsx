@@ -70,7 +70,7 @@ const HandCard: FC<CardProps> = (props) => {
   }
 
   return <Stack>
-    <GameCardDraw className="App-card" zoom={true} card={props.card} />
+    <GameCardDraw card={props.card} />
     {props.mode === HandCardMode.Hand && <Stack justifyContent="center" className={styles.Buttons}>
       {isClass(props.card) && <Button disabled={props.disabled} variant="outlined" size="small" onClick={() => handleCardActionOnTarget(PlayerActionsName.Upgrade)}>
         <MyTypography variant="button"> {PlayerActionsName.Upgrade} </MyTypography>

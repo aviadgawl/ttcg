@@ -24,17 +24,17 @@ const ChampionMenu: FC<ChampionMenuProps> = (props) => (
     className={styles.ChampionMenuList}
   >
     {props.championCard.learnedActionsCards.length > 0
-      && props.championCard.learnedActionsCards.map(action => <MenuItem key={action.guid}><GameCardDraw className='App-card' card={action} /></MenuItem>)}
+      && props.championCard.learnedActionsCards.map(action => <MenuItem key={action.guid}><GameCardDraw card={action} /></MenuItem>)}
     {props.championCard.attachedActionsCards.length > 0
-      && props.championCard.attachedActionsCards.map(action => <MenuItem key={action.guid}><GameCardDraw className='App-card' card={action} /></MenuItem>)}
+      && props.championCard.attachedActionsCards.map(action => <MenuItem key={action.guid}><GameCardDraw card={action} /></MenuItem>)}
     {props.championCard.upgrade
-      && <MenuItem><GameCardDraw className='App-card' card={props.championCard.upgrade} /></MenuItem>}
+      && <MenuItem><GameCardDraw card={props.championCard.upgrade} /></MenuItem>}
     {props.championCard.body
-      && <MenuItem><GameCardDraw className='App-card' card={props.championCard.body} /></MenuItem>}
+      && <MenuItem><GameCardDraw card={props.championCard.body} /></MenuItem>}
     {props.championCard.leftHand
-      && <MenuItem><GameCardDraw className='App-card' card={props.championCard.leftHand} /></MenuItem>}
+      && <MenuItem><GameCardDraw card={props.championCard.leftHand} /></MenuItem>}
     {props.championCard.rightHand
-      && <MenuItem><GameCardDraw className='App-card' card={props.championCard.rightHand} /></MenuItem>}
+      && <MenuItem><GameCardDraw card={props.championCard.rightHand} /></MenuItem>}
   </Menu>
 );
 

@@ -87,11 +87,11 @@ const Hand: FC = () => {
 
   return <Box>
     <Box className={styles.HandButton}>
-      <Button variant="outlined" onClick={() => dispatch(setShowHand(true))}>
-        <MyTypography variant="button"> Show Hand </MyTypography>
-      </Button>
       <Button variant="outlined" onClick={() => dispatch(setShowGameDetails(true))}>
         <MyTypography variant="button"> Show Details </MyTypography>
+      </Button>
+      <Button variant="outlined" onClick={() => dispatch(setShowHand(true))}>
+        <MyTypography variant="button"> Show Hand </MyTypography>
       </Button>
       <Button variant="outlined" onClick={() => dispatch(setShowGameLog(true))}>
         <MyTypography variant="button"> Show Log </MyTypography>

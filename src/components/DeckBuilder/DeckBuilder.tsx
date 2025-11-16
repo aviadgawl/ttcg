@@ -1,9 +1,7 @@
 import { FC } from 'react';
 import { PlayerActionsName } from '../../logic/enums';
 import HandCard, { HandCardMode } from '../HandCard/HandCard';
-import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
+import { Stack, Button, Typography, Box } from '@mui/material';
 import { useAppSelector, usePlayerAction } from '../../redux/hooks';
 import { GameCard, ChampionCard, isChampion } from '../../logic/game-card';
 import CardsDisplay from '../CardsDisplay/CardsDisplay';
@@ -12,6 +10,7 @@ import { groupBy } from '../../helpers/functions-helper';
 import prebuiltDecks from './prebuilt-decks.json';
 import MyTypography from '../Shared/MyTypography';
 import styles from './DeckBuilder.module.css';
+import GameCardDraw from '../GameCardDraw/GameCardDraw';
 
 const DeckBuilder: FC = () => {
   const player = useAppSelector((state) => {
@@ -103,11 +102,14 @@ const DeckBuilder: FC = () => {
           <hr />
           <Typography> Deck </Typography>
           {Object.keys(cardsInDeckGroupedByName).map(cardName =>
-            <Stack justifyContent="center" key={cardName}>
-              <span>{cardsInDeckGroupedByName[cardName].length}</span>
-
-              <HandCard mode={HandCardMode.DeckBuilding} card={cardsInDeckGroupedByName[cardName][0]} />
-              <Button onClick={() => removeCardFromDeck(cardsInDeckGroupedByName[cardName][0])}>Remove</Button>
+            <Stack key={cardName}>
+              <MyTypography>{cardsInDeckGroupedByName[cardName].length}</MyTypography>
+              <Box display="flex" justifyContent="center">
+                <GameCardDraw card={cardsInDeckGroupedByName[cardName][0]} />
+              </Box>
+              <Button onClick={() => removeCardFromDeck(cardsInDeckGroupedByName[cardName][0])}>
+                <MyTypography>Remove</MyTypography>
+              </Button>
               {isChampion(cardsInDeckGroupedByName[cardName][0]) && player.startingChampion?.name !== cardsInDeckGroupedByName[cardName][0].name &&
                 <Button variant="outlined" size="small" onClick={() => handleSelectingStartingChampion(cardsInDeckGroupedByName[cardName][0] as ChampionCard)}>
                   <MyTypography>Select</MyTypography>

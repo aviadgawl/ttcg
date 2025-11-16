@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 import { ActionCard, ChampionCard } from '../../logic/game-card';
-import { checkRepeatableAction } from '../../logic/champion';
+import { checkValidRepeatableAction } from '../../logic/champion';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { setSelectedActionData, createSelectedData } from '../../redux/store';
 import { GameStoreActionTypes } from '../../redux/types';
@@ -69,7 +69,7 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
     if (playerIndex !== playingPlayerIndex) return true;
 
     if (actionCard.isRepeatable) {
-      return !checkRepeatableAction(player, actionCard);
+      return !checkValidRepeatableAction(player, actionCard);
     }
     else {
       if (actionCard.wasPlayed) return true;
@@ -91,7 +91,7 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
       className={styles.Dialog}
       onClose={handleClose}>
       <DialogContent className={styles.DialogContent}>
-        <GameCardDraw disableAnimation={true} className="App-card-large" showChampionStats={true} card={props.champion}>
+        <GameCardDraw disableAnimation isLarge showChampionStats card={props.champion}>
           <div className={styles.ChampionCardActions}>
             {props.champion.learnedActionsCards.map((card, actionIndex) =>
               <Button disabled={isActionCardDisabled(props.champion, card, false)} size="small" variant="contained" className={styles.LearnedActions} key={actionIndex}
