@@ -19,7 +19,7 @@ interface CardProps {
 
 const GameCardDraw: FC<CardProps> = (props) => {
   const [showDialog, setShowDialog] = useState(false);
-
+  
   const handleShowDialog = (event: any) => {
     if (props.zoom && event.target.type !== 'button') setShowDialog(!showDialog);
   }

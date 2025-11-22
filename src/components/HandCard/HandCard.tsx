@@ -12,13 +12,13 @@ import styles from './HandCard.module.css';
 export enum HandCardMode {
   DeckBuilding = 1,
   Hand
-}
+};
 
 interface CardProps {
   card: GameCard,
   mode: HandCardMode,
   disabled?: boolean
-}
+};
 
 const HandCard: FC<CardProps> = (props) => {
   const dispatch = useAppDispatch();

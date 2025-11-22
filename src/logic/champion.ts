@@ -430,15 +430,27 @@ export const removeUsedAttachedActionCards = (sourceChampion: ChampionCard, play
     });
 };
 
+export const shouldLowerStamina = (player: Player, actionCard: ActionCard, isAttachedAction: boolean) => {
+    if(isAttachedAction)
+        return false;
+    
+    if(actionCard.isRepeatable){
+        const lastPlayedActionRecord = getLastPlayedActionGuid(player);
+        return lastPlayedActionRecord?.card?.guid !== actionCard.guid;
+    };
+
+    return true;
+};
+
 export const successfulAttackGameUpdate = (game: Game, player: Player, sourceChampion: ChampionCard, actionCard: ActionCard,
-    result: ChampionActionResult, sourceLocation: BoardLocation, targetLocation: BoardLocation) => {
+    result: ChampionActionResult, sourceLocation: BoardLocation, targetLocation: BoardLocation, isAttachedAction: boolean) => {
 
     if (actionCard.isRepeatable && actionCard.repeatableActivationLeft !== null)
         actionCard.repeatableActivationLeft--;
 
-    const lastPlayedActionRecord = getLastPlayedActionGuid(player);
+    const lowerStamina = shouldLowerStamina(player, actionCard, isAttachedAction);
 
-    if (lastPlayedActionRecord?.card?.guid !== actionCard.guid || !actionCard.isRepeatable)
+    if (lowerStamina)
         sourceChampion.stm--;
 
     if (!actionCard.wasPlayed) actionCard.wasPlayed = true;
@@ -548,7 +560,7 @@ export const championAction = (game: Game, actionCardData: ActionCard, sourceLoc
     }
 
     if (result.status === 'success')
-        successfulAttackGameUpdate(game, player, sourceChampion, actionCard, result, sourceLocation, targetLocation);
+        successfulAttackGameUpdate(game, player, sourceChampion, actionCard, result, sourceLocation, targetLocation, isAttachedAction);
 
     return result.status;
 }

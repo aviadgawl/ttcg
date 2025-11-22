@@ -105,7 +105,7 @@ const DeckBuilder: FC = () => {
             <Stack key={cardName}>
               <MyTypography>{cardsInDeckGroupedByName[cardName].length}</MyTypography>
               <Box display="flex" justifyContent="center">
-                <GameCardDraw card={cardsInDeckGroupedByName[cardName][0]} />
+                <GameCardDraw zoom card={cardsInDeckGroupedByName[cardName][0]} />
               </Box>
               <Button onClick={() => removeCardFromDeck(cardsInDeckGroupedByName[cardName][0])}>
                 <MyTypography>Remove</MyTypography>

@@ -7,6 +7,7 @@ import { CardType } from '../../logic/enums';
 import { groupBy } from '../../helpers/functions-helper';
 import MyTypography from '../Shared/MyTypography';
 import styles from './CardsDisplay.module.css';
+import GameCardDraw from '../GameCardDraw/GameCardDraw';
 
 interface CardsDisplayProps {
   cards: GameCard[],
@@ -38,7 +39,7 @@ const CardsDisplay: FC<CardsDisplayProps> = (props) => {
   
       return firstCard !== null && <Stack justifyContent="center" key={firstCard.guid}>
         <MyTypography textAlign="center">{filteredCardGroup.length}</MyTypography>
-        <HandCard mode={HandCardMode.DeckBuilding} card={firstCard} />
+        <GameCardDraw zoom card={firstCard} />
         {props.onSelectCard && <Button size="small" onClick={() => handleClick(firstCard)}>
           <MyTypography> {props.buttonName} </MyTypography>
         </Button>}

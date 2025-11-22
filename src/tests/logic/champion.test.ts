@@ -327,7 +327,23 @@ describe('Champion Logic Tests', () => {
             expect(result).toContain('success');
             expect(target.currentHp).toBeLessThan(10);
             expect(mockChampion.attachedActionsCards.length).toBe(2);
-        })
+        });
+
+        it('should use attached attack without lowering stamina', () => {
+            const sourceLocation: BoardLocation = { rowIndex: 3, columnIndex: 3 };
+            const targetLocation: BoardLocation = { rowIndex: 3, columnIndex: 4 };
+            const firstActionCard = { ...mockActionCard, isFreeTargeting: true, isRepeatable: true, repeatableActivationLeft: 1 } as ActionCard;
+            const secondActionCard = { ...mockActionCard, guid: 't1', name: 'test1' } as ActionCard;
+            const target = { ...mockChampion, currentHp: 10, armor: 0 } as unknown as SummoningCard;
+            mockChampion.attachedActionsCards = [firstActionCard, secondActionCard];
+            mockChampion.stm = 2;
+            mockGame.board[3][4] = target;
+
+            const result = championAction(mockGame, firstActionCard, sourceLocation, targetLocation, true);
+
+            expect(result).toContain('success');
+            expect(mockChampion.stm).toEqual(2);
+        });
     });
  
     describe('Get player', () => {
@@ -738,7 +754,7 @@ describe('Champion Logic Tests', () => {
             const targetLocation = { rowIndex: 3, columnIndex: 4 };
             const result = { status: 'success', targetedCard: null };
 
-            successfulAttackGameUpdate(mockGame, mockPlayer, mockChampion, mockActionCard, result, sourceLocation, targetLocation);
+            successfulAttackGameUpdate(mockGame, mockPlayer, mockChampion, mockActionCard, result, sourceLocation, targetLocation, false);
 
             expect(mockActionCard.wasPlayed).toBe(true);
             expect(mockChampion.stm).toBe(2);
@@ -751,7 +767,7 @@ describe('Champion Logic Tests', () => {
 
             const result = { status: 'success', targetedCard: null };
             successfulAttackGameUpdate(mockGame, mockPlayer, mockChampion, mockActionCard, result,
-                { rowIndex: 0, columnIndex: 0 }, { rowIndex: 0, columnIndex: 1 });
+                { rowIndex: 0, columnIndex: 0 }, { rowIndex: 0, columnIndex: 1 }, false);
 
             expect(mockActionCard.repeatableActivationLeft).toBe(1);
         });
@@ -761,7 +777,7 @@ describe('Champion Logic Tests', () => {
             const result = { status: 'success', targetedCard: mockCrystal };
 
             successfulAttackGameUpdate(mockGame, mockPlayer, mockChampion, mockActionCard, result,
-                { rowIndex: 0, columnIndex: 0 }, { rowIndex: 0, columnIndex: 1 });
+                { rowIndex: 0, columnIndex: 0 }, { rowIndex: 0, columnIndex: 1 }, false);
 
             expect(mockGame.status).toBe(GameStatus.over);
             expect(mockGame.loser).toBe(mockPlayer);
