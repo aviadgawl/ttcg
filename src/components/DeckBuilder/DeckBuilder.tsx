@@ -8,7 +8,7 @@ import CardsDisplay from '../CardsDisplay/CardsDisplay';
 import { SelectedData } from '../../redux/store';
 import { groupBy } from '../../helpers/functions-helper';
 import prebuiltDecks from './prebuilt-decks.json';
-import MyTypography from '../Shared/MyTypography';
+import MyTypography from '../Shared/MUI/MyTypography';
 import styles from './DeckBuilder.module.css';
 import GameCardDraw from '../GameCardDraw/GameCardDraw';
 

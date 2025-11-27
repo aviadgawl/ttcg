@@ -3,7 +3,7 @@ import { useAppSelector, useAppDispatch } from '../../redux/hooks';
 import { setShowGameDetails } from '../../redux/store';
 import { Drawer, Typography } from '@mui/material';
 import iconsList from './IconsList';
-import MyTypography from '../Shared/MyTypography';
+import MyTypography from '../Shared/MUI/MyTypography';
 import styles from './GameDetails.module.css';
 
 const iconHeight = 25;

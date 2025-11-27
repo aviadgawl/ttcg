@@ -5,7 +5,7 @@ import HandCard, { HandCardMode } from '../HandCard/HandCard';
 import { Button, Stack} from '@mui/material';
 import { CardType } from '../../logic/enums';
 import { groupBy } from '../../helpers/functions-helper';
-import MyTypography from '../Shared/MyTypography';
+import MyTypography from '../Shared/MUI/MyTypography';
 import styles from './CardsDisplay.module.css';
 import GameCardDraw from '../GameCardDraw/GameCardDraw';
 

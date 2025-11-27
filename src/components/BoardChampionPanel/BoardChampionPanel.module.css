@@ -1,54 +1,3 @@
-.Panel {
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    animation-name: fadeIn;
-    animation-duration: 2s;
-}
-
-.HpLabel {
-    font-weight: bolder;
-}
-
-@media only screen and (max-width: 600px) {
-    .HpLabel {
-        font-size: 20px;
-    }
-}
-  
-@media only screen and (min-width: 600px) {
-    .HpLabel {
-        font-size: 40px;
-    }
-}
-
-.DirectionIcon {
-    background-color: white;
-    border: 1px solid black;
-    border-radius: 30%;
-    display: flex;
-    align-items: center;
- }
-
- @media only screen and (max-width: 600px) {
-    .DirectionIcon {
-        height: 16px;
-        width: 11px;
-    }  
-}
-
-.PlayerOneObject {
-    color: var(--player-one-color);
-}
-
-.PlayerTwoObject {
-    color: var(--player-two-color);
-}
-
 .Damage {
     filter: invert(1);
     animation: damageAnimation 2s;
@@ -57,4 +6,4 @@
 @keyframes damageAnimation {
     from {filter: invert(0);}
     to {background-color: invert(1);}
-  }
+}

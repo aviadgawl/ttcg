@@ -7,6 +7,7 @@ import { setIsLoggedIn } from './redux/store';
 import { GameStatus } from './logic/enums';
 import Login from './components/Login/Login';
 import './App.css';
+import SpriteAnimation from './components/ChampionSprite/ChampionSprite';
 
 function App() {
   const [currentDisplay, setCurrentDisplay] = useState(0);

@@ -11,8 +11,8 @@ import DialogContent from '@mui/material/DialogContent';
 import GameCardDraw from '../GameCardDraw/GameCardDraw';
 import ChampionMenu from '../ChampionMenu/ChampionMenu';
 import BoardChampionPanel from '../BoardChampionPanel/BoardChampionPanel';
-import FadeIn from '../Motion/FadeIn';
-import Flicker from '../Motion/Flicker';
+import FadeIn from '../Shared/Motion/FadeIn';
+import Flicker from '../Shared/Motion/Flicker';
 import styles from './BoardChampion.module.css';
 
 interface BoardChampionProps {
@@ -80,11 +80,9 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
   }
 
   return (<div className={`${props.className} ${styles.Container}`}>
-    <Flicker isDisabled={!props.isSelected}>
-      <FadeIn isDisabled={props.isSelected}>
-        <BoardChampionPanel colorClassName={props.colorClassName} champion={props.champion} onPanelClick={handlePanelClick} shouldRotate={props.shouldRotate} />
-      </FadeIn>
-    </Flicker>
+    <FadeIn isDisabled={props.isSelected}>
+      <BoardChampionPanel colorClassName={props.colorClassName} isSelected={props.isSelected} champion={props.champion} onPanelClick={handlePanelClick} shouldRotate={props.shouldRotate} />
+    </FadeIn>
 
     <Dialog
       open={showDialog}

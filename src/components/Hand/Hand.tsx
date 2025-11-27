@@ -8,7 +8,7 @@ import { GameCard, isOrder } from '../../logic/game-card';
 import HandCard, { HandCardMode } from '../HandCard/HandCard';
 import CardsDisplay from '../CardsDisplay/CardsDisplay';
 import { Drawer, Button, Dialog, DialogContent, Stack, Box } from '@mui/material';
-import MyTypography from '../Shared/MyTypography';
+import MyTypography from '../Shared/MUI/MyTypography';
 import styles from './Hand.module.css';
 
 const Hand: FC = () => {

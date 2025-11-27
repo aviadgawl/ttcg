@@ -5,7 +5,7 @@ import HpIcon from '../../assets/images/HpIcon.png';
 import DexIcon from '../../assets/images/DexIcon.png';
 import IntIcon from '../../assets/images/IntIcon.png';
 import StrIcon from '../../assets/images/StrIcon.png';
-import Bounce from '../Motion/Bounce';
+import Bounce from '../Shared/Motion/Bounce';
 import styles from './GameCardDraw.module.css';
 
 interface CardProps {

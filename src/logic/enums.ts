@@ -91,10 +91,10 @@ export enum RewardType {
 };
 
 export enum ChampionDirection {
-    Up = 0,
-    Down,
-    Left,
-    Right
+    Up = 'up',
+    Down = 'down',
+    Left = 'left',
+    Right = 'right'
 };
 
 export enum BodyPart {
