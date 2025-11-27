@@ -9,6 +9,7 @@ import karinaSpriteSheet from '../assets/sprites/karina-spritesheet.png';
 import firshaSpriteSheet from '../assets/sprites/karina-spritesheet.png';
 import valindraSpriteSheet from '../assets/sprites/valindra-spritesheet.png';
 import tarielSpriteSheet from '../assets/sprites/tariel-spritesheet.png';
+import tafrandirSpriteSheet from '../assets/sprites/tafrandir-spritesheet.png';
 
 export const getSprite = (championName: string) => {
     switch (championName) {
@@ -34,6 +35,8 @@ export const getSprite = (championName: string) => {
             return valindraSpriteSheet;
         case 'Taeriel':
             return tarielSpriteSheet;
+        case 'Tafrandir':
+            return tafrandirSpriteSheet;
         default:
             throw Error(`champion name ${championName} is not supported`);
     }
