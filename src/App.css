@@ -1,6 +1,6 @@
 :root {
-  --player-one-color: lightgreen;
-  --player-two-color: lightcoral;
+  --player-one-color: #94b354;
+  --player-two-color: #b06455ff;
 }
 
 .App {

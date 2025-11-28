@@ -12,7 +12,6 @@ import GameCardDraw from '../GameCardDraw/GameCardDraw';
 import ChampionMenu from '../ChampionMenu/ChampionMenu';
 import BoardChampionPanel from '../BoardChampionPanel/BoardChampionPanel';
 import FadeIn from '../Shared/Motion/FadeIn';
-import Flicker from '../Shared/Motion/Flicker';
 import styles from './BoardChampion.module.css';
 
 interface BoardChampionProps {
@@ -22,7 +21,6 @@ interface BoardChampionProps {
   isSelected: boolean;
   shouldRotate?: boolean;
   className: string;
-  colorClassName: string;
 }
 
 const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
@@ -81,7 +79,7 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
 
   return (<div className={`${props.className} ${styles.Container}`}>
     <FadeIn isDisabled={props.isSelected}>
-      <BoardChampionPanel colorClassName={props.colorClassName} isSelected={props.isSelected} champion={props.champion} onPanelClick={handlePanelClick} shouldRotate={props.shouldRotate} />
+      <BoardChampionPanel isSelected={props.isSelected} champion={props.champion} onPanelClick={handlePanelClick} shouldRotate={props.shouldRotate} />
     </FadeIn>
 
     <Dialog

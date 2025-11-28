@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/ttcg/static/css/main.36f1336e.css",
-    "main.js": "/ttcg/static/js/main.5febe851.js",
+    "main.css": "/ttcg/static/css/main.69aa4fb7.css",
+    "main.js": "/ttcg/static/js/main.f4774c33.js",
     "static/media/WarMage.png": "/ttcg/static/media/WarMage.b9d64aaec59d6ed573e0.png",
     "static/media/EtherBladeSlash.png": "/ttcg/static/media/EtherBladeSlash.803a5e9b695d63a32f2c.png",
     "static/media/RefreshMe.png": "/ttcg/static/media/RefreshMe.d1ab3397d77d9648e5fb.png",
@@ -74,8 +74,18 @@
     "static/media/Valindra.png": "/ttcg/static/media/Valindra.09a713d827a5eac3e96a.png",
     "static/media/Tafrandir.png": "/ttcg/static/media/Tafrandir.6fef6589032d4f6279ac.png",
     "static/media/GreatStaff.png": "/ttcg/static/media/GreatStaff.1e937cd670bab91aa977.png",
+    "static/media/tariel-spritesheet.png": "/ttcg/static/media/tariel-spritesheet.b7d2c0d8eefc650bc156.png",
+    "static/media/aron-spritesheet.png": "/ttcg/static/media/aron-spritesheet.054d721df830b097f2c1.png",
+    "static/media/david-spritesheet.png": "/ttcg/static/media/david-spritesheet.924166dc35843d776e29.png",
+    "static/media/eduard-spritesheet.png": "/ttcg/static/media/eduard-spritesheet.9b1697e10c752a6d1b03.png",
     "static/media/BasicHit.png": "/ttcg/static/media/BasicHit.dd906098cfee3f3ef7fe.png",
     "static/media/BackStab.png": "/ttcg/static/media/BackStab.7cfed83058dc74d2c80f.png",
+    "static/media/gurak-spritesheet.png": "/ttcg/static/media/gurak-spritesheet.3cdf844e9227797df2be.png",
+    "static/media/robin-spritesheet.png": "/ttcg/static/media/robin-spritesheet.b717306498924eacd0c3.png",
+    "static/media/tafrandir-spritesheet.png": "/ttcg/static/media/tafrandir-spritesheet.7e1b5ff13124f5541de8.png",
+    "static/media/karina-spritesheet.png": "/ttcg/static/media/karina-spritesheet.fb7b710e48b89d7233b0.png",
+    "static/media/chiron-spritesheet.png": "/ttcg/static/media/chiron-spritesheet.253c280efab767744adc.png",
+    "static/media/valindra-spritesheet.png": "/ttcg/static/media/valindra-spritesheet.69acafcf9c7ddd7f34a5.png",
     "static/media/JumpStep.png": "/ttcg/static/media/JumpStep.7533a22f2af6078ef446.png",
     "static/media/basic-hit.mp3": "/ttcg/static/media/basic-hit.6562a7f771f3f3aa3de1.mp3",
     "static/media/magic-attack.mp3": "/ttcg/static/media/magic-attack.718cb9e214abf6733b29.mp3",
@@ -93,11 +103,11 @@
     "static/media/hp-damage.mp3": "/ttcg/static/media/hp-damage.e932eef6fc9036076d78.mp3",
     "static/media/draw.mp3": "/ttcg/static/media/draw.ceb460e6016f04e97598.mp3",
     "index.html": "/ttcg/index.html",
-    "main.36f1336e.css.map": "/ttcg/static/css/main.36f1336e.css.map",
-    "main.5febe851.js.map": "/ttcg/static/js/main.5febe851.js.map"
+    "main.69aa4fb7.css.map": "/ttcg/static/css/main.69aa4fb7.css.map",
+    "main.f4774c33.js.map": "/ttcg/static/js/main.f4774c33.js.map"
   },
   "entrypoints": [
-    "static/css/main.36f1336e.css",
-    "static/js/main.5febe851.js"
+    "static/css/main.69aa4fb7.css",
+    "static/js/main.f4774c33.js"
   ]
 }

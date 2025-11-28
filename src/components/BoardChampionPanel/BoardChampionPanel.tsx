@@ -1,17 +1,33 @@
 import React, { FC, useState, useEffect, useRef } from 'react';
 import { ChampionCard } from '../../logic/game-card';
-import { LinearProgress } from '@mui/material';
+import { LinearProgress, ThemeProvider, createTheme, Stack } from '@mui/material';
 import { playSoundByEvent, SoundEvents } from '../../helpers/audio-helper';
 import ChampionSprite from '../ChampionSprite/ChampionSprite';
 import styles from './BoardChampionPanel.module.css';
 import { ChampionDirection } from '../../logic/enums';
+import { isMobileDevice } from '../../helpers/functions-helper';
+
+const playerOneTheme = createTheme({
+  palette: {
+    primary: {
+      main: '#94b354'
+    }
+  },
+});
+
+const playerTwoTheme = createTheme({
+  palette: {
+    primary: {
+      main: '#cd604aff'
+    }
+  },
+});
 
 interface BoardChampionAnimationsProps {
   children?: React.ReactNode,
   champion: ChampionCard,
   onPanelClick: () => void,
   shouldRotate?: boolean,
-  colorClassName: string,
   isSelected: boolean
 };
 
@@ -20,6 +36,8 @@ const BoardChampionPanel: FC<BoardChampionAnimationsProps> = (props: BoardChampi
   const hpRef = useRef(props.champion.currentHp);
   const animation = props.isSelected ? 'walk' : 'idle';
   const hpValue = props.champion.currentHp / props.champion.calHp * 100;
+  const isMobile = isMobileDevice();
+  const championSpriteSize = isMobile ? 43 : 90;
 
   useEffect(() => {
     if (props.champion.currentHp < hpRef.current) {
@@ -34,11 +52,11 @@ const BoardChampionPanel: FC<BoardChampionAnimationsProps> = (props: BoardChampi
   }, [props.champion.currentHp]);
 
   const getDirection = (direction: ChampionDirection) => {
-    if(!props.shouldRotate) return direction;
+    if (!props.shouldRotate) return direction;
 
     switch (direction) {
       case ChampionDirection.Up:
-       return ChampionDirection.Down;
+        return ChampionDirection.Down;
       case ChampionDirection.Down:
         return ChampionDirection.Up;
       case ChampionDirection.Left:
@@ -50,10 +68,17 @@ const BoardChampionPanel: FC<BoardChampionAnimationsProps> = (props: BoardChampi
     }
   };
 
-  return <div className={`${showDamage && styles.Damage}`}>
-    <ChampionSprite onClick={props.onPanelClick} direction={getDirection(props.champion.direction)} championName={props.champion.name} animation={animation} width={100} height={100} />
-    <LinearProgress style={{ height: 15 }} variant="determinate" value={hpValue} />
-  </div>
+  return <Stack display="flex" justifyItems="center" height="100%" justifyContent="center" className={`${showDamage && styles.Damage}`}>
+    <ChampionSprite onClick={props.onPanelClick}
+      direction={getDirection(props.champion.direction)}
+      championName={props.champion.name}
+      animation={animation}
+      width={championSpriteSize}
+      height={championSpriteSize} />
+    {!isMobile && <ThemeProvider theme={props.champion.playerIndex === 0 ? playerOneTheme : playerTwoTheme}>
+      <LinearProgress sx={{height: 10}} variant="determinate" value={hpValue} />
+    </ThemeProvider>}
+  </Stack>
 };
 
 export default BoardChampionPanel;

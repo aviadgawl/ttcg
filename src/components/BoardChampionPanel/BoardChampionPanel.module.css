@@ -7,3 +7,17 @@
     from {filter: invert(0);}
     to {background-color: invert(1);}
 }
+
+/* mobile */
+@media only screen and (max-width: 600px) {
+  .HpBar {
+    height: 5px;
+    }
+}
+
+/* desktop */
+@media only screen and (min-width: 600px) {
+  .HpBar {
+    height: 15px;
+    }
+}
