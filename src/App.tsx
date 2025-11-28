@@ -7,7 +7,6 @@ import { setIsLoggedIn } from './redux/store';
 import { GameStatus } from './logic/enums';
 import Login from './components/Login/Login';
 import './App.css';
-import SpriteAnimation from './components/ChampionSprite/ChampionSprite';
 
 function App() {
   const [currentDisplay, setCurrentDisplay] = useState(0);
@@ -52,7 +51,7 @@ function App() {
     <main className="App">
       <header>
         <GameTabs disabledTabIndexes={disabledTabIndex} displayMode={currentDisplay} onModeClick={handleDisplaySelect} />
-        <div className="Version-number">2.1.0</div>
+        <div className="Version-number">2.1.1</div>
       </header>
       {currentDisplay === 0 && <Login />}
       {currentDisplay === 1 && <DeckBuilder />}
