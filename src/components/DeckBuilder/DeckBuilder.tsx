@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import { PlayerActionsName } from '../../logic/enums';
 import HandCard, { HandCardMode } from '../HandCard/HandCard';
 import { Stack, Button, Typography, Box } from '@mui/material';
@@ -18,6 +18,11 @@ const DeckBuilder: FC = () => {
     return state.gameActions.game.players[playerIndex];
   });
   const cardsList = useAppSelector((state) => state.gameActions.cardsList);
+
+  const filteredCardList = useMemo(() => {
+    return cardsList.filter(card => card.name !== 'Forest Spirit' && card.name !== 'Mountains Spirit');
+  },[cardsList]);
+
   const playerAction = usePlayerAction();
 
   const disablePrebuiltDecks = player.deck?.length > 0 || player.startingChampion !== null;
@@ -118,7 +123,7 @@ const DeckBuilder: FC = () => {
           )}
         </div>
       </div>
-      <CardsDisplay cards={cardsList} onSelectCard={(card) => addCardToDeck(card)} buttonName="Add to deck" />
+      <CardsDisplay cards={filteredCardList} onSelectCard={(card) => addCardToDeck(card)} buttonName="Add to deck" />
     </div>
   </div>
 };

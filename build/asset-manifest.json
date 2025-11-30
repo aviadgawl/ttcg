@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/ttcg/static/css/main.69aa4fb7.css",
-    "main.js": "/ttcg/static/js/main.b510546e.js",
+    "main.js": "/ttcg/static/js/main.fc6c1f18.js",
     "static/media/WarMage.png": "/ttcg/static/media/WarMage.b9d64aaec59d6ed573e0.png",
     "static/media/EtherBladeSlash.png": "/ttcg/static/media/EtherBladeSlash.803a5e9b695d63a32f2c.png",
     "static/media/RefreshMe.png": "/ttcg/static/media/RefreshMe.d1ab3397d77d9648e5fb.png",
@@ -24,7 +24,7 @@
     "static/media/KeepMoving.png": "/ttcg/static/media/KeepMoving.538e3a2afef1ebd491cb.png",
     "static/media/Regroup.png": "/ttcg/static/media/Regroup.5a912808c9e2ea6d90a8.png",
     "static/media/EnergyBall.png": "/ttcg/static/media/EnergyBall.8eb312006bb346e73d47.png",
-    "static/media/INeedSomeGear.png": "/ttcg/static/media/INeedSomeGear.3ba44137cd7fedcfcf8a.png",
+    "static/media/INeedSomeGear.png": "/ttcg/static/media/INeedSomeGear.f5fb94c5fc381b04ddac.png",
     "static/media/HighKnight.png": "/ttcg/static/media/HighKnight.66027157361601eb6ad0.png",
     "static/media/ArmorBreak.png": "/ttcg/static/media/ArmorBreak.6d607943dacbb942ef7c.png",
     "static/media/MagicShield.png": "/ttcg/static/media/MagicShield.1cbaf892d71887c14324.png",
@@ -70,7 +70,9 @@
     "static/media/SimpleSword.png": "/ttcg/static/media/SimpleSword.517d3866e7ee2e2a514f.png",
     "static/media/Robin.png": "/ttcg/static/media/Robin.b02770348cac9bc5e357.png",
     "static/media/Taeriel.png": "/ttcg/static/media/Taeriel.b82c21e71915d95fff7d.png",
+    "static/media/MountainsSpirit.png": "/ttcg/static/media/MountainsSpirit.5742fc9ab3644e165051.png",
     "static/media/Karina.png": "/ttcg/static/media/Karina.c3e82987d6ec8dbd1ba7.png",
+    "static/media/ForestSpirit.png": "/ttcg/static/media/ForestSpirit.83548325fafae0cdbb75.png",
     "static/media/Valindra.png": "/ttcg/static/media/Valindra.09a713d827a5eac3e96a.png",
     "static/media/Tafrandir.png": "/ttcg/static/media/Tafrandir.6fef6589032d4f6279ac.png",
     "static/media/GreatStaff.png": "/ttcg/static/media/GreatStaff.1e937cd670bab91aa977.png",
@@ -86,6 +88,7 @@
     "static/media/karina-spritesheet.png": "/ttcg/static/media/karina-spritesheet.fb7b710e48b89d7233b0.png",
     "static/media/chiron-spritesheet.png": "/ttcg/static/media/chiron-spritesheet.253c280efab767744adc.png",
     "static/media/valindra-spritesheet.png": "/ttcg/static/media/valindra-spritesheet.69acafcf9c7ddd7f34a5.png",
+    "static/media/seth-spritesheet.png": "/ttcg/static/media/seth-spritesheet.6798ad57577aafb16736.png",
     "static/media/JumpStep.png": "/ttcg/static/media/JumpStep.7533a22f2af6078ef446.png",
     "static/media/basic-hit.mp3": "/ttcg/static/media/basic-hit.6562a7f771f3f3aa3de1.mp3",
     "static/media/magic-attack.mp3": "/ttcg/static/media/magic-attack.718cb9e214abf6733b29.mp3",
@@ -104,10 +107,10 @@
     "static/media/draw.mp3": "/ttcg/static/media/draw.ceb460e6016f04e97598.mp3",
     "index.html": "/ttcg/index.html",
     "main.69aa4fb7.css.map": "/ttcg/static/css/main.69aa4fb7.css.map",
-    "main.b510546e.js.map": "/ttcg/static/js/main.b510546e.js.map"
+    "main.fc6c1f18.js.map": "/ttcg/static/js/main.fc6c1f18.js.map"
   },
   "entrypoints": [
     "static/css/main.69aa4fb7.css",
-    "static/js/main.b510546e.js"
+    "static/js/main.fc6c1f18.js"
   ]
 }

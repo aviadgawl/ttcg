@@ -80,6 +80,10 @@ import FindHim from '../assets/images/FindHim.png';
 import INeedSomeGear from '../assets/images/INeedSomeGear.png';
 import RefreshMe from '../assets/images/RefreshMe.png';
 import LearnQuick from '../assets/images/LearnQuick.png';
+// Crystals
+import ForestSpirit from '../assets/images/ForestSpirit.png';
+import MountainsSpirit from '../assets/images/MountainsSpirit.png';
+
 
 export const getImage = (id: string): string => {
     switch (id) {
@@ -242,6 +246,11 @@ export const getImage = (id: string): string => {
             return RefreshMe;
         case 'Learn Quick!':
             return LearnQuick;
+        // Crystals
+        case 'Mountains Spirit':
+            return MountainsSpirit;
+        case 'Forest Spirit':
+            return ForestSpirit
         default:
             return '';
     }

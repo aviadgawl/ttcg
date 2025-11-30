@@ -78,7 +78,8 @@ export enum CardType {
     OrderCard = 'OrderCard',
     GearCard = 'GearCard',
     ActionCard = 'ActionCard',
-    ChampionCard = 'ChampionCard'
+    ChampionCard = 'ChampionCard',
+    CrystalCard = 'CrystalCard'
 };
 
 export enum RewardType {

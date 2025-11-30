@@ -124,6 +124,18 @@ export const cardsJsonToObjects = (cardsListJson: any): GameCard[] => cardsListJ
                     reward: x.reward as OrderCardReward
                 } as OrderCard);
                 break;
+            case CardType.CrystalCard:
+                 newCardsArray.push({
+                    guid: createGuid(),
+                    image: getImage(x.name),
+                    playerIndex: 0,
+                    name: x.name,
+                    hp: x.hp,
+                    currentHp: x.hp,
+                    isBlocking: x.isBlocking,
+                    effect: {} as GameEffect
+                } as CrystalCard);
+                break;
             default:
                 break;
         }
@@ -137,19 +149,14 @@ const createBoard = (): Array<Array<GameCard | null>> => {
     const maxRows = 11;
     const board = new Array(new Array<GameCard | null>(7));
 
-    const mockCrystalOne: CrystalCard = {
-        image: 'https://img.freepik.com/premium-photo/magical-crystal-with-swirling-colors-digital-art-style-illustration_812426-6398.jpg',
-        hp: 30, currentHp: 30, name: 'Warrior Spirit', guid: '5', effect: {} as GameEffect, playerIndex: 0, isBlocking: true, calHp: 30
-    };
+    const playerOneCrystal = cardsList.find( card => card.name === 'Mountains Spirit')!;
+    let playerTwoCrystal = cardsList.find( card => card.name === 'Forest Spirit')!;
 
-    const mockCrystalTwo: CrystalCard = {
-        image: 'https://img.freepik.com/premium-photo/magical-crystal-with-swirling-colors-digital-art-style-illustration_812426-6466.jpg?w=740',
-        hp: 30, currentHp: 30, name: 'Warrior Spirit', guid: '5', effect: {} as GameEffect, playerIndex: 1, isBlocking: true, calHp: 30
-    };
+    playerTwoCrystal = {...playerTwoCrystal, playerIndex: 1};
 
     for (let index = 0; index < maxRows; index++) {
-        if (index === (maxRows - 1)) board[index] = [null, null, null, mockCrystalOne, null, null, null];
-        else if (index === 0) board[index] = [null, null, null, mockCrystalTwo, null, null, null];
+        if (index === (maxRows - 1)) board[index] = [null, null, null, playerOneCrystal, null, null, null];
+        else if (index === 0) board[index] = [null, null, null, playerTwoCrystal, null, null, null];
         else board[index] = [null, null, null, null, null, null, null];
     }
 

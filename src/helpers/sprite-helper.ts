@@ -4,7 +4,7 @@ import davidSpriteSheet from '../assets/sprites/david-spritesheet.png';
 import aronSpriteSheet from '../assets/sprites/aron-spritesheet.png';
 import gurakSpriteSheet from '../assets/sprites/gurak-spritesheet.png';
 import chironSpriteSheet from '../assets/sprites/chiron-spritesheet.png';
-import sethSpriteSheet from '../assets/sprites/chiron-spritesheet.png';
+import sethSpriteSheet from '../assets/sprites/seth-spritesheet.png';
 import karinaSpriteSheet from '../assets/sprites/karina-spritesheet.png';
 import firshaSpriteSheet from '../assets/sprites/karina-spritesheet.png';
 import valindraSpriteSheet from '../assets/sprites/valindra-spritesheet.png';

@@ -1,5 +1,15 @@
 [
     {
+        "name": "Forest Spirit",
+        "hp": "30",
+        "type": "CrystalCard"
+    },
+    {
+        "name": "Mountains Spirit",
+        "hp": "30",
+        "type": "CrystalCard"
+    },
+    {
         "type": "ChampionCard",
         "name": "Eduard",
         "race": "Humans",
