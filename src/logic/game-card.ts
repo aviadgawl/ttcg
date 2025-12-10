@@ -47,6 +47,7 @@ export interface PlayerEffect {
 }
 
 export interface StatusEffect {
+    cardName?: string;
     name: EffectStatus,
     duration: number,
     stat: Stats | null,

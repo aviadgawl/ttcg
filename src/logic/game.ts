@@ -92,6 +92,7 @@ export const cardsJsonToObjects = (cardsListJson: any): GameCard[] => cardsListJ
                     isBackTargeting: x.isBackTargeting ?? false,
                     targetEffects: x.targetEffects?.map((effect: any) => {
                         return {
+                            cardName: x.name,
                             name: effect.name,
                             duration: effect.duration ?? 0,
                             stat: effect.stat ?? null,

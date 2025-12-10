@@ -1,3 +1,4 @@
+// Basic
 import eduardSpriteSheet from '../assets/sprites/eduard-spritesheet.png';
 import robinSpriteSheet from '../assets/sprites/robin-spritesheet.png';
 import davidSpriteSheet from '../assets/sprites/david-spritesheet.png';
@@ -11,33 +12,50 @@ import valindraSpriteSheet from '../assets/sprites/valindra-spritesheet.png';
 import tarielSpriteSheet from '../assets/sprites/tariel-spritesheet.png';
 import tafrandirSpriteSheet from '../assets/sprites/tafrandir-spritesheet.png';
 
-export const getSprite = (championName: string) => {
-    switch (championName) {
-        case 'Eduard':
+// Upgraded
+import eduardHighKnightSpriteSheet from '../assets/sprites/eduard-high-knight-spritesheet.png';
+import eduardBarbarianSpriteSheet from '../assets/sprites/eduard-barbarian-spritesheet.png';
+import tafrandirBarbarianSpriteSheet from '../assets/sprites/tafrandir-barbarian-spritesheet.png';
+import tafrandirHighKnightSpriteSheet from '../assets/sprites/tafrandir-high-knight-spritesheet.png';
+import gurakHighKnightSpriteSheet from '../assets/sprites/gurak-high-knight-spritesheet.png';
+
+export const getSprite = (championName: string, className: string) => {
+    switch (`${championName}-${className}`) {
+        case 'Eduard-Fighter':
             return eduardSpriteSheet;
-        case 'Robin':
+        case 'Eduard-High Knight':
+            return eduardHighKnightSpriteSheet;
+        case 'Eduard-Barbarian':
+            return eduardBarbarianSpriteSheet;
+        case 'Robin-':
             return robinSpriteSheet;
-        case 'David':
+        case 'David-':
             return davidSpriteSheet;
-        case 'Aron':
+        case 'Aron-':
             return aronSpriteSheet;
-        case 'Gurak':
+        case 'Gurak-Fighter':
             return gurakSpriteSheet;
-        case 'Chiron':
+        case 'Gurak-High Knight':
+            return gurakHighKnightSpriteSheet;
+        case 'Chiron-':
             return chironSpriteSheet;
-        case 'Seth':
+        case 'Seth-':
             return sethSpriteSheet;
-        case 'Karina':
+        case 'Karina-':
             return karinaSpriteSheet;
-        case 'Firsha':
+        case 'Firsha-':
             return firshaSpriteSheet;
-        case 'Valindra':
+        case 'Valindra-':
             return valindraSpriteSheet;
-        case 'Taeriel':
+        case 'Taeriel-':
             return tarielSpriteSheet;
-        case 'Tafrandir':
+        case 'Tafrandir-Fighter':
             return tafrandirSpriteSheet;
+        case 'Tafrandir-Barbarian':
+            return tafrandirBarbarianSpriteSheet;
+        case 'Tafrandir-High Knight':
+            return tafrandirHighKnightSpriteSheet;
         default:
-            throw Error(`champion name ${championName} is not supported`);
+            throw Error(`championName: ${championName} and ${className} are not supported in getSprite`);
     }
 };

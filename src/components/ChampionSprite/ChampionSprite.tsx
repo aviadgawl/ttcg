@@ -14,6 +14,7 @@ interface ChampionSpriteProps {
     animation: 'magic' | 'walk' | 'idle',
     direction: 'right' | 'left' | 'up' | 'down',
     championName: string,
+    className: string
     onClick: () => void
 };
 
@@ -23,7 +24,7 @@ const ChampionSprite: FC<ChampionSpriteProps> = (props) => {
     useEffect(() => {
         const { maxFrames, y } = spriteSettings[props.animation][props.direction];
         const image = new Image();
-        image.src = getSprite(props.championName);
+        image.src = getSprite(props.championName, props.className);
         const canvas = canvasRef.current as any;
 
         if (canvas) {
@@ -40,7 +41,7 @@ const ChampionSprite: FC<ChampionSpriteProps> = (props) => {
 
             animate();
         }
-    }, [props.animation, props.direction, props.height, props.width, props.championName]);
+    }, [props.animation, props.direction, props.height, props.width, props.championName, props.className]);
 
     return <canvas onClick={props.onClick} ref={canvasRef} width={props.width} height={props.height} />;
 };

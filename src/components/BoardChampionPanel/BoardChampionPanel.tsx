@@ -72,6 +72,7 @@ const BoardChampionPanel: FC<BoardChampionAnimationsProps> = (props: BoardChampi
     <ChampionSprite onClick={props.onPanelClick}
       direction={getDirection(props.champion.direction)}
       championName={props.champion.name}
+      className={props.champion.upgrade?.name ?? props.champion.class}
       animation={animation}
       width={championSpriteSize}
       height={championSpriteSize} />

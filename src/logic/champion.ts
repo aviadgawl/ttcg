@@ -191,10 +191,9 @@ export const breakGear = (targetChampion: ChampionCard) => {
 export const applyTargetEffects = (effects: StatusEffect[], targetChampion: ChampionCard) => {
 
     const durationEffects = effects.filter(effect => effect.duration > 0);
-    targetChampion.statusEffects = targetChampion.statusEffects.concat(durationEffects);
+    targetChampion.statusEffects = [...targetChampion.statusEffects, ...durationEffects];
 
     const immediateEffects = effects.filter(effect => effect.duration === 0);
-
     immediateEffects.forEach(effects => {
         switch (effects.name) {
             case EffectStatus.BreakGear:
@@ -222,7 +221,9 @@ export const attack = (game: Game, attackingChampion: ChampionCard,
     const validTarget = checkValidTarget(target);
     if (!validTarget) return { status: 'Target is not a champion or crystal', targetedCard: target };
 
-    if (isChampion(target)) {
+    const targetIsChampion = isChampion(target);
+
+    if (targetIsChampion) {
 
         if (actionCard.isBackTargeting) {
             const attackDirection = getChampionDirection(sourceLocation, targetLocation);
@@ -255,9 +256,13 @@ export const attack = (game: Game, attackingChampion: ChampionCard,
             applyDamage(attackingChampion, actionCard, target);
     }
 
-    if (actionCard.targetEffects.length > 0 && isChampion(target)) {
-        applyTargetEffects(actionCard.targetEffects, target);
-        calculateStats(target);
+    if (actionCard.targetEffects.length > 0 && targetIsChampion) {
+        const existingSameCardEffect = target.statusEffects?.find(effect => effect.cardName === actionCard.name);
+        
+        if(!existingSameCardEffect){
+            applyTargetEffects(actionCard.targetEffects, target);
+            calculateStats(target);
+        }
     }
 
     if (target.currentHp <= 0) removeChampionFromBoard(game, targetLocation);

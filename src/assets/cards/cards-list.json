@@ -359,7 +359,7 @@
         "str": 0,
         "dex": 1,
         "int": 0,
-        "hp": 0,
+        "hp": 3,
         "bodyPart": "Body",
         "isBlocking": false
     },
@@ -370,7 +370,7 @@
         "str": 1,
         "dex": 0,
         "int": 0,
-        "hp": 0,
+        "hp": 3,
         "bodyPart": "Body",
         "isBlocking": false
     },
@@ -381,7 +381,7 @@
         "str": 0,
         "dex": 0,
         "int": 1,
-        "hp": 0,
+        "hp": 3,
         "bodyPart": "Body",
         "isBlocking": false
     },

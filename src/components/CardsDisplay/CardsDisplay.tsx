@@ -1,7 +1,6 @@
 import { FC, useMemo } from 'react';
 import { GameCard } from '../../logic/game-card';
 import { checkCardType } from '../../logic/player';
-import HandCard, { HandCardMode } from '../HandCard/HandCard';
 import { Button, Stack} from '@mui/material';
 import { CardType } from '../../logic/enums';
 import { groupBy } from '../../helpers/functions-helper';
