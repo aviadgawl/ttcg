@@ -208,7 +208,7 @@
         "str": 2,
         "dex": 0,
         "int": 0,
-        "hp": 3,
+        "hp": 6,
         "action": "Block",
         "requiredClass": "Fighter",
         "isBlocking": false
@@ -220,7 +220,7 @@
         "str": 1,
         "dex": 1,
         "int": 1,
-        "hp": 0,
+        "hp": 3,
         "action": "Heal",
         "requiredClass": "Acolyte",
         "isBlocking": false
@@ -232,7 +232,7 @@
         "str": 3,
         "dex": 0,
         "int": 0,
-        "hp": 0,
+        "hp": 3,
         "action": "Enrage",
         "requiredClass": "Fighter",
         "isBlocking": false
@@ -244,7 +244,7 @@
         "str": 2,
         "dex": 1,
         "int": 0,
-        "hp": 0,
+        "hp": 3,
         "action": "Back Stab",
         "requiredClass": "Rouge",
         "isBlocking": false
@@ -256,7 +256,7 @@
         "str": 0,
         "dex": 0,
         "int": 3,
-        "hp": 0,
+        "hp": 3,
         "action": "Arcane Power",
         "requiredClass": "Apprentice",
         "isBlocking": false
@@ -268,7 +268,7 @@
         "str": 0,
         "dex": 3,
         "int": 0,
-        "hp": 0,
+        "hp": 3,
         "action": "Haste",
         "requiredClass": "Rouge",
         "isBlocking": false
@@ -280,7 +280,7 @@
         "str": 1,
         "dex": 0,
         "int": 2,
-        "hp": 0,
+        "hp": 3,
         "action": "Ether Blade Slash",
         "requiredClass": "Apprentice",
         "isBlocking": false
@@ -288,11 +288,11 @@
     {
         "type": "Class",
         "name": "Battle Priest",
-        "class": "Mage",
+        "class": "Cleric",
         "str": 1,
         "dex": 0,
         "int": 1,
-        "hp": 3,
+        "hp": 6,
         "action": "Self Heal",
         "requiredClass": "Acolyte",
         "isBlocking": false

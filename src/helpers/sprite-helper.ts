@@ -18,6 +18,11 @@ import eduardBarbarianSpriteSheet from '../assets/sprites/eduard-barbarian-sprit
 import tafrandirBarbarianSpriteSheet from '../assets/sprites/tafrandir-barbarian-spritesheet.png';
 import tafrandirHighKnightSpriteSheet from '../assets/sprites/tafrandir-high-knight-spritesheet.png';
 import gurakHighKnightSpriteSheet from '../assets/sprites/gurak-high-knight-spritesheet.png';
+import gurakBarbarianSpriteSheet from '../assets/sprites/gurak-barbarian-spritesheet.png';
+import robinArcherSpriteSheet from '../assets/sprites/robin-archer-spritesheet.png';
+import robinShadowSpriteSheet from '../assets/sprites/robin-shadow-spritesheet.png';
+import davidBattlePriestSpriteSheet from '../assets/sprites/david-battle-priest-spritesheet.png';
+import davidHighPriestSpriteSheet from '../assets/sprites/david-high-priest-spritesheet.png';
 
 export const getSprite = (championName: string, className: string) => {
     switch (`${championName}-${className}`) {
@@ -27,27 +32,37 @@ export const getSprite = (championName: string, className: string) => {
             return eduardHighKnightSpriteSheet;
         case 'Eduard-Barbarian':
             return eduardBarbarianSpriteSheet;
-        case 'Robin-':
+        case 'Robin-Rouge':
             return robinSpriteSheet;
-        case 'David-':
+        case 'Robin-Archer':
+            return robinArcherSpriteSheet;
+        case 'Robin-Shadow':
+            return robinShadowSpriteSheet;
+        case 'David-Acolyte':
             return davidSpriteSheet;
-        case 'Aron-':
+        case 'David-High Priest':
+            return davidHighPriestSpriteSheet;
+        case 'David-Battle Priest':
+            return davidBattlePriestSpriteSheet;
+        case 'Aron-Apprentice':
             return aronSpriteSheet;
         case 'Gurak-Fighter':
             return gurakSpriteSheet;
         case 'Gurak-High Knight':
             return gurakHighKnightSpriteSheet;
-        case 'Chiron-':
+        case 'Gurak-Barbarian':
+            return gurakBarbarianSpriteSheet;
+        case 'Chiron-Acolyte':
             return chironSpriteSheet;
-        case 'Seth-':
+        case 'Seth-Rouge':
             return sethSpriteSheet;
-        case 'Karina-':
+        case 'Karina-Apprentice':
             return karinaSpriteSheet;
-        case 'Firsha-':
+        case 'Firsha-Acolyte':
             return firshaSpriteSheet;
-        case 'Valindra-':
+        case 'Valindra-Apprentice':
             return valindraSpriteSheet;
-        case 'Taeriel-':
+        case 'Taeriel-Rouge':
             return tarielSpriteSheet;
         case 'Tafrandir-Fighter':
             return tafrandirSpriteSheet;

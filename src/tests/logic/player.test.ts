@@ -122,7 +122,8 @@ describe('Player Logic Tests', () => {
             hitPoints: 10,
             hitArea: {},
             description: 'Test champion',
-            effect: null
+            effect: null,
+            isAttachedAction: false
         } as ChampionCard;
 
         mockActionCard = {

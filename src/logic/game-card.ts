@@ -153,6 +153,8 @@ export interface ChampionCard extends SummoningCard {
 
     statusEffects: StatusEffect[];
     direction: ChampionDirection;
+
+    isAttachedAction: boolean
 }
 
 export interface PlayerActionLogRecord {

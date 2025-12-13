@@ -566,6 +566,7 @@ export const refreshResources = (game: Game, nextPlayerIndex: number) => {
         if (isChampion(boardPanel) && boardPanel.playerIndex === nextPlayerIndex) {
 
             boardPanel.stm = 2;
+            boardPanel.isAttachedAction = false;
 
             refreshLearnedActions(boardPanel);
             updateChampionStatusEffects(boardPanel);
@@ -634,8 +635,11 @@ export const isValidForEquip = (championCard: ChampionCard, gearCard: GearCard):
 }
 
 export const isValidForAttach = (championCard: ChampionCard, actionCard: ActionCard): ValidationResult => {
+    if(championCard.isAttachedAction)
+        return { message: `An action were already attached this turn to ${championCard.name}`, isValid: false}
+    
     if (actionCard.requiredClassName !== null && championCard.calClass !== actionCard.requiredClassName && championCard.class !== actionCard.requiredClassName)
-        return { message: `Champion das not have the required class of ${actionCard.requiredClassName}`, isValid: false };
+        return { message: `Champion does not have the required class of ${actionCard.requiredClassName}`, isValid: false };
 
     if (actionCard.requiredGearCategory !== null) {
         const isRequiredGearFound = championCard.body?.category === actionCard.requiredGearCategory

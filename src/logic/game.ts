@@ -56,7 +56,8 @@ export const cardsJsonToObjects = (cardsListJson: any): GameCard[] => cardsListJ
                     body: null, rightHand: null, leftHand: null,
                     class: x.class, calClass: x.class, upgrade: null, calHp: x.hp,
                     direction: ChampionDirection.Up,
-                    race: x.race
+                    race: x.race,
+                    isAttachedAction: false
                 } as ChampionCard);
                 break;
             case 'Class':

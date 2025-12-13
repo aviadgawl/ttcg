@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/ttcg/static/css/main.69aa4fb7.css",
-    "main.js": "/ttcg/static/js/main.1570e97b.js",
+    "main.js": "/ttcg/static/js/main.4766a9f8.js",
     "static/media/WarMage.png": "/ttcg/static/media/WarMage.b9d64aaec59d6ed573e0.png",
     "static/media/EtherBladeSlash.png": "/ttcg/static/media/EtherBladeSlash.803a5e9b695d63a32f2c.png",
     "static/media/RefreshMe.png": "/ttcg/static/media/RefreshMe.d1ab3397d77d9648e5fb.png",
@@ -23,6 +23,7 @@
     "static/media/SwordSwipe.png": "/ttcg/static/media/SwordSwipe.062677b14a4485f0c045.png",
     "static/media/KeepMoving.png": "/ttcg/static/media/KeepMoving.538e3a2afef1ebd491cb.png",
     "static/media/Regroup.png": "/ttcg/static/media/Regroup.5a912808c9e2ea6d90a8.png",
+    "static/media/gurak-high-knight-spritesheet.png": "/ttcg/static/media/gurak-high-knight-spritesheet.d0db697491eaa90d8335.png",
     "static/media/EnergyBall.png": "/ttcg/static/media/EnergyBall.8eb312006bb346e73d47.png",
     "static/media/INeedSomeGear.png": "/ttcg/static/media/INeedSomeGear.f5fb94c5fc381b04ddac.png",
     "static/media/HighKnight.png": "/ttcg/static/media/HighKnight.66027157361601eb6ad0.png",
@@ -33,11 +34,15 @@
     "static/media/AxeSwipe.png": "/ttcg/static/media/AxeSwipe.db8a886a7a4d61ef541c.png",
     "static/media/DaggerThrow.png": "/ttcg/static/media/DaggerThrow.74b6bb2cea14972b7c2f.png",
     "static/media/HighPriest.png": "/ttcg/static/media/HighPriest.5f328bea941ce3a0eecb.png",
+    "static/media/tafrandir-high-knight-spritesheet.png": "/ttcg/static/media/tafrandir-high-knight-spritesheet.d6ea6727b74bc2c9682a.png",
     "static/media/SelfHeal.png": "/ttcg/static/media/SelfHeal.5a1b834851196bb14a97.png",
     "static/media/DaggerSlash.png": "/ttcg/static/media/DaggerSlash.fed46a7929e1ab9b62dc.png",
     "static/media/MightyBlow.png": "/ttcg/static/media/MightyBlow.2d93f04c143ed0e98a71.png",
     "static/media/Shadow.png": "/ttcg/static/media/Shadow.c056e6c7b2217d53efa8.png",
     "static/media/ShieldBash.png": "/ttcg/static/media/ShieldBash.882df2d870cd79e93a2a.png",
+    "static/media/eduard-barbarian-spritesheet.png": "/ttcg/static/media/eduard-barbarian-spritesheet.d55ca1bec3246a6fd231.png",
+    "static/media/gurak-barbarian-spritesheet.png": "/ttcg/static/media/gurak-barbarian-spritesheet.5185b9faf8c5a33aa514.png",
+    "static/media/david-high-priest-spritesheet.png": "/ttcg/static/media/david-high-priest-spritesheet.9100d0419283fe116eb5.png",
     "static/media/ArcanePower.png": "/ttcg/static/media/ArcanePower.c9f792ebb8372dda4e62.png",
     "static/media/Haste.png": "/ttcg/static/media/Haste.6543423194cfc716ba10.png",
     "static/media/ArrowShot.png": "/ttcg/static/media/ArrowShot.c30f7cefbae8db2f82c2.png",
@@ -48,8 +53,12 @@
     "static/media/LearnQuick.png": "/ttcg/static/media/LearnQuick.43718956a1593f56dff3.png",
     "static/media/StrengthBlessing.png": "/ttcg/static/media/StrengthBlessing.9b112038e4ac063d3b3f.png",
     "static/media/DexterityBlessing.png": "/ttcg/static/media/DexterityBlessing.dd274ae544cc0d67ef49.png",
+    "static/media/david-battle-priest-spritesheet.png": "/ttcg/static/media/david-battle-priest-spritesheet.cea108f5cea0c41cdaa8.png",
+    "static/media/tafrandir-barbarian-spritesheet.png": "/ttcg/static/media/tafrandir-barbarian-spritesheet.f114938e0b2fde7ff526.png",
     "static/media/GetReady.png": "/ttcg/static/media/GetReady.a5f2f938456bcbeec312.png",
+    "static/media/robin-archer-spritesheet.png": "/ttcg/static/media/robin-archer-spritesheet.76b869af12fb35c21e1d.png",
     "static/media/PlateArmor.png": "/ttcg/static/media/PlateArmor.9e91f75a91f6b073e05b.png",
+    "static/media/robin-shadow-spritesheet.png": "/ttcg/static/media/robin-shadow-spritesheet.09046602a9f1a808cef9.png",
     "static/media/Heal.png": "/ttcg/static/media/Heal.8fe107b1026e69085da6.png",
     "static/media/Firsha.png": "/ttcg/static/media/Firsha.1b9eb75bc37f3065bc14.png",
     "static/media/RobeArmor.png": "/ttcg/static/media/RobeArmor.551a8250b65cffe4143e.png",
@@ -80,6 +89,7 @@
     "static/media/aron-spritesheet.png": "/ttcg/static/media/aron-spritesheet.054d721df830b097f2c1.png",
     "static/media/david-spritesheet.png": "/ttcg/static/media/david-spritesheet.924166dc35843d776e29.png",
     "static/media/eduard-spritesheet.png": "/ttcg/static/media/eduard-spritesheet.9b1697e10c752a6d1b03.png",
+    "static/media/eduard-high-knight-spritesheet.png": "/ttcg/static/media/eduard-high-knight-spritesheet.50cf0459ce7bc96ffd7e.png",
     "static/media/BasicHit.png": "/ttcg/static/media/BasicHit.dd906098cfee3f3ef7fe.png",
     "static/media/BackStab.png": "/ttcg/static/media/BackStab.7cfed83058dc74d2c80f.png",
     "static/media/gurak-spritesheet.png": "/ttcg/static/media/gurak-spritesheet.3cdf844e9227797df2be.png",
@@ -107,10 +117,10 @@
     "static/media/draw.mp3": "/ttcg/static/media/draw.ceb460e6016f04e97598.mp3",
     "index.html": "/ttcg/index.html",
     "main.69aa4fb7.css.map": "/ttcg/static/css/main.69aa4fb7.css.map",
-    "main.1570e97b.js.map": "/ttcg/static/js/main.1570e97b.js.map"
+    "main.4766a9f8.js.map": "/ttcg/static/js/main.4766a9f8.js.map"
   },
   "entrypoints": [
     "static/css/main.69aa4fb7.css",
-    "static/js/main.1570e97b.js"
+    "static/js/main.4766a9f8.js"
   ]
 }

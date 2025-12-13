@@ -95,6 +95,7 @@ describe('Champion Logic Tests', () => {
             hitPoints: 10,
             isBlocking: false,
             image: 'test-image.png',
+            isAttachedAction: false
         } as ChampionCard;
 
         mockActionCard = {
