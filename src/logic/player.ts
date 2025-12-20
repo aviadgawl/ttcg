@@ -487,6 +487,8 @@ export const attachAction = (game: Game, player: Player, actionCard: ActionCard,
     calculateStats(targetChampion);
     removeCard(player.hand, actionCard);
 
+    targetChampion.isAttachedAction = true;
+
     return 'success';
 }
 
