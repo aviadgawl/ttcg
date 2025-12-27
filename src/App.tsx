@@ -6,6 +6,9 @@ import { useAppSelector, useAppDispatch } from './redux/hooks';
 import { setIsLoggedIn } from './redux/store';
 import { GameStatus } from './logic/enums';
 import Login from './components/Login/Login';
+import { Button, Box } from '@mui/material';
+import { loggedInKey } from './components/Shared/Configs/main.config';
+import MyTypography from './components/Shared/MUI/MyTypography';
 import './App.css';
 
 function App() {
@@ -18,7 +21,7 @@ function App() {
   const isLoggedIn = useAppSelector((state) => state.gameActions.isLoggedIn);
 
   useEffect(() => {
-    const isLoggedInItem = localStorage.getItem("isLoggedIn");
+    const isLoggedInItem = localStorage.getItem(loggedInKey);
     if (isLoggedInItem) {
       dispatch(setIsLoggedIn(true));
       setCurrentDisplay(1);
@@ -45,13 +48,23 @@ function App() {
 
   const handleDisplaySelect = (event: React.SyntheticEvent, newValue: number) => {
     setCurrentDisplay(newValue);
-  }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem(loggedInKey);
+    dispatch(setIsLoggedIn(false));
+    setCurrentDisplay(0);
+  };
 
   return (
     <main className="App">
       <header>
         <GameTabs disabledTabIndexes={disabledTabIndex} displayMode={currentDisplay} onModeClick={handleDisplaySelect} />
-        <div className="Version-number">2.1.3</div>
+
+        <Box display="flex" justifyContent="center" alignContent="center" gap={2}>
+          <Button variant='outlined' onClick={handleLogout}><MyTypography>Logout</MyTypography></Button>
+          <MyTypography>v.2.1.4</MyTypography>
+        </Box>
       </header>
       {currentDisplay === 0 && <Login />}
       {currentDisplay === 1 && <DeckBuilder />}

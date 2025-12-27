@@ -4,6 +4,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from '../../firebase/firebase';
 import { setIsLoggedIn } from '../../redux/store';
 import { useAppDispatch } from '../../redux/hooks';
+import { loggedInKey } from '../Shared/Configs/main.config';
 import styles from './Login.module.css';
 
 const Login: FC = () => {
@@ -22,7 +23,7 @@ const Login: FC = () => {
       .then((userCredential) => {
         //const user = userCredential.user;
         dispatch(setIsLoggedIn(true));
-        localStorage.setItem("isLoggedIn", 'true');
+        localStorage.setItem(loggedInKey, 'true');
       })
       .catch((error) => {
         console.log(`${error.code} ${error.message}`);

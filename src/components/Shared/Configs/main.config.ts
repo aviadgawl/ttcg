@@ -1,0 +1,1 @@
+export const loggedInKey = "isLoggedIn";
