@@ -9,6 +9,7 @@ import Login from './components/Login/Login';
 import { Button, Box } from '@mui/material';
 import { loggedInKey } from './components/Shared/Configs/main.config';
 import MyTypography from './components/Shared/MUI/MyTypography';
+import { useIsMobile } from './components/Shared/Hooks/useIsMobile.hook';
 import './App.css';
 
 function App() {
@@ -19,6 +20,8 @@ function App() {
 
   const gameStatus = useAppSelector((state) => state.gameActions.game.status);
   const isLoggedIn = useAppSelector((state) => state.gameActions.isLoggedIn);
+
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const isLoggedInItem = localStorage.getItem(loggedInKey);
@@ -61,9 +64,9 @@ function App() {
       <header>
         <GameTabs disabledTabIndexes={disabledTabIndex} displayMode={currentDisplay} onModeClick={handleDisplaySelect} />
 
-        <Box display="flex" justifyContent="center" alignContent="center" gap={2}>
-          <Button variant='outlined' onClick={handleLogout}><MyTypography>Logout</MyTypography></Button>
+        <Box display="flex" flexDirection={isMobile ? "column" : "row-reverse"} justifyContent="center" alignContent="center" gap={isMobile ? 0 : 2}>
           <MyTypography>v.2.1.4</MyTypography>
+          <Button onClick={handleLogout}><MyTypography>Logout</MyTypography></Button>
         </Box>
       </header>
       {currentDisplay === 0 && <Login />}

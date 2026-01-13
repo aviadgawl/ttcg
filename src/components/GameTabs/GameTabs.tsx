@@ -1,7 +1,5 @@
 import { FC } from 'react';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Box from '@mui/material/Box';
+import { Tabs, Tab, Box } from '@mui/material';
 import styles from './GameTabs.module.css';
 
 function a11yProps(index: number) {
