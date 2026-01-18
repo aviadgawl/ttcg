@@ -1,4 +1,4 @@
-import { GameCard, isCrystal, SummoningCard, ChampionCard, isChampion, ActionCard, AllowedBoardLocationResponse, BoardLocation, PlayerActionLogRecord, StatusEffect, isGear, HitArea } from './game-card';
+import { GameCard, isCrystal, isSummoning, SummoningCard, ChampionCard, isChampion, ActionCard, AllowedBoardLocationResponse, BoardLocation, PlayerActionLogRecord, StatusEffect, isGear, HitArea } from './game-card';
 import { ActionDirections, GameStatus, ActionType, Stats, EffectStatus, MathModifier, ChampionDirection } from './enums';
 import { Game } from './game';
 import { Player } from './player';
@@ -9,7 +9,7 @@ interface ChampionActionResult {
 }
 
 export const checkValidTarget = (target: GameCard): boolean => {
-    return isChampion(target) || isCrystal(target);
+    return isSummoning(target);
 }
 
 export const applyHeal = (sourceChampion: ChampionCard, actionCard: ActionCard, target: SummoningCard) => {
@@ -92,6 +92,10 @@ export const getChampionDirection = (sourceLocation: BoardLocation, targetLocati
     if (sourceLocation.columnIndex > targetLocation.columnIndex) return ChampionDirection.Left;
 
     return null;
+}
+
+export const removeSummoningObject = (game: Game, targetLocation: BoardLocation) => {
+    game.board[targetLocation.rowIndex][targetLocation.columnIndex] = null;
 }
 
 export const removeChampionFromBoard = (game: Game, targetLocation: BoardLocation) => {
@@ -219,7 +223,7 @@ export const attack = (game: Game, attackingChampion: ChampionCard,
     if (target === null) return { status: 'Target is not found', targetedCard: null };
 
     const validTarget = checkValidTarget(target);
-    if (!validTarget) return { status: 'Target is not a champion or crystal', targetedCard: target };
+    if (!validTarget) return { status: 'Target is not a summoning object', targetedCard: target };
 
     const targetIsChampion = isChampion(target);
 
@@ -265,7 +269,12 @@ export const attack = (game: Game, attackingChampion: ChampionCard,
         }
     }
 
-    if (target.currentHp <= 0) removeChampionFromBoard(game, targetLocation);
+    if (target.currentHp <= 0) {
+        if(isChampion(target))
+            removeChampionFromBoard(game, targetLocation);
+        else
+            removeSummoningObject(game, targetLocation);
+    }
 
     return { status: 'success', targetedCard: target };
 }
@@ -278,7 +287,7 @@ export const calculateDistance = (sourceLocation: BoardLocation, targetLocation:
     return distance;
 }
 
-export const checkAndPushAllowedLocation = (board: (GameCard | null)[][], allowedLocations: BoardLocation[], newLocation: BoardLocation, stopOnBlockers: boolean) => {
+export const checkAndPushAllowedLocation = (board: (GameCard | null)[][], allowedLocations: BoardLocation[], newLocation: BoardLocation, stopOnExistingObject: boolean) => {
     if (board.length < newLocation.rowIndex) {
         console.log(`checkAndPushAllowedLocation newLocation.rowIndex: ${newLocation.rowIndex} is more then max row are ${board.length}`);
         return;
@@ -291,10 +300,12 @@ export const checkAndPushAllowedLocation = (board: (GameCard | null)[][], allowe
 
     const currentLocation = board[newLocation.rowIndex][newLocation.columnIndex];
 
-    if (stopOnBlockers && currentLocation !== null) return true;
+    if (stopOnExistingObject && currentLocation !== null) return true;
 
     if (!allowedLocations.some(location => (location.rowIndex === newLocation.rowIndex && location.columnIndex === newLocation.columnIndex)))
         allowedLocations.push(newLocation);
+
+    if(currentLocation !== null && isSummoning(currentLocation) && (currentLocation as SummoningCard).isBlocking) return true;
 }
 
 export const checkAndPushHitAreaUpDownLocations = (hitArea: HitArea | undefined,
@@ -339,7 +350,7 @@ export const getBoardLocationInStraightPath = (board: (GameCard | null)[][],
 
     const allowedLocations: BoardLocation[] = [];
 
-    const stopOnBlockers = !actionCard.isFreeTargeting;
+    const stopOnExistingObject = !actionCard.isFreeTargeting;
     const initialRowIndex = initialLocation.rowIndex;
     const initialColumnIndex = initialLocation.columnIndex;
 
@@ -348,12 +359,12 @@ export const getBoardLocationInStraightPath = (board: (GameCard | null)[][],
     for (let i = initialRowIndex + minDistance, distanceIndex = minDistance; i < board.length && i <= maxRowIndex; i++, distanceIndex++) {
 
         const newLocation: BoardLocation = { rowIndex: i, columnIndex: initialColumnIndex };
-        const shouldStopOnBlockers = checkAndPushAllowedLocation(board, allowedLocations, newLocation, stopOnBlockers);
+        const shouldStop = checkAndPushAllowedLocation(board, allowedLocations, newLocation, stopOnExistingObject);
 
         const hitArea = actionCard?.hitAreas && actionCard.hitAreas[distanceIndex];
-        checkAndPushHitAreaUpDownLocations(hitArea, board, allowedLocations, i, initialColumnIndex, stopOnBlockers);
+        checkAndPushHitAreaUpDownLocations(hitArea, board, allowedLocations, i, initialColumnIndex, stopOnExistingObject);
 
-        if (shouldStopOnBlockers) break;
+        if (shouldStop) break;
     }
 
     const minRowIndex: number = initialRowIndex - maxDistance;
@@ -361,12 +372,12 @@ export const getBoardLocationInStraightPath = (board: (GameCard | null)[][],
     for (let i = initialRowIndex - minDistance, distanceIndex = minDistance; i >= 0 && i >= minRowIndex; i--, distanceIndex++) {
 
         const newLocation: BoardLocation = { rowIndex: i, columnIndex: initialColumnIndex };
-        const shouldStopOnBlockers = checkAndPushAllowedLocation(board, allowedLocations, newLocation, stopOnBlockers);
+        const shouldStop = checkAndPushAllowedLocation(board, allowedLocations, newLocation, stopOnExistingObject);
 
         const hitArea = actionCard?.hitAreas && actionCard.hitAreas[distanceIndex];
-        checkAndPushHitAreaUpDownLocations(hitArea, board, allowedLocations, i, initialColumnIndex, stopOnBlockers);
+        checkAndPushHitAreaUpDownLocations(hitArea, board, allowedLocations, i, initialColumnIndex, stopOnExistingObject);
 
-        if (shouldStopOnBlockers) break;
+        if (shouldStop) break;
     }
 
     const maxColumnIndex: number = initialColumnIndex + maxDistance;
@@ -374,12 +385,12 @@ export const getBoardLocationInStraightPath = (board: (GameCard | null)[][],
     for (let i = initialColumnIndex + minDistance, distanceIndex = minDistance; i < board[initialRowIndex].length && i <= maxColumnIndex; i++, distanceIndex++) {
 
         const newLocation: BoardLocation = { rowIndex: initialRowIndex, columnIndex: i };
-        const shouldStopOnBlockers = checkAndPushAllowedLocation(board, allowedLocations, newLocation, stopOnBlockers);
+        const shouldStop = checkAndPushAllowedLocation(board, allowedLocations, newLocation, stopOnExistingObject);
 
         const hitArea = actionCard?.hitAreas && actionCard.hitAreas[distanceIndex];
-        checkAndPushHitAreaLeftRightLocations(hitArea, board, allowedLocations, initialRowIndex, i, stopOnBlockers);
+        checkAndPushHitAreaLeftRightLocations(hitArea, board, allowedLocations, initialRowIndex, i, stopOnExistingObject);
 
-        if (shouldStopOnBlockers) break;
+        if (shouldStop) break;
     }
 
     const minColumnIndex: number = initialColumnIndex - maxDistance;
@@ -387,12 +398,12 @@ export const getBoardLocationInStraightPath = (board: (GameCard | null)[][],
     for (let i = initialColumnIndex - minDistance, distanceIndex = minDistance; i >= 0 && i >= minColumnIndex; i--, distanceIndex++) {
 
         const newLocation: BoardLocation = { rowIndex: initialRowIndex, columnIndex: i };
-        const shouldStopOnBlockers = checkAndPushAllowedLocation(board, allowedLocations, newLocation, stopOnBlockers);
+        const shouldStop = checkAndPushAllowedLocation(board, allowedLocations, newLocation, stopOnExistingObject);
 
         const hitArea = actionCard?.hitAreas && actionCard.hitAreas[distanceIndex];
-        checkAndPushHitAreaLeftRightLocations(hitArea, board, allowedLocations, initialRowIndex, i, stopOnBlockers);
+        checkAndPushHitAreaLeftRightLocations(hitArea, board, allowedLocations, initialRowIndex, i, stopOnExistingObject);
 
-        if (shouldStopOnBlockers) break;
+        if (shouldStop) break;
     }
 
     return allowedLocations;

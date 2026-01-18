@@ -807,10 +807,10 @@ describe('Champion Logic Tests', () => {
         it('should prevent attack on invalid target', () => {
             const sourceLocation: BoardLocation = { rowIndex: 3, columnIndex: 3 };
             const targetLocation: BoardLocation = { rowIndex: 3, columnIndex: 4 };
-            mockGame.board[3][4] = { ...mockActionCard, hp: 10, calHp: 10, currentHp: 10, isBlocking: false } as unknown as SummoningCard;
+            mockGame.board[3][4] = { ...mockActionCard, hp: 10, calHp: 10, currentHp: 10, isBlocking: false } as GameCard;
 
             const result = attack(mockGame, mockChampion, mockActionCard, sourceLocation, targetLocation);
-            expect(result.status).toContain('Target is not a champion or crystal');
+            expect(result.status).toContain('Target location row index: 3 and column index: 4 is not in allowed locations');
         });
 
         it('should successfully damage target', () => {

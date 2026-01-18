@@ -34,7 +34,7 @@ export const getSprite = (championName: string, className: string) => {
             return eduardBarbarianSpriteSheet;
         case 'Robin-Rouge':
             return robinSpriteSheet;
-        case 'Robin-Archer':
+        case 'Robin-Hawkeye':
             return robinArcherSpriteSheet;
         case 'Robin-Shadow':
             return robinShadowSpriteSheet;

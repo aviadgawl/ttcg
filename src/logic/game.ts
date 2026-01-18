@@ -9,7 +9,8 @@ import {
     OrderCard,
     OrderCardReward,
     GameEffect,
-    Damage
+    Damage,
+    SummoningCard
 } from './game-card';
 import {
     ActionType,
@@ -127,7 +128,7 @@ export const cardsJsonToObjects = (cardsListJson: any): GameCard[] => cardsListJ
                 } as OrderCard);
                 break;
             case CardType.CrystalCard:
-                 newCardsArray.push({
+                newCardsArray.push({
                     guid: createGuid(),
                     image: getImage(x.name),
                     playerIndex: 0,
@@ -137,6 +138,17 @@ export const cardsJsonToObjects = (cardsListJson: any): GameCard[] => cardsListJ
                     isBlocking: x.isBlocking,
                     effect: {} as GameEffect
                 } as CrystalCard);
+                break;
+            case CardType.SummoningCard:
+                newCardsArray.push({
+                    guid: createGuid(),
+                    image: getImage(x.name),
+                    playerIndex: -1,
+                    name: x.name,
+                    hp: x.hp,
+                    currentHp: x.hp,
+                    isBlocking: x.isBlocking
+                } as SummoningCard);
                 break;
             default:
                 break;
@@ -151,14 +163,17 @@ const createBoard = (): Array<Array<GameCard | null>> => {
     const maxRows = 11;
     const board = new Array(new Array<GameCard | null>(7));
 
-    const playerOneCrystal = cardsList.find( card => card.name === 'Mountains Spirit')!;
-    let playerTwoCrystal = cardsList.find( card => card.name === 'Forest Spirit')!;
+    const boulder = cardsList.find(card => card.name === 'Boulder')!;
 
-    playerTwoCrystal = {...playerTwoCrystal, playerIndex: 1};
+    const playerOneCrystal = cardsList.find(card => card.name === 'Mountains Spirit')!;
+    let playerTwoCrystal = cardsList.find(card => card.name === 'Forest Spirit')!;
+
+    playerTwoCrystal = { ...playerTwoCrystal, playerIndex: 1 };
 
     for (let index = 0; index < maxRows; index++) {
         if (index === (maxRows - 1)) board[index] = [null, null, null, playerOneCrystal, null, null, null];
         else if (index === 0) board[index] = [null, null, null, playerTwoCrystal, null, null, null];
+        else if (index === 5) board[index] = [null, {...boulder}, null, null, null, {...boulder}, null]
         else board[index] = [null, null, null, null, null, null, null];
     }
 

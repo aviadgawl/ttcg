@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { useAppDispatch, useAppSelector, usePlayerAction, useChampionAction } from '../../redux/hooks';
 import { setSelectedActionData, initialState } from '../../redux/store';
 import { GameStoreActionTypes } from '../../redux/types';
-import { isCrystal, CrystalCard, isChampion, BoardLocation } from '../../logic/game-card';
+import { isCrystal, CrystalCard, isChampion, BoardLocation, SummoningCard } from '../../logic/game-card';
 import BoardChampion from '../BoardChampion/BoardChampion';
 import BoardCrystal from '../BoardCrystal/BoardCrystal';
 import { FaHandPointer } from "react-icons/fa";
@@ -53,6 +53,7 @@ const Board: FC = () => {
             {row.map((card, columnIndex) => {
               return <td key={`${rowIndex}-${columnIndex}`}>
                 <div className={styles.Panel}>
+
                   {isAllowedLocation(rowIndex, columnIndex) &&
                     <button className={`${styles.TargetButton} ${shouldRotate && 'App-rotate'}`}
                       onClick={() => handleAction(rowIndex, columnIndex)}>
@@ -67,9 +68,9 @@ const Board: FC = () => {
                       shouldRotate={shouldRotate}
                       isSelected={isSelectedChampion(rowIndex, columnIndex)} />}
 
-                  {isCrystal(card) &&
+                  {card != null && !isChampion(card) &&
                     <BoardCrystal className={`${styles.Object} ${shouldRotate && 'App-rotate'}`}
-                      crystal={card as unknown as CrystalCard} />}
+                      crystal={card as unknown as SummoningCard} />}
 
                 </div>
               </td>

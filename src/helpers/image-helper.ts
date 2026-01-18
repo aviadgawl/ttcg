@@ -83,6 +83,8 @@ import LearnQuick from '../assets/images/LearnQuick.png';
 // Crystals
 import ForestSpirit from '../assets/images/ForestSpirit.png';
 import MountainsSpirit from '../assets/images/MountainsSpirit.png';
+// Objects
+import Boulder from '../assets/images/Boulder.png';
 
 
 export const getImage = (id: string): string => {
@@ -251,6 +253,9 @@ export const getImage = (id: string): string => {
             return MountainsSpirit;
         case 'Forest Spirit':
             return ForestSpirit
+        // Objects
+        case 'Boulder':
+            return Boulder;
         default:
             return '';
     }

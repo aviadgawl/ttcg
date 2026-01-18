@@ -2,12 +2,20 @@
     {
         "name": "Forest Spirit",
         "hp": "30",
-        "type": "CrystalCard"
+        "type": "CrystalCard",
+        "isBlocking": true
     },
     {
         "name": "Mountains Spirit",
         "hp": "30",
-        "type": "CrystalCard"
+        "type": "CrystalCard",
+        "isBlocking": true
+    },
+    {
+        "type": "SummoningCard",
+        "name": "Boulder",
+        "hp": 21,
+        "isBlocking": true
     },
     {
         "type": "ChampionCard",

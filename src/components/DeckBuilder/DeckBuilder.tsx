@@ -12,6 +12,8 @@ import MyTypography from '../Shared/MUI/MyTypography';
 import styles from './DeckBuilder.module.css';
 import GameCardDraw from '../GameCardDraw/GameCardDraw';
 
+const cardsToFilterOut = ['Forest Spirit', 'Mountains Spirit', 'Boulder'];
+
 const DeckBuilder: FC = () => {
   const player = useAppSelector((state) => {
     const playerIndex = state.gameActions.game.playerIndex;
@@ -20,7 +22,7 @@ const DeckBuilder: FC = () => {
   const cardsList = useAppSelector((state) => state.gameActions.cardsList);
 
   const filteredCardList = useMemo(() => {
-    return cardsList.filter(card => card.name !== 'Forest Spirit' && card.name !== 'Mountains Spirit');
+    return cardsList.filter(card => !cardsToFilterOut.some( cardName => cardName === card.name ) );
   },[cardsList]);
 
   const playerAction = usePlayerAction();
