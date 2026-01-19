@@ -214,12 +214,6 @@ export const attack = (game: Game, attackingChampion: ChampionCard,
 
     const target = game.board[targetLocation.rowIndex][targetLocation.columnIndex] as unknown as SummoningCard;;
 
-    if (attackingChampion.statusEffects.some(x => x.name === EffectStatus.Paralyze))
-        return { status: `Champion is under the effect of ${EffectStatus.Paralyze} and can not move or attack`, targetedCard: null };
-
-    if (attackingChampion.statusEffects.some(x => x.name === EffectStatus.Silence))
-        return { status: `Champion is under the effect of ${EffectStatus.Silence}`, targetedCard: null };
-
     if (target === null) return { status: 'Target is not found', targetedCard: null };
 
     const validTarget = checkValidTarget(target);
@@ -245,9 +239,12 @@ export const attack = (game: Game, attackingChampion: ChampionCard,
             return { status: 'Target is immune to magical damage', targetedCard: target };
     }
 
-    const allowedLocation = getBoardLocationInStraightPath(game.board, sourceLocation, actionCard);
+    const result = getChampionsActionsAllowedBoardLocations(game, actionCard, sourceLocation);
 
-    if (!allowedLocation.some(allowedLocation => (allowedLocation.rowIndex === targetLocation.rowIndex && allowedLocation.columnIndex === targetLocation.columnIndex)))
+    if (result.message !== 'success')
+        return { status: result.message, targetedCard: target };
+
+    if (!result.locations.some(allowedLocation => (allowedLocation.rowIndex === targetLocation.rowIndex && allowedLocation.columnIndex === targetLocation.columnIndex)))
         return {
             status: `Target location row index: ${targetLocation.rowIndex} and column index: ${targetLocation.columnIndex} is not in allowed locations`,
             targetedCard: target
@@ -262,15 +259,15 @@ export const attack = (game: Game, attackingChampion: ChampionCard,
 
     if (actionCard.targetEffects.length > 0 && targetIsChampion) {
         const existingSameCardEffect = target.statusEffects?.find(effect => effect.cardName === actionCard.name);
-        
-        if(!existingSameCardEffect){
+
+        if (!existingSameCardEffect) {
             applyTargetEffects(actionCard.targetEffects, target);
             calculateStats(target);
         }
     }
 
     if (target.currentHp <= 0) {
-        if(isChampion(target))
+        if (isChampion(target))
             removeChampionFromBoard(game, targetLocation);
         else
             removeSummoningObject(game, targetLocation);
@@ -305,7 +302,7 @@ export const checkAndPushAllowedLocation = (board: (GameCard | null)[][], allowe
     if (!allowedLocations.some(location => (location.rowIndex === newLocation.rowIndex && location.columnIndex === newLocation.columnIndex)))
         allowedLocations.push(newLocation);
 
-    if(currentLocation !== null && isSummoning(currentLocation) && (currentLocation as SummoningCard).isBlocking) return true;
+    if (currentLocation !== null && isSummoning(currentLocation) && (currentLocation as SummoningCard).isBlocking) return true;
 }
 
 export const checkAndPushHitAreaUpDownLocations = (hitArea: HitArea | undefined,
@@ -441,16 +438,16 @@ export const removeUsedAttachedActionCards = (sourceChampion: ChampionCard, play
     const usedAttachedActionCards = sourceChampion.attachedActionsCards
         .filter(actionCard => (!actionCard.isRepeatable && actionCard.wasPlayed) || (actionCard.isRepeatable && actionCard.repeatableActivationLeft === 0));
 
-        usedAttachedActionCards.forEach((actionCard) => {
+    usedAttachedActionCards.forEach((actionCard) => {
         checkAndRemoveFromAttachedActions(player, sourceChampion, actionCard);
     });
 };
 
 export const shouldLowerStamina = (player: Player, actionCard: ActionCard, isAttachedAction: boolean) => {
-    if(isAttachedAction)
+    if (isAttachedAction)
         return false;
-    
-    if(actionCard.isRepeatable){
+
+    if (actionCard.isRepeatable) {
         const lastPlayedActionRecord = getLastPlayedActionGuid(player);
         return lastPlayedActionRecord?.card?.guid !== actionCard.guid;
     };
@@ -616,14 +613,12 @@ export const getChampionsActionsAllowedBoardLocations = (game: Game, actionCard:
     const sourceChampion = game.board[sourceBoardLocation.rowIndex][sourceBoardLocation.columnIndex];
 
     if (sourceChampion === null || !isChampion(sourceChampion))
-        return { message: 'Champion was not found', locations: resultLocations };
+        return { message: 'Acting champion was not found', locations: resultLocations };
 
     if (sourceChampion.statusEffects.some(x => x.name === EffectStatus.Paralyze))
         return { message: `Champion is under the effect of ${EffectStatus.Paralyze} and can not move or attack`, locations: resultLocations };
 
-    const isMovementCard = actionCard.actionType === ActionType.Movement;
-
-    if (isMovementCard) {
+    if (actionCard.actionType === ActionType.Movement) {
         if (sourceChampion.statusEffects.some(x => x.name === EffectStatus.Immobilize))
             return { message: `Champion is under the effect of ${EffectStatus.Immobilize} and can not move`, locations: resultLocations };
     }

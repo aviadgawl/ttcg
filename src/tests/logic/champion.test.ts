@@ -791,6 +791,8 @@ describe('Champion Logic Tests', () => {
             const sourceLocation: BoardLocation = { rowIndex: 3, columnIndex: 3 };
             const targetLocation: BoardLocation = { rowIndex: 3, columnIndex: 4 };
 
+            mockGame.board[targetLocation.rowIndex][targetLocation.columnIndex] = mockChampion;
+
             const result = attack(mockGame, mockChampion, mockActionCard, sourceLocation, targetLocation);
             expect(result.status).toContain('Paralyze');
         });
@@ -799,6 +801,8 @@ describe('Champion Logic Tests', () => {
             mockChampion.statusEffects = [{ name: EffectStatus.Silence, duration: 1, stat: null, value: null }];
             const sourceLocation: BoardLocation = { rowIndex: 3, columnIndex: 3 };
             const targetLocation: BoardLocation = { rowIndex: 3, columnIndex: 4 };
+
+            mockGame.board[targetLocation.rowIndex][targetLocation.columnIndex] = mockChampion;
 
             const result = attack(mockGame, mockChampion, mockActionCard, sourceLocation, targetLocation);
             expect(result.status).toContain('Silence');
