@@ -9,7 +9,8 @@ interface ChampionMenuProps {
   anchorEl: Element | null,
   open: boolean,
   onClose: (event: {}, reason: "backdropClick" | "escapeKeyDown") => void,
-  championCard: ChampionCard
+  championCard: ChampionCard,
+  shouldShowAttachedActions?: Boolean
 }
 
 const ChampionMenu: FC<ChampionMenuProps> = (props) => (
@@ -26,7 +27,7 @@ const ChampionMenu: FC<ChampionMenuProps> = (props) => (
     {props.championCard.learnedActionsCards.length > 0
       && props.championCard.learnedActionsCards.map(action => <MenuItem key={action.guid}><GameCardDraw card={action} /></MenuItem>)}
     {props.championCard.attachedActionsCards.length > 0
-      && props.championCard.attachedActionsCards.map(action => <MenuItem key={action.guid}><GameCardDraw card={action} /></MenuItem>)}
+      && props.championCard.attachedActionsCards.map(action => <MenuItem key={action.guid}><GameCardDraw card={props.shouldShowAttachedActions ? action : undefined} /></MenuItem>)}
     {props.championCard.upgrade
       && <MenuItem><GameCardDraw card={props.championCard.upgrade} /></MenuItem>}
     {props.championCard.body

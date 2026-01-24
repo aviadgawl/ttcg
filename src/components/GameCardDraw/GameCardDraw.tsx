@@ -5,11 +5,12 @@ import HpIcon from '../../assets/images/HpIcon.png';
 import DexIcon from '../../assets/images/DexIcon.png';
 import IntIcon from '../../assets/images/IntIcon.png';
 import StrIcon from '../../assets/images/StrIcon.png';
+import CardBack from '../../assets/images/CardBack.png'
 import Bounce from '../Shared/Motion/Bounce';
 import styles from './GameCardDraw.module.css';
 
 interface CardProps {
-  card: GameCard,
+  card?: GameCard,
   children?: React.ReactNode,
   zoom?: boolean,
   showChampionStats?: boolean,
@@ -27,7 +28,7 @@ const GameCardDraw: FC<CardProps> = (props) => {
   return <div className={`App-card${props.isLarge ? '-large' : ''}`}>
     <Bounce isDisabled={props.disableAnimation} className={styles.CardMotion}>
       <Card onClick={handleShowDialog}
-        className={styles.Card} sx={{ maxWidth: 345, backgroundImage: `url(${props.card.image})` }}>
+        className={styles.Card} sx={{ maxWidth: 345, backgroundImage: `url(${props?.card?.image ?? CardBack})` }}>
         <CardContent className={styles.CardContent}>
 
           {props.showChampionStats && isChampion(props.card) && <div className={styles.CardStats}>
@@ -53,7 +54,7 @@ const GameCardDraw: FC<CardProps> = (props) => {
       open={showDialog}
       onClose={() => setShowDialog(false)}>
       <DialogContent className={styles.DialogContent}>
-        <img alt="card visual" className="App-card-large" src={props.card.image} />
+        <img alt="card visual" className="App-card-large" src={props?.card?.image ?? CardBack} />
       </DialogContent>
     </Dialog>
   </div >

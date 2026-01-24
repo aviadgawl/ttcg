@@ -35,6 +35,7 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
     props?.champion?.upgrade ||
     props?.champion?.attachedActionsCards?.length > 0 ||
     props?.champion?.learnedActionsCards?.length > 0;
+  const isChampionOwnedByPlayer = props.champion.playerIndex === playerIndex;
 
   const handlePanelClick = () => {
     setShowDialog(true);
@@ -95,14 +96,14 @@ const BoardChampion: FC<BoardChampionProps> = (props: BoardChampionProps) => {
               </Button>
             )}
             {props.champion.attachedActionsCards.map((card, actionIndex) =>
-              <Button disabled={isActionCardDisabled(props.champion, card, true)} size="small" variant="contained" key={actionIndex}
+              isChampionOwnedByPlayer && <Button disabled={isActionCardDisabled(props.champion, card, true)} size="small" variant="contained" key={actionIndex}
                 onClick={() => handleAction(card, true)}>{card.name} {card.isRepeatable && `(${card.repeatableActivationLeft})`}
               </Button>
             )}
             {showInfoButton && <button onClick={handleChampionCardClick}><FaCircleInfo /></button>}
           </div>
         </GameCardDraw>
-        <ChampionMenu anchorEl={anchorEl} open={open} onClose={handleCloseMenu} championCard={props.champion} />
+        <ChampionMenu anchorEl={anchorEl} open={open} onClose={handleCloseMenu} shouldShowAttachedActions={isChampionOwnedByPlayer} championCard={props.champion} />
       </DialogContent>
     </Dialog>
   </div>);
