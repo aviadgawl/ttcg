@@ -104,6 +104,7 @@ describe('Champion Logic Tests', () => {
             playerIndex: 0,
             actionType: ActionType.Melee,
             damages: [{
+                dmgAbsValue: null,
                 dmgStat: Stats.Str,
                 dmgModifier: null,
                 dmgModifierValue: null,

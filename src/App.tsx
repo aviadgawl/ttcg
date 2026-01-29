@@ -65,7 +65,7 @@ function App() {
         <GameTabs disabledTabIndexes={disabledTabIndex} displayMode={currentDisplay} onModeClick={handleDisplaySelect} />
 
         <Box display="flex" flexDirection={isMobile ? "column" : "row-reverse"} justifyContent="center" alignContent="center" gap={isMobile ? 0 : 2}>
-          <MyTypography>v.2.1.6</MyTypography>
+          <MyTypography>v.2.1.7</MyTypography>
           <Button onClick={handleLogout}><MyTypography>Logout</MyTypography></Button>
         </Box>
       </header>

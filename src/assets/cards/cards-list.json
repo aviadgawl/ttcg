@@ -1218,6 +1218,24 @@
     {
         "type": "ActionCard",
         "actionType": "Buff",
+        "name": "Health Potion",
+        "distance": [
+            0,
+            0
+        ],
+        "direction": "Straight",
+        "damages": [
+            {
+                "dmgAbsValue": 3
+            }
+        ],
+        "isFreeTargeting": true,
+        "isHeal": true,
+        "targetEffects": []
+    },
+    {
+        "type": "ActionCard",
+        "actionType": "Buff",
         "name": "Self Heal",
         "distance": [
             0,

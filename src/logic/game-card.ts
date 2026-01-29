@@ -89,6 +89,7 @@ export interface OrderCard extends GameCard {
 }
 
 export interface Damage {
+    dmgAbsValue: number | null;
     dmgStat: Stats | null;
     dmgModifier: MathModifier | null;
     dmgModifierValue: number | null;

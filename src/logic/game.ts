@@ -109,6 +109,7 @@ export const cardsJsonToObjects = (cardsListJson: any): GameCard[] => cardsListJ
                     isHeal: x.isHeal ?? false,
                     damages: x.damages ? x.damages.map((damage: any) =>
                     ({
+                        dmgAbsValue: damage.dmgAbsValue ?? null,
                         dmgStat: damage.dmgStat ?? null,
                         dmgModifier: damage.dmgModifier ?? null,
                         dmgModifierValue: damage.dmgModifierValue ?? null

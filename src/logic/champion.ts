@@ -63,10 +63,15 @@ export const calculateDamage = (champion: ChampionCard, actionCard: ActionCard):
     let calculatedDamage = 0;
 
     actionCard.damages.forEach((damage) => {
-        const statDamage = damage.dmgStat ? getChampionDamageValueByStat(champion, damage.dmgStat) : 0;
-        const regularDamage = damage.dmgModifierValue ?? 0;
+        if(damage.dmgAbsValue ) {
+            calculatedDamage += damage.dmgAbsValue;
+        }
+        else {
+            const statDamage = damage.dmgStat ? getChampionDamageValueByStat(champion, damage.dmgStat) : 0;
+            const regularDamage = damage.dmgModifierValue ?? 0;
 
-        calculatedDamage = calculateDamageWithModifier(statDamage + regularDamage, damage.dmgModifier, calculatedDamage);
+            calculatedDamage = calculateDamageWithModifier(statDamage + regularDamage, damage.dmgModifier, calculatedDamage);
+        }
     });
 
     return calculatedDamage;

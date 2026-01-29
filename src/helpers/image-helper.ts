@@ -69,6 +69,7 @@ import BackStab from '../assets/images/BackStab.png';
 import EtherBladeSlash from '../assets/images/EtherBladeSlash.png';
 import MagicPunch from '../assets/images/MagicPunch.png';
 import EtherBladeSwipe from '../assets/images/EtherBladeSwipe.png';
+import HealthPotion from '../assets/images/HealthPotion.png';
 // Orders
 import GiveMeMore from '../assets/images/GiveMeMore.png';
 import Regroup from '../assets/images/Regroup.png';
@@ -227,6 +228,8 @@ export const getImage = (id: string): string => {
             return MagicPunch;
         case 'Ether Blade Swipe':
             return EtherBladeSwipe;
+        case 'Health Potion':
+            return HealthPotion;
         // Orders
         case 'Give Me More!':
             return GiveMeMore;

@@ -136,7 +136,7 @@ describe('Player Logic Tests', () => {
             requiredGearCategory: null,
             image: 'test.png',
             actionType: ActionType.Melee,
-            damages: [{ dmgStat: Stats.Str, dmgModifier: null, dmgModifierValue: null }],
+            damages: [{ dmgAbsValue: null, dmgStat: Stats.Str, dmgModifier: null, dmgModifierValue: null }],
             isRepeatable: false,
             repeatableStat: null,
             repeatableActivationLeft: null,
