@@ -45,6 +45,8 @@ export const getSprite = (championName: string, className: string) => {
         case 'David-Battle Priest':
             return davidBattlePriestSpriteSheet;
         case 'Aron-Apprentice':
+        case 'Aron-War Mage':
+        case 'Aron-High Mage':
             return aronSpriteSheet;
         case 'Gurak-Fighter':
             return gurakSpriteSheet;
@@ -53,16 +55,26 @@ export const getSprite = (championName: string, className: string) => {
         case 'Gurak-Barbarian':
             return gurakBarbarianSpriteSheet;
         case 'Chiron-Acolyte':
+        case 'Chiron-High Priest':
+        case 'Chiron-Battle Priest':
             return chironSpriteSheet;
         case 'Seth-Rouge':
+        case 'Seth-Hawkeye':
+        case 'Seth-Shadow':
             return sethSpriteSheet;
         case 'Karina-Apprentice':
+        case 'Karina-War Mage':
+        case 'Karina-High Mage':
             return karinaSpriteSheet;
         case 'Firsha-Acolyte':
             return firshaSpriteSheet;
         case 'Valindra-Apprentice':
+        case 'Valindra-War Mage':
+        case 'Valindra-High Mage':
             return valindraSpriteSheet;
         case 'Taeriel-Rouge':
+        case 'Taeriel-Hawkeye':
+        case 'Taeriel-Shadow':
             return tarielSpriteSheet;
         case 'Tafrandir-Fighter':
             return tafrandirSpriteSheet;
