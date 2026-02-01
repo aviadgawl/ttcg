@@ -642,7 +642,7 @@
             1
         ],
         "direction": "Straight",
-        "damages": [
+        "targetDamages": [
             {
                 "dmgStat": "STR"
             },
@@ -664,7 +664,7 @@
             1
         ],
         "direction": "Straight",
-        "damages": [
+        "targetDamages": [
             {
                 "dmgStat": "STR"
             },
@@ -686,7 +686,7 @@
             1
         ],
         "direction": "Straight",
-        "damages": [
+        "targetDamages": [
             {
                 "dmgStat": "STR"
             },
@@ -708,7 +708,7 @@
             1
         ],
         "direction": "Straight",
-        "damages": [
+        "targetDamages": [
             {
                 "dmgStat": "STR"
             },
@@ -778,7 +778,7 @@
             1
         ],
         "direction": "Straight",
-        "damages": [
+        "targetDamages": [
             {
                 "dmgStat": "STR"
             }
@@ -841,7 +841,7 @@
             3
         ],
         "direction": "Straight",
-        "damages": [
+        "targetDamages": [
             {
                 "dmgStat": "DEX"
             }
@@ -858,7 +858,7 @@
             4
         ],
         "direction": "Straight",
-        "damages": [
+        "targetDamages": [
             {
                 "dmgStat": "DEX"
             }
@@ -922,7 +922,7 @@
             4
         ],
         "direction": "Straight",
-        "damages": [
+        "targetDamages": [
             {
                 "dmgStat": "DEX"
             }
@@ -969,7 +969,7 @@
             1
         ],
         "direction": "Straight",
-        "damages": [
+        "targetDamages": [
             {
                 "dmgStat": "STR",
                 "dmgModifier": null,
@@ -1001,7 +1001,7 @@
             }
         },
         "direction": "Straight",
-        "damages": [
+        "targetDamages": [
             {
                 "dmgStat": "STR"
             }
@@ -1025,7 +1025,7 @@
             }
         },
         "direction": "Straight",
-        "damages": [
+        "targetDamages": [
             {
                 "dmgStat": "STR"
             }
@@ -1043,7 +1043,7 @@
             1
         ],
         "direction": "Straight",
-        "damages": [
+        "targetDamages": [
             {
                 "dmgStat": "STR"
             }
@@ -1088,7 +1088,7 @@
             4
         ],
         "direction": "Straight",
-        "damages": [
+        "targetDamages": [
             {
                 "dmgStat": "INT"
             }
@@ -1198,7 +1198,7 @@
             4
         ],
         "direction": "Straight",
-        "damages": [
+        "targetDamages": [
             {
                 "dmgStat": "INT"
             }
@@ -1224,9 +1224,10 @@
             0
         ],
         "direction": "Straight",
-        "damages": [
+        "targetDamages": [
             {
-                "dmgAbsValue": 3
+                "dmgModifier": "+",
+                "dmgModifierValue": 3
             }
         ],
         "isFreeTargeting": true,
@@ -1242,7 +1243,7 @@
             0
         ],
         "direction": "Straight",
-        "damages": [
+        "targetDamages": [
             {
                 "dmgStat": "INT"
             }
@@ -1256,13 +1257,38 @@
     {
         "type": "ActionCard",
         "actionType": "Buff",
+        "name": "Helping Hand",
+        "distance": [
+            1,
+            1
+        ],
+        "direction": "Straight",
+        "targetDamages": [
+            {
+                "dmgModifier": "+",
+                "dmgModifierValue": 3
+            }
+        ],
+        "userDamages": [
+            {
+                "dmgModifier": "+",
+                "dmgModifierValue": 3
+            }
+        ],
+        "isFreeTargeting": true,
+        "isHeal": true,
+        "targetEffects": []
+    },
+    {
+        "type": "ActionCard",
+        "actionType": "Buff",
         "name": "Heal",
         "distance": [
             1,
             4
         ],
         "direction": "Straight",
-        "damages": [
+        "targetDamages": [
             {
                 "dmgStat": "INT"
             }
@@ -1283,7 +1309,7 @@
             3
         ],
         "direction": "Straight",
-        "damages": [
+        "targetDamages": [
             {
                 "dmgStat": "INT"
             }
@@ -1329,7 +1355,7 @@
         ],
         "requiredClassName": "War Mage",
         "direction": "Straight",
-        "damages": [
+        "targetDamages": [
             {
                 "dmgStat": "INT"
             },
@@ -1356,7 +1382,7 @@
             1
         ],
         "direction": "Straight",
-        "damages": [
+        "targetDamages": [
             {
                 "dmgStat": "INT"
             },
@@ -1386,7 +1412,7 @@
                 "left": 1
             }
         },
-        "damages": [
+        "targetDamages": [
             {
                 "dmgStat": "INT"
             },

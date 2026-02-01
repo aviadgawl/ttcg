@@ -103,12 +103,12 @@ describe('Champion Logic Tests', () => {
             name: 'Test Action',
             playerIndex: 0,
             actionType: ActionType.Melee,
-            damages: [{
-                dmgAbsValue: null,
+            targetDamages: [{
                 dmgStat: Stats.Str,
                 dmgModifier: null,
                 dmgModifierValue: null,
             }],
+            userDamages: [],
             isRepeatable: false,
             repeatableStat: null,
             repeatableActivationLeft: null,
@@ -117,6 +117,7 @@ describe('Champion Logic Tests', () => {
             direction: ActionDirections.Straight,
             isHeal: false,
             targetEffects: [],
+            userEffects: [],
             isFreeTargeting: false,
             isBackTargeting: false,
             // Add missing properties

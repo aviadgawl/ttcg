@@ -89,7 +89,6 @@ export interface OrderCard extends GameCard {
 }
 
 export interface Damage {
-    dmgAbsValue: number | null;
     dmgStat: Stats | null;
     dmgModifier: MathModifier | null;
     dmgModifierValue: number | null;
@@ -99,13 +98,15 @@ export interface ActionCard extends GameCard {
     actionType: ActionType;
     distance: number[];
     direction: ActionDirections;
-    damages: Damage[]
+    targetDamages: Damage[];
+    userDamages: Damage[];
     requiredClassName: string | null;
     requiredStat: Stats | null;
     requiredStatValue: number | null;
     requiredGearCategory: GearCategory | null;
     isFreeTargeting: boolean;
     targetEffects: StatusEffect[];
+    userEffects: StatusEffect[];
     isRepeatable: boolean;
     isBackTargeting: boolean;
     repeatableStat: Stats | null;

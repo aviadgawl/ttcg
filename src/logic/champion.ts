@@ -33,14 +33,14 @@ export const applyHeal = (sourceChampion: ChampionCard, actionCard: ActionCard, 
 };
 
 export const applyDamage = (sourceChampion: ChampionCard, actionCard: ActionCard, target: SummoningCard) => {
-    if (actionCard.damages.length === 0) return;
+    if (actionCard.targetDamages.length === 0) return;
 
     const calDamage = calculateDamage(sourceChampion, actionCard);
 
     if (calDamage === 0) return;
 
     if (isChampion(target)) {
-        const isMagicDmg = actionCard.damages[0].dmgStat === Stats.Int;
+        const isMagicDmg = actionCard.targetDamages[0].dmgStat === Stats.Int;
         const mitigation = isMagicDmg ? target.mental : target.armor;
         const dmg = calDamage - mitigation;
 
@@ -62,16 +62,11 @@ export const applyDamage = (sourceChampion: ChampionCard, actionCard: ActionCard
 export const calculateDamage = (champion: ChampionCard, actionCard: ActionCard): number => {
     let calculatedDamage = 0;
 
-    actionCard.damages.forEach((damage) => {
-        if(damage.dmgAbsValue ) {
-            calculatedDamage += damage.dmgAbsValue;
-        }
-        else {
-            const statDamage = damage.dmgStat ? getChampionDamageValueByStat(champion, damage.dmgStat) : 0;
-            const regularDamage = damage.dmgModifierValue ?? 0;
+    actionCard.targetDamages.forEach((damage) => {
+        const statDamage = damage.dmgStat ? getChampionDamageValueByStat(champion, damage.dmgStat) : 0;
+        const regularDamage = damage.dmgModifierValue ?? 0;
 
-            calculatedDamage = calculateDamageWithModifier(statDamage + regularDamage, damage.dmgModifier, calculatedDamage);
-        }
+        calculatedDamage = calculateDamageWithModifier(statDamage + regularDamage, damage.dmgModifier, calculatedDamage);
     });
 
     return calculatedDamage;
@@ -237,10 +232,10 @@ export const attack = (game: Game, attackingChampion: ChampionCard,
         if (target.statusEffects.some(effect => effect.name === EffectStatus.DamageImmunity))
             return { status: 'Target is immune to damage', targetedCard: target };
 
-        if (actionCard.damages.length > 0 && actionCard.damages[0].dmgStat === Stats.Str && target.statusEffects.some(effect => effect.name === EffectStatus.MeleeImmunity))
+        if (actionCard.targetDamages.length > 0 && actionCard.targetDamages[0].dmgStat === Stats.Str && target.statusEffects.some(effect => effect.name === EffectStatus.MeleeImmunity))
             return { status: 'Target is immune to melee damage', targetedCard: target };
 
-        if (actionCard.damages.length > 0 && actionCard.damages[0].dmgStat === Stats.Int && target.statusEffects.some(effect => effect.name === EffectStatus.MagicalImmunity))
+        if (actionCard.targetDamages.length > 0 && actionCard.targetDamages[0].dmgStat === Stats.Int && target.statusEffects.some(effect => effect.name === EffectStatus.MagicalImmunity))
             return { status: 'Target is immune to magical damage', targetedCard: target };
     }
 
@@ -255,11 +250,15 @@ export const attack = (game: Game, attackingChampion: ChampionCard,
             targetedCard: target
         };
 
-    if (actionCard.damages.length > 0) {
+    if (actionCard.targetDamages.length > 0) {
         if (actionCard.isHeal)
             applyHeal(attackingChampion, actionCard, target);
         else
             applyDamage(attackingChampion, actionCard, target);
+    }
+
+    if (actionCard.userDamages.length > 0) {
+        applyDamage(attackingChampion, actionCard, attackingChampion);
     }
 
     if (actionCard.targetEffects.length > 0 && targetIsChampion) {

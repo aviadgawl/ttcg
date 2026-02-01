@@ -1,6 +1,6 @@
 {
   "name": "ttcg",
-  "version": "2.1.8",
+  "version": "2.2.0",
   "private": true,
   "homepage": "/ttcg",
   "dependencies": {

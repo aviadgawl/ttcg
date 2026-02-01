@@ -1,9 +1,10 @@
 {
   "files": {
     "main.css": "/ttcg/static/css/main.a1db3bc3.css",
-    "main.js": "/ttcg/static/js/main.c8b9eaa6.js",
+    "main.js": "/ttcg/static/js/main.f60905f0.js",
     "static/media/WarMage.png": "/ttcg/static/media/WarMage.b9d64aaec59d6ed573e0.png",
     "static/media/EtherBladeSlash.png": "/ttcg/static/media/EtherBladeSlash.31fa01a59384f346fd58.png",
+    "static/media/HelpingHand.png": "/ttcg/static/media/HelpingHand.6807801176fbdfcbc3b3.png",
     "static/media/CripplingShot.png": "/ttcg/static/media/CripplingShot.65a6a1c0abc5628cb45a.png",
     "static/media/SwordSlash.png": "/ttcg/static/media/SwordSlash.b8d2f1ba2eb5184e6cc1.png",
     "static/media/RefreshMe.png": "/ttcg/static/media/RefreshMe.d1ab3397d77d9648e5fb.png",
@@ -119,10 +120,10 @@
     "static/media/draw.mp3": "/ttcg/static/media/draw.ceb460e6016f04e97598.mp3",
     "index.html": "/ttcg/index.html",
     "main.a1db3bc3.css.map": "/ttcg/static/css/main.a1db3bc3.css.map",
-    "main.c8b9eaa6.js.map": "/ttcg/static/js/main.c8b9eaa6.js.map"
+    "main.f60905f0.js.map": "/ttcg/static/js/main.f60905f0.js.map"
   },
   "entrypoints": [
     "static/css/main.a1db3bc3.css",
-    "static/js/main.c8b9eaa6.js"
+    "static/js/main.f60905f0.js"
   ]
 }

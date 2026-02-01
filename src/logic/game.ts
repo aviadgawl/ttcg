@@ -92,7 +92,7 @@ export const cardsJsonToObjects = (cardsListJson: any): GameCard[] => cardsListJ
                     requiredGearCategory: x.requiredGearCategory ?? null,
                     isFreeTargeting: x.isFreeTargeting ?? false,
                     isBackTargeting: x.isBackTargeting ?? false,
-                    targetEffects: x.targetEffects?.map((effect: any) => {
+                    targetEffects: x.targetEffects ? x.targetEffects?.map((effect: any) => {
                         return {
                             cardName: x.name,
                             name: effect.name,
@@ -100,20 +100,34 @@ export const cardsJsonToObjects = (cardsListJson: any): GameCard[] => cardsListJ
                             stat: effect.stat ?? null,
                             value: effect.value ?? null
                         }
-                    }),
+                    }) : [],
+                    userEffects: x.userEffects ? x.userEffects?.map((effect: any) => {
+                        return {
+                            cardName: x.name,
+                            name: effect.name,
+                            duration: effect.duration ?? 0,
+                            stat: effect.stat ?? null,
+                            value: effect.value ?? null
+                        }
+                    }) : [],
                     isRepeatable: x.isRepeatable ?? false,
                     repeatableStat: x.repeatableStat ?? null,
                     repeatableActivationLeft: null,
                     wasPlayed: false,
                     hitAreas: x.hitAreas ?? null,
                     isHeal: x.isHeal ?? false,
-                    damages: x.damages ? x.damages.map((damage: any) =>
+                    targetDamages: x.targetDamages ? x.targetDamages.map((damage: any) =>
                     ({
-                        dmgAbsValue: damage.dmgAbsValue ?? null,
                         dmgStat: damage.dmgStat ?? null,
                         dmgModifier: damage.dmgModifier ?? null,
                         dmgModifierValue: damage.dmgModifierValue ?? null
-                    } as Damage)) : [] as Damage[]
+                    } as Damage)) : [],
+                    userDamages: x.userDamages ? x.userDamages.map((damage: any) =>
+                    ({
+                        dmgStat: damage.dmgStat ?? null,
+                        dmgModifier: damage.dmgModifier ?? null,
+                        dmgModifierValue: damage.dmgModifierValue ?? null
+                    } as Damage)) : []
                 } as ActionCard);
                 break;
             case CardType.OrderCard:
