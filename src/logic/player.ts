@@ -618,6 +618,8 @@ export const getChampionStatValue = (champion: ChampionCard, stat: Stats): numbe
             return champion.calDex;
         case Stats.Int:
             return champion.calInt;
+        case Stats.Hp:
+            return champion.currentHp;
         default:
             return -1;
     }

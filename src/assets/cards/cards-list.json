@@ -644,9 +644,7 @@
         "direction": "Straight",
         "targetDamages": [
             {
-                "dmgStat": "STR"
-            },
-            {
+                "dmgStat": "STR",
                 "dmgModifier": "+",
                 "dmgModifierValue": 1
             }
@@ -666,9 +664,7 @@
         "direction": "Straight",
         "targetDamages": [
             {
-                "dmgStat": "STR"
-            },
-            {
+                "dmgStat": "STR",
                 "dmgModifier": "+",
                 "dmgModifierValue": 1
             }
@@ -688,9 +684,7 @@
         "direction": "Straight",
         "targetDamages": [
             {
-                "dmgStat": "STR"
-            },
-            {
+                "dmgStat": "STR",
                 "dmgModifier": "+",
                 "dmgModifierValue": 1
             }
@@ -710,9 +704,7 @@
         "direction": "Straight",
         "targetDamages": [
             {
-                "dmgStat": "STR"
-            },
-            {
+                "dmgStat": "STR",
                 "dmgModifier": "+",
                 "dmgModifierValue": 1
             }
@@ -972,10 +964,6 @@
         "targetDamages": [
             {
                 "dmgStat": "STR",
-                "dmgModifier": null,
-                "dmgModifierValue": null
-            },
-            {
                 "dmgModifier": "x",
                 "dmgModifierValue": 2
             }
@@ -1258,6 +1246,8 @@
         "type": "ActionCard",
         "actionType": "Buff",
         "name": "Helping Hand",
+        "requiredStat": "HP",
+        "requiredStatValue": 4,
         "distance": [
             1,
             1
@@ -1277,6 +1267,33 @@
         ],
         "isFreeTargeting": true,
         "isHeal": true,
+        "targetEffects": []
+    },
+    {
+        "type": "ActionCard",
+        "actionType": "Melee",
+        "name": "Headbutt",
+        "requiredStat": "HP",
+        "requiredStatValue": 4,
+        "distance": [
+            1,
+            1
+        ],
+        "direction": "Straight",
+        "targetDamages": [
+            {
+                "dmgStat": "STR",
+                "dmgModifier": "+",
+                "dmgModifierValue": 1
+            }
+        ],
+        "userDamages": [
+            {
+                "dmgModifier": "+",
+                "dmgModifierValue": 3
+            }
+        ],
+        "isFreeTargeting": true,
         "targetEffects": []
     },
     {

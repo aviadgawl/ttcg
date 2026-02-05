@@ -39,8 +39,11 @@ export const applyDamage = (sourceChampion: ChampionCard, actionCard: ActionCard
 
     if (calDamage === 0) return;
 
-    if (isChampion(target)) {
+    const isAbsDmg = actionCard.targetDamages[0].dmgStat === null;
+
+    if (isChampion(target) && !isAbsDmg) {
         const isMagicDmg = actionCard.targetDamages[0].dmgStat === Stats.Int;
+
         const mitigation = isMagicDmg ? target.mental : target.armor;
         const dmg = calDamage - mitigation;
 
@@ -64,22 +67,20 @@ export const calculateDamage = (champion: ChampionCard, actionCard: ActionCard):
 
     actionCard.targetDamages.forEach((damage) => {
         const statDamage = damage.dmgStat ? getChampionDamageValueByStat(champion, damage.dmgStat) : 0;
-        const regularDamage = damage.dmgModifierValue ?? 0;
-
-        calculatedDamage = calculateDamageWithModifier(statDamage + regularDamage, damage.dmgModifier, calculatedDamage);
+        calculatedDamage += calculateDamageWithModifier(statDamage, damage.dmgModifier, damage.dmgModifierValue);
     });
 
     return calculatedDamage;
 }
 
-export const calculateDamageWithModifier = (baseDamage: number, dmgModifier: MathModifier | null, dmgModifierValue: number | null): number => {
-    if (dmgModifier === null || dmgModifierValue === null) return baseDamage;
+export const calculateDamageWithModifier = (stateDamage: number, dmgModifier: MathModifier | null, dmgModifierValue: number | null): number => {
+    if (dmgModifier === null || dmgModifierValue === null) return stateDamage;
 
     switch (dmgModifier) {
         case MathModifier.Plus:
-            return baseDamage + dmgModifierValue;
+            return stateDamage + dmgModifierValue;
         case MathModifier.Multiply:
-            return baseDamage * dmgModifierValue;
+            return stateDamage * dmgModifierValue;
         default:
             return 0;
     }
