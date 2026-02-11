@@ -59,31 +59,87 @@ export const tryPlayChampion = (game: Game, botPlayer: Player): boolean => {
 }
 
 export const tryChampionLearnedActions = (game: Game): boolean => {
-    const champions = getPlayerSummonedChampions(game);
     let playedAny = false;
+    // Re-fetch champions each iteration since board state changes (movement, kills)
+    let champions = getPlayerSummonedChampions(game);
 
     for (const summonedChampion of champions) {
         if (summonedChampion.championCard.stm <= 0) continue;
-        if (summonedChampion.championCard.learnedActionsCards.length === 0) continue;
 
-        for (const actionCard of summonedChampion.championCard.learnedActionsCards) {
+        // Try learned actions
+        const allActions = [
+            ...summonedChampion.championCard.learnedActionsCards.map(card => ({ card, isAttached: false })),
+            ...summonedChampion.championCard.attachedActionsCards.map(card => ({ card, isAttached: true }))
+        ];
+
+        for (const { card: actionCard, isAttached } of allActions) {
             if (actionCard.wasPlayed) continue;
 
             const locations = getChampionsActionsAllowedBoardLocations(game, actionCard, summonedChampion.sourceLocation);
 
             if (locations.locations.length === 0) continue;
 
-            const targetLocation = locations.locations[0];
-            const result = championAction(game, actionCard, summonedChampion.sourceLocation, targetLocation, false);
+            const targetLocation = pickTargetLocation(game, actionCard, locations.locations, summonedChampion.sourceLocation);
+
+            if (!targetLocation) continue;
+
+            const result = championAction(game, actionCard, summonedChampion.sourceLocation, targetLocation, isAttached);
 
             if (result === 'success') {
                 playedAny = true;
                 console.log('Bot champion action: ', { action: actionCard.name, result, sourceLocation: summonedChampion.sourceLocation, targetLocation });
+                // After movement, the champion's source location changes — re-fetch
+                if (actionCard.actionType === ActionType.Movement) {
+                    champions = getPlayerSummonedChampions(game);
+                    break; // Re-evaluate this champion's new position
+                }
             }
         }
     }
 
     return playedAny;
+}
+
+const pickTargetLocation = (
+    game: Game,
+    actionCard: ActionCard,
+    locations: BoardLocation[],
+    sourceLocation: BoardLocation
+): BoardLocation | null => {
+    if (actionCard.actionType === ActionType.Movement) {
+        // For movement, pick an empty cell (prefer moving toward the opponent's side)
+        const emptyLocations = locations.filter(loc => game.board[loc.rowIndex][loc.columnIndex] === null);
+        if (emptyLocations.length === 0) return null;
+
+        // Bot is player index 1, so prefer moving toward higher row indices (toward player 0's side)
+        const opponentDirection = game.playerIndex === 1 ? 1 : -1;
+        emptyLocations.sort((a, b) => (b.rowIndex - a.rowIndex) * opponentDirection);
+        return emptyLocations[0];
+    }
+
+    if (actionCard.actionType === ActionType.Buff) {
+        // For buffs, target own champions
+        const ownChampionLocations = locations.filter(loc => {
+            const cell = game.board[loc.rowIndex][loc.columnIndex];
+            return isChampion(cell) && cell.playerIndex === game.playerIndex;
+        });
+        // Also allow self-targeting (distance 0)
+        if (ownChampionLocations.length === 0) {
+            const selfLocation = locations.find(loc =>
+                loc.rowIndex === sourceLocation.rowIndex && loc.columnIndex === sourceLocation.columnIndex);
+            return selfLocation ?? null;
+        }
+        return ownChampionLocations[0];
+    }
+
+    // For attacks (Melee, Ranged, Magic), pick a cell containing an enemy entity
+    const enemyLocations = locations.filter(loc => {
+        const cell = game.board[loc.rowIndex][loc.columnIndex];
+        return cell !== null && cell.playerIndex !== game.playerIndex;
+    });
+
+    if (enemyLocations.length === 0) return null;
+    return enemyLocations[0];
 }
 
 export const tryPlayGear = (game: Game, botPlayer: Player): boolean => {
@@ -253,7 +309,7 @@ export const getPlayerSummonedChampions = (game: Game): GetPlayerSummonedChampio
     game.board.forEach((row, rowIndex) => {
         row.forEach((card, columnIndex) => {
             if (isChampion(card) && card.playerIndex === game.playerIndex)
-                champions.push({sourceLocation: {rowIndex, columnIndex} ,championCard: card});
+                champions.push({ sourceLocation: { rowIndex, columnIndex }, championCard: card });
 
         });
     });
