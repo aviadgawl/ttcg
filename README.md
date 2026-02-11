@@ -21,6 +21,9 @@ Jump Step don't jump over obstacle
 
 add test for one attached action each turn for a champion
 
+need to move the action required validation to the attack event and not the attach event:
+    if the champion don't have the bow gear he can not preform and attack that require a bow
+
 # sprite config
 Gruk High Knight
 

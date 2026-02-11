@@ -4,7 +4,7 @@ import { GameCard, ChampionCard, ActionCard, GearCard, ClassCard, OrderCard, isC
 import { ActionType, PlayerActionsName } from './enums';
 import { BoardLocation } from './game-card';
 import { getPlayerActionsAllowedBoardLocations, getValidCardsForDiscard, playerAction } from './player';
-import { getChampionsActionsAllowedBoardLocations } from './champion';
+import { getChampionsActionsAllowedBoardLocations, championAction } from './champion';
 
 type GetPlayerSummonedChampionsResult = {
     sourceLocation: BoardLocation;
@@ -17,9 +17,10 @@ export const makeMove = (game: Game): void => {
     performDraw(game);
     tryPlayChampion(game, botPlayer);
     tryPlayGear(game, botPlayer);
-    botPlayer.summonsLeft > 0 && tryPlayClass(game, botPlayer);
+    tryPlayClass(game, botPlayer);
     tryPlayAction(game, botPlayer);
     tryPlayOrder(game, botPlayer);
+    tryChampionLearnedActions(game);
 
     // If no other moves, end turn
     endTurn(game);
@@ -30,112 +31,171 @@ export const performDraw = (game: Game): void => {
 }
 
 export const tryPlayChampion = (game: Game, botPlayer: Player): boolean => {
-    const champion = findPlayableCard(botPlayer, player =>
-        player.hand.find(card => isChampion(card))) as ChampionCard;
+    let playedAny = false;
 
-    if (!champion) return false;
+    while (true) {
+        const champion = findPlayableCard(botPlayer, player =>
+            player.hand.find(card => isChampion(card))) as ChampionCard;
 
-    const locations = getPlayerActionsAllowedBoardLocations(
-        game,
-        PlayerActionsName.Summon,
-        champion
-    );
+        if (!champion) break;
 
-    if (locations.locations.length === 0) return false;
+        const locations = getPlayerActionsAllowedBoardLocations(
+            game,
+            PlayerActionsName.Summon,
+            champion
+        );
 
-    // Choose first available location
-    const targetLocation = locations.locations[0];
-    return executeAction(game, PlayerActionsName.Summon, champion, targetLocation);
+        if (locations.locations.length === 0) break;
+
+        // Choose first available location
+        const targetLocation = locations.locations[0];
+        const success = executeAction(game, PlayerActionsName.Summon, champion, targetLocation);
+
+        if (!success) break;
+        playedAny = true;
+    }
+
+    return playedAny;
 }
 
-export const tryToChampionsLearnedActions = (game: Game): boolean => {
+export const tryChampionLearnedActions = (game: Game): boolean => {
     const champions = getPlayerSummonedChampions(game);
+    let playedAny = false;
 
-    champions.forEach(summonedChampion => {
-        if(summonedChampion.championCard.stm > 0 && summonedChampion.championCard.learnedActionsCards.length > 0) {
-            const unplayedActionCards = summonedChampion.championCard.learnedActionsCards.filter(actionCard => actionCard.wasPlayed === false);
+    for (const summonedChampion of champions) {
+        if (summonedChampion.championCard.stm <= 0) continue;
+        if (summonedChampion.championCard.learnedActionsCards.length === 0) continue;
 
-            unplayedActionCards.forEach( actionCard => {
-                if(actionCard.actionType === ActionType.Movement) {
+        for (const actionCard of summonedChampion.championCard.learnedActionsCards) {
+            if (actionCard.wasPlayed) continue;
 
-                    const locations = getChampionsActionsAllowedBoardLocations(game, actionCard, summonedChampion.sourceLocation);
-                }
-            });
+            const locations = getChampionsActionsAllowedBoardLocations(game, actionCard, summonedChampion.sourceLocation);
+
+            if (locations.locations.length === 0) continue;
+
+            const targetLocation = locations.locations[0];
+            const result = championAction(game, actionCard, summonedChampion.sourceLocation, targetLocation, false);
+
+            if (result === 'success') {
+                playedAny = true;
+                console.log('Bot champion action: ', { action: actionCard.name, result, sourceLocation: summonedChampion.sourceLocation, targetLocation });
+            }
         }
-    });
+    }
 
-    return true;
+    return playedAny;
 }
 
 export const tryPlayGear = (game: Game, botPlayer: Player): boolean => {
-    const gear = findPlayableCard(botPlayer, player =>
-        player.hand.find(card => isGear(card))) as GearCard;
+    let playedAny = false;
 
-    if (!gear) return false;
+    while (true) {
+        const gear = findPlayableCard(botPlayer, player =>
+            player.hand.find(card => isGear(card))) as GearCard;
 
-    const locations = getPlayerActionsAllowedBoardLocations(
-        game,
-        PlayerActionsName.Equip,
-        gear
-    );
+        if (!gear) break;
 
-    if (locations.locations.length === 0) return false;
+        const locations = getPlayerActionsAllowedBoardLocations(
+            game,
+            PlayerActionsName.Equip,
+            gear
+        );
 
-    // Choose first available champion
-    const targetLocation = locations.locations[0];
-    return executeAction(game, PlayerActionsName.Equip, gear, targetLocation);
+        if (locations.locations.length === 0) break;
+
+        // Choose first available champion
+        const targetLocation = locations.locations[0];
+        const success = executeAction(game, PlayerActionsName.Equip, gear, targetLocation);
+
+        if (!success) break;
+        playedAny = true;
+    }
+
+    return playedAny;
 }
 
 export const tryPlayClass = (game: Game, botPlayer: Player): boolean => {
-    const classCard = findPlayableCard(botPlayer, player =>
-        player.hand.find(card => isClass(card))) as ClassCard;
+    let playedAny = false;
 
-    if (!classCard) return false;
+    while (true) {
+        const classCard = findPlayableCard(botPlayer, player =>
+            player.hand.find(card => isClass(card))) as ClassCard;
 
-    const locations = getPlayerActionsAllowedBoardLocations(
-        game,
-        PlayerActionsName.Upgrade,
-        classCard
-    );
+        if (!classCard) break;
 
-    if (locations.locations.length === 0) return false;
+        const locations = getPlayerActionsAllowedBoardLocations(
+            game,
+            PlayerActionsName.Upgrade,
+            classCard
+        );
 
-    // Choose first available champion to upgrade
-    const targetLocation = locations.locations[0];
-    return executeAction(game, PlayerActionsName.Upgrade, classCard, targetLocation);
+        if (locations.locations.length === 0) break;
+
+        // Choose first available champion to upgrade
+        const targetLocation = locations.locations[0];
+        const success = executeAction(game, PlayerActionsName.Upgrade, classCard, targetLocation);
+
+        if (!success) break;
+        playedAny = true;
+    }
+
+    return playedAny;
 }
 
 export const tryPlayAction = (game: Game, botPlayer: Player): boolean => {
-    const action = findPlayableCard(botPlayer, player =>
-        player.hand.find(card => isAction(card))) as ActionCard;
+    let playedAny = false;
 
-    if (!action) return false;
+    while (true) {
+        const action = findPlayableCard(botPlayer, player =>
+            player.hand.find(card => isAction(card))) as ActionCard;
 
-    const locations = getPlayerActionsAllowedBoardLocations(
-        game,
-        PlayerActionsName.Attach,
-        action
-    );
+        if (!action) break;
 
-    if (locations.locations.length === 0) return false;
+        const locations = getPlayerActionsAllowedBoardLocations(
+            game,
+            PlayerActionsName.Attach,
+            action
+        );
 
-    // Choose first available target
-    const targetLocation = locations.locations[0];
-    return executeAction(game, PlayerActionsName.Attach, action, targetLocation);
+        if (locations.locations.length === 0) break;
+
+        // Choose first available target
+        const targetLocation = locations.locations[0];
+        const success = executeAction(game, PlayerActionsName.Attach, action, targetLocation);
+
+        if (!success) break;
+        playedAny = true;
+    }
+
+    return playedAny;
 }
 
 export const tryPlayOrder = (game: Game, botPlayer: Player): boolean => {
-    const order = findPlayableCard(botPlayer, player =>
-        player.hand.find(card => isOrder(card))) as OrderCard;
+    let playedAny = false;
 
-    if (!order) return false;
+    while (true) {
+        const order = findPlayableCard(botPlayer, player =>
+            player.hand.find(card => isOrder(card))) as OrderCard;
 
-    // Find valid cards for discard requirement
-    const { cardToDiscard } = getValidCardsForDiscard(botPlayer, botPlayer.hand, order);
+        if (!order) break;
 
-    if (cardToDiscard.length === 0) return false;
+        // Find valid cards for discard requirement
+        const { cardToDiscard, amountToDiscard } = getValidCardsForDiscard(botPlayer, botPlayer.hand, order);
 
-    return executeAction(game, PlayerActionsName.PlayOrder, order, null, cardToDiscard);
+        // Select only the required number of discard cards
+        const selectedDiscard = amountToDiscard === -1
+            ? cardToDiscard
+            : cardToDiscard.slice(0, amountToDiscard);
+
+        if (amountToDiscard !== 0 && selectedDiscard.length === 0) break;
+
+        const success = executeAction(game, PlayerActionsName.PlayOrder, order, null, selectedDiscard);
+
+        if (!success) break;
+        playedAny = true;
+    }
+
+    return playedAny;
 }
 
 export const findPlayableCard = (botPlayer: Player, finder: (player: Player) => GameCard | undefined): GameCard | null => {
@@ -149,7 +209,7 @@ export const executeAction = (
     targetLocation: BoardLocation | null,
     extraData?: any
 ): boolean => {
-    const result = playerAction(action, [], game, { selectedCard: card, extendedData: targetLocation || extraData });
+    const result = playerAction(action, [], game, { selectedCard: card, extendedData: targetLocation ?? extraData, cardsToDraw: null });
     console.log('Bot: ', { action, result, player: game.players[1] });
     return result === 'success';
 }

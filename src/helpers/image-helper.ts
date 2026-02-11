@@ -72,6 +72,8 @@ import EtherBladeSwipe from '../assets/images/EtherBladeSwipe.png';
 import HealthPotion from '../assets/images/HealthPotion.png';
 import HelpingHand from '../assets/images/HelpingHand.png';
 import Headbutt from '../assets/images/Headbutt.png';
+import BloodString from '../assets/images/BloodString.png';
+import BloodArrow from '../assets/images/BloodArrow.png';
 // Orders
 import GiveMeMore from '../assets/images/GiveMeMore.png';
 import Regroup from '../assets/images/Regroup.png';
@@ -236,6 +238,10 @@ export const getImage = (id: string): string => {
             return HelpingHand;
         case 'Headbutt':
             return Headbutt;
+        case 'Blood String':
+            return BloodString;
+        case 'Blood Arrow':
+            return BloodArrow;
         // Orders
         case 'Give Me More!':
             return GiveMeMore;

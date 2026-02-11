@@ -474,7 +474,7 @@ describe('Champion Logic Tests', () => {
 
         it('should apply magical damage correctly', () => {
             const target = { ...mockChampion, mental: 1, currentHp: 10 };
-            const action = { ...mockActionCard, damages: [{ dmgStat: Stats.Int, dmgModifierValue: null, dmgModifier: null }] as Damage[] };
+            const action = { ...mockActionCard, targetDamages: [{ dmgStat: Stats.Int, dmgModifierValue: null, dmgModifier: null }] as Damage[] };
 
             applyDamage(mockChampion, action, target);
             expect(target.currentHp).toBe(6); // 5 (int) - 1 (mental) = 4 damage

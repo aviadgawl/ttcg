@@ -1,7 +1,7 @@
 import { GameCard, isCrystal, isSummoning, SummoningCard, ChampionCard, isChampion, ActionCard, AllowedBoardLocationResponse, BoardLocation, PlayerActionLogRecord, StatusEffect, isGear, HitArea } from './game-card';
 import { ActionDirections, GameStatus, ActionType, Stats, EffectStatus, MathModifier, ChampionDirection } from './enums';
 import { Game } from './game';
-import { Player } from './player';
+import { getChampionStatValue, Player } from './player';
 
 interface ChampionActionResult {
     status: string,
@@ -210,8 +210,38 @@ export const applyTargetEffects = (effects: StatusEffect[], targetChampion: Cham
     });
 }
 
+export const isActionRequirementsAreFulfilled = (championCard: ChampionCard, actionCard: ActionCard) => {
+    if (actionCard.requiredClassName !== null && championCard.calClass !== actionCard.requiredClassName && championCard.class !== actionCard.requiredClassName)
+        return { message: `Champion does not have the required class of ${actionCard.requiredClassName}`, isValid: false };
+
+    if (actionCard.requiredGearCategory !== null) {
+        const isRequiredGearFound = championCard.body?.category === actionCard.requiredGearCategory
+            || championCard.rightHand?.category === actionCard.requiredGearCategory
+            || championCard.leftHand?.category === actionCard.requiredGearCategory
+
+        if (!isRequiredGearFound)
+            return { message: `Champion das not meet the gear requirement of this action ${actionCard.requiredGearCategory}`, isValid: false };
+    }
+
+    if (actionCard.requiredStat !== null && actionCard.requiredStatValue !== null) {
+        const championRequiredStatValue = getChampionStatValue(championCard, actionCard.requiredStat);
+
+        if (championRequiredStatValue < actionCard.requiredStatValue)
+            return {
+                message: `Champion stat ${actionCard.requiredStat} ${championRequiredStatValue} das not meet the required value ${actionCard.requiredStatValue}`,
+                isValid: false
+            };
+    }
+
+    return { message: 'success', isValid: true };
+};
+
 export const attack = (game: Game, attackingChampion: ChampionCard,
     actionCard: ActionCard, sourceLocation: BoardLocation, targetLocation: BoardLocation): ChampionActionResult => {
+
+    const validAction = isActionRequirementsAreFulfilled(attackingChampion, actionCard);
+    if(!validAction.isValid)
+        return { status: validAction.message, targetedCard: null };
 
     const target = game.board[targetLocation.rowIndex][targetLocation.columnIndex] as unknown as SummoningCard;;
 

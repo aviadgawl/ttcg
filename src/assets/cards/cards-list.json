@@ -1298,6 +1298,61 @@
     },
     {
         "type": "ActionCard",
+        "actionType": "Magic",
+        "name": "Blood String",
+        "requiredStat": "HP",
+        "requiredStatValue": 4,
+        "distance": [
+            1,
+            4
+        ],
+        "direction": "Straight",
+        "targetDamages": [
+            {
+                "dmgStat": "INT",
+                "dmgModifier": "+",
+                "dmgModifierValue": 1
+            }
+        ],
+        "userDamages": [
+            {
+                "dmgModifier": "+",
+                "dmgModifierValue": 3
+            }
+        ],
+        "isFreeTargeting": true,
+        "targetEffects": []
+    },
+       {
+        "type": "ActionCard",
+        "actionType": "Ranged",
+        "name": "Blood Arrow",
+        "requiredStat": "HP",
+        "requiredStatValue": 4,
+        "requiredGearCategory": "Bows",
+        "distance": [
+            1,
+            4
+        ],
+        "direction": "Straight",
+        "targetDamages": [
+            {
+                "dmgStat": "DEX",
+                "dmgModifier": "+",
+                "dmgModifierValue": 2
+            }
+        ],
+        "userDamages": [
+            {
+                "dmgModifier": "+",
+                "dmgModifierValue": 3
+            }
+        ],
+        "isFreeTargeting": true,
+        "targetEffects": []
+    },
+    {
+        "type": "ActionCard",
         "actionType": "Buff",
         "name": "Heal",
         "distance": [
