@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/ttcg/static/css/main.a1db3bc3.css",
-    "main.js": "/ttcg/static/js/main.ec05c38a.js",
+    "main.js": "/ttcg/static/js/main.dae9b274.js",
     "static/media/WarMage.png": "/ttcg/static/media/WarMage.b9d64aaec59d6ed573e0.png",
     "static/media/EtherBladeSlash.png": "/ttcg/static/media/EtherBladeSlash.31fa01a59384f346fd58.png",
     "static/media/HelpingHand.png": "/ttcg/static/media/HelpingHand.29eade96d27b962ff361.png",
@@ -45,6 +45,7 @@
     "static/media/ShieldBash.png": "/ttcg/static/media/ShieldBash.4869ecc2dccce4e9d7ee.png",
     "static/media/Shadow.png": "/ttcg/static/media/Shadow.c056e6c7b2217d53efa8.png",
     "static/media/MindBreak.png": "/ttcg/static/media/MindBreak.cfd30ceb3d26d8ea0925.png",
+    "static/media/BloodArrow.png": "/ttcg/static/media/BloodArrow.ee4e8a941962fff52415.png",
     "static/media/eduard-barbarian-spritesheet.png": "/ttcg/static/media/eduard-barbarian-spritesheet.d55ca1bec3246a6fd231.png",
     "static/media/Haste.png": "/ttcg/static/media/Haste.2deb1c64a2ce83e7d057.png",
     "static/media/gurak-barbarian-spritesheet.png": "/ttcg/static/media/gurak-barbarian-spritesheet.5185b9faf8c5a33aa514.png",
@@ -122,10 +123,10 @@
     "static/media/draw.mp3": "/ttcg/static/media/draw.ceb460e6016f04e97598.mp3",
     "index.html": "/ttcg/index.html",
     "main.a1db3bc3.css.map": "/ttcg/static/css/main.a1db3bc3.css.map",
-    "main.ec05c38a.js.map": "/ttcg/static/js/main.ec05c38a.js.map"
+    "main.dae9b274.js.map": "/ttcg/static/js/main.dae9b274.js.map"
   },
   "entrypoints": [
     "static/css/main.a1db3bc3.css",
-    "static/js/main.ec05c38a.js"
+    "static/js/main.dae9b274.js"
   ]
 }
